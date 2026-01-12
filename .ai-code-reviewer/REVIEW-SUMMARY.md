@@ -6,6 +6,20 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-12 21:40 - bin/ed/test ✓
+
+**Directory:** `bin/ed/test`
+
+**Summary:** test: Update Makefile and README for ed testing
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/ed/test/Makefile
+  - bin/ed/test/README
+  - bin/ed/test/ckscripts.sh
+
+---
+
 ## 2026-01-12 20:46 - bin/ed ✓
 
 **Directory:** `bin/ed`
