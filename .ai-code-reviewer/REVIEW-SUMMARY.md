@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-12 19:12 - bin/echo/tests ✓
+
+**Directory:** `bin/echo/tests`
+
+**Summary:** tests: Update REVIEW-INDEX.md and fix cpuset.c for safe parsing
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/cpuset/cpuset.c
+
+---
+
 ## 2026-01-12 17:46 - bin/echo ✓
 
 **Directory:** `bin/echo`

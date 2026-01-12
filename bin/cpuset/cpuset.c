@@ -219,7 +219,9 @@ main(int argc, char *argv[])
 		case 'x':
 			xflag = 1;
 			which = CPU_WHICH_IRQ;
-			id = atoi(optarg);
+			id = strtonum(optarg, 0, INT_MAX, &errstr);
+			if (errstr)
+				errx(1, "irq is %s: %s", errstr, optarg);
 			break;
 		default:
 			usage();
