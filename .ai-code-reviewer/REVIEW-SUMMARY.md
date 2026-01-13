@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-13 14:54 - bin/expr/tests ✓
+
+**Directory:** `bin/expr/tests`
+
+**Summary:** tests: Update expr tests to use FreeBSD framework
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/expr/tests/Makefile
+
+---
+
 ## 2026-01-13 14:39 - bin/expr ✓
 
 **Directory:** `bin/expr`

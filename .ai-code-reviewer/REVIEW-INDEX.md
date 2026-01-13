@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-01-13 14:39
+Generated: 2026-01-13 14:54
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,14 +13,14 @@ Generated: 2026-01-13 14:39
 
 ## Progress
 - Total directories: 8264
-- Completed: 21 (0%)
+- Completed: 22 (0%)
 - Skipped: 1
-- Remaining: 8242
+- Remaining: 8241
 
 ## Current Position
-CURRENT POSITION: `bin/expr/tests`
+CURRENT POSITION: `bin/freebsd-version`
 
-## bin/ (21/74 done)
+## bin/ (22/74 done)
 
 - [x] `bin/cat` (1 .c, 0 .h, 525 lines) - 2026-01-10 - Fixed by session 20260110_042553
 - [x] `bin/cat/tests` (0 .c, 0 .h, 0 lines) - 2026-01-10 - Fixed by session 20260110_042553
@@ -44,7 +44,7 @@ CURRENT POSITION: `bin/expr/tests`
 - [x] `bin/ed` (7 .c, 1 .h, 3032 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/ed/test` (0 .c, 0 .h, 0 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/expr` (0 .c, 0 .h, 0 lines) - 2026-01-13 - Fixed by session 20260113_093520
-- [ ] `bin/expr/tests` (0 .c, 0 .h, 0 lines)
+- [x] `bin/expr/tests` (0 .c, 0 .h, 0 lines) - 2026-01-13 - Fixed by session 20260113_093520
 - [ ] `bin/freebsd-version` (0 .c, 0 .h, 0 lines)
 - [ ] `bin/getfacl` (1 .c, 0 .h, 287 lines)
 - [ ] `bin/hostname` (1 .c, 0 .h, 102 lines)
