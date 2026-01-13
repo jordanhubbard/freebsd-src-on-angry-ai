@@ -1029,3 +1029,9 @@ Each lesson is recorded with timestamp, category, and remediation advice.
 ### COMPILER: Stale .depend Files and Syntax Errors
 - Stale `.depend` files caused build failures; undeclared identifier 'errstr' in `cpuset.c`.
 - Clean build directory with `make clean` before building to remove stale dependencies; check for correct variable names in source code.
+
+
+## 2026-01-13 22:10
+### COMPILER: Stale .depend Files and Missing Header
+- Stale `.depend` files caused build errors.
+- Clean the build directory using `make clean` before rebuilding to avoid stale dependencies.
