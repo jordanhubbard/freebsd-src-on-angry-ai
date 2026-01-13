@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-01-12 21:40
+Generated: 2026-01-13 03:39
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -31,14 +31,14 @@ CURRENT POSITION: `bin/expr`
 - [x] `bin/chmod/tests` (0 .c, 0 .h, 0 lines) - 2026-01-11 - Fixed by session 20260110_042553
 - [x] `bin/cp` (2 .c, 1 .h, 1257 lines) - 2026-01-11 - Fixed by session 20260110_042553
 - [x] `bin/cp/tests` (0 .c, 0 .h, 0 lines) - 2026-01-11 - Fixed by session 20260110_042553
-- [-] `bin/cpuset` (1 .c, 0 .h, 326 lines) - Auto-skipped after 3 retries
+- [-] `bin/cpuset` (1 .c, 0 .h, 346 lines) - Auto-skipped after 3 retries
 - [x] `bin/csh` (1 .c, 3 .h, 517 lines) - 2026-01-11 - Fixed by session 20260110_042553
 - [x] `bin/date` (2 .c, 1 .h, 1061 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/date/tests` (0 .c, 0 .h, 0 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/dd` (7 .c, 2 .h, 2384 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/dd/tests` (0 .c, 0 .h, 0 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/df` (1 .c, 0 .h, 700 lines) - 2026-01-12 - Fixed by session 20260112_031346
-- [x] `bin/domainname` (1 .c, 0 .h, 77 lines) - 2026-01-12 - Fixed by session 20260112_031346
+- [x] `bin/domainname` (1 .c, 0 .h, 79 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/echo` (1 .c, 0 .h, 111 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/echo/tests` (0 .c, 0 .h, 0 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/ed` (7 .c, 1 .h, 3032 lines) - 2026-01-12 - Fixed by session 20260112_031346
