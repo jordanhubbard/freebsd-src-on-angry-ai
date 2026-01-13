@@ -1,8 +1,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) 2004 David Schultz <das@FreeBSD.ORG>
- * All rights reserved.
+ * Copyright (c) 2026 Arm Ltd
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -25,26 +24,19 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  */
+#include <sys/types.h>
+#include <machine/ifunc.h>
 
-#define	__fenv_static
-#include "fenv.h"
+#include <elf.h>
 
-#ifdef __GNUC_GNU_INLINE__
-#error "This file must be compiled with C99 'inline' semantics"
-#endif
+void *__memmove_aarch64_simd(void *, const void *, size_t);
+void *__memmove_aarch64_mops(void *, const void *, size_t);
 
-const fenv_t __fe_dfl_env = 0x00000000;
+DEFINE_UIFUNC(, void *, memmove, (void *, const void *, size_t))
+{
+	if (ifunc_arg->_hwcap2 & HWCAP2_MOPS)
+		return (__memmove_aarch64_mops);
 
-extern inline int feclearexcept(int __excepts);
-extern inline int fegetexceptflag(fexcept_t *__flagp, int __excepts);
-extern inline int fesetexceptflag(const fexcept_t *__flagp, int __excepts);
-extern inline int feraiseexcept(int __excepts);
-extern inline int fetestexcept(int __excepts);
-extern inline int fegetround(void);
-extern inline int fesetround(int __round);
-extern inline int fegetenv(fenv_t *__envp);
-extern inline int feholdexcept(fenv_t *__envp);
-extern inline int fesetenv(const fenv_t *__envp);
-extern inline int feupdateenv(const fenv_t *__envp);
-extern inline int feenableexcept(int __mask);
-extern inline int fedisableexcept(int __mask);
+	return (__memmove_aarch64_simd);
+}
+
