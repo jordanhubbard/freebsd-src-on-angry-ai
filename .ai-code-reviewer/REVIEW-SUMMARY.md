@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-13 20:56 - bin/hostname ✓
+
+**Directory:** `bin/hostname`
+
+**Summary:** hostname: Add check for hostname length before setting
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/hostname/hostname.c
+
+---
+
 ## 2026-01-13 20:35 - bin/getfacl ✓
 
 **Directory:** `bin/getfacl`
