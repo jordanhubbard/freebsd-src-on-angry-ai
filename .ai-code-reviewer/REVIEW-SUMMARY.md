@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-13 14:39 - bin/expr ✓
+
+**Directory:** `bin/expr`
+
+**Summary:** expr: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-13 14:20 - Build ✓
 
 **Summary:** REVIEW-INDEX.md: Update line counts for various files
