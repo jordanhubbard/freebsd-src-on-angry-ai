@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-13 22:26 - bin/kill ✓
+
+**Directory:** `bin/kill`
+
+**Summary:** kill: Include limits.h for INT_MAX in kill.c
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/kill/kill.c
+
+---
+
 ## 2026-01-13 21:53 - bin/kenv ✓
 
 **Directory:** `bin/kenv`

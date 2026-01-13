@@ -36,6 +36,7 @@
 #include <ctype.h>
 #include <err.h>
 #include <errno.h>
+#include <limits.h>  /* Include for INT_MAX */
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
