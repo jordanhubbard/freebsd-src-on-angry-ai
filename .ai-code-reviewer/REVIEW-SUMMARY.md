@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-14 00:45 - bin/ln ✓
+
+**Directory:** `bin/ln`
+
+**Summary:** ln: Mark as auto-skipped after 3 retries
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-13 22:26 - bin/kill ✓
 
 **Directory:** `bin/kill`
