@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-14 23:25 - bin/mkdir ✓
+
+**Directory:** `bin/mkdir`
+
+**Summary:** mkdir: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-14 22:59 - bin/ls/tests ✓
 
 **Directory:** `bin/ls/tests`
