@@ -185,20 +185,32 @@ revstatcmp(const FTSENT *a, const FTSENT *b)
 	return (statcmp(b, a));
 }
 
+static int
+sizecmp_common(const FTSENT *a, const FTSENT *b, int reverse)
+{
+	int result;
+
+	if (b->fts_statp->st_size > a->fts_statp->st_size)
+		result = 1;
+	else if (b->fts_statp->st_size < a->fts_statp->st_size)
+		result = -1;
+	else
+		result = 0;
+
+	if (result != 0)
+		return (reverse ? -result : result);
+
+	return (strcoll(reverse ? b->fts_name : a->fts_name, reverse ? a->fts_name : b->fts_name));
+}
+
 int
 sizecmp(const FTSENT *a, const FTSENT *b)
 {
-
-	if (b->fts_statp->st_size > a->fts_statp->st_size)
-		return (1);
-	if (b->fts_statp->st_size < a->fts_statp->st_size)
-		return (-1);
-	return (strcoll(a->fts_name, b->fts_name));
+	return sizecmp_common(a, b, 0);
 }
 
 int
 revsizecmp(const FTSENT *a, const FTSENT *b)
 {
-
-	return (sizecmp(b, a));
+	return sizecmp_common(a, b, 1);
 }

@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-14 19:00 - bin/ls ✓
+
+**Directory:** `bin/ls`
+
+**Summary:** ls: Refactor size comparison functions for consistency
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/ls/cmp.c
+
+---
+
 ## 2026-01-14 16:53 - bin/ln/tests ✓
 
 **Directory:** `bin/ln/tests`
