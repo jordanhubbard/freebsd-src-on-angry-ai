@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-01-15 02:39
+Generated: 2026-01-15 22:46
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,25 +13,25 @@ Generated: 2026-01-15 02:39
 
 ## Progress
 - Total directories: 8264
-- Completed: 35 (0%)
+- Completed: 36 (0%)
 - Skipped: 1
-- Remaining: 8228
+- Remaining: 8227
 
 ## Current Position
-CURRENT POSITION: `bin/mv/tests`
+CURRENT POSITION: `bin/nproc`
 
-## bin/ (35/74 done)
+## bin/ (36/74 done)
 
 - [x] `bin/cat` (1 .c, 0 .h, 525 lines) - 2026-01-10 - Fixed by session 20260110_042553
 - [x] `bin/cat/tests` (0 .c, 0 .h, 0 lines) - 2026-01-10 - Fixed by session 20260110_042553
 - [x] `bin/chflags` (1 .c, 0 .h, 213 lines) - 2026-01-10 - Fixed by session 20260110_042553
 - [x] `bin/chflags/tests` (0 .c, 0 .h, 0 lines) - 2026-01-10 - Fixed by session 20260110_042553
-- [x] `bin/chio` (1 .c, 2 .h, 1329 lines) - 2026-01-14 - Fixed by session 20260114_033209
+- [x] `bin/chio` (1 .c, 2 .h, 1332 lines) - 2026-01-14 - Fixed by session 20260114_033209
 - [x] `bin/chmod` (1 .c, 0 .h, 248 lines) - 2026-01-11 - Fixed by session 20260110_042553
 - [x] `bin/chmod/tests` (0 .c, 0 .h, 0 lines) - 2026-01-11 - Fixed by session 20260110_042553
 - [x] `bin/cp` (2 .c, 1 .h, 1257 lines) - 2026-01-11 - Fixed by session 20260110_042553
 - [x] `bin/cp/tests` (0 .c, 0 .h, 0 lines) - 2026-01-11 - Fixed by session 20260110_042553
-- [-] `bin/cpuset` (1 .c, 0 .h, 346 lines) - Auto-skipped after 3 retries
+- [-] `bin/cpuset` (1 .c, 0 .h, 347 lines) - Auto-skipped after 3 retries
 - [x] `bin/csh` (1 .c, 3 .h, 517 lines) - 2026-01-11 - Fixed by session 20260110_042553
 - [x] `bin/date` (2 .c, 1 .h, 1061 lines) - 2026-01-12 - Fixed by session 20260112_031346
 - [x] `bin/date/tests` (0 .c, 0 .h, 0 lines) - 2026-01-12 - Fixed by session 20260112_031346
@@ -53,12 +53,12 @@ CURRENT POSITION: `bin/mv/tests`
 - [x] `bin/kill` (1 .c, 0 .h, 180 lines) - 2026-01-13 - Fixed by session 20260113_093520
 - [x] `bin/ln` (1 .c, 0 .h, 378 lines) - 2026-01-14 - Fixed by session 20260113_093520
 - [x] `bin/ln/tests` (0 .c, 0 .h, 0 lines) - 2026-01-14 - Fixed by session 20260114_033209
-- [x] `bin/ls` (4 .c, 2 .h, 2488 lines) - 2026-01-14 - Fixed by session 20260114_033209
+- [x] `bin/ls` (4 .c, 2 .h, 2500 lines) - 2026-01-14 - Fixed by session 20260114_033209
 - [x] `bin/ls/tests` (0 .c, 0 .h, 0 lines) - 2026-01-14 - Fixed by session 20260114_033209
 - [x] `bin/mkdir` (1 .c, 0 .h, 206 lines) - 2026-01-14 - Fixed by session 20260114_033209
 - [x] `bin/mkdir/tests` (0 .c, 0 .h, 0 lines) - 2026-01-15 - Fixed by session 20260114_033209
-- [x] `bin/mv` (1 .c, 0 .h, 495 lines) - 2026-01-15 - Fixed by session 20260114_033209
-- [ ] `bin/mv/tests` (0 .c, 0 .h, 0 lines)
+- [x] `bin/mv` (1 .c, 0 .h, 503 lines) - 2026-01-15 - Fixed by session 20260114_033209
+- [x] `bin/mv/tests` (0 .c, 0 .h, 0 lines) - 2026-01-15 - Fixed by session 20260115_224159
 - [ ] `bin/nproc` (1 .c, 0 .h, 132 lines)
 - [ ] `bin/pax` (16 .c, 10 .h, 14402 lines)
 - [ ] `bin/pax/tests` (0 .c, 0 .h, 0 lines)
