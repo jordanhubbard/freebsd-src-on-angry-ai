@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-15 02:39 - bin/mv ✓
+
+**Directory:** `bin/mv`
+
+**Summary:** mv: Replace vfork with fork for security and correctness
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/mv/mv.c
+
+---
+
 ## 2026-01-15 01:14 - bin/mkdir/tests ✓
 
 **Directory:** `bin/mkdir/tests`
