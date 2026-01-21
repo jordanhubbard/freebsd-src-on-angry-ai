@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-21 08:40 - bin/ln ✓
+
+**Directory:** `bin/ln`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: marking bin/ln as ">" meaning in progress? The commit covers ALL changes in the ln directory. The short summary must be <=72 chars total including prefix "[ai-code-reviewer] ln: " and summary. Must be exactly that format: "[ai-code-reviewer] ln: <short summary>" (72 chars max total). Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, imperative mood, wrap at 72 chars.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-21 08:31 - bin/kill ✓
 
 **Directory:** `bin/kill`
