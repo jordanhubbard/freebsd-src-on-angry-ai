@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-21 09:29 - bin/ls/tests ✓
+
+**Directory:** `bin/ls/tests`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: updated timestamp from 09:11 to 09:12, and changed status marker for bin/ls/tests from "[ ]" to "[>]"? Actually diff shows "- [ ] `bin/ls/tests` ..." changed to "+- [>] `bin/ls/tests` ...". So it's marking it as "In progress"? The commit covers all changes in the tests directory. The commit message should be "[ai-code-reviewer] tests: ..." short summary <=72 chars total including prefix? The format: first line: "[ai-code-reviewer] tests: <short summary>" (72 chars max total). So total length of that line must be <=72 characters. Must be exactly that format. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, not style. Use imperative mood. This commit covers ALL changes in the tests directory.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-21 09:11 - bin/mkdir ✓
 
 **Directory:** `bin/mkdir`
