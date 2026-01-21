@@ -189,7 +189,7 @@ kdumpenv(int dump_type)
 static int
 kgetenv(const char *env)
 {
-	char buf[1024];
+	char buf[4096];
 	int ret;
 
 	ret = kenv(KENV_GET, env, buf, sizeof(buf));
