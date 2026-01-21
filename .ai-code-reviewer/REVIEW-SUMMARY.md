@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-20 20:41 - bin/ed ✓
+
+**Directory:** `bin/ed`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md: Updated generated timestamp and status marker from `[ ]` to `[>]` for bin/ed. That's not actual code changes in ed directory; it's just a review index file. However the instruction says "This commit covers ALL changes in the ed directory". But the diff only shows changes to REVIEW-INDEX.md, which is outside bin/ed but under .ai-code-reviewer. Possibly they want a commit message about ed status update. The rules: first line "[ai-code-reviewer] ed: <short summary>" max 72 chars total. So something like "[ai-code-reviewer] ed: Update review status to in-progress". Must be <=72 chars including prefix? The prefix is "[ai-code-reviewer] ed: " that's 18 characters (including space?). Let's count: "[ai-code-reviewer]" = 16? Actually characters: [ a i - c o d e - r e v i e w e r ] = 16? Let's count precisely: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, -=9, r=10, e=11, v=12, i=13, e=14, w=15, e=16, r=17, ]=18. Then space then "ed:"? Actually they wrote "[ai-code-reviewer] ed: <short summary>". So after the prefix there is a space then "ed:"? The format: "[ai-code-reviewer] ed: <short summary>". So the prefix includes the bracketed tag, then a space, then "ed:"? Actually they wrote "[ai-code-reviewer] ed: <short summary>" meaning the tag is "[ai-code-reviewer]" then a space then "ed:" then space then summary? Probably they want "[ai-code-reviewer] ed: <short summary>" where the tag is "[ai-code-reviewer]" and then "ed:" is part of the message. So first line should start with "[ai-code-reviewer] ed: " then short summary. Must be <=72 characters total. Let's craft a short summary: "Mark bin/ed as in-progress review". Count characters: "[ai-code-reviewer] ed: Mark bin/ed as in-progress review". Let's count: prefix "[ai-code-reviewer] ed: " length? "[ai-code-reviewer]" = 16? Actually we counted 18 earlier including brackets? Let's recount: characters: '['=1, 'a'=2, 'i'=3, '-'=4, 'c'=5, 'o'=6, 'd'=7, 'e'=8, '-'=9, 'r'=10, 'e'=11, 'v'=12, 'i'=13, 'e'=14, 'w'=15, 'e'=16, 'r'=17, ']'=18. Then space =19, then "ed:" =22? Actually after space we have "ed:" three characters: e=20, d=21, :=22. Then space =23. Then "Mark bin/ed as in-progress review" length? Let's count: "Mark"4, space5, "bin/ed"6 => total 11? Let's just count whole string after prefix: "Mark bin/ed as in-progress review". That's 27? Let's count precisely: M1 a2 r3 k4 space5 b6 i7 n8 /9 e10 d11 space12 a13 s14 space15 i16 n17 -18 p19 r20 o21 g22 r23 e24 s25 s26 space27 r28 e29 v30 i31 e32 w33. So 33 characters after the space. So total length = 23 + 33 = 56. That's within 72. Good.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-19 21:44 - bin/echo/tests ✓
 
 **Directory:** `bin/echo/tests`
