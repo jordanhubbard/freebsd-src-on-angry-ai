@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-21 15:36 - bin/pwait/tests ✓
+
+**Directory:** `bin/pwait/tests`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows that the file .ai-code-reviewer/REVIEW-INDEX.md had a change: line "- [ ] `bin/pwait/tests` (0 .c, 0 .h, 0 lines)" changed to "+- [>] `bin/pwait/tests` (0 .c, 0 .h, 0 lines)". So it's marking that test directory as something? Probably indicating it's being reviewed? The commit message should reflect that tests directory is now being reviewed? The instruction: "This commit covers ALL changes in the tests directory". So we need to produce a commit message with first line: "[ai-code-reviewer] tests: <short summary>" max 72 chars total including prefix? Probably total length of first line must be <=72 characters. So we need something like "[ai-code-reviewer] tests: Mark pwait/tests as reviewed placeholder". Count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-21 15:32 - bin/pwait ✓
 
 **Directory:** `bin/pwait`
