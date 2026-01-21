@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-21 15:32 - bin/pwait ✓
+
+**Directory:** `bin/pwait`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md, marking pwait as done with > symbol. The commit covers ALL changes in the pwait directory. So we need a short summary <=72 chars total including prefix "[ai-code-reviewer] pwait: ". Must be exactly that format: "[ai-code-reviewer] pwait: <short summary>" with total length <=72 characters. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, imperative mood, wrap at 72 chars.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-21 15:23 - bin/ps ✓
 
 **Directory:** `bin/ps`
