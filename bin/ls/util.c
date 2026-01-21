@@ -60,7 +60,7 @@ prn_normal(const char *s)
 	n = 0;
 	while ((clen = mbrtowc(&wc, s, MB_LEN_MAX, &mbs)) != 0) {
 		if (clen == (size_t)-2) {
-			n += printf("%s", s);
+			n += fputs(s, stdout);
 			break;
 		}
 		if (clen == (size_t)-1) {

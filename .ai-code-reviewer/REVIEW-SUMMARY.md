@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-21 08:58 - bin/ls ✓
+
+**Directory:** `bin/ls`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message with first line: "[ai-code-reviewer] ls: <short summary>" max 72 chars total including that line? It says 72 chars max total. So the first line must be <=72 characters including the prefix and summary. Must be exactly "[ai-code-reviewer] ls: ..." then summary. Must be <=72 characters total length. Let's count.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/ls/util.c
+
+---
+
 ## 2026-01-21 08:46 - bin/ln ✓
 
 **Directory:** `bin/ln`
