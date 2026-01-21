@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-20 21:39 - bin/hostname/tests ✓
+
+**Directory:** `bin/hostname/tests`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows that the file .ai-code-reviewer/REVIEW-INDEX.md changed: line "- [ ] `bin/hostname/tests` (0 .c, 0 .h, 0 lines)" changed to "+- [>] `bin/hostname/tests` (0 .c, 0 .h, 0 lines)". So they marked it as "in progress"? Actually they changed status from "[ ]" to "[>]" maybe indicating something. The commit message should be about tests: something short summary, max 72 chars total including prefix? The rule: First line: "[ai-code-reviewer] tests: <short summary>" (72 chars max total). So we need to produce a line starting with "[ai-code-reviewer] tests: " then short summary, total length <=72 characters. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, imperative mood, wrap at 72 chars.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-20 21:27 - bin/hostname ✓
 
 **Directory:** `bin/hostname`
