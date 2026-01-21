@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-01-21 09:03
+Generated: 2026-01-21 09:11
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,14 +13,14 @@ Generated: 2026-01-21 09:03
 
 ## Progress
 - Total directories: 8264
-- Completed: 31 (0%)
+- Completed: 32 (0%)
 - Skipped: 1
-- Remaining: 8232
+- Remaining: 8231
 
 ## Current Position
 CURRENT POSITION: `bin/ls/tests`
 
-## bin/ (31/74 done)
+## bin/ (32/74 done)
 
 - [x] `bin/cat` (1 .c, 0 .h, 525 lines) - 2026-01-10 - Fixed by session 20260110_042553
 - [x] `bin/cat/tests` (0 .c, 0 .h, 0 lines) - 2026-01-10 - Fixed by session 20260110_042553
@@ -55,7 +55,7 @@ CURRENT POSITION: `bin/ls/tests`
 - [x] `bin/ln/tests` (0 .c, 0 .h, 0 lines) - 2026-01-21 - Fixed by session 20260121_081245
 - [x] `bin/ls` (4 .c, 2 .h, 2488 lines) - 2026-01-21 - Fixed by session 20260121_081245
 - [ ] `bin/ls/tests` (0 .c, 0 .h, 0 lines)
-- [ ] `bin/mkdir` (1 .c, 0 .h, 206 lines)
+- [x] `bin/mkdir` (1 .c, 0 .h, 206 lines) - 2026-01-21 - Fixed by session 20260121_081245
 - [ ] `bin/mkdir/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `bin/mv` (1 .c, 0 .h, 495 lines)
 - [ ] `bin/mv/tests` (0 .c, 0 .h, 0 lines)
