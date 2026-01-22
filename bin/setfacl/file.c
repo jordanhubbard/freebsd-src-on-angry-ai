@@ -57,12 +57,13 @@ get_acl_from_file(const char *filename)
 			err(1, "fopen() %s failed", filename);
 	}
 
-	len = fread(buf, (size_t)1, sizeof(buf) - 1, file);
+	len = fread(buf, 1, sizeof(buf) - 1, file);
 	buf[len] = '\0';
-	if (ferror(file) != 0) {
+	if (ferror(file)) {
 		fclose(file);
 		err(1, "error reading from %s", filename);
-	} else if (feof(file) == 0) {
+	}
+	if (len == sizeof(buf) - 1 && !feof(file)) {
 		fclose(file);
 		errx(1, "line too long in %s", filename);
 	}
