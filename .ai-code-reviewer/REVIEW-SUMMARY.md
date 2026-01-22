@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-22 14:31 - bin/sleep ✓
+
+**Directory:** `bin/sleep`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: timestamp changed from 14:22 to 14:23, and status marker changed from [ ] to [>]. Also maybe other changes? The diff shows only that file. The commit covers all changes in the sleep directory, but only the REVIEW-INDEX.md changed. The summary should be about sleep: maybe "Update review status for sleep directory" or "Mark sleep as in progress". Must be <=72 chars total for first line including prefix? The rule: First line: "[ai-code-reviewer] sleep: <short summary>" (72 chars max total). So we need to craft a short summary after "sleep: " that fits within 72 characters total including prefix and colon and space? Probably total length of line must be <=72 characters. Let's count: "[ai-code-reviewer] " is 16 characters? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, - =9, r=10, e=11, v=12, i=13, e=14, w=15, ]=16, space=17. Then "sleep: " adds 7 characters (s=18, l=19, e=20, e=21, p=22, :=23, space=24). So we have 24 characters used. We can have up to 72 total, so we have 48 characters left for the short summary. Must be concise.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-22 14:22 - bin/sh/tests/set-e ✓
 
 **Directory:** `bin/sh/tests/set-e`
