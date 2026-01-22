@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-22 11:35 - bin/rm/tests ✓
+
+**Directory:** `bin/rm/tests`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "[ ] `bin/rm/tests` (0 .c, 0 .h, 0 lines)" to "+[>] `bin/rm/tests` (0 .c, 0 .h, 0 lines)". So they marked it as "greater than"? Probably indicating that tests directory now has some status? The commit covers all changes in the tests directory. The summary should be short, max 72 chars total including prefix? The first line must be "[ai-code-reviewer] tests: <short summary>" and total <=72 characters. So we need to craft a short summary after "tests: ". Something like "Mark rm/tests as pending review" but must be <=72 chars total including prefix and space? Let's count: "[ai-code-reviewer] tests: " is 20 characters? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, - =9, r=10, e=11, v=12, i=13, e=14, w=15, ]=16, space=17, t=18, e=19, s=20, t=21, s=22, :=? Actually colon and space: colon is character 22? Let's count precisely: "[ai-code-reviewer]" length? Let's count characters: [ (1), a(2), i(3), -(4), c(5), o(6), d(7), e(8), -(9), r(10), e(11), v(12), i(13), e(14), w(15), e(16), r(17), ] (18). So bracket part is 18 characters. Then space after? Actually they have a space after? The format: "[ai-code-reviewer] tests: <short summary>" includes a space after the closing bracket? In example they have "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()". There's a space after the closing bracket? Actually they have "[ai-code-reviewer] cpuset: Replace ..." So there is a space after the bracket? The bracket includes the closing bracket, then a space, then "cpuset:"? Actually they have "[ai-code-reviewer] cpuset: ..." So after the closing bracket there is a space then "cpuset:". So the prefix includes a space after the bracket. So "[ai-code-reviewer] " is 19 characters (including space). Then "tests: " is 7 characters (t e s t s : space) = 7? Let's count: t1, e2, s3, t4, s5, :6, space7. So total prefix length = 19 + 7 = 26 characters. Then we have the short summary. Must keep total <=72 characters. So we have up to 72-26 = 46 characters for the summary. So we need a short summary <=46 characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-22 11:31 - bin/rm ✓
 
 **Directory:** `bin/rm`
