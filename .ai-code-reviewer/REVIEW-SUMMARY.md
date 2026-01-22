@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-22 13:56 - bin/sh/tests/errors ✓
+
+**Directory:** `bin/sh/tests/errors`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `bin/sh/tests/errors` (0 .c, 0 .h, 0 lines)" to "+- [>] `bin/sh/tests/errors` (0 .c, 0 .h, 0 lines)". So it's marking that directory as "in progress"? The commit message should reflect that errors directory is now being worked on? The instruction: "This commit covers ALL changes in the errors directory". So we need to describe that we are starting work on errors directory, maybe marking it as in progress. The short summary must be <=72 characters total including prefix? The format: "[ai-code-reviewer] errors: <short summary>" total 72 chars max. So we need to craft a short summary after "errors: " that fits within 72 characters total including the prefix and space? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" That's the whole line. So we need to produce something like "[ai-code-reviewer] errors: Mark errors dir as in-progress for review". Let's count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-22 13:52 - bin/sh/tests/builtins ✓
 
 **Directory:** `bin/sh/tests/builtins`
