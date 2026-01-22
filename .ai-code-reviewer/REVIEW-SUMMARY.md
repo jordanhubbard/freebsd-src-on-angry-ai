@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-22 11:23 - bin/realpath ✓
+
+**Directory:** `bin/realpath`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md, marking realpath as done with > symbol. The commit message should be about realpath component. Must follow rules:
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-22 11:15 - bin/pwd ✓
 
 **Directory:** `bin/pwd`
