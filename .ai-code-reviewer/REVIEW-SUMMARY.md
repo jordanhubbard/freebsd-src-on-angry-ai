@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-22 11:39 - bin/rmail ✓
+
+**Directory:** `bin/rmail`
+
+**Summary:** [ai-code-reviewer] We need to generate commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: changed status of bin/rmail from "[ ]" to "[>]"? Actually changed from "- [ ] `bin/rmail` (0 .c, 0 .h, 0 lines)" to "+- [>] `bin/rmail` (0 .c, 0 .h, 0 lines)". So it's marking it as "in progress"? The commit message should be about rmail: something short summary, max 72 chars total including prefix? The rule: First line: "[ai-code-reviewer] rmail: <short summary>" (72 chars max total). So we need to produce a line starting with "[ai-code-reviewer] rmail: " then short summary, total length <=72 characters. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, imperative mood, wrap at 72 chars.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-22 11:35 - bin/rm/tests ✓
 
 **Directory:** `bin/rm/tests`
