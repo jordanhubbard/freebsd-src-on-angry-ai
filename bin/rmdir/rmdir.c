@@ -96,6 +96,10 @@ rm_path(char *path)
 		if (p == path)
 			break;
 
+		/* Do not attempt to remove the root directory. */
+		if (path[0] == '/' && strcmp(path, "/") == 0)
+			break;
+
 		if (rmdir(path) < 0) {
 			warn("%s", path);
 			return (1);

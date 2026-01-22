@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-22 11:44 - bin/rmdir ✓
+
+**Directory:** `bin/rmdir`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - bin/rmdir/rmdir.c
+
+---
+
 ## 2026-01-22 11:39 - bin/rmail ✓
 
 **Directory:** `bin/rmail`
