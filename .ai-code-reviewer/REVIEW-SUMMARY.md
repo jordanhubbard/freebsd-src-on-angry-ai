@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-22 14:10 - bin/sh/tests/invocation ✓
+
+**Directory:** `bin/sh/tests/invocation`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-22 14:05 - bin/sh/tests/expansion ✓
 
 **Directory:** `bin/sh/tests/expansion`
