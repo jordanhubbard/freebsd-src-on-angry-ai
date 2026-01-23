@@ -1060,3 +1060,35 @@ That's 3 lines. Ensure no extra text.
 ### COMPILER: Stale .depend ignored
 - Make ignored stale .depend files, causing spurious errors.  
 - Clean the build directory or regenerate dependencies before rebuilding.
+
+
+## 2026-01-22 17:24
+We need to output a short lesson entry, 2-4 lines, format:
+
+### [Category]: Brief title
+- What went wrong
+- How to avoid it next time
+
+Categories allowed: COMPILER, HEADERS, SYNTAX, LOGIC, STYLE
+
+We need to infer category from the error. The errors are about stale .depend files, ignoring stale .depend. That's a make/depend issue, likely related to HEADERS? Or COMPILER? Actually stale .depend errors are about make not updating dependencies; maybe it's a HEADERS issue? Or COMPILER? The errors are about ignoring stale .depend for .a libraries. That's more about make's dependency tracking, maybe HEADERS? But category list includes COMPILER, HEADERS, SYNTAX, LOGIC, STYLE. The error is about stale .depend, which is about make's dependency generation, not directly compiler errors. Could be considered HEADERS? Or maybe it's a COMPILER error? The errors are "ignoring stale .depend". That's a make issue, not listed. Maybe they want to categorize as HEADERS? Or maybe it's a SYNTAX? Not really. Could be LOGIC? Not exactly. Could be STYLE? Not.
+
+Probably they want to categorize as HEADERS? But the errors are about stale .depend, which is about make's dependency files generated from header includes. So maybe it's about HEADERS: stale includes causing errors. So I'll choose HEADERS.
+
+Write 2-4 lines. Provide brief title. Then bullet points.
+
+Example:
+
+### HEADERS: Stale dependency files cause build failures
+- The build ignored outdated .depend files, leading to missing or incorrect dependencies.
+- Clean the obj tree or run make clean before rebuilding to regenerate .depend files.
+
+That's 2 bullet points, 3 lines total? Actually format: line with ### CATEGORY: Title, then bullet lines. That's 3 lines (title line, bullet1, bullet2). That's okay.
+
+Make sure output only the lesson entry, nothing else.
+
+Thus final answer.
+</think>
+### HEADERS: Stale .depend files cause build failures
+- The build ignored outdated dependency files, resulting in missing or incorrect includes.  
+- Clean the object directory or run `make clean` to regenerate .depend before rebuilding.
