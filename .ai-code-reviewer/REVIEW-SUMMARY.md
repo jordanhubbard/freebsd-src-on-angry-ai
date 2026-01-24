@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-24 12:30 - sbin/adjkerntz ✓
+
+**Directory:** `sbin/adjkerntz`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: timestamp updated from 12:19 to 12:20, and status marker changed from -- [ ] to - [>] indicating in progress? The component is sbin/adjkerntz. The commit covers all changes in the adjkerntz directory. The diff only shows modifications to the review index file, not actual source code changes. But the instruction: "Generate a git commit message for these FreeBSD source code changes." The changes are to the review index file, but they are tracking review progress. However rule 5: focus on security/correctness fixes, not style changes. But there are no security fixes shown; just a timestamp and status marker change. Possibly the commit is about updating the review index to reflect that adjkerntz is now in progress (marked with >). So the commit message should reflect that the review status for sbin/adjkerntz has been updated to "in progress". The short summary must be <=72 characters total including prefix? The format: "[ai-code-reviewer] adjkerntz: <short summary>" total 72 chars max. So we need to craft a short summary after the prefix. The prefix is "[ai-code-reviewer] adjkerntz: " which is 20 characters? Let's count: [ai-code-reviewer] is 15? Actually characters: [ =1, a i - c o d e - r e v i e w e r ] =? Let's count precisely: "["=1, "a"=2, "i"=3, "-"=4, "c"=5, "o"=6, "d"=7, "e"=8, "-"=9, "r"=10, "e"=11, "v"=12, "i"=13, "e"=14, "w"=15, "e"=16, "r"=17, "]"=18. Then space =19, "a"=20, "d"=21, "j"=22, "e"=23, "r"=24, "k"=25, "e"=26, "r"=27, "t"=28, "z"=29, ":"=30, space=31. So prefix length is 31 characters. Then we have short summary after that, total line must be <=72 characters. So we have up to 72-31 = 41 characters for the summary. Must be short summary of changes. Something like "Mark adjkerntz as in-progress review". That's 27 characters? Let's count: "Mark adjkerntz as in-progress review" length: M1 a2 r3 k4 space5 a6 d7 j8 e9 r10 k11 e12 r13 t14 z15 space16 a17 s18 space19 i20 n21 -22 p23 r24 o25 g26 r27 e28 s29 s30 space31 r32 e33 v34 i35 e36 w37. That's 37 characters. Plus prefix 31 = 68, within 72. Good.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-24 12:19 - bin/uuidgen ✓
 
 **Directory:** `bin/uuidgen`
