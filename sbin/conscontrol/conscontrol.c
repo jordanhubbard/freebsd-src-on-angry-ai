@@ -141,11 +141,13 @@ consdel(char *devnam)
 	devnam = stripdev(devnam);
 	if (devnam == NULL)
 		return;
-	len = strlen(devnam) + sizeof("-");
+	/* Allocate space for '-' + devnam + terminating NUL */
+	len = strlen(devnam) + 2;
 	if ((buf = malloc(len)) == NULL)
 		errx(1, "malloc failed");
 	buf[0] = '-';
-	strcpy(buf + 1, devnam);
+	/* Copy devnam safely, including the terminating NUL */
+	strlcpy(buf + 1, devnam, len);
 	if (sysctlbyname("kern.console", NULL, NULL, buf, len) == -1)
 		err(1, "could not remove %s as a console", devnam);
 	free(buf);

@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-24 13:50 - sbin/conscontrol ✓
+
+**Directory:** `sbin/conscontrol`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/conscontrol/conscontrol.c
+
+---
+
 ## 2026-01-24 13:40 - sbin/comcontrol ✓
 
 **Directory:** `sbin/comcontrol`
