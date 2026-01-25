@@ -60,10 +60,10 @@ struct hash_table *
 new_hash_table(int count)
 {
 	struct hash_table *rval;
+	size_t size;
 
-	rval = calloc(1, sizeof(struct hash_table) -
-	    (DEFAULT_HASH_SIZE * sizeof(struct hash_bucket *)) +
-	    (count * sizeof(struct hash_bucket *)));
+	size = sizeof(*rval) + count * sizeof(struct hash_bucket *);
+	rval = calloc(1, size);
 	if (rval == NULL)
 		return (NULL);
 	rval->hash_count = count;
