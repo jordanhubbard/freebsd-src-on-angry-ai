@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-01-25 02:29
+Generated: 2026-01-25 02:39
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-01-25 02:29
 
 ## Progress
 - Total directories: 8264
-- Completed: 83 (1%)
+- Completed: 84 (1%)
 - Skipped: 1
-- Remaining: 8180
+- Remaining: 8179
 
 ## Current Position
-CURRENT POSITION: `sbin/decryptcore`
+CURRENT POSITION: `sbin/devd`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/decryptcore`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (10/127 done)
+## sbin/ (11/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -109,7 +109,7 @@ CURRENT POSITION: `sbin/decryptcore`
 - [x] `sbin/comcontrol` (1 .c, 0 .h, 106 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/conscontrol` (1 .c, 0 .h, 195 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/ddb` (3 .c, 1 .h, 578 lines) - 2026-01-25 - Fixed by session 20260125_022006
-- [ ] `sbin/decryptcore` (1 .c, 0 .h, 429 lines)
+- [x] `sbin/decryptcore` (1 .c, 0 .h, 429 lines) - 2026-01-25 - Fixed by session 20260125_022006
 - [ ] `sbin/devd` (0 .c, 1 .h, 58 lines)
 - [ ] `sbin/devd/tests` (1 .c, 0 .h, 195 lines)
 - [ ] `sbin/devfs` (2 .c, 1 .h, 749 lines)
