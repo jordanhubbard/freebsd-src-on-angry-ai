@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-25 03:38 - sbin/dump ✓
+
+**Directory:** `sbin/dump`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows that REVIEW-INDEX.md was changed: line with dump status changed from "[ ]" to "[>]" indicating progress? Actually changed from "- [ ]" to "- [>]"? The diff shows "- [ ] `sbin/dump` ..." changed to "+- [>] `sbin/dump` ...". So it's marking dump as in progress? The commit covers ALL changes in the dump directory. The summary should be short, max 72 chars total including prefix? The first line must be "[ai-code-reviewer] dump: <short summary>" total <=72 characters. So we need to craft a short summary after "dump: " that fits within 72 characters total including prefix and space? The format: "[ai-code-reviewer] dump: <short summary>" total characters <=72. Let's count: "[ai-code-reviewer]" is 16 characters (including brackets). Then space, then "dump: " is 6 characters? Actually "dump: " is 6 inc space? Let's count: "dump:" is 5, plus space =6. So prefix length = 16 + 1 (space after bracket?) Actually the prefix includes the brackets and text: "[ai-code-reviewer]" is 16 characters. Then a space, then "dump: " is 6 characters, total 22. Then we have space? Actually the format: "[ai-code-reviewer] dump: <short summary>" So after "dump: " there is a space? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" No extra space after colon? They have "cpuset: " then space? Actually example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" There's a space after colon? They wrote "cpuset: Replace". So after colon there is a space. So we have "[ai-code-reviewer] dump: " then summary. So total length must be <=72 characters including everything up to end of line. So we need to keep summary short.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-25 03:34 - sbin/dmesg ✓
 
 **Directory:** `sbin/dmesg`

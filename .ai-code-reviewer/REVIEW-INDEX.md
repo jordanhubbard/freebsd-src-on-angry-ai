@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-01-25 03:34
+Generated: 2026-01-25 03:38
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-01-25 03:34
 
 ## Progress
 - Total directories: 8264
-- Completed: 91 (1%)
+- Completed: 92 (1%)
 - Skipped: 1
-- Remaining: 8172
+- Remaining: 8171
 
 ## Current Position
-CURRENT POSITION: `sbin/dump`
+CURRENT POSITION: `sbin/dumpfs`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/dump`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (18/127 done)
+## sbin/ (19/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -117,7 +117,7 @@ CURRENT POSITION: `sbin/dump`
 - [x] `sbin/dhclient` (16 .c, 5 .h, 9542 lines) - 2026-01-25 - Fixed by session 20260125_022006
 - [x] `sbin/dhclient/tests` (2 .c, 0 .h, 451 lines) - 2026-01-25 - Fixed by session 20260125_022006
 - [x] `sbin/dmesg` (1 .c, 0 .h, 201 lines) - 2026-01-25 - Fixed by session 20260125_022006
-- [ ] `sbin/dump` (8 .c, 2 .h, 4136 lines)
+- [x] `sbin/dump` (8 .c, 2 .h, 4136 lines) - 2026-01-25 - Fixed by session 20260125_022006
 - [ ] `sbin/dumpfs` (1 .c, 0 .h, 534 lines)
 - [ ] `sbin/dumpon` (1 .c, 0 .h, 706 lines)
 - [ ] `sbin/etherswitchcfg` (2 .c, 0 .h, 1637 lines)
