@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-27 11:13 - sbin/geom ✓
+
+**Directory:** `sbin/geom`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md, marking geom as ">" meaning maybe started? The commit covers ALL changes in the geom directory. The summary should be short, <=72 chars total including prefix "[ai-code-reviewer] geom: ". Must be exactly that format.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-27 11:09 - sbin/fsirand ✓
 
 **Directory:** `sbin/fsirand`
