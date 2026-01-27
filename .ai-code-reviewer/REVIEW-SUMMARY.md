@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-27 10:42 - sbin/fsck ✓
+
+**Directory:** `sbin/fsck`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `sbin/fsck` (3 .c, 1 .h, 1184 lines)" to "+- [>] `sbin/fsck` (3 .c, 1 .h, 1184 lines)". So it's marking that fsck is currently being worked on? The commit covers ALL changes in the fsck directory. The instruction: "Focus on the security/correctness fixes, not style changes". But the diff only shows a change to a markdown file, not actual source code changes. Possibly the commit includes fixing something in fsck? The diff only shows a change to the review index, marking fsck as in progress? The commit message should reflect that we are addressing fsck, maybe fixing something. The example shows "cpuset: Replace atoi() with strtonum()". So we need a short summary: "[ai-code-reviewer] fsck: <short summary>" max 72 chars total including prefix? The prefix is "[ai-code-reviewer] fsck: " plus short summary. Must be <=72 characters total. Let's craft: "[ai-code-reviewer] fsck: Mark fsck as in-progress for review". Count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-27 10:35 - sbin/ffsinfo ✓
 
 **Directory:** `sbin/ffsinfo`
