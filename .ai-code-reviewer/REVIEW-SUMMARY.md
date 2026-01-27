@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-27 10:16 - sbin/etherswitchcfg ✓
+
+**Directory:** `sbin/etherswitchcfg`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows that the file .ai-code-reviewer/REVIEW-INDEX.md had a change: line 122 changed from "- [ ] etherswitchcfg ..." to "+ [>] etherswitchcfg ...". That seems like a status marker change, maybe indicating progress. But the prompt says "Generate a git commit message for these FreeBSD source code changes." The component/directory is sbin/etherswitchcfg. Changed files: .ai-code-reviewer/REVIEW-INDEX.md. So the changes are in that review index file, not actual source code. But they want a commit message for these changes. The rules: first line: "[ai-code-reviewer] etherswitchcfg: <short summary>" max 72 chars total. So we need something like "[ai-code-reviewer] etherswitchcfg: Mark etherswitchcfg as in-progress review". Must be <=72 chars including prefix? Probably total length of first line including prefix and summary must be <=72 characters. Let's count: "[ai-code-reviewer] " is 17 characters (including brackets and space?). Actually "[ai-code-reviewer]" is 16? Let's count: [ a i - c o d e - r e v i e w e r ] = 16? Let's count precisely: characters: '['=1, 'a'=2, 'i'=3, '-'=4, 'c'=5, 'o'=6, 'd'=7, 'e'=8, '-'=9, 'r'=10, 'e'=11, 'v'=12, 'i'=13, 'e'=14, 'w'=15, 'e'=16, 'r'=17, ']'=18. Actually it's 18? Let's count again: "[ai-code-reviewer]" length: 17? Let's just count: a i - c o d e - r e v i e w e r = 15? Let's just count characters: a(1) i(2) -(3) c(4) o(5) d(6) e(7) -(8) r(9) e(10) v(11) i(12) e(13) w(14) e(15) r(16). That's 16 characters, plus brackets? Actually the string includes brackets: "[" then "ai-code-reviewer" then "]". So total length = 1 + 16 + 1 = 18. Then a space after? The format shows "[ai-code-reviewer] " then summary. So prefix length is 19 (including trailing space). So we have 72-19 = 53 characters for summary. Must be <=53 characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-27 10:09 - sbin/dumpon ✓
 
 **Directory:** `sbin/dumpon`
