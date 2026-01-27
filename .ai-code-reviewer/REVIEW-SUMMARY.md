@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-27 10:35 - sbin/ffsinfo ✓
+
+**Directory:** `sbin/ffsinfo`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md: line "Generated: 2026-01-27 10:25" changed to "Generated: 2026-01-27 10:26". Also status line for sbin/ffsinfo changed from "[ ]" to "[>]" indicating in progress? Actually status legend shows "[>]" maybe meaning "In progress"? The diff shows that the status line for ffsinfo changed from "[ ]" to "[>]". So the commit updates the review index file to reflect that ffsinfo is now in progress.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-27 10:25 - sbin/fdisk ✓
 
 **Directory:** `sbin/fdisk`
