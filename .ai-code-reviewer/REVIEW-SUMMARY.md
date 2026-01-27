@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-01-27 10:09 - sbin/dumpon ✓
+
+**Directory:** `sbin/dumpon`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The changes are to .ai-code-reviewer/REVIEW-INDEX.md, updating the generated timestamp and marking dumpon as > (in progress?) Actually diff shows "- [ ] `sbin/dumpon` ..." changed to "+- [>] `sbin/dumpon` ...". So it's indicating that dumpon is now in progress? The commit covers ALL changes in the dumpon directory. The diff only shows a change to the review index file, which tracks review progress. So the commit likely updates the review status and timestamp. The commit message should reflect that. The first line must be "[ai-code-reviewer] dumpon: <short summary>" max 72 chars total including prefix? Probably total length of first line must be <=72 characters. So we need something like "[ai-code-reviewer] dumpon: Update review index timestamp and status". Let's count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-01-25 03:49 - sbin/dumpfs ✓
 
 **Directory:** `sbin/dumpfs`

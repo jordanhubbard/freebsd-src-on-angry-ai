@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-01-25 03:49
+Generated: 2026-01-27 10:09
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-01-25 03:49
 
 ## Progress
 - Total directories: 8264
-- Completed: 93 (1%)
+- Completed: 94 (1%)
 - Skipped: 1
-- Remaining: 8170
+- Remaining: 8169
 
 ## Current Position
-CURRENT POSITION: `sbin/dumpon`
+CURRENT POSITION: `sbin/etherswitchcfg`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/dumpon`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (20/127 done)
+## sbin/ (21/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -119,7 +119,7 @@ CURRENT POSITION: `sbin/dumpon`
 - [x] `sbin/dmesg` (1 .c, 0 .h, 201 lines) - 2026-01-25 - Fixed by session 20260125_022006
 - [x] `sbin/dump` (8 .c, 2 .h, 4136 lines) - 2026-01-25 - Fixed by session 20260125_022006
 - [x] `sbin/dumpfs` (1 .c, 0 .h, 534 lines) - 2026-01-25 - Fixed by session 20260125_022006
-- [ ] `sbin/dumpon` (1 .c, 0 .h, 706 lines)
+- [x] `sbin/dumpon` (1 .c, 0 .h, 706 lines) - 2026-01-27 - Fixed by session 20260127_100122
 - [ ] `sbin/etherswitchcfg` (2 .c, 0 .h, 1637 lines)
 - [ ] `sbin/fdisk` (2 .c, 1 .h, 1615 lines)
 - [ ] `sbin/ffsinfo` (1 .c, 0 .h, 631 lines)
