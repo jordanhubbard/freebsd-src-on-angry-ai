@@ -554,8 +554,8 @@ run_late_customize() {
 #
 fixup_before_diskimage() {
 	# Run the deduplication script that takes the metalog journal and
-	# combines multiple entries for the same file (see source for
-	# details). We take the extra step of removing the size keywords. This
+	# combines multiple entries for the same file (see source for details).
+	# We take the extra step of removing the size and time keywords. This
 	# script, and many of the user scripts, copies, appends and otherwise
 	# modifies files in the build, changing their sizes.  These actions are
 	# impossible to trap, so go ahead remove the size= keyword. For this
@@ -566,7 +566,7 @@ fixup_before_diskimage() {
 		cp ${NANO_METALOG} ${NANO_METALOG}.pre
 		echo "/set uname=${NANO_DEF_UNAME} gname=${NANO_DEF_GNAME}" > ${NANO_METALOG}
 		cat ${NANO_METALOG}.pre | ${NANO_TOOLS}/mtree-dedup.awk | \
-		    sed -e 's/ size=[0-9][0-9]*//' | sort >> ${NANO_METALOG}
+		    sort -u | mtree -C -K uname,gname,tags -R size,time >> ${NANO_METALOG}
 	fi
 }
 
@@ -745,7 +745,7 @@ populate_slice() {
 	nano_umount ${mnt}
 }
 
-_populate_part() (
+_populate_part() {
 	local dir fs lbl metalog size type
 	type=$1
 	fs=$2
@@ -762,7 +762,7 @@ _populate_part() (
 	else
 		if [ "${type}" = "cfg" ]; then
 			dir=$(mktemp -d -p "${NANO_OBJ}" -t "${type}")
-			trap "rm -f ${dir}" 1 2 15 EXIT
+			trap "rm -rf ${dir}" 1 2 15 EXIT
 		fi
 	fi
 
@@ -770,8 +770,7 @@ _populate_part() (
 		# If there is no metalog, create one using the default
 		# NANO_DEF_UNAME and NANO_DEF_GNAME for all entries in the spec.
 		if [ -z "${metalog}" ]; then
-			metalog=$(mktemp -p "${NANO_OBJ}" -t "${type}")
-			trap "rm -f ${metalog}" 1 2 15 EXIT
+			metalog="${NANO_METALOG}.${type}"
 			echo "/set type=dir uname=${NANO_DEF_UNAME}" \
 			    "gname=${NANO_DEF_GNAME} mode=0755" > "${metalog}"
 			echo ". type=dir uname=${NANO_DEF_UNAME}" \
@@ -780,14 +779,14 @@ _populate_part() (
 				cd "${dir}"
 				mtree -bc -k flags,gid,gname,link,mode,uid,uname |
 				    mtree -C | tail -n +2 |
-				    sed 's/uid=[[:digit:]]*/uname=root/g' |
-				    sed 's/gid=[[:digit:]]*/gname=wheel/g' >> "${metalog}"
+				    sed "s/uid=[[:digit:]]*/uname=${NANO_DEF_UNAME}/g" |
+				    sed "s/gid=[[:digit:]]*/gname=${NANO_DEF_GNAME}/g" >> "${metalog}"
 			)
 		fi
 
 		nano_makefs "-DxZ ${NANO_MAKEFS}" "${metalog}" "${size}" "${fs}" "${dir}"
 	fi
-)
+}
 
 populate_cfg_slice() {
 	populate_slice "$1" "$2" "$3" "$4"

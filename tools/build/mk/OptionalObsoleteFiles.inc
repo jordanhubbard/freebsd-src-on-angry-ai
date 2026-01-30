@@ -3736,7 +3736,6 @@ OLD_FILES+=usr/lib/libkdb5.so
 OLD_FILES+=usr/lib/libkrad.a
 OLD_FILES+=usr/lib/libkrad.so
 OLD_FILES+=usr/lib/libkrb5profile.a
-OLD_FILES+=usr/lib/libkrb5profile.so
 OLD_FILES+=usr/lib/libkrb5support.a
 OLD_FILES+=usr/lib/libkrb5support.so
 OLD_FILES+=usr/lib/libverto.a
@@ -3789,7 +3788,6 @@ OLD_LIBS+=usr/lib/libkadm5srv_mit.so.122
 OLD_LIBS+=usr/lib/libkdb5.so.122
 OLD_LIBS+=usr/lib/libkrad.so.122
 OLD_LIBS+=usr/lib/libkrb5.so.122
-OLD_LIBS+=usr/lib/libkrb5profile.so.122
 OLD_LIBS+=usr/lib/libkrb5support.so.122
 OLD_LIBS+=usr/lib/libverto.so.122
 .endif	# ${MK_KERBEROS} == "no" || ${MK_MITKRB5} == "no"
@@ -3835,7 +3833,7 @@ OLD_DIRS+=usr/share/moused
 .for LIBCOMPAT libcompat in ${_ALL_LIBCOMPATS_libcompats}
 .  if ${MK_LIB${LIBCOMPAT}} == no
 OLD_FILES+=etc/mtree/BSD.lib${libcompat}.dist
-OLD_FILES+=libexec/ld-elf${libcompat}.so.1
+OLD_LIBS+=libexec/ld-elf${libcompat}.so.1
 .    if exists(${DESTDIR}/usr/lib${libcompat})
 LIB${LIBCOMPAT}_DIRS!=find ${DESTDIR}/usr/lib${libcompat} -type d \
     | sed -e 's,^${DESTDIR}/,,'; echo

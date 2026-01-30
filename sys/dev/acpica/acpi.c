@@ -490,7 +490,6 @@ acpi_attach(device_t dev)
     ACPI_STATUS		status;
     int			error, state;
     UINT32		flags;
-    UINT8		TypeA, TypeB;
     char		*env;
     enum power_stype	stype;
 
@@ -673,11 +672,9 @@ acpi_attach(device_t dev)
     if (AcpiGbl_FADT.Flags & ACPI_FADT_RESET_REGISTER)
 	sc->acpi_handle_reboot = 1;
 
-#if !ACPI_REDUCED_HARDWARE
     /* Only enable S4BIOS by default if the FACS says it is available. */
     if (AcpiGbl_FACS != NULL && AcpiGbl_FACS->Flags & ACPI_FACS_S4_BIOS_PRESENT)
 	sc->acpi_s4bios = 1;
-#endif
 
     /*
      * Probe all supported ACPI sleep states.  Awake (S0) is always supported,
@@ -688,13 +685,14 @@ acpi_attach(device_t dev)
 #if defined(__i386__) || defined(__amd64__)
     acpi_supported_stypes[POWER_STYPE_SUSPEND_TO_IDLE] = true;
 #endif
-    for (state = ACPI_STATE_S1; state <= ACPI_STATE_S5; state++)
-	if (ACPI_SUCCESS(AcpiEvaluateObject(ACPI_ROOT_OBJECT,
-	    __DECONST(char *, AcpiGbl_SleepStateNames[state]), NULL, NULL)) &&
-	    ACPI_SUCCESS(AcpiGetSleepTypeData(state, &TypeA, &TypeB))) {
+    for (state = ACPI_STATE_S1; state <= ACPI_STATE_S5; state++) {
+	UINT8 TypeA, TypeB;
+
+	if (ACPI_SUCCESS(AcpiGetSleepTypeData(state, &TypeA, &TypeB))) {
 	    acpi_supported_sstates[state] = true;
 	    acpi_supported_stypes[acpi_sstate_to_stype(state)] = true;
 	}
+    }
 
     /*
      * Dispatch the default sleep type to devices.  The lid switch is set
@@ -3645,8 +3643,8 @@ acpi_EnterSleepState(struct acpi_softc *sc, enum power_stype stype)
 		AcpiFormatException(status));
 	    goto backout;
 	}
+	slp_state |= ACPI_SS_SLP_PREP;
     }
-    slp_state |= ACPI_SS_SLP_PREP;
 
     if (sc->acpi_sleep_delay > 0)
 	DELAY(sc->acpi_sleep_delay * 1000000);
@@ -3672,16 +3670,13 @@ acpi_EnterSleepState(struct acpi_softc *sc, enum power_stype stype)
     case POWER_STYPE_UNKNOWN:
 	__unreachable();
     }
+    resumeclock();
 
     /*
      * Back out state according to how far along we got in the suspend
      * process.  This handles both the error and success cases.
      */
 backout:
-    if ((slp_state & ACPI_SS_SLP_PREP) != 0) {
-	resumeclock();
-	slp_state &= ~ACPI_SS_SLP_PREP;
-    }
     if ((slp_state & ACPI_SS_GPE_SET) != 0) {
 	acpi_wake_prep_walk(sc, stype);
 	sc->acpi_stype = POWER_STYPE_AWAKE;
@@ -3691,7 +3686,7 @@ backout:
 	DEVICE_RESUME(root_bus);
 	slp_state &= ~ACPI_SS_DEV_SUSPEND;
     }
-    if (stype != POWER_STYPE_SUSPEND_TO_IDLE && (slp_state & ACPI_SS_SLP_PREP) != 0) {
+    if ((slp_state & ACPI_SS_SLP_PREP) != 0) {
 	AcpiLeaveSleepState(acpi_sstate);
 	slp_state &= ~ACPI_SS_SLP_PREP;
     }
@@ -4621,6 +4616,7 @@ static struct debugtag	dbg_layer[] = {
     {"ACPI_FAN",		ACPI_FAN},
     {"ACPI_POWERRES",		ACPI_POWERRES},
     {"ACPI_PROCESSOR",		ACPI_PROCESSOR},
+    {"ACPI_SPMC",		ACPI_SPMC},
     {"ACPI_THERMAL",		ACPI_THERMAL},
     {"ACPI_TIMER",		ACPI_TIMER},
     {"ACPI_ALL_DRIVERS",	ACPI_ALL_DRIVERS},
