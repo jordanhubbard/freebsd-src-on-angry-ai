@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-02 12:21 - sbin/geom/misc ✓
+
+**Directory:** `sbin/geom/misc`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "[ ]" to "[>]" indicating some status? The component/directory is sbin/geom/misc. The commit should be about "misc: ..." with short summary <=72 chars total including prefix? The format: "[ai-code-reviewer] misc: <short summary>" (72 chars max total). So the whole first line must be <=72 characters. Must start with "[ai-code-reviewer] misc: " then short summary. Must be concise.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-02 12:11 - sbin/geom/core ✓
 
 **Directory:** `sbin/geom/core`
