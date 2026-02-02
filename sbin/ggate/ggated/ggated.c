@@ -709,12 +709,17 @@ recv_thread(void *arg)
 		    MSG_WAITALL);
 		if (data == 0) {
 			g_gate_log(LOG_DEBUG, "Process %u exiting.", getpid());
+			free(req); // Free allocated memory before exiting
 			exit(EXIT_SUCCESS);
 		} else if (data == -1) {
 			g_gate_xlog("Error while receiving hdr packet: %s.",
 			    strerror(errno));
+			free(req); // Free allocated memory on error
+			continue;
 		} else if (data != sizeof(req->r_hdr)) {
 			g_gate_xlog("Malformed hdr packet received.");
+			free(req); // Free allocated memory on error
+			continue;
 		}
 		g_gate_log(LOG_DEBUG, "Received hdr packet.");
 		g_gate_swap2h_hdr(&req->r_hdr);
@@ -738,6 +743,9 @@ recv_thread(void *arg)
 			if (data == -1) {
 				g_gate_xlog("Error while receiving data: %s.",
 				    strerror(errno));
+				free(req->r_data); // Free allocated memory on error
+				free(req); // Free allocated memory on error
+				continue;
 			}
 		}
 

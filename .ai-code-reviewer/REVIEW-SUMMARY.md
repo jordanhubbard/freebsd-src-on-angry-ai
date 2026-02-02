@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-02 13:24 - sbin/ggate/ggated ✓
+
+**Directory:** `sbin/ggate/ggated`
+
+**Summary:** [ai-code-reviewer] ggated: Free allocated memory to prevent leaks
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/ggate/ggated/ggated.c
+
+---
+
 ## 2026-02-02 12:38 - sbin/ggate/ggatec ✓
 
 **Directory:** `sbin/ggate/ggatec`
