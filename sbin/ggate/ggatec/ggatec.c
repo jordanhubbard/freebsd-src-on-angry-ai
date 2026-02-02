@@ -450,9 +450,6 @@ g_gatec_start(void)
 	}
 	sendtd = pthread_self();
 	send_thread(NULL);
-	/* Disconnected. */
-	close(sendfd);
-	close(recvfd);
 }
 
 static void
