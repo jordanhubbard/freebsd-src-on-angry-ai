@@ -64,7 +64,10 @@ initdevice(char *device, int tout)
 		fprintf(stderr, "bad device name %s\n", devname);
 		exit(-1);
 	    }
-	i = atoi(s);
+	if (strtonum(s, 0, 255, &i) == 0) {
+		fprintf(stderr, "invalid interface number %s\n", s);
+		exit(-1);
+	}
 	*s = '\0';
 	/*
 	 * For writing

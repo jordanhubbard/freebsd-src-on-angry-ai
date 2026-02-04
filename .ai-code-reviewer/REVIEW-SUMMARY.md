@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 01:44 - sbin/ipf/ipsend ✓
+
+**Directory:** `sbin/ipf/ipsend`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/ipf/ipsend/sdlpi.c
+
+---
+
 ## 2026-02-04 01:40 - sbin/ipf/ipscan ✓
 
 **Directory:** `sbin/ipf/ipscan`
