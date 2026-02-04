@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-03 20:37 - sbin/ifconfig ✓
+
+**Directory:** `sbin/ifconfig`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `sbin/ifconfig` (23 .c, 2 .h, 16051 lines)" to "+- [>] `sbin/ifconfig` (23 .c, 2 .h, 16051 lines)". That seems like a status marker change, maybe indicating something about ifconfig being reviewed? The commit covers ALL changes in the ifconfig directory. The instruction: "Write a commit message following these rules: 1. First line: "[ai-code-reviewer] ifconfig: <short summary>" (72 chars max total)". So first line must be exactly "[ai-code-reviewer] ifconfig: <short summary>" and total length <=72 characters including that prefix? Probably the whole line must be <=72 characters. So we need a short summary after the colon, within 72 chars total. Let's count: "[ai-code-reviewer] ifconfig: " is 23 characters? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, -=9, r=10, e=11, v=12, i=13, e=14, w=15, ]=16, space=17, i=18, f=19, i=20, c=21, o=22, n=23, g=24, : =25, space=26. Actually need to count precisely. Let's count characters: "[ai-code-reviewer]" length? characters: [ (1), a(2), i(3), -(4), c(5), o(6), d(7), e(8), -(9), r(10), e(11), v(12), i(13), e(14), w(15), ] (16). So 16 characters. Then space =17. Then "ifconfig:" is 7 characters (i=18, f=19, i=20, c=21, o=22, n=23, g=24). Then space =25. So prefix up to colon+space is 25 characters. Then we can add short summary up to total 72 characters. So we have 72-25 = 47 characters for summary. Must be concise.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-03 20:28 - sbin/hastd ✓
 
 **Directory:** `sbin/hastd`
