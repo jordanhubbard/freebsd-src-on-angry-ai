@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-03 20:53 - sbin/ipf ✓
+
+**Directory:** `sbin/ipf`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: changed status of sbin/ipf from "[ ]" to "[>]" indicating maybe in progress? The commit covers ALL changes in the ipf directory. The summary should be short, max 72 chars total including prefix "[ai-code-reviewer] ipf: <short summary>". So we need something like "[ai-code-reviewer] ipf: Mark ipf directory as in-progress review". Count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-03 20:49 - sbin/init ✓
 
 **Directory:** `sbin/init`
