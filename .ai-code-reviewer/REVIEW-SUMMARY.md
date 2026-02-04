@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 01:35 - sbin/ipf/ipresend ✓
+
+**Directory:** `sbin/ipf/ipresend`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md: Updated timestamp and status marker from `[ ]` to `[>]` for ipresend. That's not actual source code changes; it's just a review tracking file. However the instruction says "Focus on the security/correctness fixes, not style changes". There are no security fixes shown. The commit covers ALL changes in the ipresend directory, but only the review index file changed. So we need to produce a commit message that reflects that the ipresend directory status was updated (maybe marking it as in progress). The short summary must be <=72 chars total including prefix? The format: "[ai-code-reviewer] ipresend: <short summary>" total <=72 chars. So we need to craft a short summary after the prefix. The prefix is "[ai-code-reviewer] ipresend: " which is 20 characters? Let's count: "[ai-code-reviewer] " includes brackets and space. Actually the prefix includes the brackets and text: "[ai-code-reviewer] ipresend: " that's 20? Let's count precisely: characters: '['=1, 'a'=2, 'i'=3, '-'=4, 'c'=5, 'o'=6, 'd'=7, 'e'=8, '-'=9, 'r'=10, 'e'=11, 'v'=12, 'i'=13, 'e'=14, 'w'=15, 'e'=16, 'r'=17, ']'=18, space=19, 'i'=20, 'p'=21, 'r'=22, 'e'=23, 's'=24, 'e'=25, 'n'=26, 'd'=27, ':'=28, space=29. So prefix length is 29 characters. Then we have short summary after that, total line must be <=72 characters. So we have up to 72-29 = 43 characters for the summary part.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-04 01:32 - sbin/ipf/ippool ✓
 
 **Directory:** `sbin/ipf/ippool`
