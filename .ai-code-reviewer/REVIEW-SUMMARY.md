@@ -6,6 +6,19 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-03 20:28 - sbin/hastd ✓
+
+**Directory:** `sbin/hastd`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message with first line "[ai-code-reviewer] hastd: <short summary>" max 72 chars total including prefix? Probably total line length <=72. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, imperative mood, wrap at 72 chars. Must cover all changes in hastd directory: modifications to REVIEW-INDEX.md, ebuf.c, event.c. The changes are: marking hastd as > in review index (maybe indicating progress?), but main code changes: in ebuf.c, added overflow check, used realloc instead of malloc, free old allocation to avoid leak; also added null check for nv_alloc and error handling. So commit message should reflect security/correctness fixes: preventing integer overflow, memory leak, proper error handling.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/hastd/ebuf.c
+  - sbin/hastd/event.c
+
+---
+
 ## 2026-02-03 20:24 - sbin/hastctl ✓
 
 **Directory:** `sbin/hastctl`

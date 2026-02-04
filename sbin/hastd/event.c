@@ -54,6 +54,10 @@ event_send(const struct hast_resource *res, int event)
 	 * Prepare and send event to parent process.
 	 */
 	nvout = nv_alloc();
+	if (nvout == NULL) {
+		pjdlog_errno(LOG_ERR, 0, 0, "Failed to allocate nv object");
+		goto done;
+	}
 	nv_add_uint8(nvout, (uint8_t)event, "event");
 	error = nv_error(nvout);
 	if (error != 0) {

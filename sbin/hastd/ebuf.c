@@ -214,20 +214,26 @@ ebuf_head_extend(struct ebuf *eb, size_t size)
 {
 	unsigned char *newstart, *newused;
 	size_t newsize, page_size;
+	size_t cur_alloc;
 
 	PJDLOG_ASSERT(eb != NULL && eb->eb_magic == EBUF_MAGIC);
 
 	page_size = getpagesize();
-	newsize = eb->eb_end - eb->eb_start + (page_size / 4) + size;
+	cur_alloc = eb->eb_end - eb->eb_start;
+	/* Avoid integer overflow when adding extensions. */
+	if (cur_alloc > SIZE_MAX - ((page_size / 4) + size))
+		return (-1);
+	newsize = cur_alloc + (page_size / 4) + size;
 
-	newstart = malloc(newsize);
+	newstart = realloc(eb->eb_start, newsize);
 	if (newstart == NULL)
 		return (-1);
-	newused =
-	    newstart + (page_size / 4) + size + (eb->eb_used - eb->eb_start);
+	newused = newstart + (page_size / 4) + size + (eb->eb_used - eb->eb_start);
 
 	bcopy(eb->eb_used, newused, eb->eb_size);
 
+	/* Free the old allocation to avoid memory leak. */
+	free(eb->eb_start);
 	eb->eb_start = newstart;
 	eb->eb_used = newused;
 	eb->eb_end = newstart + newsize;
