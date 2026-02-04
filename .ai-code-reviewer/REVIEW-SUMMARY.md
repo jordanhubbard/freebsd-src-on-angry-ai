@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-03 20:57 - sbin/ipf/common ✓
+
+**Directory:** `sbin/ipf/common`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "- [ ]" to "- [>]" indicating progress? It marks that the directory is now being worked on? The commit covers all changes in the common directory. The summary should be short, max 72 chars total including prefix "[ai-code-reviewer] common: ". So we need something like "[ai-code-reviewer] common: Mark common directory as in-progress review". Let's count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-03 20:53 - sbin/ipf ✓
 
 **Directory:** `sbin/ipf`
