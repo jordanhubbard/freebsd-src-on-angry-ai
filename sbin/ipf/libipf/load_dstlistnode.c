@@ -34,16 +34,19 @@ load_dstlistnode(int role, char *name, ipf_dstnode_t *node,
 	op.iplo_arg = 0;
 	op.iplo_struct = dst;
 	op.iplo_size = sizeof(*dst);
-	if (node->ipfd_dest.fd_name >= 0)
+	if (node->ipfd_dest.fd_name >= 0) {
+		if (node->ipfd_dest.fd_name > (int)(SIZE_MAX - sizeof(*dst)))
+			return (-1);
 		op.iplo_size += node->ipfd_dest.fd_name;
-	(void) strncpy(op.iplo_name, name, sizeof(op.iplo_name));
+	}
+	(void) strlcpy(op.iplo_name, name, sizeof(op.iplo_name));
 
 	dst->fd_addr = node->ipfd_dest.fd_addr;
 	dst->fd_type = node->ipfd_dest.fd_type;
 	dst->fd_name = node->ipfd_dest.fd_name;
 	if (node->ipfd_dest.fd_name >= 0)
-		bcopy(node->ipfd_names, (char *)dst + sizeof(*dst),
-		      node->ipfd_dest.fd_name);
+		memcpy((char *)dst + sizeof(*dst), node->ipfd_names,
+		       node->ipfd_dest.fd_name);
 
 	if ((opts & OPT_REMOVE) == 0) {
 		what = "add";

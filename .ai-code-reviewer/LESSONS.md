@@ -1180,3 +1180,31 @@ That's 2 bullet points, fits 2-4 lines. Ensure no extra text.
 ### HEADERS: Stale .depend ignored
 - The build ignored stale .depend files, so header dependencies weren’t refreshed, leading to missing symbols.
 - Clean the object directory or run `make clean` to regenerate .depend before rebuilding.
+
+
+## 2026-02-04 12:19
+We need to output a short lesson entry, 2-4 lines, format:
+
+### [Category]: Brief title
+- What went wrong
+- How to avoid it next time
+
+Categories allowed: COMPILER, HEADERS, SYNTAX, LOGIC, STYLE
+
+We need to infer category from the context. The errors are about ignoring stale .depend files. That's related to make dependencies, maybe HEADERS? Or COMPILER? It's about .depend files stale, maybe HEADERS (include files). Could be COMPILER? The errors are about .depend ignoring stale .depend for libraries; likely due to outdated make database, maybe need to run make clean or rebuild dependencies. That's more about makefile handling, maybe HEADERS? But category list includes COMPILER, HEADERS, SYNTAX, LOGIC, STYLE. The issue is about stale .depend files causing build errors; that's about make's dependency tracking, maybe HEADERS (since .depend tracks header changes). I'd choose HEADERS.
+
+Brief title: "Stale .depend files cause build failures". Then bullet points: What went wrong: ignoring stale .depend for libsys_pie.a etc. How to avoid: clean or regenerate dependencies (e.g., run make clean or touch the .depend files) before building.
+
+Make it 2-4 lines. Probably 2 bullet points after title line. So output:
+
+### HEADERS: Stale .depend files cause build failures
+- Errors ignored stale .depend entries for multiple libs, leading to missing dependency tracking.
+- Run make clean or regenerate .depend (e.g., touch the files) before rebuilding to refresh dependencies.
+
+That's 3 lines? Title line counts as line, then bullet 1, bullet 2. That's okay. Must be 2-4 lines total. Title line plus two bullet lines = 3 lines. Good.
+
+Output only the lesson entry, nothing else.
+</think>
+### HEADERS: Stale .depend files cause build failures
+- Errors ignored stale .depend entries for multiple libraries, breaking dependency tracking.  
+- Clean or regenerate .depend (e.g., `make clean` or `touch` the files) before rebuilding.
