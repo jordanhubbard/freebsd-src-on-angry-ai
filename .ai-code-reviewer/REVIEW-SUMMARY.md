@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 18:40 - sbin/mount_fusefs ✓
+
+**Directory:** `sbin/mount_fusefs`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `sbin/mount_fusefs` ..." to "+ [>] `sbin/mount_fusefs` ...". So it's marking it as in progress? The commit covers all changes in mount_fusefs directory. The summary should be short, max 72 chars total including prefix. Format: "[ai-code-reviewer] mount_fusefs: <short summary>" (72 chars max total). So total length of that line must be <=72 characters. Let's craft something like "[ai-code-reviewer] mount_fusefs: Mark mount_fusefs as in-progress review". Count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-04 18:36 - sbin/mount_cd9660 ✓
 
 **Directory:** `sbin/mount_cd9660`
