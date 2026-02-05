@@ -25,15 +25,15 @@ ipmon_saver_t nothingsaver = {
 static void *
 nothing_parse(char **strings)
 {
-	void *ctx;
-
-#if 0
-	strings = strings;	/* gcc -Wextra */
-#endif
-
-	ctx = calloc(1, sizeof(void *));
-
-	return (ctx);
+    nothing_opts_t *ctx = calloc(1, sizeof(*ctx));
+    if (!ctx) {
+        return NULL;
+    }
+    /* Initialise fields (even though they are not used now) */
+    ctx->fp = NULL;
+    ctx->raw = 0;
+    ctx->path = NULL;
+    return (void *)ctx;
 }
 
 

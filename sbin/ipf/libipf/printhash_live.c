@@ -41,7 +41,7 @@ printhash_live(iphtable_t *hp, int fd, char *name, int opts, wordtab_t *fields)
 	iter.ili_otype = IPFLOOKUPITER_NODE;
 	iter.ili_ival = IPFGENITER_LOOKUP;
 	iter.ili_unit = hp->iph_unit;
-	strncpy(iter.ili_name, hp->iph_name, FR_GROUPLEN);
+	strlcpy(iter.ili_name, hp->iph_name, FR_GROUPLEN);
 
 	last = 0;
 	printed = 0;

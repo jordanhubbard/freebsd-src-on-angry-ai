@@ -32,8 +32,10 @@ printhash( iphtable_t *hp, copyfunc_t copyfunc, char *name, int opts,
 	if ((opts & OPT_DEBUG) == 0)
 		PRINTF("\t{");
 
-	sz = iph.iph_size * sizeof(*table);
+	sz = iph.iph_size * sizeof(iphtent_t *);
 	table = malloc(sz);
+	if (table == NULL)
+		return (NULL);
 	if ((*copyfunc)((char *)iph.iph_table, (char *)table, sz))
 		return (NULL);
 

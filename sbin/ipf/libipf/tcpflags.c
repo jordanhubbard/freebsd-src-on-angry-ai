@@ -8,6 +8,7 @@
  */
 
 #include "ipf.h"
+#include <string.h>
 
 
 /*

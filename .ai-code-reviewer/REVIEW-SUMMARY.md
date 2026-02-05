@@ -6,6 +6,21 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 16:14 - sbin/ipf/libipf ✓
+
+**Directory:** `sbin/ipf/libipf`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message with first line: "[ai-code-reviewer] libipf: <short summary>" max 72 chars total including that prefix? It says 72 chars max total. So the whole first line must be <=72 characters. Must be exactly "[ai-code-reviewer] libipf: " plus short summary. Let's craft a short summary <=72 - length of prefix. Prefix length: "[ai-code-reviewer] libipf: " = 18? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, -=9, r=10, e=11, v=12, i=13, e=14, r=15, ]=16, space=17, l=18, i=19, b=20, i=21, p=22, f=23, :=? Actually colon and space: ":" is char 24, space is 25? Let's count precisely: "[ai-code-reviewer]" is 16 characters? Let's count: [ (1), a(2), i(3), -(4), c(5), o(6), d(7), e(8), -(9), r(10), e(11), v(12), i(13), e(14), r(15), ] (16). Then space (17). Then "libipf:" is 7 characters? l(18), i(19), b(20), i(21), p(22), f(23), :(24). Then space (25). So prefix length is 25 characters. So we have up to 72-25 = 47 characters for the summary after prefix and space? Actually the whole first line must be <=72 characters. So we can have up to 72 characters total. So we can write something like "[ai-code-reviewer] libipf: Fix memory leaks and improve safety in libipf". Let's count length.
+
+**Files fixed:**
+  - sbin/ipf/libipf/kvatoname.c
+  - sbin/ipf/libipf/printhash.c
+  - sbin/ipf/libipf/printhash_live.c
+  - sbin/ipf/libipf/save_nothing.c
+  - sbin/ipf/libipf/tcpflags.c
+
+---
+
 ## 2026-02-04 01:48 - sbin/ipf/ipsend ✓
 
 **Directory:** `sbin/ipf/ipsend`
