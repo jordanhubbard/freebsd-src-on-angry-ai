@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 13:02 - usr.bin/bmake/tests/syntax/semi ✓
+
+**Directory:** `usr.bin/bmake/tests/syntax/semi`
+
+**Summary:** [ai-code-reviewer] We need to produce commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/bmake/tests/syntax/semi` (0 .c, 0 .h, 0 lines)" to "+- [>] `usr.bin/bmake/tests/syntax/semi` (0 .c, 0 .h, 0 lines)". So it's marking that test as "in progress"? Actually the diff shows that the status changed from "[ ]" to "[>]"? The diff shows "-- [ ]" changed to "+- [>]"? Actually the diff shows "- [ ]" line removed and "+- [>]" added? Let's parse: original line started with "- [ ]". In diff, it's "- [ ]". In new version, it's "+- [>]"? The diff shows "- [ ]" preceded by "- " and then space? Actually diff line: "- [ ] `usr.bin/bmake/tests/syntax/semi` (0 .c, 0 .h, 0 lines)". In new version: "+- [>] `usr.bin/bmake/tests/syntax/semi` (0 .c, 0 .h, 0 lines)". So they changed the status marker from "[ ]" to "[>]"? And also changed the leading dash? Actually they changed "- [ ]" to "+- [>]"? The diff shows "- [ ]" removed and "+- [>]" added. So they changed the status from "not started" to "in progress"? The ">" maybe indicates something else. Anyway, the commit message should reflect that they updated the review index to mark semi as in progress? The instruction: "Focus on the security/correctness fixes, not style changes". But there is no security fix described; it's just a change in a markdown file to mark a test as in progress. However maybe the context is that they fixed something in the semi directory? The diff only shows a change in the review index file, not actual source code. The commit covers ALL changes in the semi directory. So maybe they fixed something in the semi tests? But the diff only shows a change to the review index file, which is a tracking file, not code. The instruction says "Component/Directory: usr.bin/bmake/tests/syntax/semi". So the changes are in that directory? Actually the changed file is .ai-code-reviewer/REVIEW-INDEX.md, which presumably tracks tests. So the commit is about updating the review index to mark semi as in progress? The commit message should reflect that they updated the status of the semi test in the review index.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 12:58 - usr.bin/bmake/tests/syntax/funny-targets ✓
 
 **Directory:** `usr.bin/bmake/tests/syntax/funny-targets`
