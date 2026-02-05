@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-04 16:14
+Generated: 2026-02-04 16:24
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-04 16:14
 
 ## Progress
 - Total directories: 8264
-- Completed: 132 (1%)
+- Completed: 133 (1%)
 - Skipped: 1
-- Remaining: 8131
+- Remaining: 8130
 
 ## Current Position
-CURRENT POSITION: `sbin/ipfw`
+CURRENT POSITION: `sbin/ipfw/tests`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/ipfw`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (59/127 done)
+## sbin/ (60/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -158,7 +158,7 @@ CURRENT POSITION: `sbin/ipfw`
 - [x] `sbin/ipf/ipscan` (0 .c, 0 .h, 0 lines) - 2026-02-04 - Fixed by session 20260204_011233
 - [x] `sbin/ipf/ipsend` (15 .c, 2 .h, 5237 lines) - 2026-02-04 - Fixed by session 20260204_011233
 - [x] `sbin/ipf/libipf` (140 .c, 2 .h, 11690 lines) - 2026-02-04 - Fixed by session 20260204_154755
-- [ ] `sbin/ipfw` (11 .c, 1 .h, 15864 lines)
+- [x] `sbin/ipfw` (11 .c, 1 .h, 15864 lines) - 2026-02-04 - Fixed by session 20260204_154755
 - [ ] `sbin/ipfw/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/kldconfig` (1 .c, 0 .h, 415 lines)
 - [ ] `sbin/kldload` (1 .c, 0 .h, 202 lines)
