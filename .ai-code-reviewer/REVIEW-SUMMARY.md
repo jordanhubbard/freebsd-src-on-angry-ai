@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 04:26 - usr.bin/asa ✓
+
+**Directory:** `usr.bin/asa`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md, marking asa as "Fixed by session". Actually the diff shows a change: line "- [ ] `usr.bin/asa` (1 .c, 0 .h, 142 lines)" to "+- [>] `usr.bin/asa` (1 .c, 0 .h, 142 lines)". The ">" indicates maybe a fix? The description says "Fixed by session 20260204_232033". So the commit covers all changes in the asa directory. We need a commit message: first line "[ai-code-reviewer] asa: <short summary>" max 72 chars total including prefix? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" That's 44 chars maybe. So we need something similar: "[ai-code-reviewer] asa: Fix security issue in asa parser" maybe. Must be <=72 chars total including prefix and space? Let's count: "[ai-code-reviewer] asa: Fix security issue in asa parser". Count characters: bracket part is 16? Actually "[ai-code-reviewer]" is 16 characters including brackets? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, -=9, r=10, e=11, v=12, i=13, e=14, r=15, ]=16. Then space =17. Then "asa:" =4 characters (a18,s19,a20,:21). Then space =22. Then "Fix security issue in asa parser" length: "Fix"3 =>25, space26, "security"8 =>34, space35, "issue"5 =>40, space41, "in"2 =>43, space44, "asa"3 =>47, space48, "parser"6 =>54. So total 54 characters, well under 72. Good.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 04:22 - usr.bin/ar ✓
 
 **Directory:** `usr.bin/ar`
