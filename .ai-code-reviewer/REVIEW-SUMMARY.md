@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 11:59 - usr.bin/bmake/tests/shell/select ✓
+
+**Directory:** `usr.bin/bmake/tests/shell/select`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: Updated timestamp from 11:54 to 11:55, and changed status marker from "[ ]" to "[>]" for the select entry, indicating it's in progress? The instruction: "Focus on the security/correctness fixes, not style changes". But there are no functional code changes shown; only a metadata file updated. However we must produce a commit message covering ALL changes in the select directory. The changes are just updating the review index file. The commit likely reflects that the select test is now in progress (maybe marked as "in progress" with "[>]"?). The summary should be short, <=72 chars total including prefix? The first line must be "[ai-code-reviewer] select: <short summary>" total <=72 characters. So we need to craft a short summary after "select: " that fits within 72 characters total including prefix and space? The format: "[ai-code-reviewer] select: <short summary>" total length <=72 characters. Let's count.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 11:54 - usr.bin/bmake/tests/shell/replace ✓
 
 **Directory:** `usr.bin/bmake/tests/shell/replace`
