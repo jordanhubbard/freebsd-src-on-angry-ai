@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 04:26
+Generated: 2026-02-05 04:31
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 04:26
 
 ## Progress
 - Total directories: 8264
-- Completed: 205 (2%)
+- Completed: 206 (2%)
 - Skipped: 1
-- Remaining: 8058
+- Remaining: 8057
 
 ## Current Position
-CURRENT POSITION: `usr.bin/asa/tests`
+CURRENT POSITION: `usr.bin/at`
 
 ## bin/ (73/74 done)
 
@@ -227,14 +227,14 @@ CURRENT POSITION: `usr.bin/asa/tests`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (5/505 done)
+## usr.bin/ (6/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/ar` (4 .c, 1 .h, 1730 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/asa` (1 .c, 0 .h, 142 lines) - 2026-02-05 - Fixed by session 20260204_232033
-- [ ] `usr.bin/asa/tests` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/asa/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [ ] `usr.bin/at` (4 .c, 5 .h, 2036 lines)
 - [ ] `usr.bin/awk` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/awk/tests` (0 .c, 0 .h, 0 lines)
