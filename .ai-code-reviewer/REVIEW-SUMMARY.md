@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 17:15 - sbin/kldunload ✓
+
+**Directory:** `sbin/kldunload`
+
+**Summary:** [ai-code-reviewer] We need to generate a git commit message for these changes. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `sbin/kldunload` (1 .c, 0 .h, 116 lines)" to "+- [>] `sbin/kldunload` (1 .c, 0 .h, 116 lines)". That seems like a status update marking it as in progress or something. The instruction: "Component/Directory: sbin/kldunload Changed files: .ai-code-reviewer/REVIEW-INDEX.md". So the changes are only to that file, presumably marking the status of kldunload as being worked on. The commit message should follow rules:
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-04 17:05 - sbin/kldstat ✓
 
 **Directory:** `sbin/kldstat`
