@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 15:13
+Generated: 2026-02-05 15:17
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 15:13
 
 ## Progress
 - Total directories: 8264
-- Completed: 278 (3%)
+- Completed: 279 (3%)
 - Skipped: 1
-- Remaining: 7985
+- Remaining: 7984
 
 ## Current Position
-CURRENT POSITION: `usr.bin/bsdiff`
+CURRENT POSITION: `usr.bin/bsdiff/bsdiff`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/bsdiff`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (78/505 done)
+## usr.bin/ (79/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -307,7 +307,7 @@ CURRENT POSITION: `usr.bin/bsdiff`
 - [x] `usr.bin/bsdcat` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [x] `usr.bin/bsdcat/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [x] `usr.bin/bsddialog` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_124242
-- [ ] `usr.bin/bsdiff` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/bsdiff` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [ ] `usr.bin/bsdiff/bsdiff` (1 .c, 2 .h, 597 lines)
 - [ ] `usr.bin/bsdiff/bspatch` (1 .c, 0 .h, 302 lines)
 - [ ] `usr.bin/bzip2` (0 .c, 0 .h, 0 lines)
