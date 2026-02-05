@@ -368,7 +368,7 @@ struct strhdr {
 #define STRTBLINCR	(sizeof(struct strhdr))
 #define	allocsize(size)	roundup2((size) + 1, STRTBLINCR)
 
-static struct strhdr strtblhdr[allocsize(NAME_MAX) / STRTBLINCR];
+static struct strhdr strtblhdr[allocsize(NAME_MAX) / STRTBLINCR] = {0};
 
 /*
  * Allocate space for a name. It first looks to see if it already

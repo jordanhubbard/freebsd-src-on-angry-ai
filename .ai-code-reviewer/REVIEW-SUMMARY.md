@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 01:11 - sbin/restore ✓
+
+**Directory:** `sbin/restore`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message with first line "[ai-code-reviewer] restore: <short summary>" max 72 chars total including that prefix? It says 72 chars max total. So the whole first line must be <=72 characters. Must be exactly "[ai-code-reviewer] restore: ..." then short summary. Must be <=72 characters total length.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/restore/symtab.c
+
+---
+
 ## 2026-02-05 01:01 - sbin/resolvconf ✓
 
 **Directory:** `sbin/resolvconf`
