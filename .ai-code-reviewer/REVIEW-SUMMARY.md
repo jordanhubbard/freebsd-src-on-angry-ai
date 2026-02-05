@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 13:05 - usr.bin/bmake/tests/sysmk ✓
+
+**Directory:** `usr.bin/bmake/tests/sysmk`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: changed status of sysmk from "[ ]" to "[>]"? Actually changed from "- [ ]" to "- [>]" maybe indicating in progress? The diff shows "- [ ]" to "- [>]" meaning maybe it's now being worked on? The commit covers all changes in the sysmk directory. The summary should be short, max 72 chars total including prefix "[ai-code-reviewer] sysmk: <short summary>". So first line must be exactly that format, with short summary after colon. Must be <=72 characters total. Let's craft: "[ai-code-reviewer] sysmk: Mark sysmk tests as in-progress for review". Count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 13:02 - usr.bin/bmake/tests/syntax/semi ✓
 
 **Directory:** `usr.bin/bmake/tests/syntax/semi`
