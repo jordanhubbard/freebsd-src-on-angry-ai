@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 10:37 - usr.bin/bmake/tests/archives/fmt_oldbsd ✓
+
+**Directory:** `usr.bin/bmake/tests/archives/fmt_oldbsd`
+
+**Summary:** [ai-code-reviewer] We need to generate commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ]" to "+> [>]"? Actually they changed status marker from "[ ]" to "[>]"? The diff shows "- [ ]" changed to "+> [>]"? Actually they changed "- [ ]" to "+> [>]"? Let's parse: original line: "- [ ] `usr.bin/bmake/tests/archives/fmt_oldbsd` (0 .c, 0 .h, 0 lines)". New line: "+> [>] `usr.bin/bmake/tests/archives/fmt_oldbsd` (0 .c, 0 .h, 0 lines)". So they changed the status marker to indicate something? Probably marking it as "in progress"? The commit covers all changes in fmt_oldbsd directory. The summary should be short, <=72 chars total including prefix? The first line must be "[ai-code-reviewer] fmt_oldbsd: <short summary>" total <=72 characters. So we need to craft a short summary after colon, maybe "Mark fmt_oldbsd as in-progress" but need to keep total length <=72 characters including prefix and colon and space? Let's count: "[ai-code-reviewer] " is 17 characters? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, -=9, r=10, e=11, v=12, i=13, e=14, w=15, ]=16, space=17. Then "fmt_oldbsd: " is 12? f1, m2, t3, _4, o5, l6, d7, b8, s9, d10, :11, space12. So total so far 29. Then we have short summary. Must be <=72 total characters, so we have up to 43 characters for summary. Let's craft something like "Mark fmt_oldbsd as in-progress". That's 24 characters? Let's count: "Mark fmt_oldbsd as in-progress" length: M1 a2 r3 k4 space5 f6 m7 t8 space9 _10 o11 l12 d13 b14 s15 space16 a17 s18 space19 i20 n21 -22 p23 r24 o25 g26 r27 e28 s29 s30. That's 30 characters. Adding to 29 gives 59, within 72. Good.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 10:33 - usr.bin/bmake/tests/archives/fmt_44bsd_mod ✓
 
 **Directory:** `usr.bin/bmake/tests/archives/fmt_44bsd_mod`
