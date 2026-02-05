@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 13:36 - usr.bin/bmake/tests/sysmk/t1/mk ✓
+
+**Directory:** `usr.bin/bmake/tests/sysmk/t1/mk`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows changes in .ai-code-reviewer/REVIEW-INDEX.md: changed "- [ ]" to "+ [>]" for the mk directory entry. So it's marking it as "in progress"? Actually they changed status from not started to in progress? The diff shows they changed "- [ ]" to "+ [>]" meaning maybe they started working on it? The commit message should reflect that they updated the review index to mark mk as in progress. But the instruction: "Focus on the security/correctness fixes, not style changes". However there are no security/correctness changes; it's just a markdown file change. But we still need to produce a commit message following rules. Probably we need to describe that we updated the review index to reflect progress on mk directory. But must focus on security/correctness fixes, not style changes. There's none. Maybe we can say "Mark mk directory as in-progress in review index". But that is not security/correctness. However the rule says focus on security/correctness fixes, not style changes. If there are none, we can still mention that it's a tracking update. But maybe we should still produce a commit message that says something like "Mark mk directory as in-progress in review index". That is not security/correctness but it's the only change. The instruction says "Focus on the security/correctness fixes, not style changes". There are none, so we can just mention the change. Use imperative mood. So first line: "[ai-code-reviewer] mk: Mark mk directory as in-progress in review index". Need <=72 chars total including prefix? The format: "[ai-code-reviewer] mk: <short summary>" total 72 chars max. Let's count: "[ai-code-reviewer] mk: Mark mk directory as in-progress in review index". Count characters: Let's count precisely.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 13:32 - usr.bin/bmake/tests/sysmk/t1/2/1 ✓
 
 **Directory:** `usr.bin/bmake/tests/sysmk/t1/2/1`
