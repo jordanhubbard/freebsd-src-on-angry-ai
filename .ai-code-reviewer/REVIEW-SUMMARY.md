@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 20:42 - sbin/nvmecontrol ✓
+
+**Directory:** `sbin/nvmecontrol`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-04 20:37 - sbin/nos-tun ✓
 
 **Directory:** `sbin/nos-tun`
