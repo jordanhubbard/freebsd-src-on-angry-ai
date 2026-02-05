@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-04 20:12
+Generated: 2026-02-04 20:17
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-04 20:12
 
 ## Progress
 - Total directories: 8264
-- Completed: 156 (1%)
+- Completed: 157 (1%)
 - Skipped: 1
-- Remaining: 8107
+- Remaining: 8106
 
 ## Current Position
-CURRENT POSITION: `sbin/newfs_msdos`
+CURRENT POSITION: `sbin/newfs_msdos/tests`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/newfs_msdos`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (83/127 done)
+## sbin/ (84/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -182,7 +182,7 @@ CURRENT POSITION: `sbin/newfs_msdos`
 - [x] `sbin/mount_unionfs` (1 .c, 0 .h, 181 lines) - 2026-02-04 - Fixed by session 20260204_154755
 - [x] `sbin/natd` (2 .c, 1 .h, 2197 lines) - 2026-02-04 - Fixed by session 20260204_154755
 - [x] `sbin/newfs` (2 .c, 1 .h, 1858 lines) - 2026-02-04 - Fixed by session 20260204_154755
-- [ ] `sbin/newfs_msdos` (2 .c, 1 .h, 1452 lines)
+- [x] `sbin/newfs_msdos` (2 .c, 1 .h, 1452 lines) - 2026-02-04 - Fixed by session 20260204_154755
 - [ ] `sbin/newfs_msdos/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/nfsiod` (1 .c, 0 .h, 127 lines)
 - [ ] `sbin/nos-tun` (1 .c, 0 .h, 393 lines)

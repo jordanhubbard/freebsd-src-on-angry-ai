@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 20:17 - sbin/newfs_msdos ✓
+
+**Directory:** `sbin/newfs_msdos`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/newfs_msdos/mkfs_msdos.h
+
+---
+
 ## 2026-02-04 20:12 - sbin/mount ✓
 
 **Directory:** `sbin/mount`
