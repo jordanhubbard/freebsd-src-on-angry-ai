@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 03:10
+Generated: 2026-02-05 03:20
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 03:10
 
 ## Progress
 - Total directories: 8264
-- Completed: 195 (2%)
+- Completed: 196 (2%)
 - Skipped: 1
-- Remaining: 8068
+- Remaining: 8067
 
 ## Current Position
-CURRENT POSITION: `sbin/tunefs`
+CURRENT POSITION: `sbin/umbctl`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/tunefs`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (122/127 done)
+## sbin/ (123/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -221,7 +221,7 @@ CURRENT POSITION: `sbin/tunefs`
 - [x] `sbin/sysctl` (1 .c, 0 .h, 1368 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/sysctl/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
-- [ ] `sbin/tunefs` (1 .c, 0 .h, 1104 lines)
+- [x] `sbin/tunefs` (1 .c, 0 .h, 1104 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [ ] `sbin/umbctl` (1 .c, 0 .h, 557 lines)
 - [ ] `sbin/umount` (1 .c, 0 .h, 705 lines)
 - [ ] `sbin/veriexec` (1 .c, 1 .h, 358 lines)
