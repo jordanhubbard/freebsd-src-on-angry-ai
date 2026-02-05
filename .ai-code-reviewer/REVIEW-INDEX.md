@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-04 23:33
+Generated: 2026-02-04 23:38
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-04 23:33
 
 ## Progress
 - Total directories: 8264
-- Completed: 171 (2%)
+- Completed: 172 (2%)
 - Skipped: 1
-- Remaining: 8092
+- Remaining: 8091
 
 ## Current Position
-CURRENT POSITION: `sbin/pflogd`
+CURRENT POSITION: `sbin/pflowctl`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/pflogd`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (98/127 done)
+## sbin/ (99/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -197,7 +197,7 @@ CURRENT POSITION: `sbin/pflogd`
 - [x] `sbin/pfctl/tests` (1 .c, 0 .h, 341 lines) - 2026-02-04 - Fixed by session 20260204_154755
 - [x] `sbin/pfctl/tests/files` (0 .c, 0 .h, 0 lines) - 2026-02-04 - Fixed by session 20260204_232033
 - [x] `sbin/pfilctl` (1 .c, 0 .h, 226 lines) - 2026-02-04 - Fixed by session 20260204_232033
-- [ ] `sbin/pflogd` (0 .c, 0 .h, 0 lines)
+- [x] `sbin/pflogd` (0 .c, 0 .h, 0 lines) - 2026-02-04 - Fixed by session 20260204_232033
 - [ ] `sbin/pflowctl` (1 .c, 0 .h, 602 lines)
 - [ ] `sbin/ping` (4 .c, 4 .h, 5021 lines)
 - [ ] `sbin/ping/tests` (1 .c, 0 .h, 99 lines)
