@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 02:13
+Generated: 2026-02-05 02:23
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 02:13
 
 ## Progress
 - Total directories: 8264
-- Completed: 188 (2%)
+- Completed: 189 (2%)
 - Skipped: 1
-- Remaining: 8075
+- Remaining: 8074
 
 ## Current Position
-CURRENT POSITION: `sbin/setkey`
+CURRENT POSITION: `sbin/shutdown`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/setkey`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (115/127 done)
+## sbin/ (116/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -214,7 +214,7 @@ CURRENT POSITION: `sbin/setkey`
 - [x] `sbin/rtsol` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/savecore` (1 .c, 0 .h, 1579 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/savecore/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
-- [ ] `sbin/setkey` (3 .c, 1 .h, 1392 lines)
+- [x] `sbin/setkey` (3 .c, 1 .h, 1392 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [ ] `sbin/shutdown` (1 .c, 0 .h, 611 lines)
 - [ ] `sbin/swapon` (1 .c, 0 .h, 893 lines)
 - [ ] `sbin/swapon/tests` (0 .c, 0 .h, 0 lines)
