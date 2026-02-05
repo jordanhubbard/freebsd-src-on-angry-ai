@@ -38,7 +38,7 @@ extern int Verbose;
 extern int VeriexecVersion;
 extern const char *Cdir;
 
-#define VERBOSE(n, x) if (Verbose > n) printf x
+#define VERBOSE(n, x) if (Verbose > n) printf(x)
 
 FILE * manifest_open (const char *file, const char *file_content);
 void manifest_parser_init(void);
