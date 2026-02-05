@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 09:21 - usr.bin/bintrans/tests ✓
+
+**Directory:** `usr.bin/bintrans/tests`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules. The diff shows that REVIEW-INDEX.md was changed: line "- [ ] `usr.bin/bintrans/tests` (0 .c, 0 .h, 0 lines)" changed to "+- [>] `usr.bin/bintrans/tests` (0 .c, 0 .h, 0 lines)". So they marked it as "in progress"? Actually they changed status from "[ ]" to "[>]"? The diff shows "- [ ]" to "+- [>]" meaning they changed the checkbox to "[>]" maybe indicating "in progress"? The commit message should be about tests directory. The first line: "[ai-code-reviewer] tests: <short summary>" max 72 chars total. Should be something like "tests: Mark bintrans/tests as in-progress placeholder". But need short summary, 72 chars total including prefix? The format: "[ai-code-reviewer] tests: <short summary>" total length <=72 characters. Let's count: "[ai-code-reviewer] tests: " is 20 characters? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, -=9, r=10, e=11, v=12, i=13, e=14, r=15, ]=16, space=17, t=18, e=19, s=20, t=21, s=22, :=23, space=24. Actually need to count precisely. Let's count characters: "[ai-code-reviewer]" length? characters: [ (1), a(2), i(3), -(4), c(5), o(6), d(7), e(8), -(9), r(10), e(11), v(12), i(13), e(14), r(15), ] (16). So 16 characters. Then space =17. Then "tests:" =6 characters (t18, e19, s20, t21, s22, :23). Then space =24. So prefix length is 24 characters. So we have up to 72-24 = 48 characters for the summary after that. So we need a short summary within 48 characters. Something like "Mark bintrans/tests as placeholder (0 files)"? Let's count: "Mark bintrans/tests as placeholder (0 files)" length? Let's count characters: M1 a2 r3 k4 space5 b6 i7 n8 t9 r10 a11 n12 s13 /14 t15 e16 s17 t18 s19 space20 a21 s22 space23 p24 l25 a26 c27 e28 h29 e30 n31 d32 e33 r34 space35 (36 037 space38 f39 i40 l41 e42 s43 )44. That's 44 characters. Plus maybe we need no extra. So total after prefix would be 44, which is within 48. So full line length would be 24+44=68, within 72. Good.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 09:17 - usr.bin/bintrans ✓
 
 **Directory:** `usr.bin/bintrans`
