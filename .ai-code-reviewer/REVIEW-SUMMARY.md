@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 10:52 - usr.bin/bmake/tests/basic/t0 ✓
+
+**Directory:** `usr.bin/bmake/tests/basic/t0`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/bmake/tests/basic/t0` (0 .c, 0 .h, 0 lines)" to "+- [>] `usr.bin/bmake/tests/basic/t0` (0 .c, 0 .h, 0 lines)". So it's marking the test t0 as "in progress"? The commit covers ALL changes in the t0 directory. The instruction: "This commit covers ALL changes in the t0 directory". So we need to produce a commit message with first line: "[ai-code-reviewer] t0: <short summary>" max 72 chars total including prefix? It says first line: "[ai-code-reviewer] t0: <short summary>" (72 chars max total). So total length of first line must be <=72 characters. Must be exactly that format. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, not style changes, imperative mood.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 10:47 - usr.bin/bmake/tests/basic ✓
 
 **Directory:** `usr.bin/bmake/tests/basic`
