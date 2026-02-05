@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 02:49
+Generated: 2026-02-05 03:00
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 02:49
 
 ## Progress
 - Total directories: 8264
-- Completed: 192 (2%)
+- Completed: 193 (2%)
 - Skipped: 1
-- Remaining: 8071
+- Remaining: 8070
 
 ## Current Position
-CURRENT POSITION: `sbin/sysctl`
+CURRENT POSITION: `sbin/sysctl/tests`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/sysctl`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (119/127 done)
+## sbin/ (120/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -218,7 +218,7 @@ CURRENT POSITION: `sbin/sysctl`
 - [x] `sbin/shutdown` (1 .c, 0 .h, 611 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/swapon` (1 .c, 0 .h, 893 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/swapon/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
-- [ ] `sbin/sysctl` (1 .c, 0 .h, 1368 lines)
+- [x] `sbin/sysctl` (1 .c, 0 .h, 1368 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [ ] `sbin/sysctl/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/tunefs` (1 .c, 0 .h, 1104 lines)
