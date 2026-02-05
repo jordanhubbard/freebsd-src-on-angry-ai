@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 11:09
+Generated: 2026-02-05 11:13
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 11:09
 
 ## Progress
 - Total directories: 8264
-- Completed: 235 (2%)
+- Completed: 236 (2%)
 - Skipped: 1
-- Remaining: 8028
+- Remaining: 8027
 
 ## Current Position
-CURRENT POSITION: `usr.bin/bmake/tests/execution/ellipsis`
+CURRENT POSITION: `usr.bin/bmake/tests/execution/empty`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/bmake/tests/execution/ellipsis`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (35/505 done)
+## usr.bin/ (36/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -264,7 +264,7 @@ CURRENT POSITION: `usr.bin/bmake/tests/execution/ellipsis`
 - [x] `usr.bin/bmake/tests/basic/t2` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_073833
 - [x] `usr.bin/bmake/tests/basic/t3` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_073833
 - [x] `usr.bin/bmake/tests/execution` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_073833
-- [ ] `usr.bin/bmake/tests/execution/ellipsis` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/bmake/tests/execution/ellipsis` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_073833
 - [ ] `usr.bin/bmake/tests/execution/empty` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bmake/tests/execution/joberr` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bmake/tests/execution/plus` (0 .c, 0 .h, 0 lines)
