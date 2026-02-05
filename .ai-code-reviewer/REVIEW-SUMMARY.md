@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 00:44 - sbin/reboot ✓
+
+**Directory:** `sbin/reboot`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `sbin/reboot` ..." to "+- [>] `sbin/reboot` ...". So it's marking reboot as "in progress" or something. The commit covers all changes in the reboot directory. The summary should be short, max 72 chars total including prefix "[ai-code-reviewer] reboot: ". So we need something like "[ai-code-reviewer] reboot: Mark reboot as in-progress review". Count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 00:35 - sbin/rcorder ✓
 
 **Directory:** `sbin/rcorder`
