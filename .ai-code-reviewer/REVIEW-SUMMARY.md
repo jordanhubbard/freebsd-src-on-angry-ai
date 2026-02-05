@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 10:56 - usr.bin/bmake/tests/basic/t1 ✓
+
+**Directory:** `usr.bin/bmake/tests/basic/t1`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/bmake/tests/basic/t1`" to "+- [>] `usr.bin/bmake/tests/basic/t1`". So it's marking t1 as "in progress"? The commit covers ALL changes in the t1 directory. The summary should be short, max 72 chars total including prefix? The format: "[ai-code-reviewer] t1: <short summary>" total 72 chars max. So we need to craft a short summary after "t1: " that fits within 72 characters total including the prefix and space? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" That's the whole first line. So we need something like "[ai-code-reviewer] t1: Mark t1 as in-progress test case". Let's count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 10:52 - usr.bin/bmake/tests/basic/t0 ✓
 
 **Directory:** `usr.bin/bmake/tests/basic/t0`
