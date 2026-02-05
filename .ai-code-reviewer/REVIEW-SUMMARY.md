@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 15:13 - usr.bin/bsddialog ✓
+
+**Directory:** `usr.bin/bsddialog`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 15:09 - usr.bin/bsdcat/tests ✓
 
 **Directory:** `usr.bin/bsdcat/tests`
