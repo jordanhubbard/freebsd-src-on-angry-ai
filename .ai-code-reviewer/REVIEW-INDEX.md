@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 00:13
+Generated: 2026-02-05 00:23
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 00:13
 
 ## Progress
 - Total directories: 8264
-- Completed: 175 (2%)
+- Completed: 176 (2%)
 - Skipped: 1
-- Remaining: 8088
+- Remaining: 8087
 
 ## Current Position
-CURRENT POSITION: `sbin/quotacheck`
+CURRENT POSITION: `sbin/rcorder`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/quotacheck`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (102/127 done)
+## sbin/ (103/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -201,7 +201,7 @@ CURRENT POSITION: `sbin/quotacheck`
 - [x] `sbin/pflowctl` (1 .c, 0 .h, 602 lines) - 2026-02-04 - Fixed by session 20260204_232033
 - [x] `sbin/ping` (4 .c, 4 .h, 5021 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/ping/tests` (1 .c, 0 .h, 99 lines) - 2026-02-05 - Fixed by session 20260204_232033
-- [ ] `sbin/quotacheck` (2 .c, 1 .h, 1025 lines)
+- [x] `sbin/quotacheck` (2 .c, 1 .h, 1025 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [ ] `sbin/rcorder` (3 .c, 3 .h, 1909 lines)
 - [ ] `sbin/reboot` (1 .c, 0 .h, 556 lines)
 - [ ] `sbin/recoverdisk` (1 .c, 0 .h, 909 lines)
