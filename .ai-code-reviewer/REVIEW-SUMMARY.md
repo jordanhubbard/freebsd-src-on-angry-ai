@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 09:39 - usr.bin/bluetooth/bthost ✓
+
+**Directory:** `usr.bin/bluetooth/bthost`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "[ ]" to "[>]" indicating progress? It marks bthost as in progress? The commit message should follow rules:
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 09:30 - usr.bin/bluetooth ✓
 
 **Directory:** `usr.bin/bluetooth`
