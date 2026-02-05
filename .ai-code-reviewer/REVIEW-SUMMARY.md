@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 01:52 - sbin/rtsol ✓
+
+**Directory:** `sbin/rtsol`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md, marking sbin/rtsol as ">" meaning maybe it's being reviewed? Actually the diff shows that the entry for sbin/rtsol changed from "[ ]" to "[>]" indicating maybe it's being reviewed? The instruction: "Component/Directory: sbin/rtsol Changed files: .ai-code-reviewer/REVIEW-INDEX.md". So the changes are only to that index file, marking rtsol as ">" maybe indicating it's under review? The commit message should reflect that we are addressing the rtsol directory. The rules: first line: "[ai-code-reviewer] rtsol: <short summary>" max 72 chars total. So something like "[ai-code-reviewer] rtsol: Mark as under review for security fixes". Must be <=72 chars including prefix? The prefix includes "[ai-code-reviewer] rtsol: " which is 20 characters? Let's count: "[ai-code-reviewer]" is 16? Actually characters: [ a i - c o d e - r e v i e w e r ] = 15? Let's count precisely: [ (1) a(2) i(3) -(4) c(5) o(6) d(7) e(8) -(9) r(10) e(11) v(12) i(13) e(14) w(15) e(16) r(17) ] (18). Actually need to count: "[ai-code-reviewer]" length: 16? Let's count: characters: '['=1, 'a'=2, 'i'=3, '-'=4, 'c'=5, 'o'=6, 'd'=7, 'e'=8, '-'=9, 'r'=10, 'e'=11, 'v'=12, 'i'=13, 'e'=14, 'w'=15, 'e'=16, 'r'=17, ']'=18. So 18 characters. Then space, then "rtsol:" = 6 characters inc space? Actually after prefix we have a space then "rtsol:"? The format: "[ai-code-reviewer] rtsol: <short summary>". So after the prefix we have a space then "rtsol:" then space then summary. So prefix including space after bracket? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()". That includes a space after the closing bracket? Actually example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()". So they have "[ai-code-reviewer] " then "cpuset:" then space then summary. So the prefix is "[ai-code-reviewer] " (including trailing space). That's 19 characters? Let's count: "[ai-code-reviewer]" = 18, plus space = 19. Then "rtsol:" is 6 characters (r t s o l :). Then space = 1. So total before summary = 19+6+1 = 26 characters. So we have 72 total characters for the whole first line. So we have up to 72-26 = 46 characters for the summary after "rtsol: ". Actually we need to count the whole line length <=72. Let's craft a short summary within 46 characters. Something like "Mark rtsol as under review for security fixes". Let's count characters: "Mark rtsol as under review for security fixes". Count: M1 a2 r3 k4 space5 r6 t7 s8 o9 l10 space11 a12 s13 space14 u15 n16 d17 e18 r19 space20 r21 e22 v23 i24 e25 w26 space27 f28 o29 r30 space31 s32 e33 c34 u35 r36 i37 t38 y39 space40 f41 i42 x43 e44 s45. That's 45 characters. Plus maybe we need no extra punctuation. So total line length: prefix 26 + 45 = 71, which is within 72. Good.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 01:48 - sbin/routed/rtquery ✓
 
 **Directory:** `sbin/routed/rtquery`
