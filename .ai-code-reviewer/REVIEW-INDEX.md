@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 00:53
+Generated: 2026-02-05 01:01
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 00:53
 
 ## Progress
 - Total directories: 8264
-- Completed: 179 (2%)
+- Completed: 180 (2%)
 - Skipped: 1
-- Remaining: 8084
+- Remaining: 8083
 
 ## Current Position
-CURRENT POSITION: `sbin/resolvconf`
+CURRENT POSITION: `sbin/restore`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/resolvconf`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (106/127 done)
+## sbin/ (107/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -205,7 +205,7 @@ CURRENT POSITION: `sbin/resolvconf`
 - [x] `sbin/rcorder` (3 .c, 3 .h, 1909 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/reboot` (1 .c, 0 .h, 556 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/recoverdisk` (1 .c, 0 .h, 909 lines) - 2026-02-05 - Fixed by session 20260204_232033
-- [ ] `sbin/resolvconf` (0 .c, 0 .h, 0 lines)
+- [x] `sbin/resolvconf` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [ ] `sbin/restore` (7 .c, 2 .h, 5776 lines)
 - [ ] `sbin/route` (2 .c, 0 .h, 2940 lines)
 - [ ] `sbin/route/tests` (0 .c, 0 .h, 0 lines)
