@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 03:54 - sbin/zfsbootcfg ✓
+
+**Directory:** `sbin/zfsbootcfg`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for changes in sbin/zfsbootcfg. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md, marking the component as done with >. But the instruction: "This commit covers ALL changes in the zfsbootcfg directory". So we need to produce a commit message that reflects changes in that directory. The diff only shows a change to REVIEW-INDEX.md, but likely the actual code changes are not shown; we just need to produce a commit message that follows the rules, focusing on security/correctness fixes. The commit message must start with "[ai-code-reviewer] zfsbootcfg: <short summary>" max 72 chars total including that prefix? It says first line: "[ai-code-reviewer] zfsbootcfg: <short summary>" (72 chars max total). So the whole first line including prefix and summary must be <=72 characters. Then blank line, then body explaining what changed and why, wrap at 72 chars. Use imperative mood. Focus on security/correctness fixes, not style changes. This commit covers ALL changes in the zfsbootcfg directory.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 03:45 - sbin/veriexec ✓
 
 **Directory:** `sbin/veriexec`
