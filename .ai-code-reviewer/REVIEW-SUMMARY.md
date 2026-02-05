@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 11:39 - usr.bin/bmake/tests/shell/meta ✓
+
+**Directory:** `usr.bin/bmake/tests/shell/meta`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/bmake/tests/shell/meta`" to "+- [>] `usr.bin/bmake/tests/shell/meta`". So it's marking meta as "in progress"? The commit covers ALL changes in the meta directory. The summary should be short, max 72 chars total including prefix? The rule: First line: "[ai-code-reviewer] meta: <short summary>" (72 chars max total). So we need to produce something like "[ai-code-reviewer] meta: Mark meta tests as in-progress". Let's count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 11:35 - usr.bin/bmake/tests/shell/builtin ✓
 
 **Directory:** `usr.bin/bmake/tests/shell/builtin`
