@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 13:48 - usr.bin/bmake/tests/sysmk/t2 ✓
+
+**Directory:** `usr.bin/bmake/tests/sysmk/t2`
+
+**Summary:** [ai-code-reviewer] We need to generate commit message. The diff shows change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "- [ ]" to "- [>]"? Actually diff shows "- [ ]" changed to "- [>]"? Let's read: original line: "- [ ] `usr.bin/bmake/tests/sysmk/t2` (0 .c, 0 .h, 0 lines)" then changed to "- [>] `usr.bin/bmake/tests/sysmk/t2` (0 .c, 0 .h, 0 lines)". So they added a ">" marker? Possibly indicating something. The commit covers all changes in t2 directory. The summary should be short, <=72 chars total including prefix? The rule: First line: "[ai-code-reviewer] t2: <short summary>" (72 chars max total). So we need to produce something like "[ai-code-reviewer] t2: Mark t2 as in-progress review". Must be <=72 characters total including prefix and colon and summary. Let's count: "[ai-code-reviewer] t2: " is 20 characters? Let's count: "["=1, "a"=2, "i"=3, "-"=4, "c"=5, "o"=6, "d"=7, "e"=8, "-"=9, "r"=10, "e"=11, "v"=12, "i"=13, "e"=14, "w"=15, ")"=16, space=17, "t"=18, "2"=19, ":"=20, space=21. So we have 21 characters before summary. We need total <=72, so summary can be up to 51 characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 13:36 - usr.bin/bmake/tests/sysmk/t1/mk ✓
 
 **Directory:** `usr.bin/bmake/tests/sysmk/t1/mk`
