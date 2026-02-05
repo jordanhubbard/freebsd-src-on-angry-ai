@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-04 19:00 - sbin/mount_nfs ✓
+
+**Directory:** `sbin/mount_nfs`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `sbin/mount_nfs` ..." to "+- [>] `sbin/mount_nfs` ...". That seems like a status marker change, maybe indicating progress? The instruction: "Component/Directory: sbin/mount_nfs Changed files: .ai-code-reviewer/REVIEW-INDEX.md". So the changes are to that index file, marking mount_nfs as in progress with a "[>]" marker. The commit message should reflect that. The rules: first line: "[ai-code-reviewer] mount_nfs: <short summary>" max 72 chars total. So something like "[ai-code-reviewer] mount_nfs: Mark mount_nfs as in-progress review". Need to keep under 72 characters including prefix? The prefix is "[ai-code-reviewer] mount_nfs: " which is 20 characters? Let's count: "[ai-code-reviewer]" = 16? Actually characters: [ a i - c o d e - r e v i e w e r ] = 16? Let's count precisely: [ (1) a(2) i(3) -(4) c(5) o(6) d(7) e(8) -(9) r(10) e(11) v(12) i(13) e(14) w(15) e(16) r(17) ] (18). Actually include brackets: "[ai-code-reviewer]" length 16? Let's count: a i - c o d e - r e v i e w e r = 15? Let's just approximate. Then space then "mount_nfs:" etc. But we need total <=72 characters. Let's craft a short summary: "Mark mount_nfs as in-progress review". That's 27 characters. With prefix maybe exceed? The format: "[ai-code-reviewer] mount_nfs: <short summary>" So the whole first line includes prefix and colon and space then summary. Must be <=72 characters total. Let's count: "[ai-code-reviewer] " = 17? Actually include space after? The format shows a space after colon? Example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()". That includes a space after colon? They have "[ai-code-reviewer] cpuset: Replace..." So after colon there is a space. So we need to count characters including everything up to the end of summary. Let's count "[ai-code-reviewer] " length: characters: '['=1, 'a'=2, 'i'=3, '-'=4, 'c'=5, 'o'=6, 'd'=7, 'e'=8, '-'=9, 'r'=10, 'e'=11, 'v'=12, 'i'=13, 'e'=14, 'w'=15, 'e'=16, 'r'=17, ']'=18, then space=19. So 19 characters before summary. Then "mount_nfs:" is 10 characters? Actually "mount_nfs:" length 10 (m1 o2 u3 n4 t5 _6 n7 f8 s9 :10). Then space after colon? In example they have "cpuset:" then space then "Replace...". So after colon there is a space. So we have "mount_nfs:" then space = 11? Actually colon is part of the word, then space. So total prefix length = 19 + 10 + 1 = 30? Wait we need to be precise: "[ai-code-reviewer] mount_nfs: " includes the space after colon. So length = len("[ai-code-reviewer]") + 1 (space) + len("mount_nfs") + 1 (colon) + 1 (space). Let's count: "[ai-code-reviewer]" length 16? Let's count again: characters: '['=1, 'a'=2, 'i'=3, '-'=4, 'c'=5, 'o'=6, 'd'=7, 'e'=8, '-'=9, 'r'=10, 'e'=11, 'v'=12, 'i'=13, 'e'=14, 'w'=15, 'e'=16, 'r'=17, ']'=18. So 18 characters. Then space =19. Then "mount_nfs" length 9. Then colon =1 =>20. Then space =21. So prefix length = 21 characters. Then we can add summary up to total 72 characters. So we have up to 72-21 = 51 characters for summary. So we need a short summary <=51 characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-04 18:50 - sbin/mount_msdosfs ✓
 
 **Directory:** `sbin/mount_msdosfs`
