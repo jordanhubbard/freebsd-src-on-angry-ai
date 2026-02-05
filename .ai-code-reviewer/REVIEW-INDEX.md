@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 01:26
+Generated: 2026-02-05 01:37
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 01:26
 
 ## Progress
 - Total directories: 8264
-- Completed: 183 (2%)
+- Completed: 184 (2%)
 - Skipped: 1
-- Remaining: 8080
+- Remaining: 8079
 
 ## Current Position
-CURRENT POSITION: `sbin/routed`
+CURRENT POSITION: `sbin/routed/rtquery`
 
 ## bin/ (73/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/routed`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-01-22 - Fixed by session 20260122_170746
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-01-24 - Fixed by session 20260124_120716
 
-## sbin/ (110/127 done)
+## sbin/ (111/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-01-24 - Fixed by session 20260124_120716
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-01-24 - Fixed by session 20260124_120716
@@ -209,7 +209,7 @@ CURRENT POSITION: `sbin/routed`
 - [x] `sbin/restore` (7 .c, 2 .h, 5776 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/route` (2 .c, 0 .h, 2940 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/route/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
-- [ ] `sbin/routed` (9 .c, 3 .h, 11217 lines)
+- [x] `sbin/routed` (9 .c, 3 .h, 11217 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [ ] `sbin/routed/rtquery` (1 .c, 0 .h, 900 lines)
 - [ ] `sbin/rtsol` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/savecore` (1 .c, 0 .h, 1579 lines)

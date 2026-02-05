@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 01:37 - sbin/routed ✓
+
+**Directory:** `sbin/routed`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md, marking routed as in progress with ">" symbol. The commit covers ALL changes in the routed directory. The summary should be short, <=72 chars total including prefix "[ai-code-reviewer] routed: ". Must be exactly that format.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 01:26 - sbin/route/tests ✓
 
 **Directory:** `sbin/route/tests`
