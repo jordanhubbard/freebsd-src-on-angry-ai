@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 07:45 - usr.bin/at ✓
+
+**Directory:** `usr.bin/at`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message with first line: "[ai-code-reviewer] at: <short summary>" max 72 chars total including that line? It says 72 chars max total. So the first line must be <=72 characters. Must be exactly "[ai-code-reviewer] at: " plus short summary. Should be concise.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 04:31 - usr.bin/asa/tests ✓
 
 **Directory:** `usr.bin/asa/tests`
