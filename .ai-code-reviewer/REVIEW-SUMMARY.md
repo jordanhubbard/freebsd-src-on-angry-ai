@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 08:20 - usr.bin/col/tests ✓
+
+**Directory:** `usr.bin/col/tests`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md: updated timestamp from 07:53 to 08:11, and changed status marker from "[ ]" to "[>]" for `usr.bin/col/tests`. That indicates maybe progress? The commit covers ALL changes in the tests directory. The summary should be short, max 72 chars total including prefix? The format: "[ai-code-reviewer] tests: <short summary>" total <=72 chars. So we need something like "[ai-code-reviewer] tests: Mark col/tests as in-progress review". Count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 07:53 - usr.bin/col ✓
 
 **Directory:** `usr.bin/col`
