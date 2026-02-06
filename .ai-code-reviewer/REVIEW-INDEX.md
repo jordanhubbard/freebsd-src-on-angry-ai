@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 16:17
+Generated: 2026-02-05 16:22
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 16:17
 
 ## Progress
 - Total directories: 8264
-- Completed: 287 (3%)
+- Completed: 288 (3%)
 - Skipped: 1
-- Remaining: 7976
+- Remaining: 7975
 
 ## Current Position
-CURRENT POSITION: `usr.bin/calendar/tests`
+CURRENT POSITION: `usr.bin/cap_mkdb`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/calendar/tests`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (87/505 done)
+## usr.bin/ (88/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -316,7 +316,7 @@ CURRENT POSITION: `usr.bin/calendar/tests`
 - [x] `usr.bin/c99` (1 .c, 0 .h, 132 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [x] `usr.bin/caesar` (1 .c, 0 .h, 145 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [x] `usr.bin/calendar` (11 .c, 2 .h, 4141 lines) - 2026-02-05 - Fixed by session 20260205_124242
-- [ ] `usr.bin/calendar/tests` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/calendar/tests` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [ ] `usr.bin/cap_mkdb` (1 .c, 0 .h, 255 lines)
 - [ ] `usr.bin/chat` (1 .c, 0 .h, 1526 lines)
 - [ ] `usr.bin/chpass` (5 .c, 1 .h, 1158 lines)
