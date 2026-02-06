@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 23:37
+Generated: 2026-02-05 23:42
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 23:37
 
 ## Progress
 - Total directories: 8264
-- Completed: 319 (3%)
+- Completed: 320 (3%)
 - Skipped: 1
-- Remaining: 7944
+- Remaining: 7943
 
 ## Current Position
-CURRENT POSITION: `usr.bin/clang/llvm-mc`
+CURRENT POSITION: `usr.bin/clang/llvm-mca`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-mc`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (119/505 done)
+## usr.bin/ (120/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -348,7 +348,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-mc`
 - [x] `usr.bin/clang/llvm-link` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [x] `usr.bin/clang/llvm-lto` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [x] `usr.bin/clang/llvm-lto2` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
-- [ ] `usr.bin/clang/llvm-mc` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/clang/llvm-mc` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [ ] `usr.bin/clang/llvm-mca` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-min-tblgen` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-modextract` (0 .c, 0 .h, 0 lines)
