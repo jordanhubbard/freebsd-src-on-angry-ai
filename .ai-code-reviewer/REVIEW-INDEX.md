@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 14:31
+Generated: 2026-02-06 14:36
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 14:31
 
 ## Progress
 - Total directories: 8264
-- Completed: 366 (4%)
+- Completed: 367 (4%)
 - Skipped: 1
-- Remaining: 7897
+- Remaining: 7896
 
 ## Current Position
-CURRENT POSITION: `usr.bin/drill`
+CURRENT POSITION: `usr.bin/dtc`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/drill`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (166/505 done)
+## usr.bin/ (167/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -395,7 +395,7 @@ CURRENT POSITION: `usr.bin/drill`
 - [x] `usr.bin/dirname` (1 .c, 0 .h, 77 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/dirname/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/dpv` (1 .c, 1 .h, 609 lines) - 2026-02-06 - Fixed by session 20260206_114140
-- [ ] `usr.bin/drill` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/drill` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [ ] `usr.bin/dtc` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/du` (1 .c, 0 .h, 577 lines)
 - [ ] `usr.bin/du/tests` (0 .c, 0 .h, 0 lines)

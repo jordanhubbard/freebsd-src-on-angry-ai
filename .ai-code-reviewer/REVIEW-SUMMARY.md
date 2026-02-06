@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 14:36 - usr.bin/drill ✓
+
+**Directory:** `usr.bin/drill`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "- [ ] `usr.bin/drill` (0 .c, 0 .h, 0 lines)" to "+ [>] `usr.bin/drill` (0 .c, 0 .h, 0 lines)". That seems like marking it as in progress? The commit message should be about "drill: ..." with short summary <=72 chars total including prefix? The format: "[ai-code-reviewer] drill: <short summary>" (72 chars max total). So the whole first line including prefix must be <=72 characters. Must be exactly that format. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, not style changes, imperative mood, covering all changes in the drill directory.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 14:31 - usr.bin/dpv ✓
 
 **Directory:** `usr.bin/dpv`
