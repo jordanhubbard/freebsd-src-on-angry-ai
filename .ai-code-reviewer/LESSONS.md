@@ -1292,3 +1292,29 @@ Make sure output only the lesson entry, nothing else. No extra text. Provide exa
 ### HEADERS: Stale .depend files cause build errors
 - Ignoring stale `.depend.h_*` files prevented proper recompilation of affected objects.  
 - Clean or regenerate dependencies (e.g., `make clean` or delete `.depend` files) before rebuilding.
+
+
+## 2026-02-06 00:03
+We need to output a short lesson 2-4 lines in format:
+
+### [Category]: Brief title
+- What went wrong
+- How to avoid it next time
+
+Categories allowed: COMPILER, HEADERS, SYNTAX, LOGIC, STYLE
+
+We need to infer category from errors. The errors are about ignoring stale .depend files. That's related to make dependencies, maybe HEADERS? Or COMPILER? It's about stale .depend files causing errors. That's about make's dependency tracking, maybe HEADERS? Or LOGIC? Probably HEADERS because .depend files are generated from headers. But could be COMPILER? The errors are about ignoring stale .depend for libraries; it's a make issue. Category likely HEADERS. Provide brief title. Then bullet points.
+
+We need 2-4 lines total? The format: line with ### [Category]: Title, then bullet points each starting with "-". That's likely 3 lines: title line, then two bullet lines. That's okay.
+
+Let's craft:
+
+### [HEADERS]: Stale .depend files cause build failures
+- Make ignored outdated dependency files, leading to ignored stale .depend warnings.
+- Clean the build directory or run make clean before rebuilding to regenerate .depend files.
+
+That's 3 lines. Output only that.
+</think>
+### [HEADERS]: Stale .depend files cause build failures  
+- Make ignored outdated dependency files, leading to ignored stale .depend warnings.  
+- Clean the build directory or run `make clean` before rebuilding to regenerate .depend files.
