@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 20:16
+Generated: 2026-02-05 20:23
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 20:16
 
 ## Progress
 - Total directories: 8264
-- Completed: 302 (3%)
+- Completed: 303 (3%)
 - Skipped: 1
-- Remaining: 7961
+- Remaining: 7960
 
 ## Current Position
-CURRENT POSITION: `usr.bin/clang/lldb-tblgen`
+CURRENT POSITION: `usr.bin/clang/lli`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/clang/lldb-tblgen`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (102/505 done)
+## usr.bin/ (103/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -331,7 +331,7 @@ CURRENT POSITION: `usr.bin/clang/lldb-tblgen`
 - [x] `usr.bin/clang/lld` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_192146
 - [x] `usr.bin/clang/lldb` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_192146
 - [x] `usr.bin/clang/lldb-server` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_192146
-- [ ] `usr.bin/clang/lldb-tblgen` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/clang/lldb-tblgen` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_192146
 - [ ] `usr.bin/clang/lli` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-ar` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-as` (0 .c, 0 .h, 0 lines)
