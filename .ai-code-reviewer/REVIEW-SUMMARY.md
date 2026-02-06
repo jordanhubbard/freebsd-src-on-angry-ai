@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 23:26 - usr.bin/clang/llvm-link ✓
+
+**Directory:** `usr.bin/clang/llvm-link`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/clang/llvm-link` (0 .c, 0 .h, 0 lines)" to "+- [>] `usr.bin/clang/llvm-link` (0 .c, 0 .h, 0 lines)". That seems like a status marker change: from unchecked to in-progress? Actually original had "-- [ ]" (unchecked) and changed to "+- [>]" (maybe "in progress"?). The commit message should be about llvm-link: something. Must be "[ai-code-reviewer] llvm-link: <short summary>" max 72 chars total including that prefix? The rule: First line: "[ai-code-reviewer] llvm-link: <short summary>" (72 chars max total). So the whole first line must be <=72 characters. Must be exactly that format. Then blank line, then body explaining what changed and why, focusing on security/correctness fixes, not style changes, imperative mood.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 23:20 - usr.bin/clang/llvm-extract ✓
 
 **Directory:** `usr.bin/clang/llvm-extract`
