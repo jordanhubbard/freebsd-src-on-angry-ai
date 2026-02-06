@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 05:38
+Generated: 2026-02-06 05:50
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 05:38
 
 ## Progress
 - Total directories: 8264
-- Completed: 327 (3%)
+- Completed: 328 (3%)
 - Skipped: 1
-- Remaining: 7936
+- Remaining: 7935
 
 ## Current Position
-CURRENT POSITION: `usr.bin/clang/llvm-profdata`
+CURRENT POSITION: `usr.bin/clang/llvm-readobj`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-profdata`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (127/505 done)
+## usr.bin/ (128/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -356,7 +356,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-profdata`
 - [x] `usr.bin/clang/llvm-objcopy` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_045937
 - [x] `usr.bin/clang/llvm-objdump` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_045937
 - [x] `usr.bin/clang/llvm-pdbutil` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_045937
-- [ ] `usr.bin/clang/llvm-profdata` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/clang/llvm-profdata` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_045937
 - [ ] `usr.bin/clang/llvm-readobj` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-rtdyld` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-size` (0 .c, 0 .h, 0 lines)
