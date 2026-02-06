@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 22:38 - usr.bin/clang/llvm-cxxdump ✓
+
+**Directory:** `usr.bin/clang/llvm-cxxdump`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/clang/llvm-cxxdump` (0 .c, 0 .h, 0 lines)" to "+- [>] `usr.bin/clang/llvm-cxxdump` (0 .c, 0 .h, 0 lines)". So it's marking it as in progress? The commit covers ALL changes in the llvm-cxxdump directory. The summary should be short, max 72 chars total including prefix? The first line must be "[ai-code-reviewer] llvm-cxxdump: <short summary>" total <=72 chars. So we need to craft a short summary after colon, maybe "Mark as in-progress review" or "Mark llvm-cxxdump as in-progress". Let's count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 22:33 - usr.bin/clang/llvm-cov ✓
 
 **Directory:** `usr.bin/clang/llvm-cov`
