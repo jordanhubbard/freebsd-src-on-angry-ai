@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 23:46 - usr.bin/clang/llvm-mca ✓
+
+**Directory:** `usr.bin/clang/llvm-mca`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "- [ ] `usr.bin/clang/llvm-mca` (0 .c, 0 .h, 0 lines)" to "+- [>] `usr.bin/clang/llvm-mca` (0 .c, 0 .h, 0 lines)". Actually the diff shows a change from "[ ]" to "[>]"? The diff shows "-- [ ]" changed to "+- [>]"? Let's parse: original line: "- [ ] `usr.bin/clang/llvm-mca` (0 .c, 0 .h, 0 lines)". After change: "+- [>] `usr.bin/clang/llvm-mca` (0 .c, 0 .h, 0 lines)". So they changed the status marker from "[ ]" to "[>]"? Actually they added a plus sign and changed bracket? The diff shows "- [ ]" removed and "+- [>]" added. So they changed the checkbox to something else indicating maybe "in progress"? The commit message should reflect that they are moving llvm-mca into the "CURRENT POSITION" list? Actually the context: The file .ai-code-reviewer/REVIEW-INDEX.md tracks components and their status. They moved llvm-mca from not started to something? The diff shows they changed the status from "[ ]" (maybe "todo") to "[>]" (maybe "in progress"?). The commit message should be about updating the review index to mark llvm-mca as "in progress"? But the instruction says: "Focus on the security/correctness fixes, not style changes". However this diff is just a markdown change, not code. But they want a commit message covering ALL changes in the llvm-mca directory. Actually the diff is only about the REVIEW-INDEX.md file, which references usr.bin/clang/llvm-mca. So the commit is about updating the review index to mark llvm-mca as "in progress"? The instruction: "Write a commit message following these rules: 1. First line: "[ai-code-reviewer] llvm-mca: <short summary>" (72 chars max total)". So we need to produce a short summary describing the change: maybe "Mark llvm-mca as in-progress in review index". But must be <=72 characters total including prefix? The format: "[ai-code-reviewer] llvm-mca: <short summary>" total length <=72 characters. So we need to count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 23:42 - usr.bin/clang/llvm-mc ✓
 
 **Directory:** `usr.bin/clang/llvm-mc`
