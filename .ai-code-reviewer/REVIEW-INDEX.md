@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 09:33
+Generated: 2026-02-06 09:53
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 09:33
 
 ## Progress
 - Total directories: 8264
-- Completed: 347 (4%)
+- Completed: 348 (4%)
 - Skipped: 1
-- Remaining: 7916
+- Remaining: 7915
 
 ## Current Position
-CURRENT POSITION: `usr.bin/compress`
+CURRENT POSITION: `usr.bin/compress/doc`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/compress`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (147/505 done)
+## usr.bin/ (148/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -376,7 +376,7 @@ CURRENT POSITION: `usr.bin/compress`
 - [x] `usr.bin/comm/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_081112
 - [x] `usr.bin/command` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_081112
 - [x] `usr.bin/compile_et` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_081112
-- [ ] `usr.bin/compress` (2 .c, 1 .h, 1196 lines)
+- [x] `usr.bin/compress` (2 .c, 1 .h, 1196 lines) - 2026-02-06 - Fixed by session 20260206_081112
 - [ ] `usr.bin/compress/doc` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/compress/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/cpio` (0 .c, 0 .h, 0 lines)
