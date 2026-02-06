@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 07:32 - usr.bin/cmp ✓
+
+**Directory:** `usr.bin/cmp`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/cmp` (5 .c, 1 .h, 799 lines)" to "+- [>] `usr.bin/cmp` (5 .c, 1 .h, 799 lines)". That seems like a status marker change, maybe indicating progress? The instruction: "Component/Directory: usr.bin/cmp Changed files: .ai-code-reviewer/REVIEW-INDEX.md". So the changes are to that index file, marking cmp as in progress? The commit message should reflect that. The rules: first line: "[ai-code-reviewer] cmp: <short summary>" max 72 chars total. So something like "[ai-code-reviewer] cmp: Mark progress in review index". Must be <=72 chars including brackets and spaces? Let's count: "[ai-code-reviewer] cmp: Mark progress in review index". Count characters: brackets and text. Let's count precisely: "["=1, "a"=2, "i"=3, "-"=4, "c"=5, "o"=6, "d"=7, "e"=8, "-"=9, "r"=10, "e"=11, "v"=12, "i"=13, "e"=14, "w"=15, ")"=16, space=17, "c"=18, "m"=19, "p"=20, ":"=21, space=22, "M"=23, "a"=24, "r"=25, "k"=26, space=27, "p"=28, "r"=29, "o"=30, "g"=31, "r"=32, "e"=33, "s"=34, "s"=35, space=36, "i"=37, "n"=38, space=39, "r"=40, "e"=41, "v"=42, "i"=43, "e"=44, "w"=45, space=46, "i"=47, "n"=48, "d"=49, "e"=50, "x"=51. That's 51 characters, well under 72. Could also be "Mark cmp as in-progress". Let's craft a concise summary: "Mark cmp as in-progress in review index". Count: "[ai-code-reviewer] cmp: Mark cmp as in-progress in review index". Let's count: "[ai-code-reviewer]" = 16? Actually earlier we counted 16 including brackets? Let's recount: "["=1, "a"=2, "i"=3, "-"=4, "c"=5, "o"=6, "d"=7, "e"=8, "-"=9, "r"=10, "e"=11, "v"=12, "i"=13, "e"=14, "w"=15, ")"=16. Then space=17, "c"=18, "m"=19, "p"=20, ":"=21, space=22, "M"=23, "a"=24, "r"=25, "k"=26, space=27, "c"=28, "m"=29, "p"=30, space=31, "a"=32, "s"=33, space=34, "i"=35, "n"=36, "-"=37, "p"=38, "r"=39, "o"=40, "g"=41, "r"=42, "e"=43, "s"=44, "s"=45, space=46, "i"=47, "n"=48, space=49, "r"=50, "e"=51, "v"=52, "i"=53, "e"=54, "w"=55, space=56, "i"=57, "n"=58, "d"=59, "e"=60, "x"=61. So 61 characters, okay.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 07:22 - usr.bin/clang/opt ✓
 
 **Directory:** `usr.bin/clang/opt`
