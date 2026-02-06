@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 07:13 - usr.bin/clang/llvm-xray ✓
+
+**Directory:** `usr.bin/clang/llvm-xray`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "- [ ] `usr.bin/clang/llvm-xray` (0 .c, 0 .h, 0 lines)" to "+- [>] `usr.bin/clang/llvm-xray` (0 .c, 0 .h, 0 lines)". Actually diff shows "- [ ]" changed to "+- [>]"? Let's parse: original line started with "-- [ ] `usr.bin/clang/llvm-xray`". New line is "+- [>] `usr.bin/clang/llvm-xray`". So it's marking it as "in progress"? The diff indicates that the status changed from not started to in progress? The commit message should reflect that this covers ALL changes in the llvm-xray directory. The instruction: "This commit covers ALL changes in the llvm-xray directory". So we need a commit message that says something like "[ai-code-reviewer] llvm-xray: Mark as in progress" maybe? But need short summary <=72 chars total including prefix? The first line must be "[ai-code-reviewer] llvm-xray: <short summary>" total <=72 characters. So we need to craft a short summary within 72 characters including the prefix and colon and space? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" That's 44 characters maybe. So we need something similar.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 07:06 - usr.bin/clang/llvm-tblgen ✓
 
 **Directory:** `usr.bin/clang/llvm-tblgen`
