@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-05 16:46 - usr.bin/chpass ✓
+
+**Directory:** `usr.bin/chpass`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md, marking chpass as ">" meaning maybe in progress? The task: generate a git commit message for these FreeBSD source code changes. The component/directory is usr.bin/chpass. Changed files: .ai-code-reviewer/REVIEW-INDEX.md. So the changes are just updating the review index file to mark chpass as in progress? The diff shows a change from "[ ]" to "[>]" maybe indicating that work is started? The commit message should reflect that we are addressing chpass security/correctness fixes. The rules: first line: "[ai-code-reviewer] chpass: <short summary>" max 72 chars total. So something like "[ai-code-reviewer] chpass: Add proper bounds checking and error handling". Must be <=72 characters including prefix? The prefix includes "[ai-code-reviewer] " which is 16 characters (including space?). Let's count: "[ai-code-reviewer]" is 15? Actually characters: [ a i - c o d e - r e v i e w e r ] = 15? Let's count precisely: [ (1) a(2) i(3) -(4) c(5) o(6) d(7) e(8) -(9) r(10) e(11) v(12) i(13) e(14) w(15) e(16) r(17) ] (18). Actually let's count: "[ai-code-reviewer]" length: characters: '['=1, 'a'=2, 'i'=3, '-'=4, 'c'=5, 'o'=6, 'd'=7, 'e'=8, '-'=9, 'r'=10, 'e'=11, 'v'=12, 'i'=13, 'e'=14, 'w'=15, 'e'=16, 'r'=17, ']'=18. So 18 characters. Then a space after? The format shows "[ai-code-reviewer] chpass: <short summary>" includes a space after the closing bracket? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" There's a space after the bracket? Actually example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" There's a space after the closing bracket? The string includes a space after the bracket? The example shows "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" There's a space after the bracket? It shows "[ai-code-reviewer] cpuset: ..." So there is a space after the closing bracket? Actually the bracket includes the closing bracket, then a space, then "cpuset:". So the prefix is "[ai-code-reviewer] " which is 19 characters (including space). Then "chpass: " is 8 characters (including colon and space). So total prefix length is 27. Then we have short summary after that. The total line must be <=72 characters total. So we have up to 72-27 = 45 characters for the summary after "chpass: ". So we need a short summary <=45 characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-05 16:38 - usr.bin/chat ✓
 
 **Directory:** `usr.bin/chat`
