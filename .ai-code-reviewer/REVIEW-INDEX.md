@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 16:00
+Generated: 2026-02-05 16:08
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,9 +13,9 @@ Generated: 2026-02-05 16:00
 
 ## Progress
 - Total directories: 8264
-- Completed: 284 (3%)
+- Completed: 285 (3%)
 - Skipped: 1
-- Remaining: 7979
+- Remaining: 7978
 
 ## Current Position
 CURRENT POSITION: `usr.bin/bzip2recover`
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/bzip2recover`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (84/505 done)
+## usr.bin/ (85/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -314,7 +314,7 @@ CURRENT POSITION: `usr.bin/bzip2recover`
 - [ ] `usr.bin/bzip2recover` (0 .c, 0 .h, 0 lines)
 - [x] `usr.bin/c89` (1 .c, 0 .h, 111 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [x] `usr.bin/c99` (1 .c, 0 .h, 132 lines) - 2026-02-05 - Fixed by session 20260205_124242
-- [ ] `usr.bin/caesar` (1 .c, 0 .h, 145 lines)
+- [x] `usr.bin/caesar` (1 .c, 0 .h, 145 lines) - 2026-02-05 - Fixed by session 20260205_124242
 - [ ] `usr.bin/calendar` (11 .c, 2 .h, 4141 lines)
 - [ ] `usr.bin/calendar/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/cap_mkdb` (1 .c, 0 .h, 255 lines)
