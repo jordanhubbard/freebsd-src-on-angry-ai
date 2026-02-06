@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 23:50
+Generated: 2026-02-05 23:54
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 23:50
 
 ## Progress
 - Total directories: 8264
-- Completed: 322 (3%)
+- Completed: 323 (3%)
 - Skipped: 1
-- Remaining: 7941
+- Remaining: 7940
 
 ## Current Position
-CURRENT POSITION: `usr.bin/clang/llvm-modextract`
+CURRENT POSITION: `usr.bin/clang/llvm-nm`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-modextract`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (122/505 done)
+## usr.bin/ (123/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -351,7 +351,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-modextract`
 - [x] `usr.bin/clang/llvm-mc` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [x] `usr.bin/clang/llvm-mca` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [x] `usr.bin/clang/llvm-min-tblgen` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
-- [ ] `usr.bin/clang/llvm-modextract` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/clang/llvm-modextract` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [ ] `usr.bin/clang/llvm-nm` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-objcopy` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-objdump` (0 .c, 0 .h, 0 lines)
