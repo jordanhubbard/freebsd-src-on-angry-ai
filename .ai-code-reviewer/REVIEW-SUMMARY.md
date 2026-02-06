@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 11:49 - usr.bin/diff ✓
+
+**Directory:** `usr.bin/diff`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md, marking diff as > (maybe in progress). The commit covers ALL changes in the diff directory. The component/directory is usr.bin/diff. The changed file is .ai-code-reviewer/REVIEW-INDEX.md. The diff shows updating status of diff from [ ] to [>], indicating maybe it's being worked on. The commit message should be about diff: maybe "Mark diff as in progress" or "Update review index for diff". But need to focus on security/correctness fixes, not style changes. However the diff only changes a markdown file, not code. The instruction: "Focus on the security/correctness fixes, not style changes". But there are no security fixes in this diff; it's just updating a review index. Perhaps the commit is about marking diff as in progress, indicating it's being fixed. The short summary must be <=72 chars total including prefix? The format: "[ai-code-reviewer] diff: <short summary>" total 72 chars max. So we need to craft a short summary within 72 characters including the prefix and space? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" That's the whole first line. So we need something like "[ai-code-reviewer] diff: Mark diff as in-progress review". Let's count characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 11:32 - usr.bin/cxxfilt ✓
 
 **Directory:** `usr.bin/cxxfilt`

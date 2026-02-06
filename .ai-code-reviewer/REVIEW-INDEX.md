@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 11:32
+Generated: 2026-02-06 11:49
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 11:32
 
 ## Progress
 - Total directories: 8264
-- Completed: 359 (4%)
+- Completed: 360 (4%)
 - Skipped: 1
-- Remaining: 7904
+- Remaining: 7903
 
 ## Current Position
-CURRENT POSITION: `usr.bin/diff`
+CURRENT POSITION: `usr.bin/diff/tests`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/diff`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (159/505 done)
+## usr.bin/ (160/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -388,7 +388,7 @@ CURRENT POSITION: `usr.bin/diff`
 - [x] `usr.bin/cut` (1 .c, 0 .h, 481 lines) - 2026-02-06 - Fixed by session 20260206_081112
 - [x] `usr.bin/cut/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_081112
 - [x] `usr.bin/cxxfilt` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_081112
-- [ ] `usr.bin/diff` (6 .c, 3 .h, 3540 lines)
+- [x] `usr.bin/diff` (6 .c, 3 .h, 3540 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [ ] `usr.bin/diff/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/diff3` (1 .c, 0 .h, 1115 lines)
 - [ ] `usr.bin/diff3/tests` (0 .c, 0 .h, 0 lines)
