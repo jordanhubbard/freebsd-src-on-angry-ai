@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-05 22:52
+Generated: 2026-02-05 22:56
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-05 22:52
 
 ## Progress
 - Total directories: 8264
-- Completed: 311 (3%)
+- Completed: 312 (3%)
 - Skipped: 1
-- Remaining: 7952
+- Remaining: 7951
 
 ## Current Position
-CURRENT POSITION: `usr.bin/clang/llvm-dis`
+CURRENT POSITION: `usr.bin/clang/llvm-dwarfdump`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-dis`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (111/505 done)
+## usr.bin/ (112/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -340,7 +340,7 @@ CURRENT POSITION: `usr.bin/clang/llvm-dis`
 - [x] `usr.bin/clang/llvm-cxxdump` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [x] `usr.bin/clang/llvm-cxxfilt` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [x] `usr.bin/clang/llvm-diff` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
-- [ ] `usr.bin/clang/llvm-dis` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/clang/llvm-dis` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260205_221926
 - [ ] `usr.bin/clang/llvm-dwarfdump` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-dwarfutil` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/clang/llvm-dwp` (0 .c, 0 .h, 0 lines)
