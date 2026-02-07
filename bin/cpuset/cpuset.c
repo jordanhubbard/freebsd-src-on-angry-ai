@@ -258,8 +258,9 @@ main(int argc, char *argv[])
 			if (cpuset_setid(CPU_WHICH_PID, -1, setid))
 				err(argc, "setid");
 		} else {
-			if (cpuset(&setid))
-				err(argc, "newid");
+			if (cpuset(&setid)) {
+				errx(1, "newid: %s", strerror(errno));
+			}
 		}
 		if (lflag) {
 			if (cpuset_setaffinity(level, CPU_WHICH_PID,

@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 16:00
+Generated: 2026-02-06 16:24
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 16:00
 
 ## Progress
 - Total directories: 8264
-- Completed: 370 (4%)
+- Completed: 371 (4%)
 - Skipped: 1
-- Remaining: 7893
+- Remaining: 7892
 
 ## Current Position
-CURRENT POSITION: `usr.bin/ee`
+CURRENT POSITION: `usr.bin/elfcopy`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/ee`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (170/505 done)
+## usr.bin/ (171/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -399,7 +399,7 @@ CURRENT POSITION: `usr.bin/ee`
 - [x] `usr.bin/dtc` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/du` (1 .c, 0 .h, 577 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/du/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
-- [ ] `usr.bin/ee` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/ee` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [ ] `usr.bin/elfcopy` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/elfctl` (1 .c, 0 .h, 469 lines)
 - [ ] `usr.bin/elfdump` (1 .c, 0 .h, 1287 lines)
