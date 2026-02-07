@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 22:00
+Generated: 2026-02-06 22:17
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 22:00
 
 ## Progress
 - Total directories: 8264
-- Completed: 404 (4%)
+- Completed: 405 (4%)
 - Skipped: 1
-- Remaining: 7859
+- Remaining: 7858
 
 ## Current Position
-CURRENT POSITION: `usr.bin/gencat`
+CURRENT POSITION: `usr.bin/genl`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/gencat`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (204/505 done)
+## usr.bin/ (205/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -433,7 +433,7 @@ CURRENT POSITION: `usr.bin/gencat`
 - [x] `usr.bin/fsync` (1 .c, 0 .h, 77 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/ftp` (0 .c, 1 .h, 513 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/gcore` (3 .c, 1 .h, 1149 lines) - 2026-02-06 - Fixed by session 20260206_114140
-- [ ] `usr.bin/gencat` (1 .c, 0 .h, 694 lines)
+- [x] `usr.bin/gencat` (1 .c, 0 .h, 694 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [ ] `usr.bin/genl` (2 .c, 1 .h, 632 lines)
 - [ ] `usr.bin/getaddrinfo` (1 .c, 0 .h, 328 lines)
 - [ ] `usr.bin/getconf` (1 .c, 1 .h, 331 lines)
