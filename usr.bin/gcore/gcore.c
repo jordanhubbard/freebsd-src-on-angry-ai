@@ -54,6 +54,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -156,11 +157,11 @@ main(int argc, char *argv[])
 	/* XXX we should check that the pid argument is really a number */
 	switch (argc) {
 	case 1:
-		pid = atoi(argv[0]);
+		pid = strtonum(argv[0], 0, INT_MAX, NULL);
 		break;
 	case 2:
 		binfile = argv[0];
-		pid = atoi(argv[1]);
+		pid = strtonum(argv[1], 0, INT_MAX, NULL);
 		break;
 	default:
 		usage();

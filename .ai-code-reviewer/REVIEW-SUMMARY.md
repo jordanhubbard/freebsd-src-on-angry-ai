@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 22:00 - usr.bin/gcore ✓
+
+**Directory:** `usr.bin/gcore`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message following rules.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - usr.bin/gcore/gcore.c
+
+---
+
 ## 2026-02-06 21:52 - usr.bin/ftp ✓
 
 **Directory:** `usr.bin/ftp`
