@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 19:39
+Generated: 2026-02-06 19:52
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 19:39
 
 ## Progress
 - Total directories: 8264
-- Completed: 387 (4%)
+- Completed: 388 (4%)
 - Skipped: 1
-- Remaining: 7876
+- Remaining: 7875
 
 ## Current Position
-CURRENT POSITION: `usr.bin/find`
+CURRENT POSITION: `usr.bin/find/tests`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/find`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (187/505 done)
+## usr.bin/ (188/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -416,7 +416,7 @@ CURRENT POSITION: `usr.bin/find`
 - [x] `usr.bin/file/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/file2c` (1 .c, 0 .h, 90 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/file2c/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
-- [ ] `usr.bin/find` (8 .c, 2 .h, 3689 lines)
+- [x] `usr.bin/find` (8 .c, 2 .h, 3689 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [ ] `usr.bin/find/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/finger` (5 .c, 3 .h, 1727 lines)
 - [ ] `usr.bin/fmt` (1 .c, 0 .h, 784 lines)

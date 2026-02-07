@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 19:52 - usr.bin/find ✓
+
+**Directory:** `usr.bin/find`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/find` (8 .c, 2 .h, 3689 lines)" to "+- [>] `usr.bin/find` (8 .c, 2 .h, 3689 lines)". The meaning likely indicates that the find directory is now being reviewed or something? The diff shows status changed from "not started" to "in progress"? The symbol changed from space dash? Actually original line started with "-- [ ]" meaning not started. New line starts with "+- [>]" meaning maybe "in progress"? The commit message should reflect that find directory has been addressed? The instruction: "Write a commit message ... This commit covers ALL changes in the find directory". So we need to produce a commit message that says something like "find: Complete security review and fix integer overflow vulnerabilities". Must be <=72 chars total for first line including prefix? The format: "[ai-code-reviewer] find: <short summary>" (72 chars max total). So first line must be exactly that format, with short summary after colon, total length <=72 characters including prefix and spaces? Probably count characters. Let's craft a short summary <=72 - len("[ai-code-reviewer] find: ") = 72 - (17? Let's count: "[ai-code-reviewer]" is 16? Actually characters: [ a i - c o d e - r e v i e w e r ] = 16? Let's count: [ =1, a=2, i=3, -=4, c=5, o=6, d=7, e=8, -=9, r=10, e=11, v=12, i=13, e=14, w=15, e=16, r=17, ]=18. So "[ai-code-reviewer]" is 18 characters. Then space after? The format shows a space after colon? Example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()". There's a space after the prefix? Actually they have "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()". So after the prefix there is a space then the component name then colon then space then summary. So the prefix includes the trailing space? The prefix is "[ai-code-reviewer] ". That's 19 characters (including trailing space). Then "find: " is 6 characters (including colon and space). So total prefix length = 19 + 6 = 25 characters. So we have 72 - 25 = 47 characters left for the short summary. So we need a short summary of up to 47 characters.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 19:39 - usr.bin/file2c/tests ✓
 
 **Directory:** `usr.bin/file2c/tests`
