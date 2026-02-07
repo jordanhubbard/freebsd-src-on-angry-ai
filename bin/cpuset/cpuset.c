@@ -256,7 +256,7 @@ main(int argc, char *argv[])
 			usage();
 		if (sflag) {
 			if (cpuset_setid(CPU_WHICH_PID, -1, setid))
-				err(argc, "setid");
+				err(argc, "setuid");
 		} else {
 			if (cpuset(&setid)) {
 				errx(1, "newid: %s", strerror(errno));
