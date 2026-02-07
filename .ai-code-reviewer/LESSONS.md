@@ -1428,3 +1428,37 @@ Make sure no extra text. Output only that.
 ### [SYNTAX]: Invalid Makefile line
 - The Makefile contained a stray line `"dummy"` that caused a parse error.
 - Remove or comment out non‑directive lines to keep the Makefile syntactically valid.
+
+
+## 2026-02-06 22:23
+We need to output a short lesson entry in format:
+
+### [Category]: Brief title
+- What went wrong
+- How to avoid it next time
+
+Categories allowed: COMPILER, HEADERS, SYNTAX, LOGIC, STYLE
+
+The error is "Invalid line 'dummy'" in Makefile. That's a syntax error in makefile. Category likely SYNTAX or maybe STYLE? It's about makefile syntax. Probably SYNTAX.
+
+We need to output only the lesson entry, nothing else.
+
+So something like:
+
+### [SYNTAX]: Invalid Makefile Directive
+- The Makefile contained a stray line "dummy" causing a syntax error.
+- Ensure Makefiles only include valid targets and directives; remove or comment out unsupported lines.
+
+That's 2-4 lines? It says 2-4 lines in this format. Probably bullet points count as lines. We need to include bullet points after the title line. So we can have title line then bullet points each starting with "-". That's okay.
+
+Make sure we only output that lesson entry, nothing else.
+
+Thus final answer:
+
+### [SYNTAX]: Invalid Makefile Directive
+- A stray "dummy" line appeared in the Makefile, causing a syntax error.
+- Validate Makefile syntax and remove or comment out unsupported lines before building.
+</think>
+### [SYNTAX]: Invalid Makefile Directive
+- A stray "dummy" line was present in the Makefile, triggering a syntax error.
+- Clean up Makefiles by removing or commenting out unsupported lines before building.
