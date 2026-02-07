@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 21:22 - usr.bin/fortune/unstr ✓
+
+**Directory:** `usr.bin/fortune/unstr`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for changes in usr.bin/fortune/unstr. The diff shows that the file .ai-code-reviewer/REVIEW-INDEX.md was modified, marking unstr as ">-". That likely indicates a change in status, maybe marking it as "in progress"? The commit message should be about "unstr: ..." with short summary <=72 chars total including prefix? The rule: First line: "[ai-code-reviewer] unstr: <short summary>" (72 chars max total). So the whole first line including prefix and summary must be <=72 characters. Must be exactly that format.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 21:18 - usr.bin/fortune/tools ✓
 
 **Directory:** `usr.bin/fortune/tools`
