@@ -46,6 +46,5 @@ typedef struct {				/* information table */
 #define	STR_ROTATED	0x4			/* rot-13'd text */
 #define	STR_COMMENTS	0x8			/* embedded comments */
 	uint32_t	str_flags;		/* bit field for flags */
-	unsigned char	stuff[4];		/* 64-bit aligned space */
-#define	str_delim	stuff[0]		/* delimiting character */
+	char	str_delim;		/* delimiting character */
 } STRFILE;
