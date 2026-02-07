@@ -36,7 +36,7 @@ setup(char *pw)
 	int ic, i, k, temp;
 	char salt[3];
 	unsigned rnd;
-	int32_t seed;
+	uint32_t seed;
 	char *cryptpw;
 
 	if (crypt_set_format("des") == 0) {
@@ -140,7 +140,7 @@ shuffle(char deckary[])
 {
 	int i, ic, k, temp;
 	unsigned rnd;
-	static int32_t seed = 123;
+	static uint32_t seed = 123;
 
 	for(i=0;i<ROTORSZ;i++) {
 		seed = 5*seed + buf[i%13];
