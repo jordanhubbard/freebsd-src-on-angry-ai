@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 20:33 - usr.bin/fold ✓
+
+**Directory:** `usr.bin/fold`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md: Updated timestamp from 20:24 to 20:25 and changed status marker from [ ] to [>]. That indicates some progress? The commit covers ALL changes in the fold directory. The summary should be about fold: maybe "Update review status for fold" or "Mark fold as in progress". But need to follow rules: first line: "[ai-code-reviewer] fold: <short summary>" max 72 chars total including prefix? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" That's the format: prefix [ai-code-reviewer] then space then component name then colon then short summary. So we need "[ai-code-reviewer] fold: ..." with short summary <=72 chars total (including everything?). Probably the whole first line must be <=72 characters. Let's craft something like "[ai-code-reviewer] fold: Update review index timestamp and status marker". Count characters: Let's count.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 20:24 - usr.bin/fmt ✓
 
 **Directory:** `usr.bin/fmt`

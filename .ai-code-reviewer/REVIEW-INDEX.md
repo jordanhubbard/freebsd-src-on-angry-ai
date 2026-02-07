@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 20:24
+Generated: 2026-02-06 20:33
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 20:24
 
 ## Progress
 - Total directories: 8264
-- Completed: 391 (4%)
+- Completed: 392 (4%)
 - Skipped: 1
-- Remaining: 7872
+- Remaining: 7871
 
 ## Current Position
-CURRENT POSITION: `usr.bin/fold`
+CURRENT POSITION: `usr.bin/fold/tests`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/fold`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (191/505 done)
+## usr.bin/ (192/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -420,7 +420,7 @@ CURRENT POSITION: `usr.bin/fold`
 - [x] `usr.bin/find/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/finger` (5 .c, 3 .h, 1727 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/fmt` (1 .c, 0 .h, 784 lines) - 2026-02-06 - Fixed by session 20260206_114140
-- [ ] `usr.bin/fold` (1 .c, 0 .h, 222 lines)
+- [x] `usr.bin/fold` (1 .c, 0 .h, 222 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [ ] `usr.bin/fold/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/fortune` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/fortune/datfiles` (0 .c, 0 .h, 0 lines)
