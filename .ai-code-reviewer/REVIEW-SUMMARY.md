@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 21:18 - usr.bin/fortune/tools ✓
+
+**Directory:** `usr.bin/fortune/tools`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message. The diff shows a change in .ai-code-reviewer/REVIEW-INDEX.md: line changed from "-- [ ] `usr.bin/fortune/tools` (0 .c, 0 .h, 0 lines)" to "+- [>] `usr.bin/fortune/tools` (0 .c, 0 .h, 0 lines)". So it's marking that tool directory as "in progress"? The commit covers all changes in the tools directory. The summary should be short, max 72 chars total including prefix? The format: "[ai-code-reviewer] tools: <short summary>" total 72 chars max. So we need to craft a short summary after "tools: " that fits within 72 characters total including the prefix and space? The example: "[ai-code-reviewer] cpuset: Replace atoi() with strtonum()" That's the whole first line. So we need something like "[ai-code-reviewer] tools: Mark tools directory as in-progress" but must be <=72 chars total. Let's count.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 21:11 - usr.bin/fortune/strfile ✓
 
 **Directory:** `usr.bin/fortune/strfile`
