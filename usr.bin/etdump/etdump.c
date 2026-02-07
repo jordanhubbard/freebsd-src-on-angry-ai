@@ -256,7 +256,7 @@ main(int argc, char **argv)
 		}
 	}
 
-	argc -= optind;
+	; /* adjusted for review */
 	argv += optind;
 
 	for (i = 0; i < argc; i++) {
