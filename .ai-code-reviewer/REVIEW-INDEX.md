@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-06 19:23
+Generated: 2026-02-06 19:26
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-06 19:23
 
 ## Progress
 - Total directories: 8264
-- Completed: 384 (4%)
+- Completed: 385 (4%)
 - Skipped: 1
-- Remaining: 7879
+- Remaining: 7878
 
 ## Current Position
-CURRENT POSITION: `usr.bin/file/tests`
+CURRENT POSITION: `usr.bin/file2c`
 
 ## bin/ (73/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/file/tests`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-05 - Fixed by session 20260204_232033
 
-## usr.bin/ (184/505 done)
+## usr.bin/ (185/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-05 - Fixed by session 20260204_232033
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-05 - Fixed by session 20260204_232033
@@ -413,7 +413,7 @@ CURRENT POSITION: `usr.bin/file/tests`
 - [x] `usr.bin/false` (1 .c, 0 .h, 36 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/fetch` (1 .c, 0 .h, 1227 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [x] `usr.bin/file` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
-- [ ] `usr.bin/file/tests` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/file/tests` (0 .c, 0 .h, 0 lines) - 2026-02-06 - Fixed by session 20260206_114140
 - [ ] `usr.bin/file2c` (1 .c, 0 .h, 90 lines)
 - [ ] `usr.bin/file2c/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/find` (8 .c, 2 .h, 3689 lines)
