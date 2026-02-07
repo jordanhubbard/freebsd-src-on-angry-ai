@@ -99,7 +99,6 @@ __DEFAULT_YES_OPTIONS = \
     FINGER \
     FLOPPY \
     FORTH \
-    FP_LIBC \
     FREEBSD_UPDATE \
     FTP \
     GAMES \
@@ -172,6 +171,7 @@ __DEFAULT_YES_OPTIONS = \
     SERVICESDB \
     SETUID_LOGIN \
     SHAREDOCS \
+    SOUND \
     SOURCELESS \
     SOURCELESS_HOST \
     SOURCELESS_UCODE \
@@ -381,6 +381,10 @@ BROKEN_OPTIONS+= OFED
 .if ${MACHINE:Nhost*} == "" && ${MK_host_egacy} == "yes"
 # we cannot expect tests to work
 BROKEN_OPTIONS+= TESTS
+.endif
+
+.if ${__T} != "amd64"
+BROKEN_OPTIONS+=BHYVE_SNAPSHOT
 .endif
 
 .-include <site.src.opts.mk>

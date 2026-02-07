@@ -26,13 +26,11 @@
 # SUCH DAMAGE.
 #
 
-atf_check_same_file()
-{
+atf_check_same_file() {
 	atf_check test "$1" -ef "$2"
 }
 
-atf_check_symlink_to()
-{
+atf_check_symlink_to() {
 	atf_check -o inline:"$1\n" readlink "$2"
 }
 

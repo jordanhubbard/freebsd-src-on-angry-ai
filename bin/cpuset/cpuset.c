@@ -179,7 +179,7 @@ main(int argc, char *argv[])
 			which = CPU_WHICH_JAIL;
 			id = jail_getid(optarg);
 			if (id < 0)
-				errx(EXIT_FAILURE, "%s", jail_errmsg);
+				errx(EXIT_FAILURE, "jail id is invalid: %s", jail_errmsg);
 			break;
 		case 'l':
 			lflag = 1;

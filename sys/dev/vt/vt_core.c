@@ -804,11 +804,11 @@ vt_machine_kbdevent(struct vt_device *vd, int c)
 		return (1);
 	case SPCLKEY | STBY: /* XXX Not present in kbdcontrol parser. */
 		/* Put machine into Stand-By mode. */
-		power_pm_suspend(POWER_SLEEP_STATE_STANDBY);
+		power_pm_suspend(POWER_SSTATE_TRANSITION_STANDBY);
 		return (1);
 	case SPCLKEY | SUSP: /* kbdmap(5) keyword `susp`. */
 		/* Suspend machine. */
-		power_pm_suspend(POWER_SLEEP_STATE_SUSPEND);
+		power_pm_suspend(POWER_SSTATE_TRANSITION_SUSPEND);
 		return (1);
 	}
 
@@ -3046,9 +3046,9 @@ skip_thunk:
 				DPRINTF(5, "reset WAIT_ACQ, ");
 			return (0);
 		} else if (mode->mode == VT_PROCESS) {
-			if (!(ISSIGVALID(mode->relsig) &&
-			    ISSIGVALID(mode->acqsig) &&
-			    (mode->frsig == 0 || ISSIGVALID(mode->frsig)))) {
+			if (!(_SIG_VALID(mode->relsig) &&
+			    _SIG_VALID(mode->acqsig) &&
+			    (mode->frsig == 0 || _SIG_VALID(mode->frsig)))) {
 				DPRINTF(5, "error EINVAL\n");
 				return (EINVAL);
 			}

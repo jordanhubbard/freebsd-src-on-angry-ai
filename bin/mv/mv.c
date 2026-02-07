@@ -379,7 +379,12 @@ copy(const char *from, const char *to)
 	}
 
 	/* Copy source to destination. */
-	if (!(pid = vfork())) {
+	pid = fork();
+	if (pid == -1) {
+		warn("fork");
+		return (1);
+	}
+	if (pid == 0) {
 		execl(_PATH_CP, "mv", vflg ? "-PRpv" : "-PRp", "--", from, to,
 		    (char *)NULL);
 		_exit(EXEC_FAILED);
@@ -406,8 +411,13 @@ copy(const char *from, const char *to)
 	}
 
 	/* Delete the source. */
-	if (!(pid = vfork())) {
-		execl(_PATH_RM, "mv", "-rf", "--", from, (char *)NULL);
+	pid = fork();
+	if (pid == -1) {
+		warn("fork");
+		return (1);
+	}
+	if (pid == 0) {
+		execl(_PATH_RM, "rm", "-rf", "--", from, (char *)NULL);
 		_exit(EXEC_FAILED);
 	}
 	if (waitpid(pid, &status, 0) == -1) {
@@ -441,35 +451,33 @@ preserve_fd_acls(int source_fd, int dest_fd, const char *source_path,
 	int acl_supported = 0, ret, trivial;
 
 	ret = fpathconf(source_fd, _PC_ACL_NFS4);
-	if (ret > 0 ) {
+	if (ret > 0) {
 		acl_supported = 1;
 		acl_type = ACL_TYPE_NFS4;
 	} else if (ret < 0 && errno != EINVAL) {
-		warn("fpathconf(..., _PC_ACL_NFS4) failed for %s",
-		    source_path);
+		warn("fpathconf(..., _PC_ACL_NFS4) failed for %s: %m", source_path);
 		return;
 	}
-	if (acl_supported == 0) {
+	if (!acl_supported) {
 		ret = fpathconf(source_fd, _PC_ACL_EXTENDED);
-		if (ret > 0 ) {
+		if (ret > 0) {
 			acl_supported = 1;
 			acl_type = ACL_TYPE_ACCESS;
 		} else if (ret < 0 && errno != EINVAL) {
-			warn("fpathconf(..., _PC_ACL_EXTENDED) failed for %s",
-			    source_path);
+			warn("fpathconf(..., _PC_ACL_EXTENDED) failed for %s: %m", source_path);
 			return;
 		}
 	}
-	if (acl_supported == 0)
+	if (!acl_supported)
 		return;
 
 	acl = acl_get_fd_np(source_fd, acl_type);
 	if (acl == NULL) {
-		warn("failed to get acl entries for %s", source_path);
+		warn("failed to get acl entries for %s: %m", source_path);
 		return;
 	}
 	if (acl_is_trivial_np(acl, &trivial)) {
-		warn("acl_is_trivial() failed for %s", source_path);
+		warn("acl_is_trivial() failed for %s: %m", source_path);
 		acl_free(acl);
 		return;
 	}
@@ -478,7 +486,7 @@ preserve_fd_acls(int source_fd, int dest_fd, const char *source_path,
 		return;
 	}
 	if (acl_set_fd_np(dest_fd, acl, acl_type) < 0) {
-		warn("failed to set acl entries for %s", dest_path);
+		warn("failed to set acl entries for %s: %m", dest_path);
 		acl_free(acl);
 		return;
 	}

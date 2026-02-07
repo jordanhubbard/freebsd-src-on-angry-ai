@@ -194,7 +194,11 @@ SET_DECLARE(sdt_argtypes_set, struct sdt_argtype);
 #define	_SDT_ASM_PROBE_CONSTRAINT	"i"
 #endif
 #ifndef	_SDT_ASM_PROBE_OPERAND
+#if !defined(__clang__) && __GNUC_PREREQ__(15, 0)
+#define	_SDT_ASM_PROBE_OPERAND		"cc"
+#else
 #define	_SDT_ASM_PROBE_OPERAND		"c"
+#endif
 #endif
 
 /*
@@ -447,7 +451,7 @@ struct sdt_probe {
 	const char	*mod;
 	const char	*func;
 	const char	*name;
-	id_t		id;		/* DTrace probe ID. */
+	uint32_t	id;		/* DTrace probe ID. */
 	int		n_args;		/* Number of arguments. */
 	struct linker_file *sdtp_lf;	/* Module in which we're defined. */
 };

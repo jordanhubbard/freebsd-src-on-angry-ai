@@ -73,6 +73,8 @@ main(int argc, char *argv[])
 		usage();
 
 	if (*argv) {
+		if (strlen(*argv) > MAXHOSTNAMELEN - 1)
+			errx(1, "hostname too long");
 		if (sethostname(*argv, (int)strlen(*argv)))
 			err(1, "sethostname");
 	} else {

@@ -876,8 +876,7 @@ vmmdev_destroy(struct vmmdev_softc *sc)
 		free(dsc, M_VMMDEV);
 	}
 
-	if (sc->vm != NULL)
-		vm_destroy(sc->vm);
+	vm_destroy(sc->vm);
 
 	chgvmmcnt(sc->ucred->cr_ruidinfo, -1, 0);
 	crfree(sc->ucred);
@@ -990,9 +989,15 @@ vmmdev_create(const char *name, uint32_t flags, struct ucred *cred)
 		return (EEXIST);
 	}
 
+	if (!chgvmmcnt(cred->cr_ruidinfo, 1, vm_maxvmms)) {
+		sx_xunlock(&vmmdev_mtx);
+		return (ENOMEM);
+	}
+
 	error = vm_create(name, &vm);
 	if (error != 0) {
 		sx_xunlock(&vmmdev_mtx);
+		(void)chgvmmcnt(cred->cr_ruidinfo, -1, 0);
 		return (error);
 	}
 	sc = vmmdev_alloc(vm, cred);
@@ -1014,12 +1019,6 @@ vmmdev_create(const char *name, uint32_t flags, struct ucred *cred)
 		sx_xunlock(&vmmdev_mtx);
 		vmmdev_destroy(sc);
 		return (error);
-	}
-	if (!chgvmmcnt(cred->cr_ruidinfo, 1, vm_maxvmms)) {
-		sx_xunlock(&vmmdev_mtx);
-		destroy_dev(cdev);
-		vmmdev_destroy(sc);
-		return (ENOMEM);
 	}
 	sc->cdev = cdev;
 	sx_xunlock(&vmmdev_mtx);
@@ -1228,9 +1227,11 @@ vmm_handler(module_t mod, int what, void *arg)
 		if (error == 0)
 			vmm_initialized = true;
 		else {
-			error = vmmdev_cleanup();
-			KASSERT(error == 0,
-			    ("%s: vmmdev_cleanup failed: %d", __func__, error));
+			int error1 __diagused;
+
+			error1 = vmmdev_cleanup();
+			KASSERT(error1 == 0,
+			    ("%s: vmmdev_cleanup failed: %d", __func__, error1));
 		}
 		break;
 	case MOD_UNLOAD:

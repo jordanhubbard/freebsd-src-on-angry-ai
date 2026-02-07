@@ -67,8 +67,10 @@ get_acl_from_file(const char *filename)
 		fclose(file);
 		errx(1, "line too long in %s", filename);
 	}
-
-	fclose(file);
+	/* Close the file only if it is not stdin */
+	if (file != stdin) {
+		fclose(file);
+	}
 
 	return (acl_from_text(buf));
 }
