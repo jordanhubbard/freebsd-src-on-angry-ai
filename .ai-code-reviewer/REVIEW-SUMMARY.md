@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 16:28 - usr.bin/elfcopy ✓
+
+**Directory:** `usr.bin/elfcopy`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md, marking elfcopy as > (maybe in progress). But the instruction: "Component/Directory: usr.bin/elfcopy Changed files: .ai-code-reviewer/REVIEW-INDEX.md". So the changes are about marking elfcopy as in progress? The commit message should cover ALL changes in the elfcopy directory. Probably the change is that the review index entry for elfcopy was updated from "[ ]" to "[>]" indicating it's being worked on. But the rules: first line "[ai-code-reviewer] elfcopy: <short summary>" max 72 chars total. Then blank line, body explaining what changed and why, focusing on security/correctness fixes, not style changes. Use imperative mood. This commit covers ALL changes in the elfcopy directory.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 16:24 - usr.bin/ee ✓
 
 **Directory:** `usr.bin/ee`
