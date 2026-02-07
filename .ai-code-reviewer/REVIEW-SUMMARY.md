@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 20:24 - usr.bin/fmt ✓
+
+**Directory:** `usr.bin/fmt`
+
+**Summary:** [ai-code-reviewer] We need to generate a commit message for these changes. The diff shows only a change in .ai-code-reviewer/REVIEW-INDEX.md: line "Generated: 2026-02-06 20:12" changed to "Generated: 2026-02-06 20:13". Also status line changed from "- [ ] fmt" to "- [>] fmt". That indicates maybe some progress marker. The commit covers ALL changes in the fmt directory. But the actual code changes? The diff only shows a metadata file change. Possibly the commit includes updates to review index marking fmt as in progress. The instruction: "Focus on the security/correctness fixes, not style changes". But there are no security fixes shown. Maybe the commit is about updating the review index to reflect that fmt is being worked on. The commit message should reflect that.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 20:12 - usr.bin/finger ✓
 
 **Directory:** `usr.bin/finger`
