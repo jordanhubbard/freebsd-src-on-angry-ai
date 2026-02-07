@@ -1492,3 +1492,25 @@ No extra text.
 ### [SYNTAX]: Invalid Makefile line
 - A stray line containing "dummy" caused make to reject the file.
 - Remove placeholder or non‑directive lines and keep only valid make syntax.
+
+
+## 2026-02-06 22:28
+We need to output a short lesson entry, 2-4 lines, in format:
+
+### [Category]: Brief title
+- What went wrong
+- How to avoid it next time
+
+Categories allowed: COMPILER, HEADERS, SYNTAX, LOGIC, STYLE
+
+The error is "Invalid line 'dummy'" in Makefile. That's a syntax issue? It's a Makefile syntax error: stray line. Could be SYNTAX or maybe STYLE? Probably SYNTAX. So we need to output:
+
+### [SYNTAX]: Invalid Makefile line
+- The Makefile contained a stray "dummy" line causing build failure.
+- Remove or comment out the line and ensure only valid make directives are present.
+
+That's 2 bullet points, fits 2-4 lines. Output only the lesson entry, nothing else.
+</think>
+### [SYNTAX]: Invalid Makefile line
+- A stray `dummy` line appeared in `usr.bin/genl/Makefile`, causing the build to abort.  
+- Remove or comment out the line and verify the Makefile contains only valid make directives.
