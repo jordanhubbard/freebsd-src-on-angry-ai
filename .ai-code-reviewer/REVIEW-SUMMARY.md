@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-06 21:52 - usr.bin/ftp ✓
+
+**Directory:** `usr.bin/ftp`
+
+**Summary:** [ai-code-reviewer] We need to produce a commit message. The diff shows changes to .ai-code-reviewer/REVIEW-INDEX.md only, updating timestamp and marking ftp status as ">". The instruction: "Write a commit message following these rules: 1. First line: "[ai-code-reviewer] ftp: <short summary>" (72 chars max total)". So first line must be like "[ai-code-reviewer] ftp: ..." with short summary, max 72 characters total including brackets and spaces? Probably total length <=72 characters. Must be concise.
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-06 21:44 - usr.bin/fsync ✓
 
 **Directory:** `usr.bin/fsync`
