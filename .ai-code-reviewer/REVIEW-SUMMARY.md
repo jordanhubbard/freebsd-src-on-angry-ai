@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-16 15:01 - sbin/dump ✓
+
+**Directory:** `sbin/dump`
+
+**Summary:** [ai-code-reviewer] dump: Replace atoi() with strtonum()
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/dump/dumprmt.c
+
+---
+
 ## 2026-02-16 14:58 - sbin/dmesg ✓
 
 **Directory:** `sbin/dmesg`

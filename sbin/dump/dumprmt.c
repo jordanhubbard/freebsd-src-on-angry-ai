@@ -318,7 +318,7 @@ rmtreply(const char *cmd)
 	if (*code == 'E' || *code == 'F') {
 		rmtgets(emsg, sizeof (emsg));
 		msg("%s: %s", cmd, emsg);
-		errno = atoi(code + 1);
+		errno = strtonum(code + 1, INT_MIN, INT_MAX, NULL);
 		if (*code == 'F')
 			rmtstate = TS_CLOSED;
 		return (-1);
@@ -333,7 +333,7 @@ rmtreply(const char *cmd)
 		    code);
 		rmtconnaborted(0);
 	}
-	return (atoi(code + 1));
+	return (strtonum(code + 1, INT_MIN, INT_MAX, NULL));
 }
 
 int
