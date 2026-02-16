@@ -18,13 +18,14 @@
 #include <sys/stat.h>
 
 #include <ctype.h>
-#include <err.h>
 #include <errno.h>
 #include <inttypes.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <err.h>
 
 #ifdef SHELL
 #define main testcmd
@@ -46,21 +47,18 @@ error(const char *msg, ...)
 #endif
 
 /* test(1) accepts the following grammar:
-	oexpr	::= aexpr | aexpr "-o" oexpr ;
-	aexpr	::= nexpr | nexpr "-a" aexpr ;
-	nexpr	::= primary | "!" primary
-	primary	::= unary-operator operand
-		| operand binary-operator operand
-		| operand
-		| "(" oexpr ")"
-		;
-	unary-operator ::= "-r"|"-w"|"-x"|"-f"|"-d"|"-c"|"-b"|"-p"|
-		"-u"|"-g"|"-k"|"-s"|"-t"|"-z"|"-n"|"-o"|"-O"|"-G"|"-L"|"-S";
-
-	binary-operator ::= "="|"!="|"-eq"|"-ne"|"-ge"|"-gt"|"-le"|"-lt"|
-			"-nt"|"-ot"|"-ef";
-	operand ::= <any legal UNIX file name>
-*/
+ * oexpr ::= aexpr | aexpr "-o" oexpr ;
+ * aexpr ::= nexpr | nexpr "-a" aexpr ;
+ * nexpr ::= primary | "!" primary
+ *         | operand binary-operator operand
+ *         | operand
+ *         | "(" oexpr ")" ;
+ * unary-operator ::= "-r"|"-w"|"-x"|"-f"|"-d"|"-c"|"-b"|"-p"|
+ *                  "-u"|"-g"|"-k"|"-s"|"-t"|"-z"|"-n"|"-o"|"-O"|"-G"|"-L"|"-S" ;
+ * binary-operator ::= "="|"!="|"-eq"|"-ne"|"-ge"|"-gt"|"-le"|"-lt"|
+ *                     "-nt"|"-ot"|"-ef" ;
+ * operand ::= <any legal UNIX file name>
+ */
 
 enum token_types {
 	UNOP = 0x100,
@@ -212,15 +210,15 @@ main(int argc, char **argv)
 	nargc = argc;
 	t_wp = &argv[1];
 	parenlevel = 0;
-	if (nargc == 4 && strcmp(*t_wp, "!") == 0) {
+	if (nargc == 3 && strcmp(*t_wp, "!") == 0) {
 		/* Things like ! "" -o x do not fit in the normal grammar. */
 		--nargc;
 		++t_wp;
-		res = oexpr(t_lex(*t_wp));
+		res = !oexpr(t_lex(*t_wp));
 	} else
 		res = !oexpr(t_lex(*t_wp));
 
-	if (--nargc > 0)
+	if (nargc > 0)
 		syntax(*t_wp, "unexpected operator");
 
 	return res;
@@ -310,8 +308,11 @@ primary(enum token n)
 	}
 
 	nn = t_lex(nargc > 0 ? t_wp[1] : NULL);
-	if (TOKEN_TYPE(nn) == BINOP)
+	if (TOKEN_TYPE(nn) == BINOP) {
+		++t_wp;
+		--nargc;
 		return binop(nn);
+	}
 
 	return strlen(*t_wp) > 0;
 }
@@ -349,11 +350,11 @@ binop(enum token n)
 	case INTLT:
 		return intcmp(opnd1, opnd2) < 0;
 	case FILNT:
-		return newerf (opnd1, opnd2);
+		return newerf(opnd1, opnd2);
 	case FILOT:
-		return olderf (opnd1, opnd2);
+		return olderf(opnd1, opnd2);
 	case FILEQ:
-		return equalf (opnd1, opnd2);
+		return equalf(opnd1, opnd2);
 	default:
 		abort();
 		/* NOTREACHED */
@@ -409,7 +410,9 @@ filstat(char *nm, enum token mode)
 	case FILGID:
 		return s.st_gid == getegid();
 	default:
-		return 1;
+		syntax(NULL, "invalid file mode");
+		/* NOTREACHED */
+		return 0;
 	}
 }
 
@@ -460,15 +463,15 @@ t_lex(char *s)
 {
 	int num;
 
-	if (s == NULL) {
+	if (s == NULL)
 		return EOI;
-	}
+
 	num = find_op(s);
-	if (((TOKEN_TYPE(num) == UNOP || TOKEN_TYPE(num) == BUNOP)
-				&& isunopoperand()) ||
+	if (((TOKEN_TYPE(num) == UNOP || TOKEN_TYPE(num) == BUNOP) && isunopoperand()) ||
 	    (num == LPAREN && islparenoperand()) ||
 	    (num == RPAREN && isrparenoperand()))
 		return OPERAND;
+
 	return num;
 }
 
@@ -501,7 +504,7 @@ islparenoperand(void)
 	s = *(t_wp + 1);
 	if (nargc == 2)
 		return parenlevel == 1 && strcmp(s, ")") == 0;
-	if (nargc != 3)
+	if (nargc < 3)
 		return 0;
 	num = find_op(s);
 	return TOKEN_TYPE(num) == BINOP;
@@ -512,12 +515,10 @@ isrparenoperand(void)
 {
 	char *s;
 
-	if (nargc == 1)
+	if (nargc < 2)
 		return 0;
 	s = *(t_wp + 1);
-	if (nargc == 2)
-		return parenlevel == 1 && strcmp(s, ")") == 0;
-	return 0;
+	return parenlevel == 1 && strcmp(s, ")") == 0;
 }
 
 /* atoi with error detection */
@@ -534,8 +535,7 @@ getn(const char *s)
 		error("%s: bad number", s);
 
 	if (errno != 0)
-		error((errno == EINVAL) ? "%s: bad number" :
-					  "%s: out of range", s);
+		error((errno == ERANGE) ? "%s: out of range" : "%s: bad number", s);
 
 	while (isspace((unsigned char)*p))
 		p++;
@@ -560,8 +560,7 @@ getq(const char *s)
 		error("%s: bad number", s);
 
 	if (errno != 0)
-		error((errno == EINVAL) ? "%s: bad number" :
-					  "%s: out of range", s);
+		error((errno == ERANGE) ? "%s: out of range" : "%s: bad number", s);
 
 	while (isspace((unsigned char)*p))
 		p++;
@@ -591,7 +590,7 @@ intcmp (const char *s1, const char *s2)
 }
 
 static int
-newerf (const char *f1, const char *f2)
+newerf(const char *f1, const char *f2)
 {
 	struct stat b1, b2;
 
@@ -603,7 +602,7 @@ newerf (const char *f1, const char *f2)
 	if (b1.st_mtim.tv_sec < b2.st_mtim.tv_sec)
 		return 0;
 
-       return (b1.st_mtim.tv_nsec > b2.st_mtim.tv_nsec);
+	return (b1.st_mtim.tv_nsec > b2.st_mtim.tv_nsec);
 }
 
 static int
@@ -613,12 +612,12 @@ olderf (const char *f1, const char *f2)
 }
 
 static int
-equalf (const char *f1, const char *f2)
+equalf(const char *f1, const char *f2)
 {
 	struct stat b1, b2;
 
-	return (stat (f1, &b1) == 0 &&
-		stat (f2, &b2) == 0 &&
+	return (stat(f1, &b1) == 0 &&
+		stat(f2, &b2) == 0 &&
 		b1.st_dev == b2.st_dev &&
 		b1.st_ino == b2.st_ino);
 }
