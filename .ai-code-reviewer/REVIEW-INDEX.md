@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-16 13:29
+Generated: 2026-02-16 13:49
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-16 13:29
 
 ## Progress
 - Total directories: 8264
-- Completed: 74 (0%)
+- Completed: 75 (0%)
 - Skipped: 2
-- Remaining: 8188
+- Remaining: 8187
 
 ## Current Position
-CURRENT POSITION: `sbin/bectl/tests`
+CURRENT POSITION: `sbin/bsdlabel`
 
 ## bin/ (72/74 done)
 
@@ -97,11 +97,11 @@ CURRENT POSITION: `sbin/bectl/tests`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (2/127 done)
+## sbin/ (3/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
-- [ ] `sbin/bectl/tests` (0 .c, 0 .h, 0 lines)
+- [x] `sbin/bectl/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [ ] `sbin/bsdlabel` (1 .c, 1 .h, 1558 lines)
 - [ ] `sbin/camcontrol` (11 .c, 2 .h, 17453 lines)
 - [ ] `sbin/ccdconfig` (1 .c, 1 .h, 488 lines)

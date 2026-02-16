@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-16 13:49 - sbin/bectl/tests ✓
+
+**Directory:** `sbin/bectl/tests`
+
+**Summary:** [ai-code-reviewer] tests: Update review status for sbin/bectl/tests
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-16 13:29 - sbin/bectl ✓
 
 **Directory:** `sbin/bectl`
