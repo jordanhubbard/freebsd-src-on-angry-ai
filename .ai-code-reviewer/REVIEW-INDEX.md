@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-16 12:52
+Generated: 2026-02-16 12:59
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-16 12:52
 
 ## Progress
 - Total directories: 8264
-- Completed: 72 (0%)
+- Completed: 73 (0%)
 - Skipped: 2
-- Remaining: 8190
+- Remaining: 8189
 
 ## Current Position
-CURRENT POSITION: `sbin/adjkerntz`
+CURRENT POSITION: `sbin/bectl`
 
 ## bin/ (72/74 done)
 
@@ -97,9 +97,9 @@ CURRENT POSITION: `sbin/adjkerntz`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (0/127 done)
+## sbin/ (1/127 done)
 
-- [ ] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines)
+- [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [ ] `sbin/bectl` (3 .c, 1 .h, 1575 lines)
 - [ ] `sbin/bectl/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/bsdlabel` (1 .c, 1 .h, 1558 lines)
