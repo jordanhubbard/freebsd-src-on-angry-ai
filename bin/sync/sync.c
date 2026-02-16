@@ -33,6 +33,7 @@
 int
 main(int argc __unused, char *argv[] __unused)
 {
+	/* Synchronize all pending modifications to disk. */
 	sync();
 	exit(0);
 }
