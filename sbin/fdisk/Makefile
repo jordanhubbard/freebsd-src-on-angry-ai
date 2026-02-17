@@ -1,12 +1,13 @@
-PACKAGE=runtime
-PROG=	fdisk
-SRCS=	fdisk.c fdisk_mbr_enc.c
-WARNS?=	4
-MAN=	fdisk.8
+PACKAGE=	runtime
+PROG=		fdisk
+SRCS=		fdisk.c fdisk_mbr_enc.c
+WARNS?=		4
+MAN=		fdisk.8
 
-LIBADD=	geom
+LIBADD=		geom
 
 .include <bsd.prog.mk>
 
-test:	${PROG}
-	sh ${.CURDIR}/runtest.sh
+# Run tests for fdisk
+test:		${PROG}
+		sh ${.CURDIR}/runtest.sh

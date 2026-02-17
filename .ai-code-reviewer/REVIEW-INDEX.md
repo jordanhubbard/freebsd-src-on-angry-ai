@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-17 01:05
+Generated: 2026-02-17 03:11
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -121,7 +121,7 @@ CURRENT POSITION: `sbin/fdisk`
 - [x] `sbin/dumpfs` (1 .c, 0 .h, 534 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/dumpon` (1 .c, 0 .h, 706 lines) - 2026-02-16 - Fixed by session 20260216_171222
 - [x] `sbin/etherswitchcfg` (2 .c, 0 .h, 1637 lines) - 2026-02-17 - Fixed by session 20260216_224116
-- [ ] `sbin/fdisk` (2 .c, 1 .h, 1615 lines)
+- [>] `sbin/fdisk` (2 .c, 1 .h, 1615 lines)
 - [ ] `sbin/ffsinfo` (1 .c, 0 .h, 631 lines)
 - [ ] `sbin/fsck` (3 .c, 1 .h, 1184 lines)
 - [ ] `sbin/fsck_ffs` (16 .c, 1 .h, 11282 lines)

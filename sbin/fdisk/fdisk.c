@@ -25,13 +25,14 @@
  */
 
 #include <sys/cdefs.h>
+#include <sys/types.h>
 #include <sys/disk.h>
 #include <sys/disklabel.h>
 #include <sys/diskmbr.h>
 #include <sys/endian.h>
+#include <sys/mount.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-#include <sys/mount.h>
 #include <ctype.h>
 #include <fcntl.h>
 #include <err.h>
@@ -229,34 +230,59 @@ get_type(int t)
 	const char *ret;
 
 	ret = (t >= 0 && t <= 255) ? part_types[t] : NULL;
-	return ret ? ret : "unknown";
+	return ret != NULL ? ret : "unknown";
 }
 
 
-static int geom_class_available(const char *);
-static void print_s0(void);
-static void print_part(const struct dos_partition *);
-static void init_sector0(unsigned long start);
-static void init_boot(void);
-static void change_part(int i);
-static void print_params(void);
-static void change_active(int which);
-static void change_code(void);
-static void get_params_to_use(void);
-static char *get_rootdisk(void);
-static void dos(struct dos_partition *partp);
-static int open_disk(int flag);
-static ssize_t read_disk(off_t sector, void *buf);
-static int write_disk(off_t sector, void *buf);
-static int get_params(void);
-static int read_s0(void);
-static int write_s0(void);
-static int ok(const char *str);
-static int decimal(const char *str, int *num, int deflt, uint32_t maxval);
-static int read_config(char *config_file);
-static void reset_boot(void);
-static int sanitize_partition(struct dos_partition *);
-static void usage(void) __dead2;
+static int
+geom_class_available(const char *);
+static void
+print_s0(void);
+static void
+print_part(const struct dos_partition *);
+static void
+init_sector0(unsigned long start);
+static void
+init_boot(void);
+static void
+change_part(int i);
+static void
+print_params(void);
+static void
+change_active(int which);
+static void
+change_code(void);
+static void
+get_params_to_use(void);
+
+static char *
+get_rootdisk(void);
+static void
+dos(struct dos_partition *partp);
+static int
+open_disk(int flag);
+static ssize_t
+read_disk(off_t sector, void *buf);
+static int
+write_disk(off_t sector, void *buf);
+static int
+get_params(void);
+static int
+read_s0(void);
+static int
+write_s0(void);
+static int
+ok(const char *str);
+static int
+decimal(const char *str, int *num, int deflt, uint32_t maxval);
+static int
+read_config(char *config_file);
+static void
+reset_boot(void);
+static int
+sanitize_partition(struct dos_partition *);
+static void
+usage(void) __dead2;
 
 int
 main(int argc, char *argv[])
