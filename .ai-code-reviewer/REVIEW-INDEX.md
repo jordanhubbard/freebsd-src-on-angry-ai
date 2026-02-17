@@ -120,7 +120,7 @@ CURRENT POSITION: `sbin/etherswitchcfg`
 - [x] `sbin/dump` (8 .c, 2 .h, 4136 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/dumpfs` (1 .c, 0 .h, 534 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/dumpon` (1 .c, 0 .h, 706 lines) - 2026-02-16 - Fixed by session 20260216_171222
-- [ ] `sbin/etherswitchcfg` (2 .c, 0 .h, 1637 lines)
+- [>] `sbin/etherswitchcfg` (2 .c, 0 .h, 1637 lines)
 - [ ] `sbin/fdisk` (2 .c, 1 .h, 1615 lines)
 - [ ] `sbin/ffsinfo` (1 .c, 0 .h, 631 lines)
 - [ ] `sbin/fsck` (3 .c, 1 .h, 1184 lines)

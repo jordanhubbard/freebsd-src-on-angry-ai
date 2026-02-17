@@ -27,6 +27,8 @@
  */
 
 #include <sys/cdefs.h>
+#include <sys/types.h>
+#include <sys/ioctl.h>
 #include <ctype.h>
 #include <err.h>
 #include <errno.h>
@@ -36,8 +38,6 @@
 #include <string.h>
 #include <sysexits.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/ioctl.h>
 #include <net/if.h>
 #include <net/if_media.h>
 #include <dev/etherswitch/etherswitch.h>
@@ -64,14 +64,14 @@ enum cmdmode {
 };
 
 struct cfg {
-	int					fd;
-	int					verbose;
-	int					mediatypes;
-	const char			*controlfile;
+	int	fd;
+	int	verbose;
+	int	mediatypes;
+	const char	*controlfile;
 	etherswitch_conf_t	conf;
 	etherswitch_info_t	info;
-	enum cmdmode		mode;
-	int					unit;
+	enum cmdmode	mode;
+	int	unit;
 };
 
 struct cmds {
@@ -90,8 +90,7 @@ static const char *ledstyles[] = { "default", "on", "off", "blink", NULL };
  * Stolen from ifconfig.c.
  */
 static void
-printb(const char *s, unsigned v, const char *bits)
-{
+printb(const char *s, unsigned v, const char *bits) {
 	int i, any = 0;
 	char c;
 
@@ -103,7 +102,7 @@ printb(const char *s, unsigned v, const char *bits)
 	if (bits) {
 		putchar('<');
 		while ((i = *bits++) != '\0') {
-			if (v & (1 << (i-1))) {
+			if (v & (1 << (i - 1))) {
 				if (any)
 					putchar(',');
 				any = 1;
@@ -118,54 +117,49 @@ printb(const char *s, unsigned v, const char *bits)
 }
 
 static int
-read_register(struct cfg *cfg, int r)
-{
+read_register(struct cfg *cfg, int r) {
 	struct etherswitch_reg er;
-	
+
 	er.reg = r;
 	if (ioctl(cfg->fd, IOETHERSWITCHGETREG, &er) != 0)
-		err(EX_OSERR, "ioctl(IOETHERSWITCHGETREG)");
+		err(EX_OSERR, "ioctl(IOETHERSWITCHGETREG) failed for register %d", r);
 	return (er.val);
 }
 
 static void
-write_register(struct cfg *cfg, int r, int v)
-{
+write_register(struct cfg *cfg, int r, int v) {
 	struct etherswitch_reg er;
-	
+
 	er.reg = r;
 	er.val = v;
 	if (ioctl(cfg->fd, IOETHERSWITCHSETREG, &er) != 0)
-		err(EX_OSERR, "ioctl(IOETHERSWITCHSETREG)");
+		err(EX_OSERR, "ioctl(IOETHERSWITCHSETREG) failed for register %d", r);
 }
 
 static int
-read_phyregister(struct cfg *cfg, int phy, int reg)
-{
+read_phyregister(struct cfg *cfg, int phy, int reg) {
 	struct etherswitch_phyreg er;
-	
+
 	er.phy = phy;
 	er.reg = reg;
 	if (ioctl(cfg->fd, IOETHERSWITCHGETPHYREG, &er) != 0)
-		err(EX_OSERR, "ioctl(IOETHERSWITCHGETPHYREG)");
+		err(EX_OSERR, "ioctl(IOETHERSWITCHGETPHYREG) failed for PHY %d, register %d", phy, reg);
 	return (er.val);
 }
 
 static void
-write_phyregister(struct cfg *cfg, int phy, int reg, int val)
-{
+write_phyregister(struct cfg *cfg, int phy, int reg, int val) {
 	struct etherswitch_phyreg er;
-	
+
 	er.phy = phy;
 	er.reg = reg;
 	er.val = val;
 	if (ioctl(cfg->fd, IOETHERSWITCHSETPHYREG, &er) != 0)
-		err(EX_OSERR, "ioctl(IOETHERSWITCHSETPHYREG)");
+		err(EX_OSERR, "ioctl(IOETHERSWITCHSETPHYREG) failed for PHY %d, register %d", phy, reg);
 }
 
 static int
-set_port_vid(struct cfg *cfg, int argc, char *argv[])
-{
+set_port_vid(struct cfg *cfg, int argc, char *argv[]) {
 	int v;
 	etherswitch_port_t p;
 
@@ -174,9 +168,8 @@ set_port_vid(struct cfg *cfg, int argc, char *argv[])
 
 	v = strtol(argv[1], NULL, 0);
 	if (v < 0 || v > IEEE802DOT1Q_VID_MAX)
-		errx(EX_USAGE, "pvid must be between 0 and %d",
-		    IEEE802DOT1Q_VID_MAX);
-	bzero(&p, sizeof(p));
+		errx(EX_USAGE, "pvid must be between 0 and %d", IEEE802DOT1Q_VID_MAX);
+	memset(&p, 0, sizeof(p));
 	p.es_port = cfg->unit;
 	if (ioctl(cfg->fd, IOETHERSWITCHGETPORT, &p) != 0)
 		err(EX_OSERR, "ioctl(IOETHERSWITCHGETPORT)");
@@ -187,22 +180,21 @@ set_port_vid(struct cfg *cfg, int argc, char *argv[])
 }
 
 static int
-set_port_flag(struct cfg *cfg, int argc, char *argv[])
-{
+set_port_flag(struct cfg *cfg, int argc, char *argv[]) {
 	char *flag;
-	int n;
+	int negate;
 	uint32_t f;
 	etherswitch_port_t p;
 
 	if (argc < 1)
 		return (-1);
 
-	n = 0;
+	negate = 0;
 	f = 0;
 	flag = argv[0];
 	if (strcmp(flag, "none") != 0) {
 		if (*flag == '-') {
-			n++;
+			negate = 1;
 			flag++;
 		}
 		if (strcasecmp(flag, "striptag") == 0)
@@ -222,11 +214,11 @@ set_port_flag(struct cfg *cfg, int argc, char *argv[])
 		else if (strcasecmp(flag, "striptagingress") == 0)
 			f = ETHERSWITCH_PORT_STRIPTAGINGRESS;
 	}
-	bzero(&p, sizeof(p));
+	memset(&p, 0, sizeof(p));
 	p.es_port = cfg->unit;
 	if (ioctl(cfg->fd, IOETHERSWITCHGETPORT, &p) != 0)
 		err(EX_OSERR, "ioctl(IOETHERSWITCHGETPORT)");
-	if (n)
+	if (negate)
 		p.es_flags &= ~f;
 	else
 		p.es_flags |= f;
@@ -236,8 +228,7 @@ set_port_flag(struct cfg *cfg, int argc, char *argv[])
 }
 
 static int
-set_port_media(struct cfg *cfg, int argc, char *argv[])
-{
+set_port_media(struct cfg *cfg, int argc, char *argv[]) {
 	etherswitch_port_t p;
 	int ifm_ulist[IFMEDIAREQ_NULISTENTRIES];
 	int subtype;
@@ -245,7 +236,7 @@ set_port_media(struct cfg *cfg, int argc, char *argv[])
 	if (argc < 2)
 		return (-1);
 
-	bzero(&p, sizeof(p));
+	memset(&p, 0, sizeof(p));
 	p.es_port = cfg->unit;
 	p.es_ifmr.ifm_ulist = ifm_ulist;
 	p.es_ifmr.ifm_count = IFMEDIAREQ_NULISTENTRIES;
@@ -255,15 +246,14 @@ set_port_media(struct cfg *cfg, int argc, char *argv[])
 		return (0);
 	subtype = get_media_subtype(IFM_TYPE(ifm_ulist[0]), argv[1]);
 	p.es_ifr.ifr_media = (p.es_ifmr.ifm_current & IFM_IMASK) |
-	        IFM_TYPE(ifm_ulist[0]) | subtype;
+	    IFM_TYPE(ifm_ulist[0]) | subtype;
 	if (ioctl(cfg->fd, IOETHERSWITCHSETPORT, &p) != 0)
 		err(EX_OSERR, "ioctl(IOETHERSWITCHSETPORT)");
 	return (0);
 }
 
 static int
-set_port_mediaopt(struct cfg *cfg, int argc, char *argv[])
-{
+set_port_mediaopt(struct cfg *cfg, int argc, char *argv[]) {
 	etherswitch_port_t p;
 	int ifm_ulist[IFMEDIAREQ_NULISTENTRIES];
 	int options;
@@ -271,7 +261,7 @@ set_port_mediaopt(struct cfg *cfg, int argc, char *argv[])
 	if (argc < 2)
 		return (-1);
 
-	bzero(&p, sizeof(p));
+	memset(&p, 0, sizeof(p));
 	p.es_port = cfg->unit;
 	p.es_ifmr.ifm_ulist = ifm_ulist;
 	p.es_ifmr.ifm_count = IFMEDIAREQ_NULISTENTRIES;
@@ -291,8 +281,7 @@ set_port_mediaopt(struct cfg *cfg, int argc, char *argv[])
 }
 
 static int
-set_port_led(struct cfg *cfg, int argc, char *argv[])
-{
+set_port_led(struct cfg *cfg, int argc, char *argv[]) {
 	etherswitch_port_t p;
 	int led;
 	int i;
@@ -300,7 +289,7 @@ set_port_led(struct cfg *cfg, int argc, char *argv[])
 	if (argc < 3)
 		return (-1);
 
-	bzero(&p, sizeof(p));
+	memset(&p, 0, sizeof(p));
 	p.es_port = cfg->unit;
 	if (ioctl(cfg->fd, IOETHERSWITCHGETPORT, &p) != 0)
 		err(EX_OSERR, "ioctl(IOETHERSWITCHGETPORT)");
@@ -312,12 +301,12 @@ set_port_led(struct cfg *cfg, int argc, char *argv[])
 
 	led--;
 
-	for (i=0; ledstyles[i] != NULL; i++) {
+	for (i = 0; ledstyles[i] != NULL; i++) {
 		if (strcmp(argv[2], ledstyles[i]) == 0) {
 			p.es_led[led] = i;
 			break;
 		}
-	} 
+	}
 	if (ledstyles[i] == NULL)
 		errx(EX_USAGE, "invalid led style \"%s\"", argv[2]);
 
@@ -328,8 +317,7 @@ set_port_led(struct cfg *cfg, int argc, char *argv[])
 }
 
 static int
-set_vlangroup_vid(struct cfg *cfg, int argc, char *argv[])
-{
+set_vlangroup_vid(struct cfg *cfg, int argc, char *argv[]) {
 	int v;
 	etherswitch_vlangroup_t vg;
 
@@ -350,11 +338,10 @@ set_vlangroup_vid(struct cfg *cfg, int argc, char *argv[])
 }
 
 static int
-set_vlangroup_members(struct cfg *cfg, int argc, char *argv[])
-{
+set_vlangroup_members(struct cfg *cfg, int argc, char *argv[]) {
 	etherswitch_vlangroup_t vg;
 	int member, untagged;
-	char *c, *d;
+	char *current, *next;
 	int v;
 
 	if (argc < 2)
@@ -363,23 +350,23 @@ set_vlangroup_members(struct cfg *cfg, int argc, char *argv[])
 	member = untagged = 0;
 	memset(&vg, 0, sizeof(vg));
 	if (strcmp(argv[1], "none") != 0) {
-		for (c=argv[1]; *c; c=d) {
-			v = strtol(c, &d, 0);
-			if (d == c)
+		for (current = argv[1]; *current; current = next) {
+			v = strtol(current, &next, 0);
+			if (next == current)
 				break;
 			if (v < 0 || v >= cfg->info.es_nports)
-				errx(EX_USAGE, "Member port must be between 0 and %d", cfg->info.es_nports-1);
-			if (d[0] == ',' || d[0] == '\0' ||
-				((d[0] == 't' || d[0] == 'T') && (d[1] == ',' || d[1] == '\0'))) {
-				if (d[0] == 't' || d[0] == 'T') {
+				errx(EX_USAGE, "Member port must be between 0 and %d", cfg->info.es_nports - 1);
+			if (next[0] == ',' || next[0] == '\0' ||
+			    ((next[0] == 't' || next[0] == 'T') && (next[1] == ',' || next[1] == '\0'))) {
+				if (next[0] == 't' || next[0] == 'T') {
 					untagged &= ~ETHERSWITCH_PORTMASK(v);
-					d++;
+					next++;
 				} else
 					untagged |= ETHERSWITCH_PORTMASK(v);
 				member |= ETHERSWITCH_PORTMASK(v);
-				d++;
+				next++;
 			} else
-				errx(EX_USAGE, "Invalid members specification \"%s\"", d);
+				errx(EX_USAGE, "Invalid members specification \"%s\"", next);
 		}
 	}
 	vg.es_vlangroup = cfg->unit;
@@ -393,16 +380,15 @@ set_vlangroup_members(struct cfg *cfg, int argc, char *argv[])
 }
 
 static int
-set_register(struct cfg *cfg, char *arg)
-{
+set_register(struct cfg *cfg, char *arg) {
 	int a, v;
-	char *c;
+	char *delimiter;
 	
-	a = strtol(arg, &c, 0);
-	if (c==arg)
+	a = strtol(arg, &delimiter, 0);
+	if (delimiter == arg)
 		return (1);
-	if (*c == '=') {
-		v = strtoul(c+1, NULL, 0);
+	if (*delimiter == '=') {
+		v = strtoul(delimiter + 1, NULL, 0);
 		write_register(cfg, a, v);
 	}
 	printf("\treg 0x%04x=0x%08x\n", a, read_register(cfg, a));
@@ -410,22 +396,21 @@ set_register(struct cfg *cfg, char *arg)
 }
 
 static int
-set_phyregister(struct cfg *cfg, char *arg)
-{
+set_phyregister(struct cfg *cfg, char *arg) {
 	int phy, reg, val;
-	char *c, *d;
+	char *delimiter, *next;
 	
-	phy = strtol(arg, &c, 0);
-	if (c==arg)
+	phy = strtol(arg, &delimiter, 0);
+	if (delimiter == arg)
 		return (1);
-	if (*c != '.')
+	if (*delimiter != '.')
 		return (1);
-	d = c+1;
-	reg = strtol(d, &c, 0);
-	if (d == c)
+	next = delimiter + 1;
+	reg = strtol(next, &delimiter, 0);
+	if (next == delimiter)
 		return (1);
-	if (*c == '=') {
-		val = strtoul(c+1, NULL, 0);
+	if (*delimiter == '=') {
+		val = strtoul(delimiter + 1, NULL, 0);
 		write_phyregister(cfg, phy, reg, val);
 	}
 	printf("\treg %d.0x%02x=0x%04x\n", phy, reg, read_phyregister(cfg, phy, reg));
@@ -433,14 +418,13 @@ set_phyregister(struct cfg *cfg, char *arg)
 }
 
 static int
-set_vlan_mode(struct cfg *cfg, int argc, char *argv[])
-{
+set_vlan_mode(struct cfg *cfg, int argc, char *argv[]) {
 	etherswitch_conf_t conf;
 
 	if (argc < 2)
 		return (-1);
 
-	bzero(&conf, sizeof(conf));
+	memset(&conf, 0, sizeof(conf));
 	conf.cmd = ETHERSWITCH_CONF_VLAN_MODE;
 	if (strcasecmp(argv[1], "isl") == 0)
 		conf.vlan_mode = ETHERSWITCH_VLAN_ISL;
