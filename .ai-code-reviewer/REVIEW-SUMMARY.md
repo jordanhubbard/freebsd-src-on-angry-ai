@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-17 14:41 - sbin/ffsinfo ✓
+
+**Directory:** `sbin/ffsinfo`
+
+**Summary:** [ai-code-reviewer] ffsinfo: Update review status and skip fdisk
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-17 01:05 - sbin/etherswitchcfg ✓
 
 **Directory:** `sbin/etherswitchcfg`
