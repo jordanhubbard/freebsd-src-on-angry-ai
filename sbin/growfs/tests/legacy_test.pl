@@ -1,7 +1,6 @@
 
 use strict;
 use warnings;
-use POSIX;
 use Test::More tests => 19;
 use Fcntl qw(:DEFAULT :seek);
 
@@ -9,7 +8,7 @@ use constant BLK => 512;
 use constant BLKS_PER_MB => 2048;
 
 my $unit;
-END { system "mdconfig -du$unit" if defined $unit };
+END { system "mdconfig -du $unit" if defined $unit };
 
 sub fsck_md {
     my ($is_clean, $md);
