@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-17 16:42 - sbin/geom ✓
+
+**Directory:** `sbin/geom`
+
+**Summary:** [ai-code-reviewer] geom: Update review status for geom directory
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-17 16:35 - sbin/fsirand ✓
 
 **Directory:** `sbin/fsirand`
