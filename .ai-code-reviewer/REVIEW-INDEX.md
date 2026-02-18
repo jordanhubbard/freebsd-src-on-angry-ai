@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-18 10:16
+Generated: 2026-02-18 10:21
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-18 10:16
 
 ## Progress
 - Total directories: 8264
-- Completed: 121 (1%)
+- Completed: 122 (1%)
 - Skipped: 6
-- Remaining: 8137
+- Remaining: 8136
 
 ## Current Position
-CURRENT POSITION: `sbin/ipf/ipnat`
+CURRENT POSITION: `sbin/ipf/ippool`
 
 ## bin/ (72/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/ipf/ipnat`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (49/127 done)
+## sbin/ (50/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
@@ -152,7 +152,7 @@ CURRENT POSITION: `sbin/ipf/ipnat`
 - [x] `sbin/ipf/ipftest` (3 .c, 1 .h, 1881 lines) - 2026-02-18 - Fixed by session 20260218_095741
 - [x] `sbin/ipf/iplang` (0 .c, 1 .h, 53 lines) - 2026-02-18 - Fixed by session 20260218_095741
 - [x] `sbin/ipf/ipmon` (1 .c, 0 .h, 1844 lines) - 2026-02-18 - Fixed by session 20260218_095741
-- [ ] `sbin/ipf/ipnat` (1 .c, 0 .h, 828 lines)
+- [x] `sbin/ipf/ipnat` (1 .c, 0 .h, 828 lines) - 2026-02-18 - Fixed by session 20260218_095741
 - [ ] `sbin/ipf/ippool` (1 .c, 0 .h, 1127 lines)
 - [ ] `sbin/ipf/ipresend` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/ipf/ipscan` (0 .c, 0 .h, 0 lines)
