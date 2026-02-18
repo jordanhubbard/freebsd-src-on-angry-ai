@@ -4,63 +4,57 @@
  *
  * See the IPFILTER.LICENCE file for details on licencing.
  */
+#include <sys/cdefs.h>
+#include <sys/types.h>
 #include <sys/ioctl.h>
 #include <ctype.h>
 #include <fcntl.h>
-# include <nlist.h>
-#include <ctype.h>
+#include <nlist.h>
 #if defined(sun) && defined(__SVR4)
-# include <stddef.h>
+#include <stddef.h>
 #endif
 #include "ipf.h"
 #include "netinet/ipl.h"
 #if defined(STATETOP)
-# if defined(sun) && defined(__SVR4)
-#   include <sys/select.h>
-# endif
-# include <netinet/ip_var.h>
-# include <netinet/tcp_fsm.h>
-# include <ctype.h>
-# include <signal.h>
-# include <time.h>
-# if SOLARIS || defined(__NetBSD__)
-#  ifdef ERR
-#   undef ERR
-#  endif
-#  include <curses.h>
-# else /* SOLARIS */
-#  include <ncurses.h>
-# endif /* SOLARIS */
+#if defined(sun) && defined(__SVR4)
+#include <sys/select.h>
+#endif
+#include <netinet/ip_var.h>
+#include <netinet/tcp_fsm.h>
+#include <signal.h>
+#include <time.h>
+#if SOLARIS || defined(__NetBSD__)
+#ifdef ERR
+#undef ERR
+#endif
+#include <curses.h>
+#else /* SOLARIS */
+#include <ncurses.h>
+#endif /* SOLARIS */
 #endif /* STATETOP */
 #include "kmem.h"
 #if defined(__NetBSD__)
-# include <paths.h>
+#include <paths.h>
 #endif
 
+#define PRINTF (void)printf
+#define FPRINTF (void)fprintf
+static char *filters[4] = { "ipfilter(in)", "ipfilter(out)",
+			    "ipacct(in)", "ipacct(out)" };
+static int state_logging = -1;
+static wordtab_t *state_fields = NULL;
 
-
-extern	char	*optarg;
-extern	int	optind;
-extern	int	opterr;
-
-#define	PRINTF	(void)printf
-#define	FPRINTF	(void)fprintf
-static	char	*filters[4] = { "ipfilter(in)", "ipfilter(out)",
-				"ipacct(in)", "ipacct(out)" };
-static	int	state_logging = -1;
-static	wordtab_t	*state_fields = NULL;
-
-int	nohdrfields = 0;
-int	opts = 0;
-#ifdef	USE_INET6
-int	use_inet4 = 0;
-int	use_inet6 = 0;
+int nohdrfields = 0;
+int opts = 0;
+#ifdef USE_INET6
+int use_inet4 = 0;
+int use_inet6 = 0;
 #endif
-int	live_kernel = 1;
-int	state_fd = -1;
-int	ipf_fd = -1;
-int	auth_fd = -1;
-int	nat_fd = -1;
+int live_kernel = 1;
+int state_fd = -1;
+int ipf_fd = -1;
+int auth_fd = -1;
+int nat_fd = -1;
 frgroup_t *grtop = NULL;
 frgroup_t *grtail = NULL;
 
@@ -85,33 +79,32 @@ char *blockreasons[FRB_MAX_VALUE + 1] = {
 };
 
 #ifdef STATETOP
-#define	STSTRSIZE 	80
-#define	STGROWSIZE	16
-#define	HOSTNMLEN	40
+#define STSTRSIZE 80
+#define STGROWSIZE 16
+#define HOSTNMLEN 40
 
-#define	STSORT_PR	0
-#define	STSORT_PKTS	1
-#define	STSORT_BYTES	2
-#define	STSORT_TTL	3
-#define	STSORT_SRCIP	4
-#define	STSORT_SRCPT	5
-#define	STSORT_DSTIP	6
-#define	STSORT_DSTPT	7
-#define	STSORT_MAX	STSORT_DSTPT
-#define	STSORT_DEFAULT	STSORT_BYTES
-
+#define STSORT_PR 0
+#define STSORT_PKTS 1
+#define STSORT_BYTES 2
+#define STSORT_TTL 3
+#define STSORT_SRCIP 4
+#define STSORT_SRCPT 5
+#define STSORT_DSTIP 6
+#define STSORT_DSTPT 7
+#define STSORT_MAX STSORT_DSTPT
+#define STSORT_DEFAULT STSORT_BYTES
 
 typedef struct statetop {
-	i6addr_t	st_src;
-	i6addr_t	st_dst;
-	u_short		st_sport;
-	u_short 	st_dport;
-	u_char		st_p;
-	u_char		st_v;
-	u_char		st_state[2];
-	U_QUAD_T	st_pkts;
-	U_QUAD_T	st_bytes;
-	u_long		st_age;
+	i6addr_t st_src;
+	i6addr_t st_dst;
+	u_short st_sport;
+	u_short st_dport;
+	u_char st_p;
+	u_char st_v;
+	u_char st_state[2];
+	U_QUAD_T st_pkts;
+	U_QUAD_T st_bytes;
+	u_long st_age;
 } statetop_t;
 #endif
 

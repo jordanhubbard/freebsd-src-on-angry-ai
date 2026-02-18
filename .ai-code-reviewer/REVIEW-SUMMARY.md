@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-18 09:07 - sbin/ipf/ipfstat ✓
+
+**Directory:** `sbin/ipf/ipfstat`
+
+**Summary:** [ai-code-reviewer] ipfstat: Update includes and fix header order
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/ipf/ipfstat/ipfstat.c
+
+---
+
 ## 2026-02-18 09:00 - sbin/ipf/ipfs ✓
 
 **Directory:** `sbin/ipf/ipfs`
