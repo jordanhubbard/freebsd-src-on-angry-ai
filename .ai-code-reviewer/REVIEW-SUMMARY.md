@@ -6,6 +6,20 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-18 09:48 - sbin/ipf/ipfsync ✓
+
+**Directory:** `sbin/ipf/ipfsync`
+
+**Summary:** [ai-code-reviewer] ipfsync: Validate port numbers and IP addresses
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/ipf/ipfsync/ipfsyncd.c
+  - sbin/ipf/ipfsync/ipsyncm.c
+  - sbin/ipf/ipfsync/ipsyncs.c
+
+---
+
 ## 2026-02-18 09:07 - sbin/ipf/ipfstat ✓
 
 **Directory:** `sbin/ipf/ipfstat`

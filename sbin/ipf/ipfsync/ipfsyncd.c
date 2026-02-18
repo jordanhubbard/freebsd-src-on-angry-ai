@@ -3,6 +3,7 @@
  *
  * See the IPFILTER.LICENCE file for details on licencing.
  */
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/socket.h>
@@ -26,16 +27,15 @@
 #include "ipf.h"
 #include "opts.h"
 
+#define R_IO_ERROR -1
+#define R_OKAY 0
+#define R_MORE 1
+#define R_SKIP 2
 
-#define	R_IO_ERROR	-1
-#define	R_OKAY		0
-#define	R_MORE		1
-#define	R_SKIP		2
-#if	defined(sun) && !defined(SOLARIS2)
-# define	STRERROR(x)     sys_errlist[x]
-extern  char    *sys_errlist[];
+#if defined(sun) && !defined(SOLARIS2)
+#define STRERROR(x) sys_errlist[x]
 #else
-# define	STRERROR(x)     strerror(x)
+#define STRERROR(x) strerror(x)
 #endif
 
 
@@ -116,7 +116,14 @@ main(argc, argv)
 			sin.sin_addr.s_addr = inet_addr(optarg);
 			break;
 		case 'p' :
-			sin.sin_port = htons(atoi(optarg));
+			long port;
+			errno = 0;
+			port = strtonum(optarg, 1, 65535, NULL);
+			if (errno != 0) {
+				syslog(LOG_ERR, "Invalid port number: %s", optarg);
+				exit(1);
+			}
+			sin.sin_port = htons(port);
 			break;
 		}
 
@@ -331,8 +338,8 @@ buildsocket(nicname, sinp)
 		strncpy(req.ifr_name, nicname, sizeof(req.ifr_name));
 		req.ifr_name[sizeof(req.ifr_name) - 1] = '\0';
 		if (ioctl(igmpfd, SIOCGIFADDR, &req) == -1) {
-			syslog(LOG_ERR, "ioctl(SIOCGIFADDR):%m");
-			debug(1, "ioctl(SIOCGIFADDR):%s\n", STRERROR(errno));
+			syslog(LOG_ERR, "ioctl(SIOCGIFADDR): %m");
+			debug(1, "ioctl(SIOCGIFADDR): %s\n", STRERROR(errno));
 			close(igmpfd);
 			igmpfd = -1;
 			return -1;

@@ -4,6 +4,7 @@
  *
  * See the IPFILTER.LICENCE file for details on licencing.
  */
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/socket.h>
@@ -27,31 +28,16 @@
 #include "netinet/ip_state.h"
 #include "netinet/ip_sync.h"
 
-
-int	main(int, char *[]);
-void	usage(const char *);
-
-int	terminate = 0;
+int terminate = 0;
 
 void usage(const char *progname) {
 	fprintf(stderr, "Usage: %s <destination IP> <destination port>\n", progname);
 }
 
-#if 0
-static void handleterm(int sig)
-{
-	terminate = sig;
-}
-#endif
-
-
 /* should be large enough to hold header + any datatype */
 #define BUFFERLEN 1400
 
-int main(argc, argv)
-	int argc;
-	char *argv[];
-{
+int main(int argc, char *argv[]) {
 	struct sockaddr_in sin;
 	char buff[BUFFERLEN];
 	synclogent_t *sl;
@@ -61,6 +47,7 @@ int main(argc, argv)
 	u_32_t magic;
 	synchdr_t *sh;
 	char *progname;
+	const char *errstr;
 
 	progname = strrchr(argv[0], '/');
 	if (progname) {
@@ -69,30 +56,32 @@ int main(argc, argv)
 		progname = argv[0];
 	}
 
-
 	if (argc < 2) {
 		usage(progname);
 		exit(1);
 	}
 
-#if 0
-       	signal(SIGHUP, handleterm);
-       	signal(SIGINT, handleterm);
-       	signal(SIGTERM, handleterm);
-#endif
-
 	openlog(progname, LOG_PID, LOG_SECURITY);
 
 	bzero((char *)&sin, sizeof(sin));
 	sin.sin_family = AF_INET;
-	sin.sin_addr.s_addr = inet_addr(argv[1]);
-	if (argc > 2)
-		sin.sin_port = htons(atoi(argv[2]));
-	else
+
+	if (inet_pton(AF_INET, argv[1], &sin.sin_addr) != 1) {
+		syslog(LOG_ERR, "Invalid destination IP address: %s", argv[1]);
+		exit(1);
+	}
+
+	if (argc > 2) {
+		sin.sin_port = htons(strtonum(argv[2], 0, UINT16_MAX, &errstr));
+		if (errstr) {
+			syslog(LOG_ERR, "Invalid destination port: %s", errstr);
+			exit(1);
+		}
+	} else {
 		sin.sin_port = htons(43434);
+	}
 
 	while (1) {
-
 		if (lfd != -1)
 			close(lfd);
 		if (nfd != -1)
@@ -100,41 +89,40 @@ int main(argc, argv)
 
 		lfd = open(IPSYNC_NAME, O_RDONLY);
 		if (lfd == -1) {
-			syslog(LOG_ERR, "Opening %s :%m", IPSYNC_NAME);
-			goto tryagain;
+			syslog(LOG_ERR, "Opening %s: %m", IPSYNC_NAME);
+			sleep(1);
+			continue;
 		}
 
 		nfd = socket(AF_INET, SOCK_DGRAM, 0);
 		if (nfd == -1) {
-			syslog(LOG_ERR, "Socket :%m");
-			goto tryagain;
+			syslog(LOG_ERR, "Socket: %m");
+			close(lfd);
+			sleep(1);
+			continue;
 		}
 
 		if (connect(nfd, (struct sockaddr *)&sin, sizeof(sin)) == -1) {
 			syslog(LOG_ERR, "Connect: %m");
-			goto tryagain;
+			close(nfd);
+			close(lfd);
+			sleep(1);
+			continue;
 		}
 
-		syslog(LOG_INFO, "Sending data to %s",
-		       inet_ntoa(sin.sin_addr));
+		syslog(LOG_INFO, "Sending data to %s", inet_ntoa(sin.sin_addr));
 
 		inbuf = 0;
 		while (1) {
-
-			n1 = read(lfd, buff+inbuf, BUFFERLEN-inbuf);
-
-			printf("header : %d bytes read (header = %d bytes)\n",
-			       n1, (int) sizeof(*sh));
+			n1 = read(lfd, buff + inbuf, BUFFERLEN - inbuf);
 
 			if (n1 < 0) {
 				syslog(LOG_ERR, "Read error (header): %m");
-				goto tryagain;
+				break;
 			}
 
 			if (n1 == 0) {
-				/* XXX can this happen??? */
-				syslog(LOG_ERR,
-				       "Read error (header) : No data");
+				syslog(LOG_ERR, "Read error (header): No data");
 				sleep(1);
 				continue;
 			}
@@ -151,12 +139,10 @@ moreinbuf:
 			magic = ntohl(sh->sm_magic);
 
 			if (magic != SYNHDRMAGIC) {
-				syslog(LOG_ERR,
-				       "Invalid header magic %x", magic);
-				goto tryagain;
+				syslog(LOG_ERR, "Invalid header magic %x", magic);
+				break;
 			}
 
-#define IPSYNC_DEBUG
 #ifdef IPSYNC_DEBUG
 			printf("v:%d p:%d len:%d magic:%x", sh->sm_v,
 			       sh->sm_p, len, magic);
@@ -180,7 +166,6 @@ moreinbuf:
 
 			if (inbuf < sizeof(*sh) + len) {
 				continue; /* need more data */
-				goto tryagain;
 			}
 
 #ifdef IPSYNC_DEBUG
@@ -191,9 +176,9 @@ moreinbuf:
 				su = (syncupdent_t *)buff;
 				if (sh->sm_p == IPPROTO_TCP) {
 					printf(" TCP Update: age %lu state %d/%d\n",
-						su->sup_tcp.stu_age,
-						su->sup_tcp.stu_state[0],
-						su->sup_tcp.stu_state[1]);
+					       su->sup_tcp.stu_age,
+					       su->sup_tcp.stu_state[0],
+					       su->sup_tcp.stu_state[1]);
 				}
 			} else {
 				printf("Unknown command\n");
@@ -204,28 +189,20 @@ moreinbuf:
 			n3 = write(nfd, buff, n2);
 			if (n3 <= 0) {
 				syslog(LOG_ERR, "Write error: %m");
-				goto tryagain;
+				break;
 			}
-
 
 			if (n3 != n2) {
-				syslog(LOG_ERR, "Incomplete write (%d/%d)",
-				       n3, n2);
-				goto tryagain;
+				syslog(LOG_ERR, "Incomplete write (%d/%d)", n3, n2);
+				break;
 			}
 
-			/* signal received? */
 			if (terminate)
 				break;
 
-			/* move buffer to the front,we might need to make
-			 * this more efficient, by using a rolling pointer
-			 * over the buffer and only copying it, when
-			 * we are reaching the end
-			 */
 			inbuf -= n2;
 			if (inbuf) {
-				bcopy(buff+n2, buff, inbuf);
+				bcopy(buff + n2, buff, inbuf);
 				printf("More data in buffer\n");
 				goto moreinbuf;
 			}
@@ -233,19 +210,15 @@ moreinbuf:
 
 		if (terminate)
 			break;
-tryagain:
+
+		close(nfd);
+		close(lfd);
 		sleep(1);
 	}
 
-
-	/* terminate */
-	if (lfd != -1)
-		close(lfd);
-	if (nfd != -1)
-		close(nfd);
-
+	close(lfd);
+	close(nfd);
 	syslog(LOG_ERR, "signal %d received, exiting...", terminate);
-
 	exit(1);
 }
 
