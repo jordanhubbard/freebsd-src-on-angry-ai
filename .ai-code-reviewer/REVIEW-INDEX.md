@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-17 14:41
+Generated: 2026-02-17 16:15
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-17 14:41
 
 ## Progress
 - Total directories: 8264
-- Completed: 95 (1%)
+- Completed: 96 (1%)
 - Skipped: 3
-- Remaining: 8166
+- Remaining: 8165
 
 ## Current Position
-CURRENT POSITION: `sbin/fsck`
+CURRENT POSITION: `sbin/fsck_ffs`
 
 ## bin/ (72/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/fsck`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (23/127 done)
+## sbin/ (24/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
@@ -123,7 +123,7 @@ CURRENT POSITION: `sbin/fsck`
 - [x] `sbin/etherswitchcfg` (2 .c, 0 .h, 1637 lines) - 2026-02-17 - Fixed by session 20260216_224116
 - [-] `sbin/fdisk` (2 .c, 1 .h, 1615 lines) - Auto-skipped after 3 retries
 - [x] `sbin/ffsinfo` (1 .c, 0 .h, 631 lines) - 2026-02-17 - Fixed by session 20260217_134452
-- [ ] `sbin/fsck` (3 .c, 1 .h, 1184 lines)
+- [x] `sbin/fsck` (3 .c, 1 .h, 1184 lines) - 2026-02-17 - Fixed by session 20260217_134452
 - [ ] `sbin/fsck_ffs` (16 .c, 1 .h, 11282 lines)
 - [ ] `sbin/fsck_msdosfs` (5 .c, 2 .h, 3517 lines)
 - [ ] `sbin/fsdb` (2 .c, 1 .h, 1592 lines)
