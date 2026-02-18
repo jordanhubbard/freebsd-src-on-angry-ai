@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-18 10:54 - sbin/ipf/ippool ✓
+
+**Directory:** `sbin/ipf/ippool`
+
+**Summary:** [ai-code-reviewer] ippool: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-18 10:21 - sbin/ipf/ipnat ✓
 
 **Directory:** `sbin/ipf/ipnat`
