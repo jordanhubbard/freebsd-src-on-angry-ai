@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-18 06:23 - sbin/ifconfig ✓
+
+**Directory:** `sbin/ifconfig`
+
+**Summary:** [ai-code-reviewer] ifconfig: Replace atoi() with strtonum() for safer input handling
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/ifconfig/carp.c
+
+---
+
 ## 2026-02-18 06:17 - sbin/hastd ✓
 
 **Directory:** `sbin/hastd`

@@ -112,7 +112,7 @@ setcarp_vhid(if_ctx *ctx, const char *val, int dummy __unused)
 {
 	const struct afswtch *afp = ctx->afp;
 
-	carpr_vhid = atoi(val);
+	carpr_vhid = strtonum(val, 1, CARP_MAXVHID, NULL);
 
 	if (carpr_vhid <= 0 || carpr_vhid > CARP_MAXVHID)
 		errx(1, "vhid must be greater than 0 and less than %u",
@@ -177,7 +177,7 @@ setcarp_advskew(if_ctx *ctx __unused, const char *val, int dummy __unused)
 	if (carpr_vhid == -1)
 		errx(1, "advskew requires vhid");
 
-	carpr_advskew = atoi(val);
+	carpr_advskew = strtonum(val, 0, 255, NULL); /* Assuming advskew is typically 0-255 */
 }
 
 static void
@@ -187,7 +187,7 @@ setcarp_advbase(if_ctx *ctx __unused, const char *val, int dummy __unused)
 	if (carpr_vhid == -1)
 		errx(1, "advbase requires vhid");
 
-	carpr_advbase = atoi(val);
+	carpr_advbase = strtonum(val, 0, INT_MAX, NULL); /* Assuming advbase can be any positive integer */
 }
 
 static void
@@ -247,7 +247,7 @@ setcarp_mcast6(if_ctx *ctx __unused, const char *val __unused, int dummy __unuse
 static void
 setcarp_version(if_ctx *ctx __unused, const char *val, int dummy __unused)
 {
-	carpr_version = atoi(val);
+	carpr_version = strtonum(val, CARP_VERSION_CARP, CARP_VERSION_VRRPv3, NULL);
 
 	if (carpr_version != CARP_VERSION_CARP && carpr_version != CARP_VERSION_VRRPv3)
 		errx(1, "version must be %d or %d", CARP_VERSION_CARP,
@@ -257,13 +257,13 @@ setcarp_version(if_ctx *ctx __unused, const char *val, int dummy __unused)
 static void
 setvrrp_prio(if_ctx *ctx __unused, const char *val, int dummy __unused)
 {
-	carpr_vrrp_prio = atoi(val);
+	carpr_vrrp_prio = strtonum(val, 1, 255, NULL); /* Assuming priority is typically 1-255 */
 }
 
 static void
 setvrrp_interval(if_ctx *ctx __unused, const char *val, int dummy __unused)
 {
-	carpr_vrrp_adv_inter = atoi(val);
+	carpr_vrrp_adv_inter = strtonum(val, 1, VRRP_MAX_INTERVAL, NULL);
 
 	if (carpr_vrrp_adv_inter == 0 || carpr_vrrp_adv_inter > VRRP_MAX_INTERVAL)
 		errx(1, "vrrpinterval must be greater than 0 and less than %d", VRRP_MAX_INTERVAL);
