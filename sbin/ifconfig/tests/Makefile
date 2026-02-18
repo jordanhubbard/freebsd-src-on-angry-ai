@@ -1,4 +1,3 @@
-NETBSD_ATF_TESTS_SH=	nonexistent_test
 ATF_TESTS_SH+=		ifconfig \
 			inet6
 
