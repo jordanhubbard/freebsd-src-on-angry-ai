@@ -5,14 +5,15 @@
  * See the IPFILTER.LICENCE file for details on licencing.
  */
 %{
+#include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
+#include <ctype.h>
 #include "ipf.h"
 #include "opts.h"
 #include "kmem.h"
 #include "ipscan_l.h"
 #include "netinet/ip_scan.h"
-#include <ctype.h>
 
 #define	YYDEBUG	1
 
@@ -26,16 +27,16 @@ extern	int	yylineNum;
 extern	void	printbuf(char *, int, int);
 
 
-void		printent(ipscan_t *);
-void		showlist(void);
-int		getportnum(char *);
-struct in_addr	gethostip(char *);
-struct in_addr	combine(int, int, int, int);
-char		**makepair(char *, char *);
-void		addtag(char *, char **, char **, struct action *);
-int		cram(char *, char *);
-void		usage(char *);
-int		main(int, char **);
+void printent(ipscan_t *);
+void showlist(void);
+int getportnum(char *);
+struct in_addr gethostip(char *);
+struct in_addr combine(int, int, int, int);
+char **makepair(char *, char *);
+void addtag(char *, char **, char **, struct action *);
+int cram(char *, char *);
+void usage(char *);
+int main(int, char **);
 
 int		opts = 0;
 int		fd = -1;
@@ -199,8 +200,8 @@ static	struct	wordtab	yywords[] = {
 int
 cram(char *dst, char *src)
 {
-	char c, *s, *t, *u;
-	int i, j, k;
+	char	c, *s, *t, *u;
+	int	i, j, k;
 
 	c = *src;
 	s = src + 1;
@@ -224,18 +225,17 @@ cram(char *dst, char *src)
 				i++;
 
 				if (ISALPHA(c) || (c > '7')) {
-					switch (c)
-					{
-					case 'n' :
+					switch (c) {
+					case 'n':
 						*u++ = '\n';
 						break;
-					case 'r' :
+					case 'r':
 						*u++ = '\r';
 						break;
-					case 't' :
+					case 't':
 						*u++ = '\t';
 						break;
-					default :
+					default:
 						*u++ = c;
 						break;
 					}
@@ -245,21 +245,21 @@ cram(char *dst, char *src)
 					k |= (c - '0');
 					i--;
 				} else
-						*u++ = c;
+					*u++ = c;
 			} while ((i <= ISC_TLEN) && (s <= t) && (j > 0));
 		} else
 			*u++ = c, i++;
 	}
-	return(i);
+	return (i);
 }
 
 
 void
 printent(ipscan_t *isc)
 {
-	char buf[ISC_TLEN+1];
-	u_char *u;
-	int i, j;
+	char	buf[ISC_TLEN + 1];
+	u_char	*u;
+	int	i, j;
 
 	buf[ISC_TLEN] = '\0';
 	bcopy(isc->ipsc_ctxt, buf, ISC_TLEN);
@@ -274,43 +274,41 @@ printent(ipscan_t *isc)
 	bcopy(isc->ipsc_smsk, buf, ISC_TLEN);
 	printf("\", \"%s\") = ", buf);
 
-	switch (isc->ipsc_action)
-	{
-	case ISC_A_TRACK :
+	switch (isc->ipsc_action) {
+	case ISC_A_TRACK:
 		printf("track");
 		break;
-	case ISC_A_REDIRECT :
+	case ISC_A_REDIRECT:
 		printf("redirect");
 		printf("(%s", inet_ntoa(isc->ipsc_ip));
 		if (isc->ipsc_port)
 			printf(",%d", isc->ipsc_port);
 		printf(")");
 		break;
-	case ISC_A_CLOSE :
+	case ISC_A_CLOSE:
 		printf("close");
 		break;
-	default :
+	default:
 		break;
 	}
 
 	if (isc->ipsc_else != ISC_A_NONE) {
 		printf(" else ");
-		switch (isc->ipsc_else)
-		{
-		case ISC_A_TRACK :
+		switch (isc->ipsc_else) {
+		case ISC_A_TRACK:
 			printf("track");
 			break;
-		case ISC_A_REDIRECT :
+		case ISC_A_REDIRECT:
 			printf("redirect");
 			printf("(%s", inet_ntoa(isc->ipsc_eip));
 			if (isc->ipsc_eport)
 				printf(",%d", isc->ipsc_eport);
 			printf(")");
 			break;
-		case ISC_A_CLOSE :
+		case ISC_A_CLOSE:
 			printf("close");
 			break;
-		default :
+		default:
 			break;
 		}
 	}
@@ -326,8 +324,8 @@ printent(ipscan_t *isc)
 	}
 	if (opts & OPT_VERBOSE) {
 		printf("# hits %d active %d fref %d sref %d\n",
-			isc->ipsc_hits, isc->ipsc_active, isc->ipsc_fref,
-			isc->ipsc_sref);
+		    isc->ipsc_hits, isc->ipsc_active, isc->ipsc_fref,
+		    isc->ipsc_sref);
 	}
 }
 
@@ -335,19 +333,18 @@ printent(ipscan_t *isc)
 void
 addtag(char *tstr, char **cp, char **sp, struct action *act)
 {
-	ipscan_t isc, *iscp;
+	ipscan_t	isc, *iscp;
 
 	bzero((char *)&isc, sizeof(isc));
 
-	strncpy(isc.ipsc_tag, tstr, sizeof(isc.ipsc_tag));
-	isc.ipsc_tag[sizeof(isc.ipsc_tag) - 1] = '\0';
+	strlcpy(isc.ipsc_tag, tstr, sizeof(isc.ipsc_tag));
 
 	if (cp) {
 		isc.ipsc_clen = cram(isc.ipsc_ctxt, cp[0]);
 		if (cp[1]) {
 			if (cram(isc.ipsc_cmsk, cp[1]) != isc.ipsc_clen) {
 				fprintf(stderr,
-					"client text/mask strings different length\n");
+				    "client text/mask strings different length\n");
 				return;
 			}
 		}
@@ -358,7 +355,7 @@ addtag(char *tstr, char **cp, char **sp, struct action *act)
 		if (sp[1]) {
 			if (cram(isc.ipsc_smsk, sp[1]) != isc.ipsc_slen) {
 				fprintf(stderr,
-					"server text/mask strings different length\n");
+				    "server text/mask strings different length\n");
 				return;
 			}
 		}
@@ -390,7 +387,7 @@ addtag(char *tstr, char **cp, char **sp, struct action *act)
 		iscp = &isc;
 		if (opts & OPT_REMOVE) {
 			if (ioctl(fd, SIOCRMSCA, &iscp) == -1)
-				perror("SIOCADSCA");
+				perror("SIOCRMSCA");
 		} else {
 			if (ioctl(fd, SIOCADSCA, &iscp) == -1)
 				perror("SIOCADSCA");
@@ -451,20 +448,20 @@ gethostip(char *host)
 int
 getportnum(char *port)
 {
-	struct servent *s;
+	struct servent	*s;
 
 	s = getservbyname(port, "tcp");
 	if (s == NULL)
-		return(-1);
-	return(s->s_port);
+		return (-1);
+	return (ntohs(s->s_port));
 }
 
 
 void
 showlist(void)
 {
-	ipscanstat_t ipsc, *ipscp = &ipsc;
-	ipscan_t isc;
+	ipscanstat_t	ipsc, *ipscp = &ipsc;
+	ipscan_t	isc;
 
 	if (ioctl(fd, SIOCGSCST, &ipscp) == -1)
 		perror("ioctl(SIOCGSCST)");
@@ -499,8 +496,8 @@ usage(char *prog)
 int
 main(int argc, char *argv[])
 {
-	FILE *fp = NULL;
-	int c;
+	FILE	*fp = NULL;
+	int	c;
 
 	(void) yysettab(yywords);
 
@@ -508,13 +505,12 @@ main(int argc, char *argv[])
 		usage(argv[0]);
 
 	while ((c = getopt(argc, argv, "df:lnrsv")) != -1)
-		switch (c)
-		{
-		case 'd' :
+		switch (c) {
+		case 'd':
 			opts |= OPT_DEBUG;
 			yydebug++;
 			break;
-		case 'f' :
+		case 'f':
 			if (!strcmp(optarg, "-"))
 				fp = stdin;
 			else {
@@ -526,19 +522,19 @@ main(int argc, char *argv[])
 			}
 			yyin = fp;
 			break;
-		case 'l' :
+		case 'l':
 			opts |= OPT_SHOWLIST;
 			break;
-		case 'n' :
+		case 'n':
 			opts |= OPT_DONOTHING;
 			break;
-		case 'r' :
+		case 'r':
 			opts |= OPT_REMOVE;
 			break;
-		case 's' :
+		case 's':
 			opts |= OPT_STAT;
 			break;
-		case 'v' :
+		case 'v':
 			opts |= OPT_VERBOSE;
 			break;
 		}
@@ -560,7 +556,7 @@ main(int argc, char *argv[])
 		exit(0);
 	}
 
-	if (opts & (OPT_SHOWLIST|OPT_STAT)) {
+	if (opts & (OPT_SHOWLIST | OPT_STAT)) {
 		showlist();
 		exit(0);
 	}

@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-19 00:22 - sbin/ipf/ipscan ✓
+
+**Directory:** `sbin/ipf/ipscan`
+
+**Summary:** [ai-code-reviewer] ipscan: Update REVIEW-INDEX and fix port number handling
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/ipf/ipscan/ipscan_y.y
+
+---
+
 ## 2026-02-18 10:57 - sbin/ipf/ipresend ✓
 
 **Directory:** `sbin/ipf/ipresend`
