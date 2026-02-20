@@ -68,7 +68,7 @@ attach_vnode_non_explicit_type_cleanup()
 	cleanup_common
 }
 
-atf_test_case attach_vnode_implicit_a_f cleanup
+atf_test_case attach_vnode_implicit_af cleanup
 attach_vnode_implicit_a_f_head()
 {
 	atf_set "descr" "Tests out implied -a / -f without -t"

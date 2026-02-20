@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-20 12:32 - sbin/mdconfig/tests ✓
+
+**Directory:** `sbin/mdconfig/tests`
+
+**Summary:** [ai-code-reviewer] tests: Update mdconfig_test.sh and REVIEW-INDEX.md
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/mdconfig/tests/mdconfig_test.sh
+
+---
+
 ## 2026-02-20 06:45 - sbin/md5/tests ✓
 
 **Directory:** `sbin/md5/tests`

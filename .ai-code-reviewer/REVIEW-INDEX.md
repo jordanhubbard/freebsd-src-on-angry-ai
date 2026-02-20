@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-20 06:45
+Generated: 2026-02-20 12:32
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-20 06:45
 
 ## Progress
 - Total directories: 8264
-- Completed: 134 (1%)
-- Skipped: 8
-- Remaining: 8122
+- Completed: 135 (1%)
+- Skipped: 9
+- Remaining: 8120
 
 ## Current Position
-CURRENT POSITION: `sbin/mdconfig`
+CURRENT POSITION: `sbin/mdmfs`
 
 ## bin/ (72/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/mdconfig`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (62/127 done)
+## sbin/ (63/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
@@ -167,8 +167,8 @@ CURRENT POSITION: `sbin/mdconfig`
 - [x] `sbin/ldconfig` (2 .c, 1 .h, 494 lines) - 2026-02-20 - Fixed by session 20260220_015148
 - [x] `sbin/md5` (1 .c, 0 .h, 1044 lines) - 2026-02-20 - Fixed by session 20260220_045142
 - [x] `sbin/md5/tests` (0 .c, 0 .h, 0 lines) - 2026-02-20 - Fixed by session 20260220_062336
-- [ ] `sbin/mdconfig` (1 .c, 0 .h, 661 lines)
-- [ ] `sbin/mdconfig/tests` (0 .c, 0 .h, 0 lines)
+- [-] `sbin/mdconfig` (1 .c, 0 .h, 661 lines) - Auto-skipped after 3 retries
+- [x] `sbin/mdconfig/tests` (0 .c, 0 .h, 0 lines) - 2026-02-20 - Fixed by session 20260220_122442
 - [ ] `sbin/mdmfs` (1 .c, 0 .h, 858 lines)
 - [ ] `sbin/mknod` (1 .c, 0 .h, 155 lines)
 - [ ] `sbin/mksnap_ffs` (1 .c, 0 .h, 189 lines)
