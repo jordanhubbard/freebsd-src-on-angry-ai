@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-20 02:41
+Generated: 2026-02-20 02:58
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-20 02:41
 
 ## Progress
 - Total directories: 8264
-- Completed: 130 (1%)
+- Completed: 131 (1%)
 - Skipped: 8
-- Remaining: 8126
+- Remaining: 8125
 
 ## Current Position
-CURRENT POSITION: `sbin/kldunload`
+CURRENT POSITION: `sbin/ldconfig`
 
 ## bin/ (72/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/kldunload`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (58/127 done)
+## sbin/ (59/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
@@ -163,7 +163,7 @@ CURRENT POSITION: `sbin/kldunload`
 - [x] `sbin/kldconfig` (1 .c, 0 .h, 415 lines) - 2026-02-20 - Fixed by session 20260220_011040
 - [x] `sbin/kldload` (1 .c, 0 .h, 202 lines) - 2026-02-20 - Fixed by session 20260220_015148
 - [x] `sbin/kldstat` (1 .c, 0 .h, 208 lines) - 2026-02-20 - Fixed by session 20260220_015148
-- [ ] `sbin/kldunload` (1 .c, 0 .h, 116 lines)
+- [x] `sbin/kldunload` (1 .c, 0 .h, 116 lines) - 2026-02-20 - Fixed by session 20260220_015148
 - [ ] `sbin/ldconfig` (2 .c, 1 .h, 494 lines)
 - [ ] `sbin/md5` (1 .c, 0 .h, 1044 lines)
 - [ ] `sbin/md5/tests` (0 .c, 0 .h, 0 lines)
