@@ -21,10 +21,10 @@ print_toif(int family, char *tag, char *base, frdest_t *fdp)
 #ifdef	USE_INET6
 		if (family == AF_INET6) {
 			if (IP6_NOTZERO(&fdp->fd_ip6)) {
-				char ipv6addr[80];
+				char ipv6addr[INET6_ADDRSTRLEN];
 
 				inet_ntop(AF_INET6, &fdp->fd_ip6, ipv6addr,
-					  sizeof(fdp->fd_ip6));
+					  sizeof(ipv6addr));
 				PRINTF(":%s", ipv6addr);
 			}
 		} else

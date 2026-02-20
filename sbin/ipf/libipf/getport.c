@@ -25,8 +25,12 @@ getport(frentry_t *fr, char *name, u_short *port, char *proto)
 		}
 
 		if (ISDIGIT(*name)) {
-			int portval = atoi(name);
-			if (portval < 0 || portval > 65535)
+			long portval;
+			char *endptr;
+
+			errno = 0;
+			portval = strtol(name, &endptr, 10);
+			if (errno != 0 || *endptr != '\0' || portval < 0 || portval > 65535)
 				return (-1);
 			*port = htons((u_short)portval);
 			return (0);
@@ -67,13 +71,18 @@ getport(frentry_t *fr, char *name, u_short *port, char *proto)
 		 * mappings for this protocol name match ports.
 		 */
 		s = getservbyname(name, "tcp");
-		if (s == NULL)
-			return (-1);
-		p1 = s->s_port;
+		if (s != NULL)
+			p1 = s->s_port;
+		else
+			p1 = 0;
 		s = getservbyname(name, "udp");
-		if (s == NULL || s->s_port != p1)
+		if (s != NULL) {
+			if (p1 != 0 && s->s_port != p1)
+				return (-1);
+		} else if (p1 == 0) {
 			return (-1);
-		*port = p1;
+		}
+		*port = p1 ? p1 : s->s_port;
 		return (0);
 	}
 

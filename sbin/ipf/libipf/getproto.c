@@ -21,11 +21,19 @@ getproto(char *name)
 	for (s = name; *s != '\0'; s++)
 		if (!ISDIGIT(*s))
 			break;
-	if (*s == '\0')
-		return (atoi(name));
+	if (*s == '\0') {
+		long proto_num;
+		char *endptr;
+
+		errno = 0;
+		proto_num = strtol(name, &endptr, 10);
+		if (errno != 0 || *endptr != '\0' || proto_num < 0 || proto_num > INT_MAX)
+			return (-1);
+		return ((int)proto_num);
+	}
 
 	if (!strcasecmp(name, "ip"))
-		return (0);
+		return (IPPROTO_IP);
 
 	p = getprotobyname(name);
 	if (p != NULL)

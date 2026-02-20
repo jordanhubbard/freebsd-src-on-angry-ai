@@ -23,14 +23,14 @@ uint16_t tcp_flags(char *flgs, uint16_t *mask, int linenum)
 		*s++ = '\0';
 
 	if (*flgs == '0') {
-		tcpf = strtol(flgs, NULL, 0);
+		tcpf = strtonum(flgs, 0, USHRT_MAX, NULL);
 	} else {
 		tcpf = tcpflags(flgs);
 	}
 
 	if (s != NULL) {
 		if (*s == '0')
-			tcpfm = strtol(s, NULL, 0);
+			tcpfm = strtonum(s, 0, USHRT_MAX, NULL);
 		else
 			tcpfm = tcpflags(s);
 	}

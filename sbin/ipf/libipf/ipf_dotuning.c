@@ -53,7 +53,7 @@ void ipf_dotuning(int fd, char *tuneargs, ioctlfunc_t iocfn)
 			}
 		} else {
 			tu.ipft_cookie = NULL;
-			strncpy(tu.ipft_name, s, sizeof(tu.ipft_name));
+			strlcpy(tu.ipft_name, s, sizeof(tu.ipft_name));
 			if ((*iocfn)(fd, SIOCIPFGET, &obj) == -1) {
 				ipf_perror_fd(fd, iocfn, "ioctl(SIOCIPFGET)");
 				return;
