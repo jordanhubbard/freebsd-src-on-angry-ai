@@ -6,6 +6,34 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-19 18:21 - sbin/ipf/libipf ✓
+
+**Directory:** `sbin/ipf/libipf`
+
+**Summary:** [ai-code-reviewer] libipf: Improve input validation and error handling
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - .ai-code-reviewer/REVIEW-SUMMARY.md
+
+---
+
+## 2026-02-19 18:17 - sbin/ipf/libipf ✓
+
+**Directory:** `sbin/ipf/libipf`
+
+**Summary:** [ai-code-reviewer] ipf: Improve input validation and error handling
+
+**Files fixed:**
+  - sbin/ipf/libipf/ipf_dotuning.c
+  - sbin/ipf/libipf/parsefields.c
+  - sbin/ipf/libipf/getport.c
+  - sbin/ipf/libipf/tcp_flags.c
+  - sbin/ipf/libipf/getproto.c
+  - sbin/ipf/libipf/print_toif.c
+
+---
+
 ## 2026-02-19 00:22 - sbin/ipf/ipscan ✓
 
 **Directory:** `sbin/ipf/ipscan`
