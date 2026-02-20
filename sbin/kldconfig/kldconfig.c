@@ -38,7 +38,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
 /* the default sysctl name */
 #define PATHCTL	"kern.module_path"
 
@@ -60,36 +59,35 @@ static char	*modpath;
 static int	 changed;
 
 /* Top-level path management functions */
-static void	 addpath(struct pathhead *, char *, int, int);
-static void	 rempath(struct pathhead *, char *, int, int);
-static void	 showpath(struct pathhead *);
+static void addpath(struct pathhead *, char *, int, int);
+static void rempath(struct pathhead *, char *, int, int);
+static void showpath(struct pathhead *);
 
-/* Low-level path management functions */
+	/* Low-level path management functions */
 static char	*qstring(struct pathhead *);
 
 /* sysctl-related functions */
-static void	 getmib(void);
-static void	 getpath(void);
-static void	 parsepath(struct pathhead *, char *, int);
-static void	 setpath(struct pathhead *);
+static void getmib(void);
+static void getpath(void);
+static void parsepath(struct pathhead *, char *, int);
+static void setpath(struct pathhead *);
 
-static void	 usage(void);
+static void usage(void);
 
-/* Get the MIB entry for our sysctl */
+	/* Get the MIB entry for our sysctl */
 static void
 getmib(void)
 {
-
 	/* have we already fetched it? */
 	if (miblen != 0)
 		return;
-	
+
 	miblen = nitems(mib);
 	if (sysctlnametomib(pathctl, mib, &miblen) != 0)
 		err(1, "sysctlnametomib(%s)", pathctl);
 }
 
-/* Get the current module search path */
+	/* Get the current module search path */
 static void
 getpath(void)
 {
@@ -115,7 +113,7 @@ getpath(void)
 	modpath = path;
 }
 
-/* Set the module search path after changing it */
+	/* Set the module search path after changing it */
 static void
 setpath(struct pathhead *pathq)
 {
@@ -135,7 +133,7 @@ setpath(struct pathhead *pathq)
 	modpath = newpath;
 }
 
-/* Add/insert a new component to the module search path */
+	/* Add/insert a new component to the module search path */
 static void
 addpath(struct pathhead *pathq, char *path, int force, int insert)
 {
@@ -166,7 +164,7 @@ addpath(struct pathhead *pathq, char *path, int force, int insert)
 			return;
 		errx(1, "already in the module search path: %s", pathbuf);
 	}
-	
+
 	/* OK, allocate and add it. */
 	if (((pe = malloc(sizeof(*pe))) == NULL) ||
 	    ((pe->path = strdup(pathbuf)) == NULL)) {
@@ -187,7 +185,7 @@ addpath(struct pathhead *pathq, char *path, int force, int insert)
 	changed = 1;
 }
 
-/* Remove a path component from the module search path */
+	/* Remove a path component from the module search path */
 static void
 rempath(struct pathhead *pathq, char *path, int force, int insert __unused)
 {
@@ -219,7 +217,7 @@ rempath(struct pathhead *pathq, char *path, int force, int insert __unused)
 	changed = 1;
 }
 
-/* Display the retrieved module search path */
+	/* Display the retrieved module search path */
 static void
 showpath(struct pathhead *pathq)
 {
@@ -233,13 +231,13 @@ showpath(struct pathhead *pathq)
 	free(s);
 }
 
-/* Break a string down into path components, store them into a queue */
+	/* Break a string down into path components, store them into a queue */
 static void
 parsepath(struct pathhead *pathq, char *path, int uniq)
 {
 	char *p;
 	struct pathentry *pe;
-	
+
 	while ((p = strsep(&path, ";")) != NULL)
 		if (!uniq) {
 			if (((pe = malloc(sizeof(*pe))) == NULL) ||
@@ -253,13 +251,13 @@ parsepath(struct pathhead *pathq, char *path, int uniq)
 		}
 }
 
-/* Recreate a path string from a components queue */
+	/* Recreate a path string from a components queue */
 static char *
 qstring(struct pathhead *pathq)
 {
 	char *s, *p;
 	struct pathentry *pe;
-	
+
 	s = strdup("");
 	TAILQ_FOREACH(pe, pathq, next) {
 		asprintf(&p, "%s%s%s",
@@ -273,18 +271,17 @@ qstring(struct pathhead *pathq)
 	return (s);
 }
 
-/* Usage message */
+	/* Usage message */
 static void
 usage(void)
 {
-
 	fprintf(stderr, "%s\n%s\n",
 	    "usage:\tkldconfig [-dfimnUv] [-S sysctlname] [path ...]",
 	    "\tkldconfig -r");
 	exit(1);
 }
 
-/* Main function */
+	/* Main function */
 int
 main(int argc, char *argv[])
 {
@@ -329,45 +326,45 @@ main(int argc, char *argv[])
 
 	while ((c = getopt(argc, argv, "dfimnrS:Uv")) != -1)
 		switch (c) {
-			case 'd':
-				if (iflag || mflag)
-					usage();
-				act = rempath;
-				break;
-			case 'f':
-				fflag = 1;
-				break;
-			case 'i':
-				if (act != addpath)
-					usage();
-				iflag = 1;
-				break;
-			case 'm':
-				if (act != addpath)
-					usage();
-				mflag = 1;
-				break;
-			case 'n':
-				nflag = 1;
-				break;
-			case 'r':
-				rflag = 1;
-				break;
-			case 'S':
-				free(pathctl);
-				if ((pathctl = strdup(optarg)) == NULL) {
-					errno = ENOMEM;
-					err(1, "sysctl name %s", optarg);
-				}
-				break;
-			case 'U':
-				uniqflag = 1;
-				break;
-			case 'v':
-				vflag++;
-				break;
-			default:
+		case 'd':
+			if (iflag || mflag)
 				usage();
+			act = rempath;
+			break;
+		case 'f':
+			fflag = 1;
+			break;
+		case 'i':
+			if (act != addpath)
+				usage();
+			iflag = 1;
+			break;
+		case 'm':
+			if (act != addpath)
+				usage();
+			mflag = 1;
+			break;
+		case 'n':
+			nflag = 1;
+			break;
+		case 'r':
+			rflag = 1;
+			break;
+		case 'S':
+			free(pathctl);
+			if ((pathctl = strdup(optarg)) == NULL) {
+				errno = ENOMEM;
+				err(1, "sysctl name %s", optarg);
+			}
+			break;
+		case 'U':
+			uniqflag = 1;
+			break;
+		case 'v':
+			vflag++;
+			break;
+		default:
+			usage();
 		}
 
 	argc -= optind;
