@@ -172,14 +172,14 @@ main(int argc, char** argv)
 						switch (errno) {
 						case EEXIST:
 							warnx("can't load %s: module "
-							    "already loaded or "
-							    "in kernel", argv[0]);
+							      "already loaded or "
+							      "in kernel", argv[0]);
 							break;
 						case ENOEXEC:
 							warnx("an error occurred while "
-							    "loading module %s. "
-							    "Please check dmesg(8) for "
-							    "more details.", argv[0]);
+							      "loading module %s. "
+							      "Please check dmesg(8) for "
+							      "more details.", argv[0]);
 							break;
 						default:
 							warn("can't load %s", argv[0]);
