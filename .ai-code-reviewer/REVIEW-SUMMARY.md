@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 02:14 - sbin/newfs_msdos/tests ✓
+
+**Directory:** `sbin/newfs_msdos/tests`
+
+**Summary:** [ai-code-reviewer] tests: Update review index for newfs_msdos/tests
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-20 23:14 - sbin/newfs ✓
 
 **Directory:** `sbin/newfs`
