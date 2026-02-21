@@ -101,7 +101,7 @@ main(int argc, char *argv[])
 	error = sysctlbyname("vfs.nfs.iodmin", &iodmin, &len, NULL, 0);
 	if (error < 0)
 		err(1, "sysctlbyname(\"vfs.nfs.iodmin\")");
-	len = sizeof iodmax;
+	len = sizeof(iodmax);
 	error = sysctlbyname("vfs.nfs.iodmax", &iodmax, &len, NULL, 0);
 	if (error < 0)
 		err(1, "sysctlbyname(\"vfs.nfs.iodmax\")");

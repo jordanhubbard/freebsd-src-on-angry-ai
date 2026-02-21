@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 02:24 - sbin/nfsiod ✓
+
+**Directory:** `sbin/nfsiod`
+
+**Summary:** [ai-code-reviewer] nfsiod: Correct sysctlbyname length parameter
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/nfsiod/nfsiod.c
+
+---
+
 ## 2026-02-21 02:14 - sbin/newfs_msdos/tests ✓
 
 **Directory:** `sbin/newfs_msdos/tests`
