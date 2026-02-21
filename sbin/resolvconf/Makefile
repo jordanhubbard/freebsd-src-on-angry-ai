@@ -17,7 +17,8 @@ VARDIR=		/var/run/resolvconf
 SBINDIR=	/sbin
 
 # We don't assume to restart the services in /sbin.  So, though
-# our service(8) is in /usr/sbin, we can use it, here.
+# our service(8) is in /usr/sbin, we can use it here to manage services.
+# CMD1 checks if the service is running, and CMD2 restarts it if necessary.
 CMD1=		\\$$1 onestatus >/dev/null 2>\&1
 CMD2=		\\$$1 restart
 RESTARTCMD=	"/usr/sbin/service ${CMD1} \&\& /usr/sbin/service ${CMD2}"

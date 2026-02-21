@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 11:00 - sbin/resolvconf ✓
+
+**Directory:** `sbin/resolvconf`
+
+**Summary:** [ai-code-reviewer] resolvconf: Update Makefile to clarify service management
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/resolvconf/Makefile
+
+---
+
 ## 2026-02-21 10:57 - sbin/recoverdisk ✓
 
 **Directory:** `sbin/recoverdisk`
