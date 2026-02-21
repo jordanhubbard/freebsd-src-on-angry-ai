@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 11:04 - sbin/restore ✓
+
+**Directory:** `sbin/restore`
+
+**Summary:** [ai-code-reviewer] restore: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-21 11:00 - sbin/resolvconf ✓
 
 **Directory:** `sbin/resolvconf`
