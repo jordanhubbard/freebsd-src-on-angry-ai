@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 08:21 - sbin/pfctl/tests ✓
+
+**Directory:** `sbin/pfctl/tests`
+
+**Summary:** [ai-code-reviewer] tests: Fix macro.sh to correctly handle quotes
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/pfctl/tests/macro.sh
+
+---
+
 ## 2026-02-21 06:02 - sbin/nvmecontrol/tests ✓
 
 **Directory:** `sbin/nvmecontrol/tests`

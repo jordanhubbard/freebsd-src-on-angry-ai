@@ -8,11 +8,11 @@ space_head()
 
 space_body()
 {
-	echo \"this is\" = \"a variable\" > pf.conf
+	echo "this is" = "a variable" > pf.conf
 	cat pf.conf
 	atf_check -o ignore -e ignore -s exit:1 pfctl -nvf pf.conf
 
-	echo this = \"a variable\" > pf.conf
+	echo this = "a variable" > pf.conf
 	cat pf.conf
 	atf_check -o ignore -s exit:0 pfctl -nvf pf.conf
 }

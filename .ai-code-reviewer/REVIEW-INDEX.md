@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-21 06:02
+Generated: 2026-02-21 08:21
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-21 06:02
 
 ## Progress
 - Total directories: 8264
-- Completed: 157 (1%)
-- Skipped: 11
-- Remaining: 8096
+- Completed: 158 (1%)
+- Skipped: 12
+- Remaining: 8094
 
 ## Current Position
-CURRENT POSITION: `sbin/pfctl`
+CURRENT POSITION: `sbin/pfctl/tests/files`
 
 ## bin/ (72/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/pfctl`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (85/127 done)
+## sbin/ (86/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
@@ -193,8 +193,8 @@ CURRENT POSITION: `sbin/pfctl`
 - [x] `sbin/nvmecontrol/modules/samsung` (1 .c, 0 .h, 162 lines) - 2026-02-21 - Fixed by session 20260221_031539
 - [x] `sbin/nvmecontrol/modules/wdc` (1 .c, 0 .h, 814 lines) - 2026-02-21 - Fixed by session 20260221_031539
 - [x] `sbin/nvmecontrol/tests` (0 .c, 0 .h, 0 lines) - 2026-02-21 - Fixed by session 20260221_052844
-- [ ] `sbin/pfctl` (10 .c, 3 .h, 13351 lines)
-- [ ] `sbin/pfctl/tests` (1 .c, 0 .h, 341 lines)
+- [-] `sbin/pfctl` (10 .c, 3 .h, 13351 lines) - Auto-skipped after 3 retries
+- [x] `sbin/pfctl/tests` (1 .c, 0 .h, 341 lines) - 2026-02-21 - Fixed by session 20260221_080937
 - [ ] `sbin/pfctl/tests/files` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/pfilctl` (1 .c, 0 .h, 226 lines)
 - [ ] `sbin/pflogd` (0 .c, 0 .h, 0 lines)
