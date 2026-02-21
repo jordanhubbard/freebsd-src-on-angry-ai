@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-20 22:52 - sbin/mount_udf ✓
+
+**Directory:** `sbin/mount_udf`
+
+**Summary:** [ai-code-reviewer] mount_udf: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-20 22:45 - sbin/mount_nullfs ✓
 
 **Directory:** `sbin/mount_nullfs`
