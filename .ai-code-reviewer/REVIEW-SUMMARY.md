@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 05:11 - sbin/nvmecontrol/modules/wdc ✓
+
+**Directory:** `sbin/nvmecontrol/modules/wdc`
+
+**Summary:** [ai-code-reviewer] wdc: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-21 03:39 - sbin/nvmecontrol/modules/samsung ✓
 
 **Directory:** `sbin/nvmecontrol/modules/samsung`
