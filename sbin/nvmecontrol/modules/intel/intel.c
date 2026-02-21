@@ -57,22 +57,22 @@ print_intel_temp_stats(const struct nvme_controller_data *cdata __unused, void *
 {
 	struct intel_log_temp_stats	*temp = buf;
 
-	printf("Intel Temperature Log\n");
+	printf("Intel Temperature Log:\n");
 	printf("=====================\n");
 
 	printf("Current:                        ");
 	print_temp_C(letoh(temp->current));
-	printf("Overtemp Last Flags             %#jx\n",
+	printf("Overtemp Last Flags:            %#jx\n",
 	    (uintmax_t)letoh(temp->overtemp_flag_last));
-	printf("Overtemp Lifetime Flags         %#jx\n",
+	printf("Overtemp Lifetime Flags:        %#jx\n",
 	    (uintmax_t)letoh(temp->overtemp_flag_life));
-	printf("Max Temperature                 ");
+	printf("Max Temperature:                ");
 	print_temp_C(letoh(temp->max_temp));
-	printf("Min Temperature                 ");
+	printf("Min Temperature:                ");
 	print_temp_C(letoh(temp->min_temp));
-	printf("Max Operating Temperature       ");
+	printf("Max Operating Temperature:      ");
 	print_temp_C(letoh(temp->max_oper_temp));
-	printf("Min Operating Temperature       ");
+	printf("Min Operating Temperature:      ");
 	print_temp_C(letoh(temp->min_oper_temp));
 	printf("Estimated Temperature Offset:   %ju C/K\n",
 	    (uintmax_t)letoh(temp->est_offset));

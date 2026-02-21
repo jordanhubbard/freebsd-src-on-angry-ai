@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 03:08 - sbin/nvmecontrol/modules/intel ✓
+
+**Directory:** `sbin/nvmecontrol/modules/intel`
+
+**Summary:** [ai-code-reviewer] intel: Update temperature log output formatting
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/nvmecontrol/modules/intel/intel.c
+
+---
+
 ## 2026-02-21 02:38 - sbin/nvmecontrol/modules ✓
 
 **Directory:** `sbin/nvmecontrol/modules`
