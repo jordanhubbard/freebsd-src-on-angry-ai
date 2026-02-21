@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 10:53 - sbin/reboot ✓
+
+**Directory:** `sbin/reboot`
+
+**Summary:** [ai-code-reviewer] reboot: Mark as under review
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-21 10:49 - sbin/rcorder ✓
 
 **Directory:** `sbin/rcorder`
