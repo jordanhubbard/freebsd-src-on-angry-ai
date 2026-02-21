@@ -108,11 +108,15 @@ main(int argc, char *argv[])
 		switch (opt) {
 #ifdef INET
 		case '4':
-			goto ping4;
+			optreset = 1;
+			optind = 1;
+			return ping(argc, argv);
 #endif
 #ifdef INET6
 		case '6':
-			goto ping6;
+			optreset = 1;
+			optind = 1;
+			return ping6(argc, argv);
 #endif
 		case 'S':
 			/*
@@ -120,12 +124,18 @@ main(int argc, char *argv[])
 			 * force use of the corresponding version.
 			 */
 #ifdef INET
-			if (inet_pton(AF_INET, optarg, &a) == 1)
-				goto ping4;
+			if (inet_pton(AF_INET, optarg, &a) == 1) {
+				optreset = 1;
+				optind = 1;
+				return ping(argc, argv);
+			}
 #endif
 #ifdef INET6
-			if (inet_pton(AF_INET6, optarg, &a6) == 1)
-				goto ping6;
+			if (inet_pton(AF_INET6, optarg, &a6) == 1) {
+				optreset = 1;
+				optind = 1;
+				return ping6(argc, argv);
+			}
 #endif
 			break;
 		default:

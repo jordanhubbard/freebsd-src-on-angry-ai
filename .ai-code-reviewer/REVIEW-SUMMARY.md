@@ -6,6 +6,19 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 09:22 - sbin/ping ✓
+
+**Directory:** `sbin/ping`
+
+**Summary:** [ai-code-reviewer] ping: Reset options parsing for IPv4 and IPv6
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/ping/main.c
+  - sbin/ping/main.h
+
+---
+
 ## 2026-02-21 09:02 - sbin/pflowctl ✓
 
 **Directory:** `sbin/pflowctl`
