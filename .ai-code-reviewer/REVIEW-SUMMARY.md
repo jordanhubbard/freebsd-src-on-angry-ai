@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 06:02 - sbin/nvmecontrol/tests ✓
+
+**Directory:** `sbin/nvmecontrol/tests`
+
+**Summary:** [ai-code-reviewer] tests: Improve device existence checks in basic.sh
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/nvmecontrol/tests/basic.sh
+
+---
+
 ## 2026-02-21 05:11 - sbin/nvmecontrol/modules/wdc ✓
 
 **Directory:** `sbin/nvmecontrol/modules/wdc`

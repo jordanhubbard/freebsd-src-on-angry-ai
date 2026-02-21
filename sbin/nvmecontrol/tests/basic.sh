@@ -157,12 +157,13 @@ logpage_head()
 }
 logpage_body()
 {
-	if [ -c "${TEST_DEV_PATH}" ] ; then
-		atf_check -o not-empty -e empty nvmecontrol logpage -p 1 ${TEST_DEV}
-	else
-		atf_check -s not-exit:0 -o empty -e not-empty nvmecontrol logpage -p 1 ${TEST_DEV}
+	if [ ! -c "${TEST_DEV_PATH}" ]; then
+		echo "Device ${TEST_DEV_PATH} does not exist or is not a character device."
+		exit 1
 	fi
-	atf_check -s not-exit:0 -o ignore -e match:"${INV_OPT_MSG}" nvmecontrol logpage -p 1 ${INV_OPT} ${TEST_DEV}
+
+	atf_check -o not-empty -e empty nvmecontrol logpage -p 1 "${TEST_DEV}"
+	atf_check -s not-exit:0 -o ignore -e match:"${INV_OPT_MSG}" nvmecontrol logpage -p 1 "${INV_OPT}" "${TEST_DEV}"
 }
 
 atf_test_case nsid
@@ -173,12 +174,13 @@ nsid_head()
 }
 nsid_body()
 {
-	if [ -c "${TEST_DEV_PATH}" ] ; then
-		atf_check -o not-empty -e empty nvmecontrol nsid ${TEST_DEV}
-	else
-		atf_check -s not-exit:0 -o empty -e not-empty nvmecontrol nsid ${TEST_DEV}
+	if [ ! -c "${TEST_DEV_PATH}" ]; then
+		echo "Device ${TEST_DEV_PATH} does not exist or is not a character device."
+		exit 1
 	fi
-	atf_check -s not-exit:0 -o ignore -e match:"${INV_OPT_MSG}" nvmecontrol nsid ${INV_OPT} ${TEST_DEV}
+
+	atf_check -o not-empty -e empty nvmecontrol nsid "${TEST_DEV}"
+	atf_check -s not-exit:0 -o ignore -e match:"${INV_OPT_MSG}" nvmecontrol nsid "${INV_OPT}" "${TEST_DEV}"
 }
 
 atf_test_case power
@@ -189,12 +191,13 @@ power_head()
 }
 power_body()
 {
-	if [ -c "${TEST_DEV_PATH}" ] ; then
-		atf_check -o not-empty -e empty nvmecontrol power ${TEST_DEV}
-	else
-		atf_check -s not-exit:0 -o empty -e not-empty nvmecontrol power ${TEST_DEV}
+	if [ ! -c "${TEST_DEV_PATH}" ]; then
+		echo "Device ${TEST_DEV_PATH} does not exist or is not a character device."
+		exit 1
 	fi
-	atf_check -s not-exit:0 -o ignore -e match:"${INV_OPT_MSG}" nvmecontrol power ${INV_OPT} ${TEST_DEV}
+
+	atf_check -o not-empty -e empty nvmecontrol power "${TEST_DEV}"
+	atf_check -s not-exit:0 -o ignore -e match:"${INV_OPT_MSG}" nvmecontrol power "${INV_OPT}" "${TEST_DEV}"
 }
 
 atf_test_case reset
