@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-20 22:39 - sbin/mount_nfs ✓
+
+**Directory:** `sbin/mount_nfs`
+
+**Summary:** [ai-code-reviewer] mount_nfs: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-20 22:33 - sbin/mount_msdosfs ✓
 
 **Directory:** `sbin/mount_msdosfs`
