@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 03:39 - sbin/nvmecontrol/modules/samsung ✓
+
+**Directory:** `sbin/nvmecontrol/modules/samsung`
+
+**Summary:** [ai-code-reviewer] samsung: Reorder struct fields for consistency
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/nvmecontrol/modules/samsung/samsung.c
+
+---
+
 ## 2026-02-21 03:25 - sbin/nvmecontrol/modules/micron ✓
 
 **Directory:** `sbin/nvmecontrol/modules/micron`

@@ -43,23 +43,23 @@
 
 struct samsung_log_extended_smart
 {
-	uint8_t		kv[256];/* Key-Value pair */
-	uint32_t	lwaf;	/* Lifetime Write Amplification */
-	uint32_t	thwaf;	/* Trailing Hour Write Amplification Factor */
 	uint64_t	luw[2];	/* Lifetime User Writes */
 	uint64_t	lnw[2];	/* Lifetime NAND Writes */
 	uint64_t	lur[2];	/* Lifetime User Reads */
-	uint32_t	lrbc;	/* Lifetime Retired Block Count */
-	uint16_t	ct;	/* Current Temperature */
-	uint16_t	ch;	/* Capacitor Health */
-	uint32_t	luurb;	/* Lifetime Unused Reserved Block */
 	uint64_t	rrc;	/* Read Reclaim Count */
 	uint64_t	lueccc;	/* Lifetime Uncorrectable ECC count */
-	uint32_t	lurb;	/* Lifetime Used Reserved Block */
 	uint64_t	poh[2];	/* Power on Hours */
 	uint64_t	npoc[2];/* Normal Power Off Count */
 	uint64_t	spoc[2];/* Sudden Power Off Count */
+	uint32_t	lwaf;	/* Lifetime Write Amplification */
+	uint32_t	thwaf;	/* Trailing Hour Write Amplification Factor */
+	uint32_t	lrbc;	/* Lifetime Retired Block Count */
+	uint32_t	luurb;	/* Lifetime Unused Reserved Block */
+	uint32_t	lurb;	/* Lifetime Used Reserved Block */
 	uint32_t	pi;	/* Performance Indicator */
+	uint16_t	ct;	/* Current Temperature */
+	uint16_t	ch;	/* Capacitor Health */
+	uint8_t		kv[256]; /* Key-Value pair */
 } __packed;
 
 static void
