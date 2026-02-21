@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-20 22:56
+Generated: 2026-02-20 23:01
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-20 22:56
 
 ## Progress
 - Total directories: 8264
-- Completed: 145 (1%)
+- Completed: 146 (1%)
 - Skipped: 10
-- Remaining: 8109
+- Remaining: 8108
 
 ## Current Position
-CURRENT POSITION: `sbin/natd`
+CURRENT POSITION: `sbin/newfs`
 
 ## bin/ (72/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/natd`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (73/127 done)
+## sbin/ (74/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
@@ -180,7 +180,7 @@ CURRENT POSITION: `sbin/natd`
 - [x] `sbin/mount_nullfs` (1 .c, 0 .h, 129 lines) - 2026-02-20 - Fixed by session 20260220_202627
 - [x] `sbin/mount_udf` (1 .c, 0 .h, 166 lines) - 2026-02-20 - Fixed by session 20260220_202627
 - [x] `sbin/mount_unionfs` (1 .c, 0 .h, 181 lines) - 2026-02-20 - Fixed by session 20260220_202627
-- [ ] `sbin/natd` (2 .c, 1 .h, 2197 lines)
+- [x] `sbin/natd` (2 .c, 1 .h, 2197 lines) - 2026-02-20 - Fixed by session 20260220_202627
 - [ ] `sbin/newfs` (2 .c, 1 .h, 1858 lines)
 - [ ] `sbin/newfs_msdos` (2 .c, 1 .h, 1452 lines)
 - [ ] `sbin/newfs_msdos/tests` (0 .c, 0 .h, 0 lines)

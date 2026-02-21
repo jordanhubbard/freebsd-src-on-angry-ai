@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-20 23:01 - sbin/natd ✓
+
+**Directory:** `sbin/natd`
+
+**Summary:** [ai-code-reviewer] natd: Update review status to in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-20 22:56 - sbin/mount_unionfs ✓
 
 **Directory:** `sbin/mount_unionfs`
