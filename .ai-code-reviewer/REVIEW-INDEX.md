@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-21 21:49
+Generated: 2026-02-21 21:52
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-21 21:49
 
 ## Progress
 - Total directories: 8264
-- Completed: 171 (2%)
+- Completed: 172 (2%)
 - Skipped: 15
-- Remaining: 8078
+- Remaining: 8077
 
 ## Current Position
-CURRENT POSITION: `sbin/rtsol`
+CURRENT POSITION: `sbin/savecore`
 
 ## bin/ (72/74 done)
 
@@ -97,7 +97,7 @@ CURRENT POSITION: `sbin/rtsol`
 - [x] `bin/timeout/tests` (0 .c, 0 .h, 0 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `bin/uuidgen` (1 .c, 0 .h, 202 lines) - 2026-02-16 - Fixed by session 20260216_121349
 
-## sbin/ (99/127 done)
+## sbin/ (100/127 done)
 
 - [x] `sbin/adjkerntz` (1 .c, 1 .h, 401 lines) - 2026-02-16 - Fixed by session 20260216_121349
 - [x] `sbin/bectl` (3 .c, 1 .h, 1575 lines) - 2026-02-16 - Fixed by session 20260216_121349
@@ -211,7 +211,7 @@ CURRENT POSITION: `sbin/rtsol`
 - [x] `sbin/route/tests` (0 .c, 0 .h, 0 lines) - 2026-02-21 - Fixed by session 20260221_122408
 - [-] `sbin/routed` (9 .c, 3 .h, 11217 lines) - Auto-skipped after 3 retries
 - [x] `sbin/routed/rtquery` (1 .c, 0 .h, 900 lines) - 2026-02-21 - Fixed by session 20260221_214609
-- [ ] `sbin/rtsol` (0 .c, 0 .h, 0 lines)
+- [x] `sbin/rtsol` (0 .c, 0 .h, 0 lines) - 2026-02-21 - Fixed by session 20260221_214609
 - [ ] `sbin/savecore` (1 .c, 0 .h, 1579 lines)
 - [ ] `sbin/savecore/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `sbin/setkey` (3 .c, 1 .h, 1392 lines)
