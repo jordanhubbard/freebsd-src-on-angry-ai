@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 03:12 - usr.bin/bluetooth/rfcomm_sppd ✓
+
+**Directory:** `usr.bin/bluetooth/rfcomm_sppd`
+
+**Summary:** [ai-code-reviewer] rfcomm_sppd: Update review status
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-22 03:07 - usr.bin/bluetooth/btsockstat ✓
 
 **Directory:** `usr.bin/bluetooth/btsockstat`

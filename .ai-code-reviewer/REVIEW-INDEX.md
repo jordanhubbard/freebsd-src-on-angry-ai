@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-22 03:07
+Generated: 2026-02-22 03:12
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-22 03:07
 
 ## Progress
 - Total directories: 8264
-- Completed: 194 (2%)
+- Completed: 195 (2%)
 - Skipped: 29
-- Remaining: 8041
+- Remaining: 8040
 
 ## Current Position
-CURRENT POSITION: `usr.bin/bluetooth/rfcomm_sppd`
+CURRENT POSITION: `usr.bin/bmake`
 
 ## bin/ (72/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/bluetooth/rfcomm_sppd`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-21 - Fixed by session 20260221_233206
 
-## usr.bin/ (16/505 done)
+## usr.bin/ (17/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-21 - Fixed by session 20260221_233206
@@ -251,7 +251,7 @@ CURRENT POSITION: `usr.bin/bluetooth/rfcomm_sppd`
 - [x] `usr.bin/bluetooth` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_024720
 - [x] `usr.bin/bluetooth/bthost` (1 .c, 0 .h, 144 lines) - 2026-02-22 - Fixed by session 20260222_025645
 - [x] `usr.bin/bluetooth/btsockstat` (1 .c, 0 .h, 641 lines) - 2026-02-22 - Fixed by session 20260222_025645
-- [ ] `usr.bin/bluetooth/rfcomm_sppd` (2 .c, 0 .h, 728 lines)
+- [x] `usr.bin/bluetooth/rfcomm_sppd` (2 .c, 0 .h, 728 lines) - 2026-02-22 - Fixed by session 20260222_025645
 - [ ] `usr.bin/bmake` (0 .c, 1 .h, 449 lines)
 - [ ] `usr.bin/bmake/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bmake/tests/archives` (0 .c, 0 .h, 0 lines)
