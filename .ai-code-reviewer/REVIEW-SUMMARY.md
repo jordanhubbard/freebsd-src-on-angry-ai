@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 03:54 - usr.bin/bmake/tests/basic/t3 ✓
+
+**Directory:** `usr.bin/bmake/tests/basic/t3`
+
+**Summary:** [ai-code-reviewer] t3: Update test status in REVIEW-INDEX.md
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - usr.bin/bmake/tests/basic/t3/Makefile
+
+---
+
 ## 2026-02-22 03:51 - usr.bin/bmake/tests/basic/t2 ✓
 
 **Directory:** `usr.bin/bmake/tests/basic/t2`
