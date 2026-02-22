@@ -8,7 +8,7 @@ ARG_MAX_HALF=$((ARG_MAX / 2))
 apply 'echo %1 %1 %1' $(jot $ARG_MAX_HALF 1 1 | tr -d '\n') 2>&1
 
 if [ $? -eq 0 ]; then
-	return 1
+	exit 1
 else
-	return 0
+	exit 0
 fi

@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 23:52 - usr.bin/apply/tests ✓
+
+**Directory:** `usr.bin/apply/tests`
+
+**Summary:** [ai-code-reviewer] tests: Correct exit usage in regress.01.sh
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - usr.bin/apply/tests/regress.01.sh
+
+---
+
 ## 2026-02-21 23:49 - usr.bin/apply ✓
 
 **Directory:** `usr.bin/apply`
