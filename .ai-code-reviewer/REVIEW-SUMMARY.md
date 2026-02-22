@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 21:49 - sbin/routed/rtquery ✓
+
+**Directory:** `sbin/routed/rtquery`
+
+**Summary:** [ai-code-reviewer] rtquery: Update review status and skip parent directory
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-21 12:29 - sbin/route/tests ✓
 
 **Directory:** `sbin/route/tests`
