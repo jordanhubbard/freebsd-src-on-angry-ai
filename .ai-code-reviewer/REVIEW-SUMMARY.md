@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 01:42 - usr.bin/awk/tests/bugs-fixed ✓
+
+**Directory:** `usr.bin/awk/tests/bugs-fixed`
+
+**Summary:** [ai-code-reviewer] bugs-fixed: Mark directory as in-progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-22 01:38 - usr.bin/backlight ✓
 
 **Directory:** `usr.bin/backlight`
