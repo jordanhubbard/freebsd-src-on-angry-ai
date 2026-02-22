@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-22 04:12
+Generated: 2026-02-22 04:15
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-22 04:12
 
 ## Progress
 - Total directories: 8264
-- Completed: 211 (2%)
+- Completed: 212 (2%)
 - Skipped: 29
-- Remaining: 8024
+- Remaining: 8023
 
 ## Current Position
-CURRENT POSITION: `usr.bin/bmake/tests/shell`
+CURRENT POSITION: `usr.bin/bmake/tests/shell/builtin`
 
 ## bin/ (72/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/bmake/tests/shell`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-21 - Fixed by session 20260221_233206
 
-## usr.bin/ (33/505 done)
+## usr.bin/ (34/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-21 - Fixed by session 20260221_233206
@@ -268,7 +268,7 @@ CURRENT POSITION: `usr.bin/bmake/tests/shell`
 - [x] `usr.bin/bmake/tests/execution/empty` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_034051
 - [x] `usr.bin/bmake/tests/execution/joberr` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_034051
 - [x] `usr.bin/bmake/tests/execution/plus` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_034051
-- [ ] `usr.bin/bmake/tests/shell` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/bmake/tests/shell` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_034051
 - [ ] `usr.bin/bmake/tests/shell/builtin` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bmake/tests/shell/meta` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bmake/tests/shell/path` (0 .c, 0 .h, 0 lines)
