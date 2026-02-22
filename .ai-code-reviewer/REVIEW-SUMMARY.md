@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 22:35 - sbin/swapon ✓
+
+**Directory:** `sbin/swapon`
+
+**Summary:** [ai-code-reviewer] swapon: Update review status and skip setkey/shutdown
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-21 22:07 - sbin/savecore/tests ✓
 
 **Directory:** `sbin/savecore/tests`
