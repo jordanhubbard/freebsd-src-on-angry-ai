@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 03:07 - usr.bin/bluetooth/btsockstat ✓
+
+**Directory:** `usr.bin/bluetooth/btsockstat`
+
+**Summary:** [ai-code-reviewer] btsockstat: Mark review in progress
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-22 03:03 - usr.bin/bluetooth/bthost ✓
 
 **Directory:** `usr.bin/bluetooth/bthost`
