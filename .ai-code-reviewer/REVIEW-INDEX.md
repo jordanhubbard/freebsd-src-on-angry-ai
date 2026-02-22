@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-22 03:24
+Generated: 2026-02-22 03:28
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-22 03:24
 
 ## Progress
 - Total directories: 8264
-- Completed: 198 (2%)
+- Completed: 199 (2%)
 - Skipped: 29
-- Remaining: 8037
+- Remaining: 8036
 
 ## Current Position
-CURRENT POSITION: `usr.bin/bmake/tests/archives/fmt_44bsd`
+CURRENT POSITION: `usr.bin/bmake/tests/archives/fmt_44bsd_mod`
 
 ## bin/ (72/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/bmake/tests/archives/fmt_44bsd`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-21 - Fixed by session 20260221_233206
 
-## usr.bin/ (20/505 done)
+## usr.bin/ (21/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-21 - Fixed by session 20260221_233206
@@ -255,7 +255,7 @@ CURRENT POSITION: `usr.bin/bmake/tests/archives/fmt_44bsd`
 - [x] `usr.bin/bmake` (0 .c, 1 .h, 449 lines) - 2026-02-22 - Fixed by session 20260222_025645
 - [x] `usr.bin/bmake/tests` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_025645
 - [x] `usr.bin/bmake/tests/archives` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_025645
-- [ ] `usr.bin/bmake/tests/archives/fmt_44bsd` (0 .c, 0 .h, 0 lines)
+- [x] `usr.bin/bmake/tests/archives/fmt_44bsd` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_025645
 - [ ] `usr.bin/bmake/tests/archives/fmt_44bsd_mod` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bmake/tests/archives/fmt_oldbsd` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bmake/tests/basic` (0 .c, 0 .h, 0 lines)
