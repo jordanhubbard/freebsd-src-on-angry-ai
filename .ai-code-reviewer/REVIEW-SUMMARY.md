@@ -6,6 +6,30 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 01:56 - sbin/mount ✓
+
+**Directory:** `sbin/mount`
+
+**Summary:** [ai-code-reviewer] mount: Improve error handling for fstype/malloc
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - .ai-code-reviewer/REVIEW-SUMMARY.md
+
+---
+
+## 2026-02-22 01:53 - sbin/mount ✓
+
+**Directory:** `sbin/mount`
+
+**Summary:** [ai-code-reviewer] mount: Improve error handling for fstype and malloc
+
+**Files fixed:**
+  - sbin/mount/vfslist.c
+  - sbin/mount/mount_fs.c
+
+---
+
 ## 2026-02-22 01:42 - usr.bin/awk/tests/bugs-fixed ✓
 
 **Directory:** `usr.bin/awk/tests/bugs-fixed`
