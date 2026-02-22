@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 03:37 - usr.bin/bmake/tests/basic ✓
+
+**Directory:** `usr.bin/bmake/tests/basic`
+
+**Summary:** [ai-code-reviewer] basic: Update review status indicator
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-22 03:34 - usr.bin/bmake/tests/archives/fmt_oldbsd ✓
 
 **Directory:** `usr.bin/bmake/tests/archives/fmt_oldbsd`
