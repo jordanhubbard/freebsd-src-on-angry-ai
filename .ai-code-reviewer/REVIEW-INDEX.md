@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-22 01:56
+Generated: 2026-02-22 01:59
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -14,11 +14,11 @@ Generated: 2026-02-22 01:56
 ## Progress
 - Total directories: 8264
 - Completed: 184 (2%)
-- Skipped: 28
-- Remaining: 8052
+- Skipped: 29
+- Remaining: 8051
 
 ## Current Position
-CURRENT POSITION: `usr.bin/awk/tests/netbsd`
+CURRENT POSITION: `usr.bin/banner`
 
 ## bin/ (72/74 done)
 
@@ -239,7 +239,7 @@ CURRENT POSITION: `usr.bin/awk/tests/netbsd`
 - [-] `usr.bin/awk` (0 .c, 0 .h, 0 lines) - Auto-skipped after 3 retries
 - [-] `usr.bin/awk/tests` (0 .c, 0 .h, 0 lines) - Auto-skipped after 3 retries
 - [x] `usr.bin/awk/tests/bugs-fixed` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_013518
-- [ ] `usr.bin/awk/tests/netbsd` (0 .c, 0 .h, 0 lines)
+- [-] `usr.bin/awk/tests/netbsd` (0 .c, 0 .h, 0 lines) - Auto-skipped after 3 retries
 - [x] `usr.bin/backlight` (1 .c, 0 .h, 224 lines) - 2026-02-22 - Fixed by session 20260222_013518
 - [ ] `usr.bin/banner` (1 .c, 0 .h, 1168 lines)
 - [ ] `usr.bin/basename` (1 .c, 0 .h, 134 lines)
