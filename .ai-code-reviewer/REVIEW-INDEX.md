@@ -3,7 +3,7 @@
 This file tracks review progress across the source tree.
 **DO NOT EDIT MANUALLY** - Updated automatically by the review tool.
 
-Generated: 2026-02-22 02:15
+Generated: 2026-02-22 02:18
 
 ## Status Legend
 - `[ ]` Pending - needs review
@@ -13,12 +13,12 @@ Generated: 2026-02-22 02:15
 
 ## Progress
 - Total directories: 8264
-- Completed: 188 (2%)
+- Completed: 189 (2%)
 - Skipped: 29
-- Remaining: 8047
+- Remaining: 8046
 
 ## Current Position
-CURRENT POSITION: `usr.bin/biff`
+CURRENT POSITION: `usr.bin/bintrans`
 
 ## bin/ (72/74 done)
 
@@ -227,7 +227,7 @@ CURRENT POSITION: `usr.bin/biff`
 - [x] `sbin/veriexec` (1 .c, 1 .h, 358 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `sbin/zfsbootcfg` (1 .c, 0 .h, 285 lines) - 2026-02-21 - Fixed by session 20260221_233206
 
-## usr.bin/ (10/505 done)
+## usr.bin/ (11/505 done)
 
 - [x] `usr.bin/addr2line` (0 .c, 0 .h, 0 lines) - 2026-02-21 - Fixed by session 20260221_233206
 - [x] `usr.bin/apply` (1 .c, 0 .h, 247 lines) - 2026-02-21 - Fixed by session 20260221_233206
@@ -245,7 +245,7 @@ CURRENT POSITION: `usr.bin/biff`
 - [x] `usr.bin/basename` (1 .c, 0 .h, 134 lines) - 2026-02-22 - Fixed by session 20260222_014919
 - [x] `usr.bin/basename/tests` (0 .c, 0 .h, 0 lines) - 2026-02-22 - Fixed by session 20260222_014919
 - [x] `usr.bin/beep` (1 .c, 0 .h, 280 lines) - 2026-02-22 - Fixed by session 20260222_014919
-- [ ] `usr.bin/biff` (1 .c, 0 .h, 100 lines)
+- [x] `usr.bin/biff` (1 .c, 0 .h, 100 lines) - 2026-02-22 - Fixed by session 20260222_014919
 - [ ] `usr.bin/bintrans` (4 .c, 0 .h, 1144 lines)
 - [ ] `usr.bin/bintrans/tests` (0 .c, 0 .h, 0 lines)
 - [ ] `usr.bin/bluetooth` (0 .c, 0 .h, 0 lines)
