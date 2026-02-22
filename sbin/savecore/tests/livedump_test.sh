@@ -41,7 +41,7 @@ __EOF__
 	    kgdb -q ${kernel} ./livecore.0 < ./script.gdb
 
 	# Get rid of gunk printed by kgdb.
-	sed -i '' -n -e 's/^(kgdb) //' -e '/^Id Refs /,$p' out
+	sed -i.bak -n -e 's/^(kgdb) //' -e '/^Id Refs /,$p' out
 
 	# The output of kgdb should match the output of kldstat.
 	atf_check -o save:kldstat kldstat

@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-21 22:07 - sbin/savecore/tests ✓
+
+**Directory:** `sbin/savecore/tests`
+
+**Summary:** [ai-code-reviewer] tests: Update livedump_test.sh to handle sed backup
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - sbin/savecore/tests/livedump_test.sh
+
+---
+
 ## 2026-02-21 21:52 - sbin/rtsol ✓
 
 **Directory:** `sbin/rtsol`
