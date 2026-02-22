@@ -6,6 +6,17 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 06:07 - sbin/mount ✓
+
+**Directory:** `sbin/mount`
+
+**Summary:** [ai-code-reviewer] mount: Update review index for mount directory
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+
+---
+
 ## 2026-02-22 04:15 - usr.bin/bmake/tests/shell ✓
 
 **Directory:** `usr.bin/bmake/tests/shell`
