@@ -118,6 +118,8 @@ main(int argc, char *argv[])
 		case 'h':
 			usage();
 			break;
+		default:
+			usage();
 		}
 	}
 
@@ -152,8 +154,7 @@ main(int argc, char *argv[])
 	}
 
 	if ((fd = open(device_name, O_RDWR)) == -1)
-		errx(1, "cannot open %s: %s",
-		    device_name, strerror(errno));
+		err(1, "cannot open %s", device_name);
 
 	if (caph_limit_stdio() < 0)
 		errx(1, "can't limit stdio rights");
@@ -197,12 +198,17 @@ main(int argc, char *argv[])
 		if (ioctl(fd, BACKLIGHTGETSTATUS, &props) == -1)
 			errx(1, "Cannot query the backlight device");
 		percent = percent == -1 ? 10 : percent;
-		percent = action == BACKLIGHT_INCR ? percent : -percent;
-		props.brightness += percent;
-		if ((int)props.brightness < 0)
-			props.brightness = 0;
-		if (props.brightness > 100)
-			props.brightness = 100;
+		if (action == BACKLIGHT_DECR) {
+			if ((uint32_t)percent > props.brightness)
+				props.brightness = 0;
+			else
+				props.brightness -= percent;
+		} else {
+			if (props.brightness + percent > 100)
+				props.brightness = 100;
+			else
+				props.brightness += percent;
+		}
 		if (ioctl(fd, BACKLIGHTUPDATESTATUS, &props) == -1)
 			errx(1, "Cannot update the backlight device");
 		break;

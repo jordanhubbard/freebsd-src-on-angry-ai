@@ -6,6 +6,18 @@
 **Mission:** Find and fix code that would fail peer review, break builds, or embarrass the project
 
 ---
+## 2026-02-22 01:38 - usr.bin/backlight ✓
+
+**Directory:** `usr.bin/backlight`
+
+**Summary:** [ai-code-reviewer] backlight: Code review fixes
+
+**Files fixed:**
+  - .ai-code-reviewer/REVIEW-INDEX.md
+  - usr.bin/backlight/backlight.c
+
+---
+
 ## 2026-02-22 00:31 - usr.bin/at ✓
 
 **Directory:** `usr.bin/at`
