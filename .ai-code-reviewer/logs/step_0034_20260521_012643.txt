@@ -1,0 +1,23 @@
+=== STEP 34 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/flua/libfreebsd/sys/linker/Makefile:
+PROGRESS:
+📁 Directory: libexec/flua/libfreebsd/sys/linker
+   Files: 0/3
+📄 File: libexec/flua/libfreebsd/sys/linker/Makefile
+
+```
+SHLIB_NAME=	linker.so
+
+MAN=	freebsd.sys.linker.3lua
+
+.include "Makefile.inc"
+.include <bsd.lib.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE libexec/flua/libfreebsd/sys/linker/Makefile.inc

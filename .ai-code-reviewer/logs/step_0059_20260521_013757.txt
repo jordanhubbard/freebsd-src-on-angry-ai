@@ -1,0 +1,39 @@
+=== STEP 59 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/flua/libfreebsd/sys/linker/src/lib.rs
+Scope: libexec/flua/libfreebsd/sys/linker
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The build keeps failing silently. Let me try a completely standalone Makefile approach:
+
+ACTION: EDIT_FILE libexec/flua/libfreebsd/sys/linker/Makefile
+OLD:
+<<<
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all:
+	@echo "Building linker.so (Rust)"
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all:
+	@echo "Building linker.so (Rust)"
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.end.mk>
+>>>

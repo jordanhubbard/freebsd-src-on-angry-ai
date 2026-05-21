@@ -1,0 +1,15 @@
+=== STEP 36 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*bootstrap.h*':
+```
+./stand/common/bootstrap.h
+./libexec/flua/bootstrap.h
+```
+
+--- RESPONSE ---
+
+
+Let me check the FLUA bootstrap infrastructure:
+
+ACTION: READ_FILE libexec/flua/bootstrap.h

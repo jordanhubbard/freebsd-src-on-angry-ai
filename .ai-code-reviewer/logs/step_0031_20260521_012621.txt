@@ -1,0 +1,73 @@
+=== STEP 31 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/dirname is now complete.
+Changes committed and pushed.
+Post-success metadata commit: eebc61715758.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE libexec/flua/libfreebsd/sys/linker
+
+FINAL DIFFS:
+--- usr.bin/dirname/Makefile ---
+```diff
+diff --git a/usr.bin/dirname/Makefile b/usr.bin/dirname/Makefile
+index cc7d1a1b16b..40e840b42e1 100644
+--- a/usr.bin/dirname/Makefile
++++ b/usr.bin/dirname/Makefile
+@@ -1,9 +1,31 @@
+-.include <src.opts.mk>
+-
+ PROG=	dirname
+-MAN=
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
++
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+ 
+ HAS_TESTS=
+-SUBDIR.${MK_TESTS}+= tests
++SUBDIR.${MK_TESTS:Uyes}+= tests
++
++# Build the Rust binary
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	@${ECHO} "=== Building ${PROG} (Rust) ==="
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
++	    --target-dir ${CARGO_TARGET_DIR}
++	@${ECHO} "=== Done building ${PROG} (Rust) ==="
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
++	    ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
+ 
+-.include <bsd.prog.mk>
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/dirname/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/dirname/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `usr.bin/dirname`. Moving to the next unit.
+
+ACTION: SET_SCOPE libexec/flua/libfreebsd/sys/linker

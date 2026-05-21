@@ -1,0 +1,49 @@
+=== STEP 46 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/flua/libfreebsd/sys/linker/src/lib.rs
+Scope: libexec/flua/libfreebsd/sys/linker
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE libexec/flua/libfreebsd/sys/linker/src/lib.rs
+OLD:
+<<<
+#[used]
+#[no_mangle]
+static FREEBSD_SYS_LINKER_REG: [luaL_Reg; 3] = [
+    luaL_Reg {
+        name: b"kldload\0".as_ptr() as *const c_char,
+        func: lua_kldload,
+    },
+    luaL_Reg {
+        name: b"kldunload\0".as_ptr() as *const c_char,
+        func: lua_kldunload,
+    },
+    luaL_Reg {
+        name: std::ptr::null(),
+        func: std::ptr::null::<()>() as lua_CFunction,
+    },
+];
+>>>
+NEW:
+<<<
+#[used]
+#[no_mangle]
+static FREEBSD_SYS_LINKER_REG: [luaL_Reg; 3] = [
+    luaL_Reg {
+        name: b"kldload\0".as_ptr() as *const c_char,
+        func: Some(lua_kldload),
+    },
+    luaL_Reg {
+        name: b"kldunload\0".as_ptr() as *const c_char,
+        func: Some(lua_kldunload),
+    },
+    luaL_Reg {
+        name: std::ptr::null(),
+        func: None,
+    },
+];
+>>>

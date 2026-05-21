@@ -1,0 +1,125 @@
+=== STEP 41 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/flua/libfreebsd/sys/linker/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE libexec/flua/libfreebsd/sys/linker/src/lib.rs
+CONTENT:
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2024, Baptiste Daroussin <bapt@FreeBSD.org>
+ */
+
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int};
+
+extern "C" {
+    type lua_State;
+
+    fn lua_pushnil(L: *mut lua_State);
+    fn lua_pushstring(L: *mut lua_State, s: *const c_char);
+    fn lua_pushinteger(L: *mut lua_State, n: i64);
+    fn luaL_checkstring(L: *mut lua_State, idx: c_int) -> *const c_char;
+    fn lua_isinteger(L: *mut lua_State, idx: c_int) -> c_int;
+    fn lua_tointeger(L: *mut lua_State, idx: c_int) -> i64;
+    fn luaL_newlib(L: *mut lua_State, l: *const luaL_Reg);
+
+    fn kldload(file: *const c_char) -> c_int;
+    fn kldunload(fileid: c_int) -> c_int;
+    fn kldfind(file: *const c_char) -> c_int;
+}
+
+#[repr(C)]
+struct luaL_Reg {
+    name: *const c_char,
+    func: lua_CFunction,
+}
+
+type lua_CFunction = extern "C" fn(*mut lua_State) -> c_int;
+
+extern "C" fn lua_kldload(L: *mut lua_State) -> c_int {
+    let name = unsafe { luaL_checkstring(L, 1) };
+    let ret = unsafe { kldload(name) };
+    if ret == -1 {
+        unsafe {
+            let err = std::io::Error::last_os_error();
+            let errstr = CString::new(err.to_string()).unwrap();
+            lua_pushnil(L);
+            lua_pushstring(L, errstr.as_ptr());
+            lua_pushinteger(L, err.raw_os_error().unwrap_or(0) as i64);
+        }
+        return 3;
+    }
+    unsafe {
+        lua_pushinteger(L, ret as i64);
+    }
+    1
+}
+
+extern "C" fn lua_kldunload(L: *mut lua_State) -> c_int {
+    let fileid;
+    if unsafe { lua_isinteger(L, 1) } != 0 {
+        fileid = unsafe { lua_tointeger(L, 1) } as c_int;
+    } else {
+        let name = unsafe { luaL_checkstring(L, 1) };
+        fileid = unsafe { kldfind(name) };
+    }
+    if fileid == -1 {
+        unsafe {
+            let err = std::io::Error::last_os_error();
+            let errstr = CString::new(err.to_string()).unwrap();
+            lua_pushnil(L);
+            lua_pushstring(L, errstr.as_ptr());
+            lua_pushinteger(L, err.raw_os_error().unwrap_or(0) as i64);
+        }
+        return 3;
+    }
+    let ret = unsafe { kldunload(fileid) };
+    unsafe {
+        lua_pushinteger(L, ret as i64);
+    }
+    if ret == -1 {
+        unsafe {
+            let err = std::io::Error::last_os_error();
+            let errstr = CString::new(err.to_string()).unwrap();
+            lua_pushnil(L);
+            lua_pushstring(L, errstr.as_ptr());
+            lua_pushinteger(L, err.raw_os_error().unwrap_or(0) as i64);
+        }
+        return 3;
+    }
+    unsafe {
+        lua_pushinteger(L, 0);
+    }
+    1
+}
+
+#[used]
+#[no_mangle]
+static FREEBSD_SYS_LINKER_REG: [luaL_Reg; 3] = [
+    luaL_Reg {
+        name: b"kldload\0".as_ptr() as *const c_char,
+        func: Some(lua_kldload),
+    },
+    luaL_Reg {
+        name: b"kldunload\0".as_ptr() as *const c_char,
+        func: Some(lua_kldunload),
+    },
+    luaL_Reg {
+        name: std::ptr::null(),
+        func: None,
+    },
+];
+
+#[no_mangle]
+pub extern "C" fn luaopen_freebsd_sys_linker(L: *mut lua_State) -> c_int {
+    unsafe {
+        luaL_newlib(L, FREEBSD_SYS_LINKER_REG.as_ptr());
+    }
+    1
+}
