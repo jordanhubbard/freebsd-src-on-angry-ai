@@ -3,6 +3,26 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-21 13:15 - bin/sleep ✓
+
+**Directory:** `bin/sleep`
+
+**Summary:** [ai-code-reviewer] sleep: Rewrite utility from C to Rust
+
+**Files changed:**
+  - bin/sleep/Makefile
+  - bin/sleep/Makefile.depend
+  - bin/sleep/sleep.c
+  - bin/sleep/Cargo.toml
+  - bin/sleep/sleep
+  - bin/sleep/sleep.1.gz
+  - bin/sleep/sleep.debug
+  - bin/sleep/sleep.full
+  - bin/sleep/src/main.rs
+  - bin/sleep/tests/Kyuafile
+
+---
+
 ## 2026-05-21 13:05 - bin/echo ✓
 
 **Directory:** `bin/echo`
