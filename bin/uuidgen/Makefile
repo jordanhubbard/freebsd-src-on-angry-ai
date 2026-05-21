@@ -1,4 +1,27 @@
-PACKAGE=	runtime
 PROG=	uuidgen
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
 
-.include <bsd.prog.mk>
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+SRCDIR?=	${.CURDIR}
+
+.PHONY: all ${PROG}
+
+${PROG}: ${SRCDIR}/Cargo.toml ${SRCDIR}/src/main.rs
+	${CARGO} build --manifest-path ${SRCDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}

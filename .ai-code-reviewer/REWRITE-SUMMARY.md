@@ -3,6 +3,23 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-21 13:24 - bin/uuidgen ✓
+
+**Directory:** `bin/uuidgen`
+
+**Summary:** [ai-code-reviewer] uuidgen: Rewrite implementation in Rust
+
+**Files changed:**
+  - bin/uuidgen/Makefile
+  - bin/uuidgen/Cargo.toml
+  - bin/uuidgen/src/main.rs
+  - bin/uuidgen/uuidgen
+  - bin/uuidgen/uuidgen.1.gz
+  - bin/uuidgen/uuidgen.debug
+  - bin/uuidgen/uuidgen.full
+
+---
+
 ## 2026-05-21 13:15 - bin/sleep ✓
 
 **Directory:** `bin/sleep`

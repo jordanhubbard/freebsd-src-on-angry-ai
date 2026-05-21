@@ -1,0 +1,13 @@
+[package]
+name = "uuidgen"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "uuidgen"
+path = "src/main.rs"
+
+[dependencies]
+
+[profile.dev]
+lto = false
