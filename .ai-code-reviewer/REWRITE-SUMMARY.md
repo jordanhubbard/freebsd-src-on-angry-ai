@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-21 10:55 - bin/sync ✓
+
+**Directory:** `bin/sync`
+
+**Summary:** [ai-code-reviewer] sync: Rewrite implementation in Rust
+
+**Files changed:**
+  - bin/sync/Makefile
+  - bin/sync/Cargo.toml
+  - bin/sync/src/main.rs
+
+---
+
 ## 2026-05-21 10:52 - bin/domainname ✓
 
 **Directory:** `bin/domainname`

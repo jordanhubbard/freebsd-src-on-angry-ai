@@ -1,0 +1,63 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory bin/domainname is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 9d103ba6c8a6.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE bin/sync
+
+FINAL DIFFS:
+--- bin/domainname/Makefile ---
+```diff
+diff --git a/bin/domainname/Makefile b/bin/domainname/Makefile
+index e0fdcfe8bbf..f4fa0b17423 100644
+--- a/bin/domainname/Makefile
++++ b/bin/domainname/Makefile
+@@ -1,4 +1,23 @@
+-PACKAGE=yp
+ PROG=	domainname
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- bin/domainname/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- bin/domainname/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `bin/domainname`. Moving to the next unit: `bin/sync`.
+
+ACTION: SET_SCOPE bin/sync
