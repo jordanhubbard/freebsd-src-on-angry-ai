@@ -3,6 +3,20 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-21 13:05 - bin/echo ✓
+
+**Directory:** `bin/echo`
+
+**Summary:** [ai-code-reviewer] echo: Rewrite C implementation to Rust
+
+**Files changed:**
+  - bin/echo/Makefile
+  - bin/echo/Makefile.depend
+  - bin/echo/Cargo.toml
+  - bin/echo/src/main.rs
+
+---
+
 ## 2026-05-21 13:01 - bin/pwd ✓
 
 **Directory:** `bin/pwd`
