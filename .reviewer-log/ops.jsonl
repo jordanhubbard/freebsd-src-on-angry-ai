@@ -63,3 +63,5 @@
 {"event_type":"directory_start","timestamp":"2026-05-21T10:59:03.180325","session_id":"20260521_104504","directory":"bin/nproc","message":"Started reviewing bin/nproc"}
 {"event_type":"build_start","timestamp":"2026-05-21T11:01:46.071743","session_id":"20260521_104504","directory":"bin/nproc","message":"Build started: make -C bin/nproc"}
 {"event_type":"build_success","timestamp":"2026-05-21T11:01:48.769241","session_id":"20260521_104504","directory":"bin/nproc","duration_seconds":1.498795986175537,"warning_count":0}
+{"event_type":"commit_success","timestamp":"2026-05-21T11:03:55.128508","session_id":"20260521_104504","directory":"bin/nproc","files_changed":["bin/nproc/Makefile","bin/nproc/Cargo.toml","bin/nproc/src/main.rs"],"commit_hash":"480aecec88d8"}
+{"event_type":"directory_complete","timestamp":"2026-05-21T11:03:56.868079","session_id":"20260521_104504","directory":"bin/nproc","message":"Completed bin/nproc","duration_seconds":293.687667,"files_changed":["bin/nproc/Makefile","bin/nproc/Cargo.toml","bin/nproc/src/main.rs"],"commit_hash":"480aecec88d8"}
