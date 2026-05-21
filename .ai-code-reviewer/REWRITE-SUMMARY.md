@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-21 11:03 - bin/nproc ✓
+
+**Directory:** `bin/nproc`
+
+**Summary:** [ai-code-reviewer] nproc: Migrate Makefile to Rust/Cargo build
+
+**Files changed:**
+  - bin/nproc/Makefile
+  - bin/nproc/Cargo.toml
+  - bin/nproc/src/main.rs
+
+---
+
 ## 2026-05-21 10:58 - bin/realpath ✓
 
 **Directory:** `bin/realpath`
