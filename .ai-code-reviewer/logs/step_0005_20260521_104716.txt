@@ -1,0 +1,20 @@
+=== STEP 5 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE bin/domainname/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "domainname"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "domainname"
+path = "src/main.rs"
+<<<

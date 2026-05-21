@@ -1,0 +1,48 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/domainname/Makefile:
+PROGRESS:
+📁 Directory: bin/domainname
+   Files: 0/3
+📄 File: bin/domainname/Makefile
+✏️  Edits: 2 files modified
+
+```
+PACKAGE=yp
+PROG=	domainname
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+I'll use WRITE_FILE to replace the entire Makefile since it's small and being completely rewritten.
+
+ACTION: WRITE_FILE bin/domainname/Makefile
+CONTENT:
+PROG=	domainname
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
