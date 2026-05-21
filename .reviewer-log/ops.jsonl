@@ -68,3 +68,5 @@
 {"event_type":"directory_start","timestamp":"2026-05-21T11:04:10.227142","session_id":"20260521_104504","directory":"bin/hostname","message":"Started reviewing bin/hostname"}
 {"event_type":"build_start","timestamp":"2026-05-21T11:05:19.596577","session_id":"20260521_104504","directory":"bin/hostname","message":"Build started: make -C bin/hostname"}
 {"event_type":"build_success","timestamp":"2026-05-21T11:05:22.833911","session_id":"20260521_104504","directory":"bin/hostname","duration_seconds":1.9213478565216064,"warning_count":0}
+{"event_type":"commit_success","timestamp":"2026-05-21T11:07:09.084852","session_id":"20260521_104504","directory":"bin/hostname","files_changed":["bin/hostname/Makefile","bin/hostname/Cargo.toml","bin/hostname/src/main.rs"],"commit_hash":"684ce3770e31"}
+{"event_type":"directory_complete","timestamp":"2026-05-21T11:07:10.893746","session_id":"20260521_104504","directory":"bin/hostname","message":"Completed bin/hostname","duration_seconds":180.666458,"files_changed":["bin/hostname/Makefile","bin/hostname/Cargo.toml","bin/hostname/src/main.rs"],"commit_hash":"684ce3770e31"}
