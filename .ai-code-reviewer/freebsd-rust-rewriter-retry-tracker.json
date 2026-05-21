@@ -1,1 +1,6 @@
-{}
+{
+  "bin/hostname": {
+    "attempts": 1,
+    "last_attempt": "2026-05-21T11:04:10.229040"
+  }
+}

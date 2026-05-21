@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-21 11:06 - bin/hostname ✓
+
+**Directory:** `bin/hostname`
+
+**Summary:** [ai-code-reviewer] hostname: Rewrite C implementation to Rust
+
+**Files changed:**
+  - bin/hostname/Makefile
+  - bin/hostname/Cargo.toml
+  - bin/hostname/src/main.rs
+
+---
+
 ## 2026-05-21 11:03 - bin/nproc ✓
 
 **Directory:** `bin/nproc`

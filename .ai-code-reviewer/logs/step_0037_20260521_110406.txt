@@ -1,0 +1,61 @@
+=== STEP 37 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory bin/nproc is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 65303000a613.
+
+Completed directories so far: 4
+NEXT: Use SET_SCOPE bin/hostname
+
+FINAL DIFFS:
+--- bin/nproc/Makefile ---
+```diff
+diff --git a/bin/nproc/Makefile b/bin/nproc/Makefile
+index 2a57083b9d4..8851030abfb 100644
+--- a/bin/nproc/Makefile
++++ b/bin/nproc/Makefile
+@@ -1,4 +1,23 @@
+-PACKAGE=runtime
+ PROG=	nproc
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- bin/nproc/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- bin/nproc/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/hostname
