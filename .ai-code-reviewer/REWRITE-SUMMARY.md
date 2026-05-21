@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-21 10:58 - bin/realpath ✓
+
+**Directory:** `bin/realpath`
+
+**Summary:** [ai-code-reviewer] realpath: Rewrite C implementation in Rust
+
+**Files changed:**
+  - bin/realpath/Makefile
+  - bin/realpath/Cargo.toml
+  - bin/realpath/src/main.rs
+
+---
+
 ## 2026-05-21 10:55 - bin/sync ✓
 
 **Directory:** `bin/sync`

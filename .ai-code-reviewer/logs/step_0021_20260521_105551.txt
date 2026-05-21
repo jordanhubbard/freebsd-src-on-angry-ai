@@ -1,0 +1,64 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory bin/sync is now complete.
+Changes committed and pushed.
+Post-success metadata commit: f18a22193fe5.
+
+Completed directories so far: 2
+NEXT: Use SET_SCOPE bin/realpath
+
+FINAL DIFFS:
+--- bin/sync/Makefile ---
+```diff
+diff --git a/bin/sync/Makefile b/bin/sync/Makefile
+index dd3460afcbe..76d8519b0be 100644
+--- a/bin/sync/Makefile
++++ b/bin/sync/Makefile
+@@ -1,5 +1,23 @@
+-PACKAGE=runtime
+ PROG=	sync
+-MAN=	sync.8
++BINDIR?=	/usr/sbin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- bin/sync/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- bin/sync/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `bin/sync`. Moving to the next unit: `bin/realpath`.
+
+ACTION: SET_SCOPE bin/realpath
