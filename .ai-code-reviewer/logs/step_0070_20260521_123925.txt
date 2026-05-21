@@ -1,0 +1,11 @@
+=== STEP 70 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'Makefile.depend'
+
+--- RESPONSE ---
+
+
+Let me check if `bsd.init.mk` provides the basic variables:
+
+ACTION: READ_FILE share/mk/bsd.init.mk

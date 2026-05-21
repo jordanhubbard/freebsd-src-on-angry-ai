@@ -1,0 +1,68 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE bin/rmdir/src/main.rs
+OLD:
+<<<
+use std::env;
+use std::ffi::CString;
+use std::io::Write;
+use std::os::raw::c_char;
+use std::process;
+
+extern "C" {
+    fn rmdir(path: *const c_char) -> c_char;
+}
+
+fn usage() -> ! {
+    let msg = b"usage: rmdir [-pv] directory ...\n";
+    let _ = std::io::stderr().write_all(msg);
+    process::exit(2);
+}
+
+fn warn(path: &str) {
+    let stderr = std::io::stderr();
+    let mut handle = stderr.lock();
+    let _ = write!(handle, "rmdir: ");
+    let _ = write!(handle, "{}: ", path);
+    // Use libc strerror via std::io::Error
+    let _ = writeln!(handle, "Directory not empty");
+}
+>>>
+NEW:
+<<<
+use std::env;
+use std::ffi::CString;
+use std::io::Write;
+use std::os::raw::{c_char, c_int};
+use std::process;
+
+extern "C" {
+    fn rmdir(path: *const c_char) -> c_int;
+    fn __error_errno() -> *mut c_int;
+    fn strerror(errnum: c_int) -> *const c_char;
+}
+
+fn usage() -> ! {
+    let msg = b"usage: rmdir [-pv] directory ...\n";
+    let _ = std::io::stderr().write_all(msg);
+    process::exit(2);
+}
+
+fn get_errno() -> c_int {
+    unsafe { *(*__error_errno()) }
+}
+
+fn warn(path: &str) {
+    let stderr = std::io::stderr();
+    let mut handle = stderr.lock();
+    let err = get_errno();
+    let err_str = unsafe { std::ffi::CStr::from_ptr(strerror(err)).to_string_lossy() };
+    let _ = write!(handle, "rmdir: {}: {}: {}\n", "rmdir", path, err_str);
+}
+>>>

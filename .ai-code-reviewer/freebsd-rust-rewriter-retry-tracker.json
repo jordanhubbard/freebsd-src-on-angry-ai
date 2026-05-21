@@ -1,1 +1,10 @@
-{}
+{
+  "bin/pwd": {
+    "attempts": 1,
+    "last_attempt": "2026-05-21T12:54:21.343108"
+  },
+  "bin/rmdir": {
+    "attempts": 1,
+    "last_attempt": "2026-05-21T12:22:31.654359"
+  }
+}

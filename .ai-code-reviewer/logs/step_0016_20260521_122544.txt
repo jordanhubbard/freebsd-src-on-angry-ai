@@ -1,0 +1,13 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/rmdir/Makefile
+Scope: bin/rmdir
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Let me build the unit now:
+
+ACTION: BUILD

@@ -1,0 +1,51 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/rmdir/src/main.rs
+Scope: bin/rmdir
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me update the Makefile to build the Rust version:
+
+ACTION: EDIT_FILE bin/rmdir/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PACKAGE=runtime
+PROG=	rmdir
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PACKAGE=runtime
+PROG=	rmdir
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o root -g wheel -m 555 ${PROG} ${DESTDIR}/usr/bin/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>
