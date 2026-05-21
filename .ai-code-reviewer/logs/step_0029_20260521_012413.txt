@@ -1,0 +1,76 @@
+=== STEP 29 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/dirname/Makefile
+Scope: usr.bin/dirname
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The build keeps failing silently. Let me try a completely standalone Makefile approach that doesn't depend on `bsd.prog.mk`:
+
+ACTION: EDIT_FILE usr.bin/dirname/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	dirname
+MAN=
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Rust-only build: no C sources
+SRCS=
+
+# Override the ${PROG} target to build via cargo instead of cc
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	@${ECHO} "=== Building ${PROG} (Rust) ==="
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+	@${ECHO} "=== Done building ${PROG} (Rust) ==="
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+CLEANFILES+=	${CARGO_TARGET_DIR}
+
+# Include bsd.prog.mk for install/debug/depend infrastructure
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	dirname
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS:Uyes}+= tests
+
+# Build the Rust binary
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	@${ECHO} "=== Building ${PROG} (Rust) ==="
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+	@${ECHO} "=== Done building ${PROG} (Rust) ==="
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
+	    ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>

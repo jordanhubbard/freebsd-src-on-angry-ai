@@ -1,0 +1,63 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/dirname/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to update the Makefile to build the Rust replacement. Let me update it to use cargo:
+
+ACTION: EDIT_FILE usr.bin/dirname/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	dirname
+MAN=
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	dirname
+MAN=
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+SRCS=
+
+CARGO_TARGET_DIR=	${.OBJDIR}/cargo-target
+
+.cargo:
+	@${ECHO} "=== Building ${PROG} (Rust) ==="
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} ${CARGOFLAGS}
+	@${ECHO} "=== Done building ${PROG} (Rust) ==="
+
+CLEANFILES+=	${CARGO_TARGET_DIR}
+
+.if !defined(NOMAN)
+MAN=
+.endif
+
+.include <bsd.prog.mk>
+
+.PHONY: cargo-build
+
+all: cargo-build
+
+cargo-build: .cargo
+	@true
+
+install: cargo-build
+	${INSTALL} -s -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
+	    ${CARGO_TARGET_DIR}/debug/${PROG} ${DESTDIR}${BINDIR}/${PROG}
+>>>

@@ -1,0 +1,67 @@
+=== STEP 28 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/dirname/Makefile
+Scope: usr.bin/dirname
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The build keeps failing silently. The issue is that `bsd.prog.mk` still tries to compile C sources. Let me take a different approach - write a standalone Makefile that doesn't rely on `bsd.prog.mk`:
+
+ACTION: EDIT_FILE usr.bin/dirname/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	dirname
+MAN=
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Define ${PROG} target BEFORE bsd.prog.mk so it skips C compilation
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	@${ECHO} "=== Building ${PROG} (Rust) ==="
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+	@${ECHO} "=== Done building ${PROG} (Rust) ==="
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+CLEANFILES+=	${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	dirname
+MAN=
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Rust-only build: no C sources
+SRCS=
+
+# Override the ${PROG} target to build via cargo instead of cc
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	@${ECHO} "=== Building ${PROG} (Rust) ==="
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+	@${ECHO} "=== Done building ${PROG} (Rust) ==="
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+CLEANFILES+=	${CARGO_TARGET_DIR}
+
+# Include bsd.prog.mk for install/debug/depend infrastructure
+.include <bsd.prog.mk>
+>>>

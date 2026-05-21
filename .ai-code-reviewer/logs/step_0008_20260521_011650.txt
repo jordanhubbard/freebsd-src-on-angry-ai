@@ -1,0 +1,11 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*.rs'
+
+--- RESPONSE ---
+
+
+Let me check if Rust toolchain is available on the system.
+
+ACTION: LIST_DIR usr.bin/dirname
