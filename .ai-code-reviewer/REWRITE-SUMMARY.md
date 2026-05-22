@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 00:52 - usr.bin/locate/bigram ✓
+
+**Directory:** `usr.bin/locate/bigram`
+
+**Summary:** [ai-code-reviewer] bigram: Rewrite locate bigram indexer to Rust
+
+**Files changed:**
+  - usr.bin/locate/bigram/Makefile
+  - usr.bin/locate/bigram/Makefile.depend
+  - usr.bin/locate/bigram/Cargo.lock
+  - usr.bin/locate/bigram/Cargo.toml
+  - usr.bin/locate/bigram/cargo-target/.rustc_info.json
+  - usr.bin/locate/bigram/cargo-target/CACHEDIR.TAG
+  - usr.bin/locate/bigram/cargo-target/debug/.cargo-lock
+  - usr.bin/locate/bigram/cargo-target/debug/.fingerprint/locate-bigram-6a092c2bf9500828/invoked.timestamp
+  - usr.bin/locate/bigram/cargo-target/debug/.fingerprint/locate-bigram-6a092c2bf9500828/output-bin-locate_bigram
+  - usr.bin/locate/bigram/cargo-target/debug/deps/locate_bigram-6a092c2bf9500828.d
+  - ... and 3 more
+
+---
+
 ## 2026-05-22 00:10 - usr.bin/tty ✓
 
 **Directory:** `usr.bin/tty`

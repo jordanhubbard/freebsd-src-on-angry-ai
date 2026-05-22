@@ -1,0 +1,190 @@
+=== STEP 143 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/uname/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/uname/src/main.rs
+CONTENT:
+<<<
+use std::env;
+use std::io::{self, Write};
+use std::process;
+
+extern "C" {
+    fn sysctl(
+        name: *const std::os::raw::c_int,
+        namelen: std::os::raw::c_uint,
+        oldp: *mut std::os::raw::c_void,
+        oldlenp: *mut usize,
+        newp: *const std::os::raw::c_void,
+        newlen: usize,
+    ) -> std::os::raw::c_int;
+    fn sysctlbyname(
+        name: *const std::os::raw::c_char,
+        oldp: *mut std::os::raw::c_void,
+        oldlenp: *mut usize,
+        newp: *const std::os::raw::c_void,
+        newlen: usize,
+    ) -> std::os::raw::c_int;
+}
+
+const CTL_KERN: std::os::raw::c_int = 1;
+const KERN_OSTYPE: std::os::raw::c_int = 2;
+const KERN_HOSTNAME: std::os::raw::c_int = 10;
+const KERN_OSRELEASE: std::os::raw::c_int = 2;
+const KERN_VERSION: std::os::raw::c_int = 82;
+const CTL_HW: std::os::raw::c_int = 6;
+const HW_MACHINE: std::os::raw::c_int = 1;
+const HW_MACHINE_ARCH: std::os::raw::c_int = 8;
+
+const MFLAG: u32 = 0x01;
+const NFLAG: u32 = 0x02;
+const PFLAG: u32 = 0x04;
+const RFLAG: u32 = 0x08;
+const SFLAG: u32 = 0x10;
+const VFLAG: u32 = 0x20;
+const IFLAG: u32 = 0x40;
+const UFLAG: u32 = 0x80;
+const KFLAG: u32 = 0x100;
+const BFLAG: u32 = 0x200;
+
+fn sysctl2(mib0: i32, mib1: i32) -> String {
+    let mut buf = [0u8; 1024];
+    let mut len = buf.len();
+    let mib: [i32; 2] = [mib0, mib1];
+    if unsafe { sysctl(mib.as_ptr(), 2, buf.as_mut_ptr() as *mut _, &mut len, std::ptr::null(), 0) } == -1 {
+        eprintln!("sysctl: error");
+        process::exit(1);
+    }
+    String::from_utf8_lossy(&buf[..len]).to_string()
+}
+
+fn sysctlbyname(name: &str) -> String {
+    let mut buf = [0u8; 1024];
+    let mut len = buf.len();
+    let cname = std::ffi::CString::new(name).unwrap();
+    if unsafe { sysctlbyname(cname.as_ptr(), buf.as_mut_ptr() as *mut _, &mut len, std::ptr::null(), 0) } == -1 {
+        eprintln!("sysctlbyname: error");
+        process::exit(1);
+    }
+    String::from_utf8_lossy(&buf[..len]).to_string()
+}
+
+fn get_sysname() -> String {
+    env::var("UNAME_s").unwrap_or_else(|_| sysctl2(CTL_KERN, KERN_OSTYPE))
+}
+
+fn get_hostname() -> String {
+    env::var("UNAME_n").unwrap_or_else(|_| sysctl2(CTL_KERN, KERN_HOSTNAME))
+}
+
+fn get_release() -> String {
+    env::var("UNAME_r").unwrap_or_else(|_| sysctl2(CTL_KERN, KERN_OSRELEASE))
+}
+
+fn get_version() -> String {
+    env::var("UNAME_v").unwrap_or_else(|_| {
+        let mut s = sysctl2(CTL_KERN, KERN_VERSION);
+        let mut n = s.len();
+        for p in s.as_bytes_mut() {
+            if *p == b'\n' || *p == b'\t' {
+                if n > 1 {
+                    *p = b' ';
+                } else {
+                    *p = b'\0';
+                }
+            }
+            n -= 1;
+        }
+        s
+    })
+}
+
+fn get_platform() -> String {
+    env::var("UNAME_m").unwrap_or_else(|_| sysctl2(CTL_HW, HW_MACHINE))
+}
+
+fn get_arch() -> String {
+    env::var("UNAME_p").unwrap_or_else(|_| sysctl2(CTL_HW, HW_MACHINE_ARCH))
+}
+
+fn get_ident() -> String {
+    env::var("UNAME_i").unwrap_or_else(|_| sysctlbyname("kern.ident"))
+}
+
+fn get_buildid() -> String {
+    env::var("UNAME_b").unwrap_or_else(|_| sysctlbyname("kern.build_id"))
+}
+
+fn get_uservers() -> String {
+    env::var("UNAME_U").unwrap_or_else(|| "0".to_string())
+}
+
+fn get_kernvers() -> String {
+    env::var("UNAME_K").unwrap_or_else(|| "0".to_string())
+}
+
+fn usage() -> ! {
+    eprintln!("usage: uname [-abiKmnoprsUv]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut flags: u32 = 0;
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-a" => flags |= MFLAG | NFLAG | RFLAG | SFLAG | VFLAG,
+            "-b" => flags |= BFLAG,
+            "-i" => flags |= IFLAG,
+            "-K" => flags |= KFLAG,
+            "-m" => flags |= MFLAG,
+            "-n" => flags |= NFLAG,
+            "-p" => flags |= PFLAG,
+            "-r" => flags |= RFLAG,
+            "-s" | "-o" => flags |= SFLAG,
+            "-U" => flags |= UFLAG,
+            "-v" => flags |= VFLAG,
+            _ => usage(),
+        }
+        i += 1;
+    }
+
+    if flags == 0 {
+        flags |= SFLAG;
+    }
+
+    let mut space = false;
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+
+    let print_val = |val: &str| {
+        if space {
+            let _ = out.write_all(b" ");
+        } else {
+            space = true;
+        }
+        let _ = out.write_all(val.as_bytes());
+    };
+
+    if flags & SFLAG == SFLAG { print_val(&get_sysname()); }
+    if flags & NFLAG == NFLAG { print_val(&get_hostname()); }
+    if flags & RFLAG == RFLAG { print_val(&get_release()); }
+    if flags & VFLAG == VFLAG { print_val(&get_version()); }
+    if flags & MFLAG == MFLAG { print_val(&get_platform()); }
+    if flags & PFLAG == PFLAG { print_val(&get_arch()); }
+    if flags & IFLAG == IFLAG { print_val(&get_ident()); }
+    if flags & KFLAG == KFLAG { print_val(&get_kernvers()); }
+    if flags & UFLAG == UFLAG { print_val(&get_uservers()); }
+    if flags & BFLAG == BFLAG { print_val(&get_buildid()); }
+
+    let _ = out.write_all(b"\n");
+}
+
+>>>

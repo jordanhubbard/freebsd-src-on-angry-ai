@@ -1,0 +1,23 @@
+=== STEP 217 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/locate/bigram/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/locate/bigram
+   Files: 0/2
+📄 File: usr.bin/locate/bigram/Makefile
+
+```
+PROG=	locate.bigram
+MAN=
+BINDIR=	${LIBEXECDIR}
+CFLAGS+= -I${.CURDIR}/../locate
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE usr.bin/locate/locate/locate.h

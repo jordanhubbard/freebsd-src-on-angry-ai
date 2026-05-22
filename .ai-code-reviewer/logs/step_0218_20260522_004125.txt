@@ -1,0 +1,9 @@
+=== STEP 218 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/locate/locate/locate.h*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE locate.h

@@ -1,0 +1,14 @@
+=== STEP 219 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*locate.h*':
+```
+./contrib/llvm-project/libcxx/include/__new/allocate.h
+./contrib/llvm-project/clang/include/clang/AST/ASTContextAllocate.h
+./usr.bin/locate/locate/locate.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/locate/locate/locate.h

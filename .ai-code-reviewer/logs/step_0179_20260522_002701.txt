@@ -1,0 +1,64 @@
+=== STEP 179 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tty/Cargo.toml:
+PROGRESS:
+📁 Directory: usr.bin/uname
+   Files: 0/3
+📄 File: usr.bin/tty/Cargo.toml
+✏️  Edits: 3 files modified
+
+```
+[package]
+name = "tty"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tty"
+path = "src/main.rs"
+
+[dependencies]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+```
+
+--- RESPONSE ---
+
+
+Let me try adding a .PHONY target to the Makefile:
+
+ACTION: WRITE_FILE usr.bin/uname/Makefile
+CONTENT:
+<<<
+PROG=	uname
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+.PHONY: all clean install
+
+>>>
