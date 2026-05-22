@@ -1,0 +1,11 @@
+=== STEP 318 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*lib/librpcsvc*'
+
+--- RESPONSE ---
+
+
+Let me check what RPC-related libraries exist in the tree.
+
+ACTION: LIST_DIR lib

@@ -127,6 +127,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-21T20:49:38.897585"
   },
+  "usr.bin/from": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T08:39:51.016727"
+  },
   "usr.bin/head": {
     "attempts": 1,
     "last_attempt": "2026-05-22T01:11:10.571575"
@@ -158,6 +162,10 @@
   "usr.bin/printf": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:33.681504"
+  },
+  "usr.bin/rwall": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T07:44:34.194698"
   },
   "usr.bin/tail": {
     "attempts": 1,

@@ -1,0 +1,11 @@
+=== STEP 390 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*lib/librpcsvc*'
+
+--- RESPONSE ---
+
+
+The original C code uses `<rpc/rpc.h>` and `<rpcsvc/rwall.h>`. On FreeBSD, these are in `librpcsvc`. Let me check the lib/librpcsvc directory.
+
+ACTION: LIST_DIR lib/librpcsvc

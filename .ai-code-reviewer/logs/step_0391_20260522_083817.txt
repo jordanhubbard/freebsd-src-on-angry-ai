@@ -1,0 +1,28 @@
+=== STEP 391 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/librpcsvc:
+```
+Makefile
+Makefile.depend
+rnusers.c
+rstat.c
+rwall.c
+secretkey.c
+xcrypt.c
+yp_passwd.c
+yp_update.c
+```
+
+--- RESPONSE ---
+
+
+The original C code uses RPC functions from `librpcsvc`. Let me update the build.rs to properly link against it.
+
+ACTION: WRITE_FILE usr.bin/rwall/build.rs
+CONTENT:
+<<<
+fn main() {
+    println!("cargo:rustc-link-lib=rpcsvc");
+}
+>>>

@@ -1,0 +1,11 @@
+=== STEP 314 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'usr.bin/rwall'
+
+--- RESPONSE ---
+
+
+Let me check what RPC libraries exist on this system.
+
+ACTION: LIST_DIR usr.sbin/rpc.lockd

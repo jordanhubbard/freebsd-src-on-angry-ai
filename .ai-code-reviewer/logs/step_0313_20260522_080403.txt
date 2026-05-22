@@ -1,0 +1,11 @@
+=== STEP 313 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/rwall/Makefile*'
+
+--- RESPONSE ---
+
+
+The Makefile was already read. Let me check what the original FreeBSD build system links for rwall.
+
+ACTION: GREP usr.bin/rwall

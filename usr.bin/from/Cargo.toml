@@ -1,0 +1,12 @@
+[package]
+name = "from"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[build-dependencies]
+
+[[bin]]
+name = "from"
+path = "src/main.rs"

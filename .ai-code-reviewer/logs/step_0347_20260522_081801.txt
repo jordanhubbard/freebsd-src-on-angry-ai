@@ -1,0 +1,18 @@
+=== STEP 347 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwall/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/rwall/src/main.rs
+OLD:
+<<<
+    let fd = unsafe { libc_mkstemp(tmp_c.as_ptr() as *mut i8) };
+>>>
+NEW:
+<<<
+    let fd = unsafe { mkstemp(tmp_c.as_ptr() as *mut i8) };
+>>>

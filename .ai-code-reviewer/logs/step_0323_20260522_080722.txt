@@ -1,0 +1,27 @@
+=== STEP 323 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwall/src/main.rs
+Scope: usr.bin/rwall
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to update the code that uses `stdin()` and `stderr()` to use the static variables instead.
+
+ACTION: EDIT_FILE usr.bin/rwall/src/main.rs
+OLD:
+<<<
+        let stdin_ptr = unsafe { stdin() };
+        let new_fp = unsafe {
+            freopen(fn_c.as_ptr(), b"r\0".as_ptr() as *const i8, stdin_ptr)
+        };
+>>>
+NEW:
+<<<
+        let stdin_ptr = unsafe { stdin };
+        let new_fp = unsafe {
+            freopen(fn_c.as_ptr(), b"r\0".as_ptr() as *const i8, stdin_ptr)
+        };
+>>>

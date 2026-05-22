@@ -1,0 +1,77 @@
+=== STEP 306 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwall/Cargo.toml:
+PROGRESS:
+📁 Directory: usr.bin/rwall
+   Files: 0/3
+📄 File: usr.bin/rwall/Cargo.toml
+✏️  Edits: 3 files modified
+
+```
+[package]
+name = "rwall"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "rwall"
+path = "src/main.rs"
+```
+
+--- RESPONSE ---
+
+
+I need to link against the RPC libraries. Let me update the extern block with link attributes.
+
+ACTION: EDIT_FILE usr.bin/rwall/src/main.rs
+OLD:
+<<<
+extern "C" {
+    fn clnt_create(
+        host: *const i8,
+        prog: u32,
+        vers: u32,
+        netid: *const i8,
+    ) -> *mut CLIENT;
+    fn clnt_call(
+        cl: *mut CLIENT,
+        procnum: u32,
+        xdr_args: xdrproc_t,
+        args_ptr: *mut c_void,
+        xdr_results: xdrproc_t,
+        results_ptr: *mut c_void,
+        timeout: timeval,
+    ) -> u32;
+    fn clnt_destroy(cl: *mut CLIENT);
+    fn clnt_spcreateerror(s: *const i8) -> *const i8;
+    fn clnt_sperror(cl: *mut CLIENT, s: *const i8) -> *const i8;
+    fn xdr_wrapstring(objpp: *mut *mut i8) -> bool;
+    fn xdr_void(dummy: *mut c_void) -> bool;
+>>>
+NEW:
+<<<
+#[link(name = "rpcsvc")]
+#[link(name = "rpc")]
+extern "C" {
+    fn clnt_create(
+        host: *const i8,
+        prog: u32,
+        vers: u32,
+        netid: *const i8,
+    ) -> *mut CLIENT;
+    fn clnt_call(
+        cl: *mut CLIENT,
+        procnum: u32,
+        xdr_args: xdrproc_t,
+        args_ptr: *mut c_void,
+        xdr_results: xdrproc_t,
+        results_ptr: *mut c_void,
+        timeout: timeval,
+    ) -> u32;
+    fn clnt_destroy(cl: *mut CLIENT);
+    fn clnt_spcreateerror(s: *const i8) -> *const i8;
+    fn clnt_sperror(cl: *mut CLIENT, s: *const i8) -> *const i8;
+    fn xdr_wrapstring(objpp: *mut *mut i8) -> bool;
+    fn xdr_void(dummy: *mut c_void) -> bool;
+>>>

@@ -1,0 +1,114 @@
+=== STEP 274 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/resizewin is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 96683d2a7453.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE usr.bin/rwall
+
+FINAL DIFFS:
+--- usr.bin/resizewin/Makefile ---
+```diff
+diff --git a/usr.bin/resizewin/Makefile b/usr.bin/resizewin/Makefile
+index edc1914e255..10ec4a261ea 100644
+--- a/usr.bin/resizewin/Makefile
++++ b/usr.bin/resizewin/Makefile
+@@ -1,4 +1,23 @@
+-PROG=		resizewin
++PROG=	resizewin
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+ 
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- usr.bin/resizewin/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/resizewin/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/resizewin/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/resizewin/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/resizewin/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/resizewin/cargo-target/debug/.fingerprint/resizewin-748958173147aec1/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/resizewin/cargo-target/debug/.fingerprint/resizewin-748958173147aec1/output-bin-resizewin ---
+```diff
+fatal: ambiguous argument 'usr.bin/resizewin/cargo-target/debug/.fingerprint/resizewin-748958173147aec1/output-bin-resizewin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/resizewin/cargo-target/debug/deps/resizewin-748958173147aec1.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/resizewin/cargo-target/debug/incremental/resizewin-3c4aihia0fh9k/s-hirkygpckn-0gki5uf-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/resizewin/cargo-target/debug/incremental/resizewin-3c4aihia0fh9k/s-hirkygpckn-0gki5uf-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/resizewin/cargo-target/debug/incremental/resizewin-3c4aihia0fh9k/s-hirkygpckn-0gki5uf.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/resizewin/cargo-target/debug/incremental/resizewin-3c4aihia0fh9k/s-hirkygpckn-0gki5uf.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/resizewin/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `usr.bin/resizewin`. Moving to the next unit: `usr.bin/rwall`.
+
+ACTION: SET_SCOPE usr.bin/rwall

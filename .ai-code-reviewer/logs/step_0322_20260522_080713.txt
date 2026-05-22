@@ -1,0 +1,438 @@
+=== STEP 322 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwall/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/rwall
+   Files: 0/3
+📄 File: usr.bin/rwall/src/main.rs
+✏️  Edits: 3 files modified
+
+```
+use std::ffi::{CStr, CString};
+use std::process;
+
+const WALLPROG: u32 = 0x20000001;
+const WALLVERS: u32 = 1;
+const WALLPROC_WALL: u32 = 1;
+const RPC_SUCCESS: u32 = 0;
+const MAXHOSTNAMELEN: usize = 256;
+const PATH_TMP: &str = "/tmp";
+
+type xdrproc_t = unsafe extern "C" fn(*mut XDR, *mut c_void) -> bool;
+
+#[repr(C)]
+struct c_void;
+
+#[repr(C)]
+struct CLIENT {
+    _private: [u8; 0],
+}
+
+#[repr(C)]
+struct XDR {
+    _private: [u8; 0],
+}
+
+#[repr(C)]
+struct timeval {
+    tv_sec: i64,
+    tv_usec: i64,
+}
+
+#[repr(C)]
+struct tm {
+    tm_sec: i32,
+    tm_min: i32,
+    tm_hour: i32,
+    tm_mday: i32,
+    tm_mon: i32,
+    tm_year: i32,
+    tm_wday: i32,
+    tm_yday: i32,
+    tm_isdst: i32,
+}
+
+#[repr(C)]
+struct FILE {
+    _private: [u8; 0],
+}
+
+#[repr(C)]
+struct stat {
+    st_size: i64,
+}
+
+#[repr(C)]
+struct passwd {
+    pw_name: *mut i8,
+}
+
+#[link(name = "rpcsvc")]
+extern "C" {
+    fn clnt_create(
+        host: *const i8,
+        prog: u32,
+        vers: u32,
+        netid: *const i8,
+    ) -> *mut CLIENT;
+    fn clnt_call(
+        cl: *mut CLIENT,
+        procnum: u32,
+        xdr_args: xdrproc_t,
+        args_ptr: *mut c_void,
+        xdr_results: xdrproc_t,
+        results_ptr: *mut c_void,
+        timeout: timeval,
+    ) -> u32;
+    fn clnt_destroy(cl: *mut CLIENT);
+    fn clnt_spcreateerror(s: *const i8) -> *const i8;
+    fn clnt_sperror(cl: *mut CLIENT, s: *const i8) -> *const i8;
+    fn xdr_wrapstring(objpp: *mut *mut i8) -> bool;
+    fn xdr_void(dummy: *mut c_void) -> bool;
+
+    fn getlogin() -> *mut i8;
+    fn gethostname(name: *mut i8, len: usize) -> i32;
+    fn time(tp: *mut i64) -> i64;
+    fn localtime(tp: *const i64) -> *mut tm;
+    fn ttyname(fd: i32) -> *mut i8;
+    fn mkstemp(template: *mut i8) -> i32;
+    fn fdopen(fd: i32, mode: *const i8) -> *mut FILE;
+    fn unlink(path: *const i8) -> i32;
+    fn fstat(fd: i32, buf: *mut stat) -> i32;
+    fn malloc(size: usize) -> *mut i8;
+    fn free(p: *mut c_void);
+    fn fread(ptr: *mut c_void, size: usize, nmemb: usize, stream: *mut FILE) -> usize;
+    fn fclose(stream: *mut FILE) -> i32;
+    fn fgets(buf: *mut i8, size: i32, stream: *mut FILE) -> *mut i8;
+    fn fputs(s: *const i8, stream: *mut FILE) -> i32;
+    fn fprintf(stream: *mut FILE, format: *const i8, ...) -> i32;
+    fn putc(c: i32, stream: *mut FILE) -> i32;
+    fn rewind(stream: *mut FILE);
+    fn freopen(filename: *const i8, mode: *const i8, stream: *mut FILE) -> *mut FILE;
+    fn stderr() -> *mut FILE;
+    fn stdin() -> *mut FILE;
+    fn getuid() -> u32;
+    fn getpwuid(uid: u32) -> *mut passwd;
+    fn close(fd: i32) -> i32;
+}
+
+fn usage() -> ! {
+    eprintln!("usage: rwall host [file]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 2 || args.len() > 3 {
+        usage();
+    }
+
+    let wallhost = &args[1];
+    let fname = if args.len() == 3 { Some(&args[2]) } else { None };
+
+    let mut mbuf = makemsg(fname.map(|s| s.as_str()));
+
+    let host_c = match CString::new(wallhost.as_bytes()) {
+        Ok(c) => c,
+        Err(_) => usage(),
+    };
+
+    let netid_c = CString::new("udp").unwrap();
+
+    let cl = unsafe {
+        clnt_create(
+            host_c.as_ptr(),
+            WALLPROG,
+            WALLVERS,
+            netid_c.as_ptr(),
+        )
+    };
+
+    if cl.is_null() {
+        let err = unsafe { clnt_spcreateerror(host_c.as_ptr()) };
+        let msg = unsafe { CStr::from_ptr(err) };
+        eprintln!("{}", msg.to_string_lossy());
+        process::exit(1);
+    }
+
+    let tv = timeval { tv_sec: 15, tv_usec: 0 };
+    let mut res: i32 = 0;
+
+    // Cast the XDR functions to xdrproc_t type, matching the C casts
+    let xdr_wrapstring_fn: xdrproc_t = unsafe {
+        std::mem::transmute(xdr_wrapstring as *const ())
+    };
+    let xdr_void_fn: xdrproc_t = unsafe {
+        std::mem::transmute(xdr_void as *const ())
+    };
+
+    let result = unsafe {
+        clnt_call(
+            cl,
+            WALLPROC_WALL,
+            xdr_wrapstring_fn,
+            &mut mbuf as *mut _ as *mut c_void,
+            xdr_void_fn,
+            &mut res as *mut _ as *mut c_void,
+            tv,
+        )
+    };
+
+    if result != RPC_SUCCESS {
+        let err = unsafe { clnt_sperror(cl, host_c.as_ptr()) };
+        let msg = unsafe { CStr::from_ptr(err) };
+        eprintln!("{}", msg.to_string_lossy());
+        unsafe { clnt_destroy(cl) };
+        process::exit(1);
+    }
+
+    unsafe {
+        clnt_destroy(cl);
+        free(mbuf as *mut c_void);
+    }
+}
+
+fn makemsg(fname: Option<&str>) -> *mut i8 {
+    let tmpname = format!("{}/wall.XXXXXX", PATH_TMP);
+    let tmp_c = match CString::new(tmpname.as_bytes()) {
+        Ok(c) => c,
+        Err(_) => process::exit(1),
+    };
+
+    let fd = unsafe { mkstemp(tmp_c.as_ptr() as *mut i8) };
+    if fd == -1 {
+        eprintln!("can't open temporary file");
+        process::exit(1);
+    }
+
+    let fp = unsafe { fdopen(fd, b"r+\0".as_ptr() as *const i8) };
+    if fp.is_null() {
+        eprintln!("can't open temporary file");
+        unsafe { close(fd) };
+        process::exit(1);
+    }
+
+    unsafe { unlink(tmp_c.as_ptr()) };
+
+    let whom = unsafe { getlogin() };
+    let whom_str: String = if whom.is_null() {
+        let pw = unsafe { getpwuid(getuid()) };
+        if pw.is_null() {
+            "???".to_string()
+        } else {
+            let name = unsafe { (*pw).pw_name };
+            unsafe { CStr::from_ptr(name) }.to_string_lossy().into_owned()
+        }
+    } else {
+        unsafe { CStr::from_ptr(whom) }.to_string_lossy().into_owned()
+    };
+
+    let mut hostname = [0i8; MAXHOSTNAMELEN];
+    unsafe { gethostname(hostname.as_mut_ptr(), hostname.len()) };
+    let hostname_str = unsafe {
+        CStr::from_ptr(hostname.as_ptr()).to_string_lossy().into_owned()
+    };
+
+    let mut now: i64 = 0;
+    unsafe { time(&mut now) };
+    let lt = unsafe { localtime(&now) };
+    let hour = unsafe { (*lt).tm_hour };
+    let min = unsafe { (*lt).tm_min };
+
+    let tty = unsafe { ttyname(2) };
+    let tty_str: String = if tty.is_null() {
+        "no tty".to_string()
+    } else {
+        unsafe { CStr::from_ptr(tty) }.to_string_lossy().into_owned()
+    };
+
+    // Convert to CStrings for fprintf %s format (need null-terminated)
+    let whom_c = CString::new(whom_str).unwrap();
+    let hostname_c = CString::new(hostname_str).unwrap();
+    let tty_c = CString::new(tty_str).unwrap();
+
+    unsafe {
+        fprintf(
+            fp,
+            b"Remote Broadcast Message from %s@%s\n\0".as_ptr() as *const i8,
+            whom_c.as_ptr(),
+            hostname_c.as_ptr(),
+        );
+        fprintf(
+            fp,
+            b"        (%s) at %d:%02d ...\n\0".as_ptr() as *const i8,
+            tty_c.as_ptr(),
+            hour,
+            min,
+        );
+        putc(b'\n' as i32, fp);
+    }
+
+    if let Some(fn_) = fname {
+        let fn_c = match CString::new(fn_.as_bytes()) {
+            Ok(c) => c,
+            Err(_) => {
+                unsafe { fclose(fp) };
+                process::exit(1);
+            }
+        };
+        let stdin_ptr = unsafe { stdin() };
+        let new_fp = unsafe {
+            freopen(fn_c.as_ptr(), b"r\0".as_ptr() as *const i8, stdin_ptr)
+        };
+        if new_fp.is_null() {
+            eprintln!("can't read {}", fn_);
+            unsafe { fclose(fp) };
+            process::exit(1);
+        }
+    }
+
+    let mut lbuf = [0i8; 256];
+    loop {
+        let line = unsafe { fgets(lbuf.as_mut_ptr(), lbuf.len() as i32, unsafe { stdin() }) };
+        if line.is_null() {
+            break;
+        }
+        unsafe { fputs(line, fp) };
+    }
+
+    unsafe { rewind(fp) };
+
+    let mut sbuf: stat = unsafe { std::mem::zeroed() };
+    if unsafe { fstat(fd, &mut sbuf) } == -1 {
+        eprintln!("can't stat temporary file");
+        unsafe { fclose(fp) };
+        process::exit(1);
+    }
+
+    let mbufsize = sbuf.st_size as usize;
+    let mbuf = unsafe { malloc(mbufsize) };
+    if mbuf.is_null() {
+        eprintln!("out of memory");
+        unsafe { fclose(fp) };
+        process::exit(1);
+    }
+
+    let nread = unsafe { fread(mbuf as *mut c_void, 1, mbufsize, fp) };
+    if nread != mbufsize {
+        eprintln!("can't read temporary file");
+        unsafe {
+            free(mbuf as *mut c_void);
+            fclose(fp);
+        };
+        process::exit(1);
+    }
+
+    unsafe { fclose(fp) };
+    mbuf
+}
+```
+
+--- RESPONSE ---
+
+
+The issue is that `stdin` and `stderr` are C variables (not functions), and the RPC client functions are in libc on FreeBSD, not in a separate library. Let me fix the extern declarations.
+
+ACTION: EDIT_FILE usr.bin/rwall/src/main.rs
+OLD:
+<<<
+#[link(name = "rpcsvc")]
+extern "C" {
+    fn clnt_create(
+        host: *const i8,
+        prog: u32,
+        vers: u32,
+        netid: *const i8,
+    ) -> *mut CLIENT;
+    fn clnt_call(
+        cl: *mut CLIENT,
+        procnum: u32,
+        xdr_args: xdrproc_t,
+        args_ptr: *mut c_void,
+        xdr_results: xdrproc_t,
+        results_ptr: *mut c_void,
+        timeout: timeval,
+    ) -> u32;
+    fn clnt_destroy(cl: *mut CLIENT);
+    fn clnt_spcreateerror(s: *const i8) -> *const i8;
+    fn clnt_sperror(cl: *mut CLIENT, s: *const i8) -> *const i8;
+    fn xdr_wrapstring(objpp: *mut *mut i8) -> bool;
+    fn xdr_void(dummy: *mut c_void) -> bool;
+
+    fn getlogin() -> *mut i8;
+    fn gethostname(name: *mut i8, len: usize) -> i32;
+    fn time(tp: *mut i64) -> i64;
+    fn localtime(tp: *const i64) -> *mut tm;
+    fn ttyname(fd: i32) -> *mut i8;
+    fn mkstemp(template: *mut i8) -> i32;
+    fn fdopen(fd: i32, mode: *const i8) -> *mut FILE;
+    fn unlink(path: *const i8) -> i32;
+    fn fstat(fd: i32, buf: *mut stat) -> i32;
+    fn malloc(size: usize) -> *mut i8;
+    fn free(p: *mut c_void);
+    fn fread(ptr: *mut c_void, size: usize, nmemb: usize, stream: *mut FILE) -> usize;
+    fn fclose(stream: *mut FILE) -> i32;
+    fn fgets(buf: *mut i8, size: i32, stream: *mut FILE) -> *mut i8;
+    fn fputs(s: *const i8, stream: *mut FILE) -> i32;
+    fn fprintf(stream: *mut FILE, format: *const i8, ...) -> i32;
+    fn putc(c: i32, stream: *mut FILE) -> i32;
+    fn rewind(stream: *mut FILE);
+    fn freopen(filename: *const i8, mode: *const i8, stream: *mut FILE) -> *mut FILE;
+    fn stderr() -> *mut FILE;
+    fn stdin() -> *mut FILE;
+    fn getuid() -> u32;
+    fn getpwuid(uid: u32) -> *mut passwd;
+    fn close(fd: i32) -> i32;
+}
+>>>
+NEW:
+<<<
+extern "C" {
+    fn clnt_create(
+        host: *const i8,
+        prog: u32,
+        vers: u32,
+        netid: *const i8,
+    ) -> *mut CLIENT;
+    fn clnt_call(
+        cl: *mut CLIENT,
+        procnum: u32,
+        xdr_args: xdrproc_t,
+        args_ptr: *mut c_void,
+        xdr_results: xdrproc_t,
+        results_ptr: *mut c_void,
+        timeout: timeval,
+    ) -> u32;
+    fn clnt_destroy(cl: *mut CLIENT);
+    fn clnt_spcreateerror(s: *const i8) -> *const i8;
+    fn clnt_sperror(cl: *mut CLIENT, s: *const i8) -> *const i8;
+    fn xdr_wrapstring(objpp: *mut *mut i8) -> bool;
+    fn xdr_void(dummy: *mut c_void) -> bool;
+
+    fn getlogin() -> *mut i8;
+    fn gethostname(name: *mut i8, len: usize) -> i32;
+    fn time(tp: *mut i64) -> i64;
+    fn localtime(tp: *const i64) -> *mut tm;
+    fn ttyname(fd: i32) -> *mut i8;
+    fn mkstemp(template: *mut i8) -> i32;
+    fn fdopen(fd: i32, mode: *const i8) -> *mut FILE;
+    fn unlink(path: *const i8) -> i32;
+    fn fstat(fd: i32, buf: *mut stat) -> i32;
+    fn malloc(size: usize) -> *mut i8;
+    fn free(p: *mut c_void);
+    fn fread(ptr: *mut c_void, size: usize, nmemb: usize, stream: *mut FILE) -> usize;
+    fn fclose(stream: *mut FILE) -> i32;
+    fn fgets(buf: *mut i8, size: i32, stream: *mut FILE) -> *mut i8;
+    fn fputs(s: *const i8, stream: *mut FILE) -> i32;
+    fn fprintf(stream: *mut FILE, format: *const i8, ...) -> i32;
+    fn putc(c: i32, stream: *mut FILE) -> i32;
+    fn rewind(stream: *mut FILE);
+    fn freopen(filename: *const i8, mode: *const i8, stream: *mut FILE) -> *mut FILE;
+    static stdin: *mut FILE;
+    static stderr: *mut FILE;
+    fn getuid() -> u32;
+    fn getpwuid(uid: u32) -> *mut passwd;
+    fn close(fd: i32) -> i32;
+}
+>>>

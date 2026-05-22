@@ -1,0 +1,180 @@
+=== STEP 400 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/from/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me create the Rust source file for the `from` command.
+
+ACTION: WRITE_FILE usr.bin/from/src/main.rs
+CONTENT:
+<<<
+use std::env;
+use std::ffi::CString;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read};
+use std::process;
+
+const PATH_MAILDIR: &str = "/var/mail";
+
+extern "C" {
+    fn getpwuid_r(uid: u32, pwd: *mut passwd, buf: *mut u8, buflen: usize, result: *mut *mut passwd) -> i32;
+    fn getuid() -> u32;
+}
+
+#[repr(C)]
+struct passwd {
+    pw_name: *mut i8,
+    _rest: [u8; 256],
+}
+
+fn usage() -> ! {
+    eprintln!("usage: from [-c] [-f file] [-s sender] [user]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let mut count_mode = false;
+    let mut file: Option<String> = None;
+    let mut sender: Option<String> = None;
+    let mut user: Option<&str> = None;
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-c" => count_mode = true,
+            "-f" => {
+                i += 1;
+                if i >= args.len() { usage(); }
+                file = Some(args[i].clone());
+            }
+            "-s" => {
+                i += 1;
+                if i >= args.len() { usage(); }
+                sender = Some(args[i].to_lowercase());
+            }
+            _ => {
+                if user.is_none() {
+                    user = Some(args[i].as_str());
+                } else {
+                    usage();
+                }
+            }
+        }
+        i += 1;
+    }
+
+    let file = match file {
+        Some(f) => f,
+        None => {
+            if let Some(u) = user {
+                format!("{}/{}", PATH_MAILDIR, u)
+            } else if let Ok(mail) = env::var("MAIL") {
+                mail
+            } else {
+                let uid = unsafe { getuid() };
+                let mut pwd: passwd = unsafe { std::mem::zeroed() };
+                let mut buf = [0u8; 1024];
+                let mut result: *mut passwd = std::ptr::null_mut();
+                let ret = unsafe {
+                    getpwuid_r(uid, &mut pwd, buf.as_mut_ptr(), buf.len(), &mut result)
+                };
+                if ret != 0 || result.is_null() {
+                    eprintln!("no password file entry for you");
+                    process::exit(1);
+                }
+                let name = unsafe {
+                    let ptr = (*result).pw_name;
+                    std::ffi::CStr::from_ptr(ptr).to_string_lossy().into_owned()
+                };
+                format!("{}/{}", PATH_MAILDIR, name)
+            }
+        }
+    };
+
+    let reader: Box<dyn Read> = if file == "-" {
+        Box::new(io::stdin())
+    } else {
+        match File::open(&file) {
+            Ok(f) => Box::new(f),
+            Err(_) => {
+                eprintln!("can't read {}", file);
+                process::exit(1);
+            }
+        }
+    };
+
+    let buf_reader = BufReader::new(reader);
+    let sender_lower = sender.clone();
+
+    let mut count: i32 = -1;
+    let mut newline = true;
+
+    for line in buf_reader.lines() {
+        let line = match line {
+            Ok(l) => l,
+            Err(_) => break,
+        };
+
+        if line == "\n" || line.is_empty() {
+            newline = true;
+            continue;
+        }
+
+        if newline && line.starts_with("From ") {
+            let after_from = &line[5..];
+            if sender_lower.is_none() || match_sender(after_from, &sender_lower.as_ref().unwrap()) {
+                if count != -1 {
+                    count += 1;
+                } else {
+                    println!("{}", line);
+                }
+            }
+        }
+        newline = false;
+    }
+
+    if count != -1 {
+        let (verb, suffix) = if count == 1 { ("is", "") } else { ("are", "s") };
+        println!("There {} {} message{} in your incoming mailbox.", verb, count, suffix);
+    }
+}
+
+fn match_sender(line: &str, sender: &str) -> bool {
+    let sender_chars: Vec<char> = sender.chars().collect();
+    if sender_chars.is_empty() {
+        return true;
+    }
+    let first = sender_chars[0];
+
+    let mut line_chars = line.chars().peekable();
+    loop {
+        match line_chars.next() {
+            None => return false,
+            Some(ch) if ch.is_whitespace() => return false,
+            Some(ch) if ch.to_lowercase().next() == Some(first) => {
+                // Found first char match, try to match rest
+                let mut s_iter = sender_chars[1..].iter().peekable();
+                let mut l_iter = line_chars.clone();
+                let mut matched = true;
+                for &sc in sender_chars.iter().skip(1) {
+                    match l_iter.next() {
+                        None => { matched = false; break; }
+                        Some(lc) if lc.to_lowercase().next() == Some(sc) => {}
+                        _ => { matched = false; break; }
+                    }
+                }
+                if matched {
+                    return true;
+                }
+            }
+            _ => {}
+        }
+    }
+}
+>>>

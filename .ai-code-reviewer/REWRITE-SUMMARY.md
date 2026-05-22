@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 08:44 - usr.bin/from ✓
+
+**Directory:** `usr.bin/from`
+
+**Summary:** [ai-code-reviewer] from: Rewrite C implementation in Rust
+
+**Files changed:**
+  - usr.bin/from/Makefile
+  - usr.bin/from/Cargo.toml
+  - usr.bin/from/src/main.rs
+
+---
+
 ## 2026-05-22 07:43 - usr.bin/resizewin ✓
 
 **Directory:** `usr.bin/resizewin`

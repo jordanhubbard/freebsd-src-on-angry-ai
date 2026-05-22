@@ -1,0 +1,18 @@
+=== STEP 338 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwall/Cargo.toml
+Scope: usr.bin/rwall
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/rwall/build.rs
+CONTENT:
+<<<
+fn main() {
+    println!("cargo:rustc-link-lib=c");
+    println!("cargo:rustc-link-lib=rpcsvc");
+}
+>>>

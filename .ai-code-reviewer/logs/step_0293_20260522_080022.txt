@@ -1,0 +1,12 @@
+=== STEP 293 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwall/cargo-target/debug/deps:
+```
+rwall-84a248c6fa61fd59.d
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/rwall/cargo-target/debug/.fingerprint/rwall-84a248c6fa61fd59/output-bin-rwall

@@ -1,0 +1,133 @@
+=== STEP 326 ===
+
+--- REQUEST ---
+BUILD_FAILED: Build errors detected
+
+No changes were committed. Rewrite units are atomic: source, Rust artifacts, build glue, and configured contract checks must pass together before the unit can be marked complete.
+
+BUILD ERROR REPORT:
+BUILD FAILED: 2 errors, 0 warnings
+Duration: 1.0 seconds
+
+============================================================
+ERRORS (fix these first):
+============================================================
+
+[1] (linker):0: error: undefined symbol: clnt_destroy
+
+[2] (linker):0: error: undefined symbol: stdin
+
+
+NEXT STEPS:
+1. Keep the active scope.
+2. Fix the source/build integration that caused this failure.
+3. BUILD again when the complete rewrite unit is ready.
+
+
+--- RESPONSE ---
+
+
+The linker can't find `clnt_destroy` and `stdin` even though they should be in libc. Let me try explicitly linking libc and also check if the RPC functions need a different library on FreeBSD.
+
+ACTION: EDIT_FILE usr.bin/rwall/src/main.rs
+OLD:
+<<<
+extern "C" {
+    fn clnt_create(
+        host: *const i8,
+        prog: u32,
+        vers: u32,
+        netid: *const i8,
+    ) -> *mut CLIENT;
+    fn clnt_call(
+        cl: *mut CLIENT,
+        procnum: u32,
+        xdr_args: xdrproc_t,
+        args_ptr: *mut c_void,
+        xdr_results: xdrproc_t,
+        results_ptr: *mut c_void,
+        timeout: timeval,
+    ) -> u32;
+    fn clnt_destroy(cl: *mut CLIENT);
+    fn clnt_spcreateerror(s: *const i8) -> *const i8;
+    fn clnt_sperror(cl: *mut CLIENT, s: *const i8) -> *const i8;
+    fn xdr_wrapstring(objpp: *mut *mut i8) -> bool;
+    fn xdr_void(dummy: *mut c_void) -> bool;
+
+    fn getlogin() -> *mut i8;
+    fn gethostname(name: *mut i8, len: usize) -> i32;
+    fn time(tp: *mut i64) -> i64;
+    fn localtime(tp: *const i64) -> *mut tm;
+    fn ttyname(fd: i32) -> *mut i8;
+    fn mkstemp(template: *mut i8) -> i32;
+    fn fdopen(fd: i32, mode: *const i8) -> *mut FILE;
+    fn unlink(path: *const i8) -> i32;
+    fn fstat(fd: i32, buf: *mut stat) -> i32;
+    fn malloc(size: usize) -> *mut i8;
+    fn free(p: *mut c_void);
+    fn fread(ptr: *mut c_void, size: usize, nmemb: usize, stream: *mut FILE) -> usize;
+    fn fclose(stream: *mut FILE) -> i32;
+    fn fgets(buf: *mut i8, size: i32, stream: *mut FILE) -> *mut i8;
+    fn fputs(s: *const i8, stream: *mut FILE) -> i32;
+    fn fprintf(stream: *mut FILE, format: *const i8, ...) -> i32;
+    fn putc(c: i32, stream: *mut FILE) -> i32;
+    fn rewind(stream: *mut FILE);
+    fn freopen(filename: *const i8, mode: *const i8, stream: *mut FILE) -> *mut FILE;
+    static stdin: *mut FILE;
+    static stderr: *mut FILE;
+    fn getuid() -> u32;
+    fn getpwuid(uid: u32) -> *mut passwd;
+    fn close(fd: i32) -> i32;
+}
+>>>
+NEW:
+<<<
+#[link(name = "c")]
+extern "C" {
+    fn clnt_create(
+        host: *const i8,
+        prog: u32,
+        vers: u32,
+        netid: *const i8,
+    ) -> *mut CLIENT;
+    fn clnt_call(
+        cl: *mut CLIENT,
+        procnum: u32,
+        xdr_args: xdrproc_t,
+        args_ptr: *mut c_void,
+        xdr_results: xdrproc_t,
+        results_ptr: *mut c_void,
+        timeout: timeval,
+    ) -> u32;
+    fn clnt_destroy(cl: *mut CLIENT);
+    fn clnt_spcreateerror(s: *const i8) -> *const i8;
+    fn clnt_sperror(cl: *mut CLIENT, s: *const i8) -> *const i8;
+    fn xdr_wrapstring(objpp: *mut *mut i8) -> bool;
+    fn xdr_void(dummy: *mut c_void) -> bool;
+
+    fn getlogin() -> *mut i8;
+    fn gethostname(name: *mut i8, len: usize) -> i32;
+    fn time(tp: *mut i64) -> i64;
+    fn localtime(tp: *const i64) -> *mut tm;
+    fn ttyname(fd: i32) -> *mut i8;
+    fn mkstemp(template: *mut i8) -> i32;
+    fn fdopen(fd: i32, mode: *const i8) -> *mut FILE;
+    fn unlink(path: *const i8) -> i32;
+    fn fstat(fd: i32, buf: *mut stat) -> i32;
+    fn malloc(size: usize) -> *mut i8;
+    fn free(p: *mut c_void);
+    fn fread(ptr: *mut c_void, size: usize, nmemb: usize, stream: *mut FILE) -> usize;
+    fn fclose(stream: *mut FILE) -> i32;
+    fn fgets(buf: *mut i8, size: i32, stream: *mut FILE) -> *mut i8;
+    fn fputs(s: *const i8, stream: *mut FILE) -> i32;
+    fn fprintf(stream: *mut FILE, format: *const i8, ...) -> i32;
+    fn putc(c: i32, stream: *mut FILE) -> i32;
+    fn rewind(stream: *mut FILE);
+    fn freopen(filename: *const i8, mode: *const i8, stream: *mut FILE) -> *mut FILE;
+    static stdin: *mut FILE;
+    static stderr: *mut FILE;
+    fn getuid() -> u32;
+    fn getpwuid(uid: u32) -> *mut passwd;
+    fn close(fd: i32) -> i32;
+}
+>>>

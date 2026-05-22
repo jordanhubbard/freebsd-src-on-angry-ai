@@ -1,0 +1,64 @@
+=== STEP 385 ===
+
+--- REQUEST ---
+GREP_RESULT for 'rpcsvc':
+```
+./sys/rpc/svc.c:1174:	cv_init(&st->st_cond, "rpcsvc");
+./sys/fs/nfs/nfsproto.h:91: * defined in rpcsvc/nfs_prot.h for userland.
+./sys/fs/nfs/nfsproto.h:302: * <rpcsvc/nfs_prot.h> as well and the numbers are different.
+./include/rpcsvc/nis_db.h:46: * Note: although the version of <rpcsvc/nis_db.h> shipped with Solaris
+./include/rpcsvc/nis_db.h:53:#include <rpcsvc/nis.h>
+./sbin/umount/umount.c:39:#include <rpcsvc/mount.h>
+./sbin/mount_nfs/mount_nfs.c:47:#include <rpcsvc/nfs_prot.h>
+./sbin/mount_nfs/mount_nfs.c:48:#include <rpcsvc/mount.h>
+./libexec/rpc.rstatd/rstat_proc.c:65:#include <rpcsvc/rstat.h>
+./libexec/rpc.rstatd/rstatd.c:36:#include <rpcsvc/rstat.h>
+./libexec/rpc.sprayd/sprayd.c:31:#include <rpcsvc/spray.h>
+./libexec/rpc.rwalld/rwalld.c:42:#include <rpcsvc/rwall.h>
+./libexec/rpc.rusersd/rusersd.c:37:#include <rpcsvc/rnusers.h>
+./libexec/rpc.rusersd/rusers_proc.c:47:#include <rpcsvc/rnusers.h>
+./libexec/ypxfr/ypxfr_extern.h:38:#include <rpcsvc/yp.h>
+./libexec/ypxfr/ypxfr_getmap.c:41:#include <rpcsvc/yp.h>
+./libexec/ypxfr/yp_dbwrite.c:46:#include <rpcsvc/yp.h>
+./libexec/ypxfr/ypxfr_misc.c:42:#include <rpcsvc/yp.h>
+./libexec/ypxfr/ypxfr_misc.c:43:#include <rpcsvc/ypclnt.h>
+./libexec/ypxfr/ypxfr_main.c:49:#include <rpcsvc/yp.h>
+./libexec/ypxfr/ypxfr_main.c:50:#include <rpcsvc/ypclnt.h>
+./libexec/ypxfr/ypxfr_main.c:51:#include <rpcsvc/ypxfrd.h>
+./libexec/ypxfr/ypxfrd_getmap.c:41:#include <rpcsvc/ypxfrd.h>
+./libexec/ypxfr/ypxfrd_getmap.c:42:#include <rpcsvc/yp.h>
+./libexec/mknetid/mknetid.c:44:#include <rpcsvc/yp_prot.h>
+./libexec/mknetid/mknetid.c:45:#include <rpcsvc/ypclnt.h>
+./libexec/rpc.rquotad/rquotad.c:15:#include <rpcsvc/rquota.h>
+./crypto/heimdal/lib/roken/iruserok.c:47:#include <rpcsvc/ypclnt.h>
+./crypto/heimdal/appl/login/login_locl.h:85:#include <rpcsvc/ypclnt.h>
+./crypto/krb5/src/lib/rpc/unit-test/rpc_test_svc.c:13:static int _rpcsvcstate = _IDLE;	/* Set when a request is serviced */
+./crypto/krb5/src/lib/rpc/unit-test/rpc_test_svc.c:14:static int _rpcsvccount = 0;		/* Number of requests being serviced */
+./crypto/krb5/src/lib/rpc/unit-test/rpc_test_svc.c:26:	_rpcsvccount++;
+./contrib/sendmail/src/map.c:37:# include <rpcsvc/ypclnt.h>
+./contrib/sendmail/src/map.c:3497:# include <rpcsvc/nis.h>
+./contrib/sendmail/src/map.c:3498:# include <rpcsvc/nislib.h>
+./lib/librpcsvc/secretkey.c:45:#include <rpcsvc/yp_prot.h>
+./lib/librpcsvc/secretkey.c:46:#include <rpcsvc/ypclnt.h>
+./lib/librpcsvc/rwall.c:41:#include <rpcsvc/rwall.h>
+./lib/librpcsvc/yp_passwd.c:38:#include <rpcsvc/yp_prot.h>
+./lib/librpcsvc/yp_passwd.c:39:#include <rpcsvc/ypclnt.h>
+./lib/librpcsvc/yp_passwd.c:40:#include <rpcsvc/yppasswd.h>
+./lib/librpcsvc/rstat.c:41:#include <rpcsvc/rstat.h>
+./lib/librpcsvc/yp_update.c:44:#include <rpcsvc/yp_prot.h>
+./lib/librpcsvc/yp_update.c:45:#include <rpcsvc/ypclnt.h>
+./lib/librpcsvc/yp_update.c:46:#include <rpcsvc/ypupdate_prot.h>
+./lib/librpcsvc/rnusers.c:42:#include <rpcsvc/rnusers.h>
+./lib/libc/gen/getgrent.c:39:#include <rpcsvc/yp_prot.h>
+./lib/libc/gen/getgrent.c:40:#include <rpcsvc/ypclnt.h>
+./lib/libc/gen/getpwent.c:39:#include <rpcsvc/yp_prot.h>
+./lib/libc/gen/getpwent.c:40:#include <rpcsvc/ypclnt.h>
+... [114 more matches]
+```
+
+--- RESPONSE ---
+
+
+Let me check the original Makefile for rwall to see the library dependencies.
+
+ACTION: FIND_FILE usr.bin/rwall/rwall.c

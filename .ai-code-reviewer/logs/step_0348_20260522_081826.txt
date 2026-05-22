@@ -1,0 +1,37 @@
+=== STEP 348 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwall/src/main.rs
+Scope: usr.bin/rwall
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/rwall/src/main.rs
+OLD:
+<<<
+extern "C" {
+    fn libc_mkstemp(template: *mut i8) -> i32;
+    fn libc_getlogin() -> *mut i8;
+    fn libc_gethostname(name: *mut i8, len: usize) -> i32;
+    fn libc_time(tp: *mut i64) -> i64;
+    fn libc_localtime(tp: *const i64) -> *mut tm;
+    fn libc_ttyname(fd: i32) -> *mut i8;
+    fn libc_getuid() -> u32;
+    fn libc_getpwuid(uid: u32) -> *mut passwd;
+}
+>>>
+NEW:
+<<<
+extern "C" {
+    fn mkstemp(template: *mut i8) -> i32;
+    fn getlogin() -> *mut i8;
+    fn gethostname(name: *mut i8, len: usize) -> i32;
+    fn time(tp: *mut i64) -> i64;
+    fn localtime(tp: *const i64) -> *mut tm;
+    fn ttyname(fd: i32) -> *mut i8;
+    fn getuid() -> u32;
+    fn getpwuid(uid: u32) -> *mut passwd;
+}
+>>>

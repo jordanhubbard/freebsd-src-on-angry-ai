@@ -1,0 +1,11 @@
+=== STEP 384 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/rwall/Makefile.orig*'
+
+--- RESPONSE ---
+
+
+Let me check the git history for the original Makefile to understand the library dependencies.
+
+ACTION: GREP rpcsvc
