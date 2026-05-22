@@ -1,0 +1,242 @@
+=== STEP 248 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*libc/Cargo.toml*'
+
+--- RESPONSE ---
+
+
+The `libc` crate is not vendored. I need to rewrite the source to use raw FFI without external crates.
+
+ACTION: WRITE_FILE usr.bin/resizewin/src/main.rs
+CONTENT:
+use std::io::{self, Read, Write};
+use std::os::unix::io::RawFd;
+use std::process;
+use std::time::{Duration, Instant};
+
+const QUERY: &[u8] = b"\x1b7\x1b[r\x1b[999;999H\x1b[6n\x1b8";
+
+// libc constants
+const O_RDWR: libc::c_int = 2;
+const O_NONBLOCK: libc::c_int = 0o4000;
+const TIOCGWINSZ: libc::c_ulong = 0x40087468;
+const TIOCSWINSZ: libc::c_ulong = 0x80087467;
+const CLOCAL: libc::c_ulong = 0o04000;
+const CREAD: libc::c_ulong = 0o02000;
+const ICANON: libc::c_ulong = 0o00002;
+const ECHO: libc::c_ulong = 0o00010;
+const ECHOE: libc::c_ulong = 0o00002;
+const ISIG: libc::c_ulong = 0o00001;
+const TCSAFLUSH: libc::c_int = 2;
+const TCSANOW: libc::c_int = 0;
+const NCCS: usize = 20;
+
+type cc_t = libc::c_uchar;
+type speed_t = libc::c_uint;
+type tcflag_t = libc::c_ulong;
+
+fn usage() -> ! {
+    eprintln!("usage: resizewin [-z]");
+    process::exit(1);
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct Winsize {
+    ws_row: u16,
+    ws_col: u16,
+    ws_xpixel: u16,
+    ws_ypixel: u16,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct Termios {
+    c_iflag: tcflag_t,
+    c_oflag: tcflag_t,
+    c_cflag: tcflag_t,
+    c_lflag: tcflag_t,
+    c_line: cc_t,
+    c_cc: [cc_t; NCCS],
+}
+
+extern "C" {
+    fn open(path: *const libc::c_char, oflag: libc::c_int, ...) -> libc::c_int;
+    fn close(fd: libc::c_int) -> libc::c_int;
+    fn read(fd: libc::c_int, buf: *mut libc::c_void, count: libc::size_t) -> libc::ssize_t;
+    fn write(fd: libc::c_int, buf: *const libc::c_void, count: libc::size_t) -> libc::ssize_t;
+    fn ioctl(fd: libc::c_int, request: libc::c_ulong, ...) -> libc::c_int;
+    fn tcgetattr(fd: libc::c_int, tp: *mut Termios) -> libc::c_int;
+    fn tcsetattr(fd: libc::c_int, act: libc::c_int, tp: *const Termios) -> libc::c_int;
+    fn usleep(usecs: libc::c_uint) -> libc::c_int;
+}
+
+struct TtyFd(RawFd);
+
+impl TtyFd {
+    fn new() -> io::Result<Self> {
+        let fd = unsafe {
+            open(
+                b"/dev/tty\0".as_ptr() as *const libc::c_char,
+                O_RDWR | O_NONBLOCK,
+            )
+        };
+        if fd < 0 {
+            Err(io::Error::last_os_error())
+        } else {
+            Ok(TtyFd(fd))
+        }
+    }
+}
+
+impl Drop for TtyFd {
+    fn drop(&mut self) {
+        unsafe { close(self.0) };
+    }
+}
+
+impl Read for TtyFd {
+    fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+        let n = unsafe { read(self.0, buf.as_mut_ptr() as *mut _, buf.len()) };
+        if n < 0 {
+            Err(io::Error::last_os_error())
+        } else {
+            Ok(n as usize)
+        }
+    }
+}
+
+impl Write for TtyFd {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        let n = unsafe { write(self.0, buf.as_ptr() as *const _, buf.len()) };
+        if n < 0 {
+            Err(io::Error::last_os_error())
+        } else {
+            Ok(n as usize)
+        }
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut zflag = false;
+
+    for arg in &args[1..] {
+        match arg.as_str() {
+            "-z" => zflag = true,
+            _ => usage(),
+        }
+    }
+
+    let mut fd = match TtyFd::new() {
+        Ok(f) => f,
+        Err(_) => process::exit(1),
+    };
+
+    if zflag {
+        let mut w = Winsize {
+            ws_row: 0, ws_col: 0, ws_xpixel: 0, ws_ypixel: 0,
+        };
+        if unsafe {
+            ioctl(fd.0, TIOCGWINSZ, &mut w as *mut Winsize)
+        } == -1 {
+            process::exit(1);
+        }
+        if w.ws_row != 0 && w.ws_col != 0 {
+            process::exit(0);
+        }
+    }
+
+    let old = {
+        let mut t: Termios = unsafe { std::mem::zeroed() };
+        if unsafe { tcgetattr(fd.0, &mut t) } == -1 {
+            process::exit(1);
+        }
+        t
+    };
+
+    let mut new = old;
+    new.c_cflag |= CLOCAL | CREAD;
+    new.c_lflag &= !(ICANON | ECHO | ECHOE | ISIG);
+
+    if unsafe { tcsetattr(fd.0, TCSAFLUSH, &new) } == -1 {
+        process::exit(1);
+    }
+
+    let mut error = 0;
+    let mut w = Winsize {
+        ws_row: 0, ws_col: 0, ws_xpixel: 0, ws_ypixel: 0,
+    };
+
+    if fd.write_all(QUERY).is_err() {
+        error = 1;
+    } else {
+        let mut data = [0u8; 20];
+        let start = Instant::now();
+        let mut cnt: usize = 0;
+
+        loop {
+            match fd.read(&mut data[cnt..cnt + 1]) {
+                Ok(0) => { error = 1; break; }
+                Ok(1) => {
+                    if data[cnt] == b'R' { break; }
+                    cnt += 1;
+                    if cnt >= data.len() - 2 {
+                        eprintln!("resizewin: response too long");
+                        error = 1;
+                        break;
+                    }
+                }
+                Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {
+                    if start.elapsed() >= Duration::from_secs(2) {
+                        eprintln!("resizewin: timeout reading from terminal");
+                        error = 1;
+                        break;
+                    }
+                    unsafe { usleep(20000) };
+                    continue;
+                }
+                Err(_) => { error = 1; break; }
+            }
+        }
+
+        if error == 0 {
+            let resp = &data[..cnt];
+            if resp.is_empty() || resp[0] != 0x1b || resp[resp.len()-1] != b'R' {
+                eprintln!("resizewin: unable to parse response");
+                error = 1;
+            } else {
+                let inner = std::str::from_utf8(&resp[2..resp.len()-1]).unwrap_or("");
+                let parts: Vec<&str> = inner.split(';').collect();
+                if parts.len() == 2 {
+                    match (parts[0].parse::<u16>(), parts[1].parse::<u16>()) {
+                        (Ok(r), Ok(c)) => { w.ws_row = r; w.ws_col = c; }
+                        _ => {
+                            eprintln!("resizewin: unable to parse response");
+                            error = 1;
+                        }
+                    }
+                } else {
+                    eprintln!("resizewin: unable to parse response");
+                    error = 1;
+                }
+            }
+        }
+
+        if error == 0 {
+            if unsafe {
+                ioctl(fd.0, TIOCSWINSZ, &w as *const Winsize)
+            } == -1 {
+                error = 1;
+            }
+        }
+    }
+
+    let _ = unsafe { tcsetattr(fd.0, TCSANOW, &old) };
+    process::exit(error);
+}

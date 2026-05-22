@@ -1,0 +1,131 @@
+=== STEP 121 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/colrm/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The Rust code has issues - `ch.width()` doesn't exist in std, and the output logic is wrong. Let me fix it properly.
+
+ACTION: WRITE_FILE usr.bin/colrm/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+
+use std::env;
+use std::io::{self, Read, Write};
+use std::os::raw::c_int;
+use std::process;
+
+const TAB: usize = 8;
+
+extern "C" {
+    fn wcwidth(ch: u32) -> c_int;
+}
+
+fn usage() -> ! {
+    let _ = io::stderr().write_all(b"usage: colrm [start [stop]]\n");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let mut start: u64 = 0;
+    let mut stop: u64 = 0;
+
+    // Parse arguments: no options, just positional start and stop
+    let mut pos = 1;
+    let mut count = 0;
+
+    while pos < args.len() {
+        let arg = &args[pos];
+        if arg.starts_with('-') {
+            usage();
+        }
+        count += 1;
+        pos += 1;
+    }
+
+    if count > 2 {
+        usage();
+    }
+
+    if count >= 1 {
+        start = args[1].parse::<u64>().unwrap_or_else(|_| {
+            eprintln!("colrm: illegal column -- {}", args[1]);
+            process::exit(1);
+        });
+        if start == 0 {
+            eprintln!("colrm: illegal column -- {}", args[1]);
+            process::exit(1);
+        }
+    }
+
+    if count >= 2 {
+        stop = args[2].parse::<u64>().unwrap_or_else(|_| {
+            eprintln!("colrm: illegal column -- {}", args[2]);
+            process::exit(1);
+        });
+        if stop == 0 {
+            eprintln!("colrm: illegal column -- {}", args[2]);
+            process::exit(1);
+        }
+    }
+
+    if stop != 0 && start > stop {
+        eprintln!("colrm: illegal start and stop columns");
+        process::exit(1);
+    }
+
+    let mut stdin = io::stdin();
+    let mut stdout = io::stdout();
+    let mut buf = Vec::new();
+    if stdin.read_to_end(&mut buf).is_err() {
+        eprintln!("colrm: stdin");
+        process::exit(1);
+    }
+
+    let input_str = String::from_utf8_lossy(&buf);
+    let mut column: usize = 0;
+
+    for ch in input_str.chars() {
+        let ch_val = ch as u32;
+
+        match ch {
+            '\b' => {
+                if column > 0 {
+                    column -= 1;
+                }
+            }
+            '\n' => {
+                column = 0;
+            }
+            '\t' => {
+                column = (column + TAB) & !(TAB - 1);
+            }
+            _ => {
+                let width = unsafe { wcwidth(ch_val) };
+                if width > 0 {
+                    column += width as usize;
+                }
+            }
+        }
+
+        // Output if not in the removed range
+        let should_output = start == 0 || column < start as usize || (stop != 0 && column > stop as usize);
+
+        if should_output {
+            let mut out = [0u8; 4];
+            let encoded = ch.encode_utf8(&mut out);
+            if stdout.write_all(encoded.as_bytes()).is_err() {
+                eprintln!("colrm: stdout");
+                process::exit(1);
+            }
+        }
+    }
+}
+
+>>>

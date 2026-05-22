@@ -115,6 +115,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-21T23:26:14.041313"
   },
+  "usr.bin/colrm": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T07:03:11.300903"
+  },
   "usr.bin/env": {
     "attempts": 1,
     "last_attempt": "2026-05-22T00:06:33.829160"
@@ -148,12 +152,16 @@
     "last_attempt": "2026-05-22T03:45:59.312336"
   },
   "usr.bin/nohup": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T06:07:15.584375"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T06:46:40.217264"
   },
   "usr.bin/printf": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:33.681504"
+  },
+  "usr.bin/resizewin": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T07:28:55.047460"
   },
   "usr.bin/tail": {
     "attempts": 1,

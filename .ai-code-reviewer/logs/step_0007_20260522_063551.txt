@@ -1,0 +1,176 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/nohup/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I'll create the Rust source file.
+
+ACTION: WRITE_FILE usr.bin/nohup/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+
+use std::env;
+use std::ffi::CString;
+use std::fs::OpenOptions;
+use std::io::{self, Write};
+use std::os::fd::{AsRawFd, FromRawFd, RawFd};
+use std::os::unix::process::CommandExt;
+use std::process;
+
+const FILENAME: &str = "nohup.out";
+const EXIT_NOEXEC: i32 = 126;
+const EXIT_NOTFOUND: i32 = 127;
+const EXIT_MISC: i32 = 127;
+
+fn usage() -> ! {
+    let _ = io::stderr().write_all(b"usage: nohup [--] utility [arguments]\n");
+    process::exit(EXIT_MISC);
+}
+
+fn dofile() {
+    let mut path: Option<String> = None;
+    let mut fd: RawFd = -1;
+
+    // Try opening nohup.out in the current directory
+    if let Ok(f) = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .append(true)
+        .open(FILENAME)
+    {
+        fd = f.as_raw_fd();
+        path = Some(FILENAME.to_string());
+    }
+
+    // If that failed, try $HOME/nohup.out
+    if fd == -1 {
+        if let Ok(home) = env::var("HOME") {
+            if !home.is_empty() {
+                let full_path = format!("{}/{}", home, FILENAME);
+                if let Ok(f) = OpenOptions::new()
+                    .read(true)
+                    .write(true)
+                    .create(true)
+                    .append(true)
+                    .open(&full_path)
+                {
+                    fd = f.as_raw_fd();
+                    path = Some(full_path);
+                }
+            }
+        }
+    }
+
+    if fd == -1 {
+        let _ = io::stderr().write_all(b"can't open a nohup.out file\n");
+        process::exit(EXIT_MISC);
+    }
+
+    // dup2(fd, STDOUT_FILENO)
+    unsafe {
+        if libc::dup2(fd, libc::STDOUT_FILENO) == -1 {
+            let _ = io::stderr().write_all(b"nohup: ");
+            let _ = io::stderr().write_all(io::Error::last_os_error().to_string().as_bytes());
+            let _ = io::stderr().write_all(b"\n");
+            process::exit(EXIT_MISC);
+        }
+        // Close the original fd since stdout now owns it
+        let _ = libc::close(fd);
+    }
+
+    if let Some(ref p) = path {
+        let msg = format!("appending output to {}\n", p);
+        let _ = io::stderr().write_all(msg.as_bytes());
+    }
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    // Check for any options (nohup accepts no options)
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg.starts_with('-') {
+            usage();
+        }
+        break;
+    }
+
+    // Skip the program name
+    let cmd_args = &args[1..];
+    if cmd_args.is_empty() {
+        usage();
+    }
+
+    // If stdout is a terminal, redirect to nohup.out
+    if isatty(libc::STDOUT_FILENO) {
+        dofile();
+    }
+
+    // If stderr is a terminal, dup2 stdout to stderr
+    if isatty(libc::STDERR_FILENO) {
+        unsafe {
+            if libc::dup2(libc::STDOUT_FILENO, libc::STDERR_FILENO) == -1 {
+                // may have just closed stderr, nothing we can do
+                let _ = io::stderr().write_all(b"nohup: ");
+                let _ = io::stderr().write_all(io::Error::last_os_error().to_string().as_bytes());
+                let _ = io::stderr().write_all(b"\n");
+                process::exit(EXIT_MISC);
+            }
+        }
+    }
+
+    // Ignore SIGHUP
+    unsafe {
+        libc::signal(libc::SIGHUP, libc::SIG_IGN as _);
+    }
+
+    // execvp
+    let cmd = &cmd_args[0];
+    let c_cmd = match CString::new(cmd.as_bytes()) {
+        Ok(s) => s,
+        Err(_) => {
+            let _ = io::stderr().write_all(b"nohup: ");
+            let _ = io::stderr().write_all(cmd.as_bytes());
+            let _ = io::stderr().write_all(b": Invalid argument\n");
+            process::exit(EXIT_NOEXEC);
+        }
+    };
+
+    let c_args: Vec<CString> = cmd_args
+        .iter()
+        .map(|a| CString::new(a.as_bytes()).unwrap_or_else(|_| CString::new("".as_bytes()).unwrap()))
+        .collect();
+
+    let mut ptrs: Vec<*const libc::c_char> = c_args.iter().map(|s| s.as_ptr()).collect();
+    ptrs.push(std::ptr::null());
+
+    let exit_status = unsafe {
+        libc::execvp(c_cmd.as_ptr(), ptrs.as_ptr());
+        // execvp only returns on error
+        if io::Error::last_os_error().raw_os_error() == Some(libc::ENOENT) {
+            EXIT_NOTFOUND
+        } else {
+            EXIT_NOEXEC
+        }
+    };
+
+    let _ = io::stderr().write_all(b"nohup: ");
+    let _ = io::stderr().write_all(cmd.as_bytes());
+    let _ = io::stderr().write_all(b": ");
+    let _ = io::stderr().write_all(io::Error::last_os_error().to_string().as_bytes());
+    let _ = io::stderr().write_all(b"\n");
+    process::exit(exit_status);
+}
+
+fn isatty(fd: RawFd) -> bool {
+    unsafe { libc::isatty(fd) != 0 }
+}
+>>>

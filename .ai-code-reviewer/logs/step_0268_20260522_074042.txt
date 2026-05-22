@@ -1,0 +1,9 @@
+=== STEP 268 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/resizewin/cargo-target/debug/resizewin*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/resizewin/cargo-target/debug/.fingerprint

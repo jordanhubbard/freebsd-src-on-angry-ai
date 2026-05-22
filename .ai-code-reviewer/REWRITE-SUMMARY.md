@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 07:43 - usr.bin/resizewin ✓
+
+**Directory:** `usr.bin/resizewin`
+
+**Summary:** [ai-code-reviewer] resizewin: Rewrite utility in Rust
+
+**Files changed:**
+  - usr.bin/resizewin/Makefile
+  - usr.bin/resizewin/Cargo.lock
+  - usr.bin/resizewin/Cargo.toml
+  - usr.bin/resizewin/cargo-target/.rustc_info.json
+  - usr.bin/resizewin/cargo-target/CACHEDIR.TAG
+  - usr.bin/resizewin/cargo-target/debug/.cargo-lock
+  - usr.bin/resizewin/cargo-target/debug/.fingerprint/resizewin-748958173147aec1/invoked.timestamp
+  - usr.bin/resizewin/cargo-target/debug/.fingerprint/resizewin-748958173147aec1/output-bin-resizewin
+  - usr.bin/resizewin/cargo-target/debug/deps/resizewin-748958173147aec1.d
+  - usr.bin/resizewin/cargo-target/debug/incremental/resizewin-3c4aihia0fh9k/s-hirkygpckn-0gki5uf-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 06:05 - usr.bin/asa ✓
 
 **Directory:** `usr.bin/asa`

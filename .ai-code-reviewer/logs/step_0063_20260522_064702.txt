@@ -1,0 +1,176 @@
+=== STEP 63 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/nohup/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/nohup
+   Files: 0/3
+📄 File: usr.bin/nohup/src/main.rs
+
+```
+// SPDX-License-Identifier: BSD-3-Clause
+
+use std::env;
+use std::ffi::CString;
+use std::fs::OpenOptions;
+use std::io::{self, Write};
+use std::os::fd::{AsRawFd, RawFd};
+use std::os::unix::io::dup2;
+use std::os::unix::process::CommandExt;
+use std::process::{self, Command};
+
+const FILENAME: &str = "nohup.out";
+const EXIT_NOEXEC: i32 = 126;
+const EXIT_NOTFOUND: i32 = 127;
+const EXIT_MISC: i32 = 127;
+
+const STDOUT_FILENO: RawFd = 1;
+const STDERR_FILENO: RawFd = 2;
+
+fn usage() -> ! {
+    let _ = io::stderr().write_all(b"usage: nohup [--] utility [arguments]\n");
+    process::exit(EXIT_MISC);
+}
+
+fn dofile() {
+    let mut path: Option<String> = None;
+    let mut fd: RawFd = -1;
+
+    // Try opening nohup.out in the current directory
+    if let Ok(f) = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .append(true)
+        .open(FILENAME)
+    {
+        fd = f.as_raw_fd();
+        path = Some(FILENAME.to_string());
+        std::mem::forget(f);
+    }
+
+    // If that failed, try $HOME/nohup.out
+    if fd == -1 {
+        if let Ok(home) = env::var("HOME") {
+            if !home.is_empty() {
+                let full_path = format!("{}/{}", home, FILENAME);
+                if let Ok(f) = OpenOptions::new()
+                    .read(true)
+                    .write(true)
+                    .create(true)
+                    .append(true)
+                    .open(&full_path)
+                {
+                    fd = f.as_raw_fd();
+                    path = Some(full_path);
+                    std::mem::forget(f);
+                }
+            }
+        }
+    }
+
+    if fd == -1 {
+        let _ = io::stderr().write_all(b"can't open a nohup.out file\n");
+        process::exit(EXIT_MISC);
+    }
+
+    // dup2(fd, STDOUT_FILENO)
+    if dup2(fd, STDOUT_FILENO).is_err() {
+        let _ = io::stderr().write_all(b"nohup: ");
+        let _ = io::stderr().write_all(io::Error::last_os_error().to_string().as_bytes());
+        let _ = io::stderr().write_all(b"\n");
+        process::exit(EXIT_MISC);
+    }
+    // Close the original fd since stdout now owns it
+    let _ = unsafe { libc_close(fd) };
+
+    if let Some(ref p) = path {
+        let msg = format!("appending output to {}\n", p);
+        let _ = io::stderr().write_all(msg.as_bytes());
+    }
+}
+
+extern "C" {
+    fn close(fd: RawFd) -> std::os::raw::c_int;
+    fn isatty(fd: RawFd) -> std::os::raw::c_int;
+    fn signal(signum: std::os::raw::c_int, handler: extern "C" fn(std::os::raw::c_int)) -> extern "C" fn(std::os::raw::c_int);
+}
+
+fn libc_close(fd: RawFd) -> std::os::raw::c_int {
+    unsafe { close(fd) }
+}
+
+fn sig_ign_handler(_signum: std::os::raw::c_int) {}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    // Check for any options (nohup accepts no options)
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg.starts_with('-') {
+            usage();
+        }
+        break;
+    }
+
+    // Skip the program name
+    let cmd_args = &args[1..];
+    if cmd_args.is_empty() {
+        usage();
+    }
+
+    // If stdout is a terminal, redirect to nohup.out
+    if unsafe { isatty(STDOUT_FILENO) != 0 } {
+        dofile();
+    }
+
+    // If stderr is a terminal, dup2 stdout to stderr
+    if unsafe { isatty(STDERR_FILENO) != 0 } {
+        if dup2(STDOUT_FILENO, STDERR_FILENO).is_err() {
+            // may have just closed stderr, nothing we can do
+            let _ = io::stderr().write_all(b"nohup: ");
+            let _ = io::stderr().write_all(io::Error::last_os_error().to_string().as_bytes());
+            let _ = io::stderr().write_all(b"\n");
+            process::exit(EXIT_MISC);
+        }
+    }
+
+    // Ignore SIGHUP (signal 1)
+    unsafe {
+        signal(1, sig_ign_handler);
+    }
+
+    // Build the command and exec
+    let cmd = &cmd_args[0];
+    let mut command = Command::new(cmd);
+    for arg in &cmd_args[1..] {
+        command.arg(arg);
+    }
+
+    let err = command.exec();
+    // exec only returns on error
+    let raw_err = err.raw_os_error().unwrap_or(0);
+    let exit_status = if raw_err == 2 {
+        // ENOENT
+        EXIT_NOTFOUND
+    } else {
+        EXIT_NOEXEC
+    };
+
+    let _ = io::stderr().write_all(b"nohup: ");
+    let _ = io::stderr().write_all(cmd.as_bytes());
+    let _ = io::stderr().write_all(b": ");
+    let _ = io::stderr().write_all(err.to_string().as_bytes());
+    let _ = io::stderr().write_all(b"\n");
+    process::exit(exit_status);
+}
+```
+
+--- RESPONSE ---
+
+
+The Rust source and Cargo.toml already exist from a previous attempt. Let me read the original C source to verify behavior preservation, then try building.
+
+ACTION: READ_FILE usr.bin/nohup/nohup.c

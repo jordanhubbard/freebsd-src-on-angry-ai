@@ -1,0 +1,251 @@
+=== STEP 243 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/resizewin/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me create the Rust source. This is a terminal-resize utility that uses escape sequences to query terminal size and sets it via ioctl.
+
+ACTION: WRITE_FILE usr.bin/resizewin/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-2-Clause
+//
+// resizewin
+//
+// Query terminal for size and inform the kernel
+//
+// Copyright 2015 EMC / Isilon Storage Division
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::io::{self, Read, Write};
+use std::os::unix::io::AsRawFd;
+use std::os::unix::net::UnixStream;
+use std::process;
+use std::time::{Duration, Instant};
+
+const QUERY: &[u8] = b"\x1b7\x1b[r\x1b[999;999H\x1b[6n\x1b8";
+
+fn usage() -> ! {
+    eprintln!("usage: resizewin [-z]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut zflag = false;
+
+    for arg in &args[1..] {
+        match arg.as_str() {
+            "-z" => zflag = true,
+            _ => usage(),
+        }
+    }
+
+    let fd = match open_tty() {
+        Ok(fd) => fd,
+        Err(_) => process::exit(1),
+    };
+
+    if zflag {
+        let mut w = Winsize {
+            ws_row: 0,
+            ws_col: 0,
+            ws_xpixel: 0,
+            ws_ypixel: 0,
+        };
+        if unsafe { libc::ioctl(fd.as_raw_fd(), libc::TIOCGWINSZ, &mut w as *mut Winsize) } == -1 {
+            process::exit(1);
+        }
+        if w.ws_row != 0 && w.ws_col != 0 {
+            process::exit(0);
+        }
+    }
+
+    let old = match get_termios(fd.as_raw_fd()) {
+        Ok(t) => t,
+        Err(_) => process::exit(1),
+    };
+
+    let mut new = old;
+    new.c_cflag |= libc::CLOCAL | libc::CREAD;
+    new.c_lflag &= !(libc::ICANON | libc::ECHO | libc::ECHOE | libc::ISIG);
+
+    if set_termios(fd.as_raw_fd(), &new, libc::TCSAFLUSH) == -1 {
+        process::exit(1);
+    }
+
+    let mut error = 0;
+    let mut w = Winsize {
+        ws_row: 0,
+        ws_col: 0,
+        ws_xpixel: 0,
+        ws_ypixel: 0,
+    };
+
+    if fd.write_all(QUERY).is_err() {
+        error = 1;
+    } else {
+        let mut data = [0u8; 20];
+        let start = Instant::now();
+        let mut cnt: usize = 0;
+
+        loop {
+            match fd.read(&mut data[cnt..cnt + 1]) {
+                Ok(0) => {
+                    error = 1;
+                    break;
+                }
+                Ok(1) => {
+                    if data[cnt] == b'R' {
+                        break;
+                    }
+                    cnt += 1;
+                    if cnt >= data.len() - 2 {
+                        eprintln!("resizewin: response too long");
+                        error = 1;
+                        break;
+                    }
+                }
+                Err(ref e) if e.kind() == io::ErrorKind::WouldBlock => {
+                    if start.elapsed() >= Duration::from_secs(2) {
+                        eprintln!("resizewin: timeout reading from terminal");
+                        error = 1;
+                        break;
+                    }
+                    std::thread::sleep(Duration::from_micros(20000));
+                    continue;
+                }
+                Err(_) => {
+                    error = 1;
+                    break;
+                }
+            }
+        }
+
+        if error == 0 {
+            let resp = &data[..cnt];
+            if let Ok(row) = parse_cursor_pos(resp) {
+                w.ws_row = row.0;
+                w.ws_col = row.1;
+            } else {
+                eprintln!("resizewin: unable to parse response");
+                error = 1;
+            }
+        }
+
+        if error == 0 {
+            if unsafe {
+                libc::ioctl(fd.as_raw_fd(), libc::TIOCSWINSZ, &w as *const Winsize)
+            } == -1
+            {
+                error = 1;
+            }
+        }
+    }
+
+    // Restore termios
+    let _ = set_termios(fd.as_raw_fd(), &old, libc::TCSANOW);
+
+    process::exit(error);
+}
+
+fn parse_cursor_pos(data: &[u8]) -> Result<(u16, u16), ()> {
+    // Expected format: ESC[row;colR
+    if data.is_empty() || data[0] != 0x1b || data[data.len() - 1] != b'R' {
+        return Err(());
+    }
+    let inner = &data[2..data.len() - 1];
+    let s = match std::str::from_utf8(inner) {
+        Ok(s) => s,
+        Err(_) => return Err(()),
+    };
+    let parts: Vec<&str> = s.split(';').collect();
+    if parts.len() != 2 {
+        return Err(());
+    }
+    let row: u16 = parts[0].parse().map_err(|_| ())?;
+    let col: u16 = parts[1].parse().map_err(|_| ())?;
+    Ok((row, col))
+}
+
+fn open_tty() -> io::Result<UnixStream> {
+    // Open /dev/tty with O_RDWR | O_NONBLOCK
+    let fd = unsafe {
+        libc::open(
+            b"/dev/tty\0".as_ptr() as *const libc::c_char,
+            libc::O_RDWR | libc::O_NONBLOCK,
+        )
+    };
+    if fd < 0 {
+        return Err(io::Error::last_os_error());
+    }
+    // We need a Read+Write wrapper around the raw fd.
+    // Use a pipe trick: create a UnixStream pair and replace one end with /dev/tty fd.
+    // Actually, simpler: just use a raw fd wrapper.
+    // We'll use a custom wrapper that holds the raw fd.
+    let _ = fd; // We'll use a different approach below
+    Err(io::Error::new(io::ErrorKind::Other, "not implemented"))
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct Winsize {
+    ws_row: u16,
+    ws_col: u16,
+    ws_xpixel: u16,
+    ws_ypixel: u16,
+}
+
+#[repr(C)]
+#[derive(Copy, Clone)]
+struct Termios {
+    c_iflag: libc::c_ulong,
+    c_oflag: libc::c_ulong,
+    c_cflag: libc::c_ulong,
+    c_lflag: libc::c_ulong,
+    c_line: libc::cc_t,
+    c_cc: [libc::cc_t; libc::NCCS],
+}
+
+extern "C" {
+    fn tcgetattr(fd: libc::c_int, termios_p: *mut Termios) -> libc::c_int;
+    fn tcsetattr(fd: libc::c_int, optional_actions: libc::c_int, termios_p: *const Termios) -> libc::c_int;
+}
+
+fn get_termios(fd: libc::c_int) -> Result<Termios, ()> {
+    let mut t: Termios = unsafe { std::mem::zeroed() };
+    if unsafe { tcgetattr(fd, &mut t) } == -1 {
+        Err(())
+    } else {
+        Ok(t)
+    }
+}
+
+fn set_termios(fd: libc::c_int, t: &Termios, action: libc::c_int) -> libc::c_int {
+    unsafe { tcsetattr(fd, action, t) }
+}
+<<<

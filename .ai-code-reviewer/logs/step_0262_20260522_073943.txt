@@ -1,0 +1,11 @@
+=== STEP 262 ===
+
+--- REQUEST ---
+GREP_ERROR: 'utf-8' codec can't decode byte 0xa9 in position 1736168: invalid start byte
+
+--- RESPONSE ---
+
+
+The issue might be that the Makefile doesn't have proper tabs. Let me check the biff Makefile for comparison and ensure the resizewin Makefile matches exactly.
+
+ACTION: READ_FILE usr.bin/resizewin/Makefile
