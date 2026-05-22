@@ -3,6 +3,25 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 01:23 - usr.bin/revoke ✓
+
+**Directory:** `usr.bin/revoke`
+
+**Summary:** [ai-code-reviewer] revoke: Rewrite C implementation in Rust
+
+**Files changed:**
+  - usr.bin/revoke/Makefile
+  - usr.bin/revoke/Cargo.lock
+  - usr.bin/revoke/Cargo.toml
+  - usr.bin/revoke/cargo-target/.rustc_info.json
+  - usr.bin/revoke/cargo-target/CACHEDIR.TAG
+  - usr.bin/revoke/cargo-target/debug/.cargo-lock
+  - usr.bin/revoke/cargo-target/debug/.fingerprint/revoke-a026797ca573fb11/invoked.timestamp
+  - usr.bin/revoke/cargo-target/debug/.fingerprint/revoke-a026797ca573fb11/output-bin-revoke
+  - usr.bin/revoke/src/main.rs
+
+---
+
 ## 2026-05-22 01:14 - usr.bin/rev ✓
 
 **Directory:** `usr.bin/rev`

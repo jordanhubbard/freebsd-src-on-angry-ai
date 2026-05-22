@@ -1,0 +1,20 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/revoke/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "revoke"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "revoke"
+path = "src/main.rs"
+<<<
