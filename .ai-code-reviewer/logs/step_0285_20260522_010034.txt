@@ -1,0 +1,12 @@
+=== STEP 285 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/yes is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE bin/sh
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/tee

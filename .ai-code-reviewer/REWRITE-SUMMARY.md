@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 01:10 - usr.bin/tee ✓
+
+**Directory:** `usr.bin/tee`
+
+**Summary:** [ai-code-reviewer] tee: Rewrite utility in Rust and update build system
+
+**Files changed:**
+  - usr.bin/tee/Makefile
+  - usr.bin/tee/Cargo.lock
+  - usr.bin/tee/Cargo.toml
+  - usr.bin/tee/cargo-target/.rustc_info.json
+  - usr.bin/tee/cargo-target/CACHEDIR.TAG
+  - usr.bin/tee/cargo-target/debug/.cargo-lock
+  - usr.bin/tee/cargo-target/debug/.fingerprint/tee-12d7b4b28a98589b/invoked.timestamp
+  - usr.bin/tee/cargo-target/debug/.fingerprint/tee-12d7b4b28a98589b/output-bin-tee
+  - usr.bin/tee/cargo-target/debug/deps/tee-12d7b4b28a98589b.d
+  - usr.bin/tee/cargo-target/debug/incremental/tee-3fu6see0u6ddg/s-hira55npmc-04brkh4-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 00:57 - usr.bin/locate/code ✓
 
 **Directory:** `usr.bin/locate/code`

@@ -1,0 +1,20 @@
+=== STEP 299 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tee:
+```
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+cargo-target
+src
+tee.1
+tee.c
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/tee/cargo-target
