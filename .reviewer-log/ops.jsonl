@@ -1673,3 +1673,5 @@
 {"event_type":"directory_start","timestamp":"2026-05-22T14:05:03.394151","session_id":"20260522_131146","directory":"usr.bin/number","message":"Started reviewing usr.bin/number"}
 {"event_type":"build_start","timestamp":"2026-05-22T14:07:45.476706","session_id":"20260522_131146","directory":"usr.bin/number","message":"Build started: make -C usr.bin/number"}
 {"event_type":"build_success","timestamp":"2026-05-22T14:07:48.688547","session_id":"20260522_131146","directory":"usr.bin/number","duration_seconds":1.7314910888671875,"warning_count":0}
+{"event_type":"commit_success","timestamp":"2026-05-22T14:09:33.463590","session_id":"20260522_131146","directory":"usr.bin/number","files_changed":["usr.bin/number/Makefile","usr.bin/number/Cargo.toml","usr.bin/number/src/main.rs"],"commit_hash":"5066890fc3a6"}
+{"event_type":"directory_complete","timestamp":"2026-05-22T14:09:33.661653","session_id":"20260522_131146","directory":"usr.bin/number","message":"Completed usr.bin/number","duration_seconds":270.267471,"files_changed":["usr.bin/number/Makefile","usr.bin/number/Cargo.toml","usr.bin/number/src/main.rs"],"commit_hash":"5066890fc3a6"}
