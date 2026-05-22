@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 06:01 - usr.bin/stdbuf ✓
+
+**Directory:** `usr.bin/stdbuf`
+
+**Summary:** [ai-code-reviewer] stdbuf: Rewrite utility from C to Rust
+
+**Files changed:**
+  - usr.bin/stdbuf/Makefile
+  - usr.bin/stdbuf/Cargo.lock
+  - usr.bin/stdbuf/Cargo.toml
+  - usr.bin/stdbuf/cargo-target/.rustc_info.json
+  - usr.bin/stdbuf/cargo-target/CACHEDIR.TAG
+  - usr.bin/stdbuf/cargo-target/debug/.cargo-lock
+  - usr.bin/stdbuf/cargo-target/debug/.fingerprint/stdbuf-ef2091a72dd38c7a/invoked.timestamp
+  - usr.bin/stdbuf/cargo-target/debug/.fingerprint/stdbuf-ef2091a72dd38c7a/output-bin-stdbuf
+  - usr.bin/stdbuf/cargo-target/debug/deps/stdbuf-ef2091a72dd38c7a.d
+  - usr.bin/stdbuf/cargo-target/debug/incremental/stdbuf-0v7a4bivocu0y/s-hiri7288x2-1y7gldh-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 05:55 - usr.bin/biff ✓
 
 **Directory:** `usr.bin/biff`
