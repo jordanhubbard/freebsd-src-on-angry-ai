@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 01:30 - usr.bin/perror ✓
+
+**Directory:** `usr.bin/perror`
+
+**Summary:** [ai-code-reviewer] perror: Rewrite utility in Rust
+
+**Files changed:**
+  - usr.bin/perror/Makefile
+  - usr.bin/perror/Cargo.toml
+  - usr.bin/perror/src/main.rs
+
+---
+
 ## 2026-05-22 01:26 - usr.bin/fortune/unstr ✓
 
 **Directory:** `usr.bin/fortune/unstr`
