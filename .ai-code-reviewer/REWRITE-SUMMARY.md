@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 06:05 - usr.bin/asa ✓
+
+**Directory:** `usr.bin/asa`
+
+**Summary:** [ai-code-reviewer] asa: Rewrite utility from C to Rust
+
+**Files changed:**
+  - usr.bin/asa/Makefile
+  - usr.bin/asa/Cargo.toml
+  - usr.bin/asa/src/main.rs
+
+---
+
 ## 2026-05-22 06:01 - usr.bin/stdbuf ✓
 
 **Directory:** `usr.bin/stdbuf`

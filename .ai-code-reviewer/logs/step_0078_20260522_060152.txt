@@ -1,0 +1,114 @@
+=== STEP 78 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/stdbuf is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 72055415535a.
+
+Completed directories so far: 4
+NEXT: Use SET_SCOPE usr.bin/asa
+
+FINAL DIFFS:
+--- usr.bin/stdbuf/Makefile ---
+```diff
+diff --git a/usr.bin/stdbuf/Makefile b/usr.bin/stdbuf/Makefile
+index 538cea76c51..be8db863556 100644
+--- a/usr.bin/stdbuf/Makefile
++++ b/usr.bin/stdbuf/Makefile
+@@ -1,4 +1,23 @@
+-PROG=   stdbuf
+-SRCS=   stdbuf.c
++PROG=	stdbuf
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/stdbuf/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/stdbuf/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/stdbuf/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/stdbuf/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/stdbuf/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/stdbuf/cargo-target/debug/.fingerprint/stdbuf-ef2091a72dd38c7a/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/stdbuf/cargo-target/debug/.fingerprint/stdbuf-ef2091a72dd38c7a/output-bin-stdbuf ---
+```diff
+fatal: ambiguous argument 'usr.bin/stdbuf/cargo-target/debug/.fingerprint/stdbuf-ef2091a72dd38c7a/output-bin-stdbuf': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/stdbuf/cargo-target/debug/deps/stdbuf-ef2091a72dd38c7a.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/stdbuf/cargo-target/debug/incremental/stdbuf-0v7a4bivocu0y/s-hiri7288x2-1y7gldh-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/stdbuf/cargo-target/debug/incremental/stdbuf-0v7a4bivocu0y/s-hiri7288x2-1y7gldh-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/stdbuf/cargo-target/debug/incremental/stdbuf-0v7a4bivocu0y/s-hiri7288x2-1y7gldh.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/stdbuf/cargo-target/debug/incremental/stdbuf-0v7a4bivocu0y/s-hiri7288x2-1y7gldh.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/stdbuf/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `usr.bin/stdbuf`. Moving to the next unit.
+
+ACTION: SET_SCOPE usr.bin/asa
