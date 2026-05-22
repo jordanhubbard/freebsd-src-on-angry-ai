@@ -4,13 +4,10 @@ BINOWN?=	root
 BINGRP?=	wheel
 BINMODE?=	555
 
-LINKS=	${BINDIR}/enigma ${BINDIR}/crypt
-MLINKS=	enigma.1 crypt.1
-
 CARGO?=		cargo
-CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
 
-${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs ${.CURDIR}/build.rs
 	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
 	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
 

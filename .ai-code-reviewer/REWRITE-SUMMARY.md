@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 10:16 - usr.bin/which ✓
+
+**Directory:** `usr.bin/which`
+
+**Summary:** [ai-code-reviewer] which: Begin Rust rewrite of which utility
+
+**Files changed:**
+  - usr.bin/enigma/Makefile
+  - usr.bin/which/Cargo.toml
+  - usr.bin/which/cargo-target/debug/deps/which-d747b2d1a406d972
+  - usr.bin/which/cargo-target/debug/incremental/which-01crgo2pjlvu3/s-hirp0fle1w-17i8cbl-9v0zblwzg781o16pszjuntr3w/dep-graph.bin
+  - usr.bin/which/cargo-target/debug/incremental/which-01crgo2pjlvu3/s-hirp0fle1w-17i8cbl-9v0zblwzg781o16pszjuntr3w/query-cache.bin
+  - usr.bin/which/cargo-target/debug/incremental/which-01crgo2pjlvu3/s-hirp0fle1w-17i8cbl-9v0zblwzg781o16pszjuntr3w/work-products.bin
+  - usr.bin/which/cargo-target/debug/incremental/which-01crgo2pjlvu3/s-hirp0fle1w-17i8cbl.lock
+  - usr.bin/which/cargo-target/debug/which
+  - usr.bin/which/src/main.rs
+  - usr.bin/which/which
+  - ... and 31 more
+
+---
+
 ## 2026-05-22 10:12 - usr.bin/soelim ✓
 
 **Directory:** `usr.bin/soelim`

@@ -1,0 +1,19 @@
+=== STEP 249 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/which/Cargo.toml
+CONTENT:
+[package]
+name = "which"
+version = "0.1.0"
+edition = "2021"
+description = "FreeBSD which command"
+
+[[bin]]
+name = "which"
+path = "src/main.rs"

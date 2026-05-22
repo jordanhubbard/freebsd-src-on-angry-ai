@@ -1,0 +1,9 @@
+=== STEP 246 ===
+
+--- REQUEST ---
+CONTRACT_REJECTED: rewrite contract requires a changed Cargo.toml manifest.
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/which/Cargo.toml

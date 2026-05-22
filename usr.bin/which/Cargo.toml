@@ -2,6 +2,7 @@
 name = "which"
 version = "0.1.0"
 edition = "2021"
+description = "FreeBSD which command"
 
 [[bin]]
 name = "which"
