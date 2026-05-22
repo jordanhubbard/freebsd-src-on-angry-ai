@@ -1,0 +1,217 @@
+=== STEP 69 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ypmatch/cargo-target/debug/.fingerprint:
+```
+ypmatch-2b788e6f2e85cd48
+ypmatch-77005f16c348bd8b
+ypmatch-bd6bfc77eaaa51c9
+ypmatch-c00c20173565538d
+```
+
+--- RESPONSE ---
+
+
+The cargo target directory is stale. Let me clean it and rebuild.
+
+ACTION: WRITE_FILE usr.bin/ypmatch/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-2-Clause
+//
+// Copyright (c) 1992, 1993, 1996 Theo de Raadt <deraadt@theos.com>
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int, c_void};
+use std::process;
+
+const YPERR_YPBIND: c_int = 14;
+
+struct YpAlias {
+    alias: &'static str,
+    name: &'static str,
+}
+
+const YPALIASES: &[YpAlias] = &[
+    YpAlias { alias: "passwd", name: "passwd.byname" },
+    YpAlias { alias: "master.passwd", name: "master.passwd.byname" },
+    YpAlias { alias: "shadow", name: "shadow.byname" },
+    YpAlias { alias: "group", name: "group.byname" },
+    YpAlias { alias: "networks", name: "networks.byaddr" },
+    YpAlias { alias: "hosts", name: "hosts.byname" },
+    YpAlias { alias: "protocols", name: "protocols.bynumber" },
+    YpAlias { alias: "services", name: "services.byname" },
+    YpAlias { alias: "aliases", name: "mail.aliases" },
+    YpAlias { alias: "ethers", name: "ethers.byname" },
+];
+
+extern "C" {
+    fn yp_match(
+        domain: *const c_char,
+        map: *const c_char,
+        key: *const c_char,
+        key_len: c_int,
+        val: *mut *mut c_char,
+        val_len: *mut c_int,
+    ) -> c_int;
+    fn yp_get_default_domain(domain: *mut *mut c_char) -> c_int;
+    fn yperr_string(err: c_int) -> *const c_char;
+    fn xdr_free(xdrproc: unsafe extern "C" fn(*mut c_void, *mut c_void) -> c_int, obj: *mut c_void);
+    fn xdr_string(xdrs: *mut c_void, cpp: *mut *mut c_char, maxsize: u64) -> c_int;
+}
+
+fn usage() -> ! {
+    eprintln!(
+        "{}\n{}",
+        "usage: ypmatch [-kt] [-d domainname] key ... mapname",
+        "       ypmatch -x"
+    );
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut domainname: *mut c_char = std::ptr::null_mut();
+    let mut notrans: bool = false;
+    let mut key: bool = false;
+    let mut show_aliases: bool = false;
+
+    let mut optind: usize = 1;
+    while optind < args.len() {
+        let arg = &args[optind];
+        if arg.starts_with('-') && arg.len() > 1 {
+            if arg == "-x" {
+                show_aliases = true;
+                optind += 1;
+                continue;
+            }
+            if arg == "-t" {
+                notrans = true;
+                optind += 1;
+                continue;
+            }
+            if arg == "-k" {
+                key = true;
+                optind += 1;
+                continue;
+            }
+            if arg.starts_with("-d") {
+                if arg.len() > 2 {
+                    let d = CString::new(&arg[2..]).unwrap();
+                    domainname = d.into_raw();
+                } else if optind + 1 < args.len() {
+                    optind += 1;
+                    let d = CString::new(args[optind].as_str()).unwrap();
+                    domainname = d.into_raw();
+                }
+                optind += 1;
+                continue;
+            }
+            usage();
+        } else {
+            break;
+        }
+    }
+
+    if show_aliases {
+        for a in YPALIASES {
+            println!("Use \"{}\" for \"{}\"", a.alias, a.name);
+        }
+        process::exit(0);
+    }
+
+    if args.len() - optind < 2 {
+        usage();
+    }
+
+    if domainname.is_null() {
+        let ret = unsafe { yp_get_default_domain(&mut domainname) };
+        if ret != 0 {
+            eprintln!("can't get default domain");
+            process::exit(1);
+        }
+    }
+
+    let inmap_cstr = CString::new(args[args.len() - 1].as_str()).unwrap();
+    let mut inmap_ptr = inmap_cstr.as_ptr();
+
+    if !notrans {
+        for a in YPALIASES {
+            if args[args.len() - 1] == a.alias {
+                inmap_ptr = CString::new(a.name).unwrap().as_ptr();
+                break;
+            }
+        }
+    }
+
+    let mut rval: i32 = 0;
+    for i in optind..args.len() - 1 {
+        let inkey = &args[i];
+        let inkey_cstr = CString::new(inkey.as_bytes()).unwrap();
+        let key_len = inkey.len() as c_int;
+
+        let mut outbuf: *mut c_char = std::ptr::null_mut();
+        let mut outbuflen: c_int = 0;
+
+        let r = unsafe {
+            yp_match(domainname, inmap_ptr, inkey_cstr.as_ptr(), key_len, &mut outbuf, &mut outbuflen)
+        };
+
+        match r {
+            0 => {
+                if key {
+                    print!("{}: ", inkey);
+                }
+                let val = unsafe {
+                    std::str::from_utf8_unchecked(std::slice::from_raw_parts(outbuf as *const u8, outbuflen as usize))
+                };
+                println!("{}", val);
+                unsafe {
+                    let xdr_proc: unsafe extern "C" fn(*mut c_void, *mut c_void) -> c_int =
+                        std::mem::transmute(xdr_string);
+                    xdr_free(xdr_proc, outbuf as *mut c_void);
+                }
+            }
+            YPERR_YPBIND => {
+                eprintln!("not running ypbind");
+                process::exit(1);
+            }
+            _ => {
+                let errstr = unsafe {
+                    CStr::from_ptr(yperr_string(r)).to_string_lossy().into_owned()
+                };
+                eprintln!(
+                    "can't match key {} in map {}. reason: {}",
+                    inkey,
+                    unsafe { CStr::from_ptr(inmap_ptr).to_string_lossy() },
+                    errstr
+                );
+                rval = 1;
+            }
+        }
+    }
+    process::exit(rval);
+}
+>>>

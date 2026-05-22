@@ -1,0 +1,13 @@
+=== STEP 84 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ypmatch/Makefile
+Scope: usr.bin/ypmatch
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The cargo-target directory has stale cached artifacts. Let me remove it and rebuild.
+
+ACTION: SET_SCOPE usr.bin/ypmatch

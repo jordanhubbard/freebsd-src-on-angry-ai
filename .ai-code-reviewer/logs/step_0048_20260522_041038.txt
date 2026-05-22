@@ -1,0 +1,20 @@
+=== STEP 48 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ypmatch/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+I need to add library linking. The YP client needs `-lypclnt -lrpcsvc -lrpc`. Let me add a build.rs.
+
+ACTION: WRITE_FILE usr.bin/ypmatch/build.rs
+CONTENT:
+<<<
+fn main() {
+    println!("cargo:rustc-link-lib=ypclnt");
+    println!("cargo:rustc-link-lib=rpcsvc");
+    println!("cargo:rustc-link-lib=rpc");
+}
+>>>

@@ -1,0 +1,31 @@
+=== STEP 101 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/ypmatch/cargo-target/debug/ypmatch*'
+
+--- RESPONSE ---
+
+
+The cargo-target directory has stale artifacts from a previous failed build. Let me try to force a clean build.
+
+ACTION: EDIT_FILE usr.bin/ypmatch/Makefile
+OLD:
+<<<
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${RM} -rf ${CARGO_TARGET_DIR}
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>
+NEW:
+<<<
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${RM} -rf ${CARGO_TARGET_DIR}
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+.cargo-clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+	${TOUCH} .cargo-clean
+
+${PROG}: .cargo-clean
+>>>

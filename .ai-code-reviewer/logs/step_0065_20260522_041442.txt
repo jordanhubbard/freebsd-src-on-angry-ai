@@ -1,0 +1,57 @@
+=== STEP 65 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ypmatch/src/main.rs
+Scope: usr.bin/ypmatch
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+I made a mistake - the helper function calls itself recursively. Let me fix this properly by casting at the call site.
+
+ACTION: EDIT_FILE usr.bin/ypmatch/src/main.rs
+OLD:
+<<<
+type XdrProc = unsafe extern "C" fn(*mut c_void, *mut c_void) -> c_int;
+
+extern "C" {
+    fn yp_match(
+        domain: *const c_char,
+        map: *const c_char,
+        key: *const c_char,
+        key_len: c_int,
+        val: *mut *mut c_char,
+        val_len: *mut c_int,
+    ) -> c_int;
+    fn yp_get_default_domain(domain: *mut *mut c_char) -> c_int;
+    fn yperr_string(err: c_int) -> *const c_char;
+    fn xdr_free(xdrproc: XdrProc, obj: *mut c_void);
+}
+
+extern "C" {
+    fn xdr_string(xdrs: *mut c_void, cpp: *mut *mut c_char, maxsize: u64) -> c_int;
+}
+
+// Cast xdr_string to the XdrProc type expected by xdr_free
+unsafe fn xdr_string_free(obj: *mut c_void) -> c_int {
+    xdr_free(xdr_string as XdrProc, obj)
+}
+>>>
+NEW:
+<<<
+extern "C" {
+    fn yp_match(
+        domain: *const c_char,
+        map: *const c_char,
+        key: *const c_char,
+        key_len: c_int,
+        val: *mut *mut c_char,
+        val_len: *mut c_int,
+    ) -> c_int;
+    fn yp_get_default_domain(domain: *mut *mut c_char) -> c_int;
+    fn yperr_string(err: c_int) -> *const c_char;
+    fn xdr_free(xdrproc: unsafe extern "C" fn(*mut c_void, *mut c_void) -> c_int, obj: *mut c_void);
+    fn xdr_string(xdrs: *mut c_void, cpp: *mut *mut c_char, maxsize: u64) -> c_int;
+}
+>>>

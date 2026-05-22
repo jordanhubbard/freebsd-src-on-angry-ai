@@ -1,0 +1,24 @@
+=== STEP 104 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ypmatch/build.rs:
+PROGRESS:
+📁 Directory: usr.bin/ypmatch
+   Files: 0/4
+📄 File: usr.bin/ypmatch/build.rs
+✏️  Edits: 1 files modified
+
+```
+fn main() {
+    println!("cargo:rustc-link-lib=ypclnt");
+    println!("cargo:rustc-link-lib=rpcsvc");
+    println!("cargo:rustc-link-lib=rpc");
+}
+```
+
+--- RESPONSE ---
+
+
+The build.rs looks correct. Let me check the Cargo.toml for any issues.
+
+ACTION: READ_FILE usr.bin/ypmatch/Cargo.toml
