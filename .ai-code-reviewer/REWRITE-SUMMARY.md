@@ -3,6 +3,23 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 14:24 - usr.bin/pathchk ✓
+
+**Directory:** `usr.bin/pathchk`
+
+**Summary:** [ai-code-reviewer] pathchk: Rewrite source
+
+**Files changed:**
+  - usr.bin/pathchk/Makefile
+  - usr.bin/pathchk/Cargo.toml
+  - usr.bin/pathchk/pathchk
+  - usr.bin/pathchk/pathchk.1.gz
+  - usr.bin/pathchk/pathchk.debug
+  - usr.bin/pathchk/pathchk.full
+  - usr.bin/pathchk/src/main.rs
+
+---
+
 ## 2026-05-22 14:09 - usr.bin/number ✓
 
 **Directory:** `usr.bin/number`

@@ -1,0 +1,227 @@
+=== STEP 147 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/pathchk/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/pathchk/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-2-Clause
+// Translation of FreeBSD usr.bin/pathchk/pathchk.c to Rust
+
+use std::ffi::CString;
+use std::os::raw::{c_char, c_int, c_long};
+use std::process;
+
+const NAME_MAX: c_long = 255;
+const PATH_MAX: c_long = 1024;
+const _POSIX_NAME_MAX: c_long = 14;
+const _POSIX_PATH_MAX: c_long = 256;
+const _PC_NAME_MAX: c_int = 4;
+const _PC_PATH_MAX: c_int = 3;
+const ENOENT: c_int = 2;
+
+extern "C" {
+    fn pathconf(path: *const c_char, name: c_int) -> c_long;
+    fn stat(path: *const c_char, buf: *mut Stat) -> c_int;
+}
+
+#[repr(C)]
+struct Stat {
+    _padding: [u8; 256],
+}
+
+static PORTABLE_CHARSET: &[u8] = b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._-";
+
+fn warnx(msg: &str) {
+    eprintln!("pathchk: {}", msg);
+}
+
+fn warn(path: &str, partial: &str) {
+    let err = std::io::Error::last_os_error();
+    eprintln!("pathchk: {}: {} {}: {}", path, partial, path, err);
+}
+
+fn usage() -> ! {
+    eprintln!("usage: pathchk [-Pp] pathname ...");
+    process::exit(1);
+}
+
+fn portable(path: &str) -> bool {
+    path.as_bytes().iter().all(|&b| PORTABLE_CHARSET.contains(&b))
+}
+
+fn check(path: &str, pflag: bool, pflag_cap: bool) -> i32 {
+    let pathd = path.to_string();
+    let mut p = pathd.as_str();
+
+    if pflag_cap && p.is_empty() {
+        warnx(&format!("{}: empty pathname", path));
+        return 1;
+    }
+
+    if (pflag_cap || pflag) && (p.starts_with('-') || p.contains("/-")) {
+        warnx(&format!("{}: contains a component starting with '-'", path));
+        return 1;
+    }
+
+    let namemax: c_long = if !pflag {
+        let base = if p.starts_with('/') { "/" } else { "." };
+        let c_base = CString::new(base).unwrap();
+        let mut errno_save = 0;
+        let mut result = unsafe {
+            let val = pathconf(c_base.as_ptr(), _PC_NAME_MAX);
+            if val == -1 {
+                errno_save = 1;
+            }
+            val
+        };
+        if result == -1 && errno_save != 0 {
+            NAME_MAX
+        } else {
+            result
+        }
+    } else {
+        _POSIX_NAME_MAX
+    };
+
+    let mut pathd = path.to_string();
+    let mut p = pathd.as_mut_str();
+
+    loop {
+        // Skip leading slashes
+        let slash_count = p.chars().take_while(|&c| c == '/').count();
+        p = &p[slash_count..];
+
+        // Find next component
+        let complen = p.chars().take_while(|&c| c != '/').count();
+        let end = p.len() - (p[complen..].len());
+        let last = p[complen..].is_empty() || p[complen..] == "/";
+
+        let component = &p[..complen];
+
+        if namemax != -1 && complen as c_long > namemax {
+            warnx(&format!(
+                "{}: {}: component too long (limit {})",
+                path, component, namemax
+            ));
+            return 1;
+        }
+
+        if !pflag {
+            // Stat the current prefix
+            let prefix = &pathd[..pathd.len() - p.len() + complen];
+            let c_prefix = CString::new(prefix).unwrap();
+            let mut sb = Stat { _padding: [0u8; 256] };
+            let ret = unsafe { stat(c_prefix.as_ptr(), &mut sb) };
+            if ret == -1 {
+                let err = std::io::Error::last_os_error();
+                if err.raw_os_error().unwrap_or(0) != ENOENT {
+                    warn(path, prefix);
+                    return 1;
+                }
+            }
+        }
+
+        if pflag && !portable(component) {
+            warnx(&format!(
+                "{}: {}: component contains non-portable character",
+                path, component
+            ));
+            return 1;
+        }
+
+        if last {
+            break;
+        }
+
+        if !pflag {
+            let current_path = &pathd[..pathd.len() - p.len() + complen];
+            let c_current = CString::new(current_path).unwrap();
+            let mut errno_save = 0;
+            let mut result = unsafe {
+                let val = pathconf(c_current.as_ptr(), _PC_NAME_MAX);
+                if val == -1 {
+                    errno_save = 1;
+                }
+                val
+            };
+            if result == -1 && errno_save != 0 {
+                // keep old namemax
+            } else {
+                let _ = result;
+            }
+        }
+
+        p = &p[complen + 1..];
+    }
+
+    let pathmax: c_long = if !pflag {
+        let c_path = CString::new(path).unwrap();
+        let mut errno_save = 0;
+        let mut result = unsafe {
+            let val = pathconf(c_path.as_ptr(), _PC_PATH_MAX);
+            if val == -1 {
+                errno_save = 1;
+            }
+            val
+        };
+        if result == -1 && errno_save != 0 {
+            PATH_MAX
+        } else {
+            result
+        }
+    } else {
+        _POSIX_PATH_MAX
+    };
+
+    if pathmax != -1 && path.len() as c_long >= pathmax {
+        warnx(&format!(
+            "{}: path too long (limit {})",
+            path,
+            pathmax - 1
+        ));
+        return 1;
+    }
+
+    0
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut pflag = false;
+    let mut pflag_cap = false;
+    let mut i = 1;
+
+    while i < args.len() {
+        let arg = &args[i];
+        if arg.starts_with('-') && arg.len() > 1 {
+            for ch in arg[1..].chars() {
+                match ch {
+                    'p' => pflag = true,
+                    'P' => pflag_cap = true,
+                    _ => usage(),
+                }
+            }
+            i += 1;
+        } else {
+            break;
+        }
+    }
+
+    if i >= args.len() {
+        usage();
+    }
+
+    let mut rval = 0;
+    for arg in &args[i..] {
+        rval |= check(arg, pflag, pflag_cap);
+    }
+
+    process::exit(rval);
+}
+>>>

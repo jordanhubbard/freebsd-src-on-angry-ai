@@ -1,0 +1,8 @@
+[package]
+name = "pathchk"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "pathchk"
+path = "src/main.rs"
