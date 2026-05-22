@@ -687,3 +687,5 @@
 {"event_type":"directory_start","timestamp":"2026-05-22T01:33:50.304795","session_id":"20260522_011529","directory":"usr.bin/logname","message":"Started reviewing usr.bin/logname"}
 {"event_type":"build_start","timestamp":"2026-05-22T01:35:09.153659","session_id":"20260522_011529","directory":"usr.bin/logname","message":"Build started: make -C usr.bin/logname"}
 {"event_type":"build_success","timestamp":"2026-05-22T01:35:11.525601","session_id":"20260522_011529","directory":"usr.bin/logname","duration_seconds":1.2686893939971924,"warning_count":0}
+{"event_type":"commit_success","timestamp":"2026-05-22T01:37:03.267117","session_id":"20260522_011529","directory":"usr.bin/logname","files_changed":["usr.bin/logname/Makefile","usr.bin/logname/Cargo.toml","usr.bin/logname/src/main.rs"],"commit_hash":"1f1a61e4f6dc"}
+{"event_type":"directory_complete","timestamp":"2026-05-22T01:37:03.468690","session_id":"20260522_011529","directory":"usr.bin/logname","message":"Completed usr.bin/logname","duration_seconds":193.163905,"files_changed":["usr.bin/logname/Makefile","usr.bin/logname/Cargo.toml","usr.bin/logname/src/main.rs"],"commit_hash":"1f1a61e4f6dc"}
