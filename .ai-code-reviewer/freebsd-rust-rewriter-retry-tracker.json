@@ -184,8 +184,8 @@
     "last_attempt": "2026-05-22T07:44:34.194698"
   },
   "usr.bin/rwho": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T12:49:04.616564"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T12:55:31.529110"
   },
   "usr.bin/tail": {
     "attempts": 1,
