@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 01:14 - usr.bin/rev ✓
+
+**Directory:** `usr.bin/rev`
+
+**Summary:** [ai-code-reviewer] rev: Rewrite utility in Rust and update build system
+
+**Files changed:**
+  - usr.bin/rev/Makefile
+  - usr.bin/rev/Cargo.toml
+  - usr.bin/rev/src/main.rs
+
+---
+
 ## 2026-05-22 01:10 - usr.bin/tee ✓
 
 **Directory:** `usr.bin/tee`

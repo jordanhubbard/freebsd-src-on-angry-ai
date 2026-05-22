@@ -123,6 +123,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-21T20:49:38.897585"
   },
+  "usr.bin/head": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T01:11:10.571575"
+  },
   "usr.bin/id": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:15:10.423865"
@@ -136,8 +140,12 @@
     "last_attempt": "2026-05-21T23:16:33.681504"
   },
   "usr.bin/rev": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T01:11:33.966275"
+  },
+  "usr.bin/tail": {
     "attempts": 1,
-    "last_attempt": "2026-05-21T23:16:48.015580"
+    "last_attempt": "2026-05-22T01:11:28.327863"
   },
   "usr.bin/uname": {
     "attempts": 2,
