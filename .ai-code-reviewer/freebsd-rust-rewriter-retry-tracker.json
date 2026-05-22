@@ -64,8 +64,8 @@
     "last_attempt": "2026-05-21T19:02:59.954621"
   },
   "bin/mv": {
-    "attempts": 2,
-    "last_attempt": "2026-05-21T18:26:19.420657"
+    "attempts": 3,
+    "last_attempt": "2026-05-21T19:30:06.013835"
   },
   "bin/pax": {
     "attempts": 1,
@@ -112,7 +112,7 @@
     "last_attempt": "2026-05-21T19:00:22.350442"
   },
   "usr.bin/false": {
-    "attempts": 1,
-    "last_attempt": "2026-05-21T19:04:28.511011"
+    "attempts": 2,
+    "last_attempt": "2026-05-21T19:30:19.224424"
   }
 }

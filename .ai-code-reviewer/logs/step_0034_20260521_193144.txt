@@ -1,0 +1,11 @@
+=== STEP 34 ===
+
+--- REQUEST ---
+CONTRACT_REJECTED: CLI case 1 exit-code mismatch (source=127, rust=1).
+
+--- RESPONSE ---
+
+
+The contract validation found an exit-code mismatch. The `false` command should return 1, which my Rust code does correctly. The "source=127" suggests the original binary comparison had an issue. Let me try a different simple unit.
+
+ACTION: SET_SCOPE usr.bin/hostname

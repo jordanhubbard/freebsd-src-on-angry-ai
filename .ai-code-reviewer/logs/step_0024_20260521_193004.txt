@@ -1,0 +1,61 @@
+=== STEP 24 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/true is now complete.
+Changes committed and pushed.
+Post-success metadata commit: e2eec6118bdd.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE bin/mv
+
+FINAL DIFFS:
+--- usr.bin/true/Makefile ---
+```diff
+diff --git a/usr.bin/true/Makefile b/usr.bin/true/Makefile
+index 1285b818d78..6bcbfed1435 100644
+--- a/usr.bin/true/Makefile
++++ b/usr.bin/true/Makefile
+@@ -1,3 +1,23 @@
+ PROG=	true
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/true/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/true/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+`usr.bin/true` is complete. Moving to the next suggested unit.
+
+ACTION: SET_SCOPE bin/mv
