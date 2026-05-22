@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 10:40 - usr.bin/enigma ✓
+
+**Directory:** `usr.bin/enigma`
+
+**Summary:** [ai-code-reviewer] enigma: rewrite C implementation to Rust
+
+**Files changed:**
+  - usr.bin/enigma/Cargo.toml
+  - usr.bin/enigma/Makefile
+  - usr.bin/enigma/Makefile.depend
+  - usr.bin/enigma/cargo-target/debug/.fingerprint/enigma-56a668ce9e9d145b/output-bin-enigma
+  - usr.bin/enigma/cargo-target/debug/.fingerprint/enigma-ed75bad22ee64eff/run-build-script-build-script-build
+  - usr.bin/enigma/cargo-target/debug/.fingerprint/enigma-ed75bad22ee64eff/run-build-script-build-script-build.json
+  - usr.bin/enigma/cargo-target/debug/incremental/enigma-2dns2xkap0rzz/s-hirpavslla-17e208w-working/dep-graph.part.bin
+  - usr.bin/enigma/cargo-target/debug/incremental/enigma-2dns2xkap0rzz/s-hirpavslla-17e208w.lock
+  - usr.bin/enigma/src/main.rs
+  - usr.bin/enigma/cargo-target/debug/.fingerprint/enigma-56a668ce9e9d145b/bin-enigma
+  - ... and 10 more
+
+---
+
 ## 2026-05-22 10:16 - usr.bin/which ✓
 
 **Directory:** `usr.bin/which`
