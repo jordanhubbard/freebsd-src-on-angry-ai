@@ -1,0 +1,9 @@
+=== STEP 195 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE bin/echo/Makefile

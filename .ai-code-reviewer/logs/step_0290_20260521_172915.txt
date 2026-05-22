@@ -1,0 +1,14 @@
+=== STEP 290 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/hostname is already marked complete.
+
+Completed work units are closed after a successful build and commit; do not reopen the same unit for incremental polish.
+NEXT: Use SET_SCOPE bin/getfacl
+
+--- RESPONSE ---
+
+
+I need to provide the complete WRITE_FILE action with CONTENT block in a single response.
+
+ACTION: WRITE_FILE bin/getfacl/Cargo.toml

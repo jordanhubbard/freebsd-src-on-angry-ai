@@ -1,0 +1,48 @@
+=== STEP 278 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/freebsd-version has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE bin/getfacl
+
+--- RESPONSE ---
+
+
+I'll work on bin/getfacl since I already have the source code. Let me start by editing the Makefile.
+
+ACTION: EDIT_FILE bin/getfacl/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PACKAGE=runtime
+PROG=	getfacl
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	getfacl
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>

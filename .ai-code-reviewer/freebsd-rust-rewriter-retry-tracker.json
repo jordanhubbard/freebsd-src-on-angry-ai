@@ -1,4 +1,36 @@
 {
+  "bin/cat": {
+    "attempts": 1,
+    "last_attempt": "2026-05-21T17:17:48.308757"
+  },
+  "bin/chflags": {
+    "attempts": 2,
+    "last_attempt": "2026-05-21T17:22:51.423342"
+  },
+  "bin/date": {
+    "attempts": 1,
+    "last_attempt": "2026-05-21T17:18:25.723219"
+  },
+  "bin/ed": {
+    "attempts": 1,
+    "last_attempt": "2026-05-21T17:11:08.457281"
+  },
+  "bin/getfacl": {
+    "attempts": 2,
+    "last_attempt": "2026-05-21T17:22:31.446823"
+  },
+  "bin/kenv": {
+    "attempts": 3,
+    "last_attempt": "2026-05-21T16:43:26.378723"
+  },
+  "bin/kill": {
+    "attempts": 3,
+    "last_attempt": "2026-05-21T16:50:09.034618"
+  },
+  "bin/pwait": {
+    "attempts": 3,
+    "last_attempt": "2026-05-21T17:11:48.698711"
+  },
   "bin/rmdir": {
     "attempts": 1,
     "last_attempt": "2026-05-21T12:22:31.654359"

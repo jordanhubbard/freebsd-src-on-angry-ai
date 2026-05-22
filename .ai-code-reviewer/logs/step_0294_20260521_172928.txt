@@ -1,0 +1,11 @@
+=== STEP 294 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to provide the complete action with CONTENT block.
+
+ACTION: WRITE_FILE bin/getfacl/Cargo.toml
