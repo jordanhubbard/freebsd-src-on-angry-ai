@@ -1,0 +1,46 @@
+=== STEP 130 ===
+
+--- REQUEST ---
+BUILD_REJECTED: No pending source or build-file changes for the active scope.
+
+Do not run BUILD just to satisfy the loop. Choose a pending work unit with SET_SCOPE or make a real source/build-file change first.
+
+Only reviewer metadata is dirty: .ai-code-reviewer/logs/step_0129_20260522_103616.txt
+
+--- RESPONSE ---
+
+
+The build system says no pending changes. Let me make a real change to the Makefile to match the `asa` pattern exactly:
+
+ACTION: WRITE_FILE usr.bin/enigma/Makefile
+CONTENT:
+<<<
+.include <src.opts.mk>
+
+PROG=	enigma
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs ${.CURDIR}/build.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+=	tests
+>>>

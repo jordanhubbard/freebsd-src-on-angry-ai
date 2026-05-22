@@ -1,0 +1,22 @@
+=== STEP 139 ===
+
+--- REQUEST ---
+CONTRACT_REJECTED: rewrite contract requires a changed Cargo.toml manifest.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/enigma/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "enigma"
+version = "0.1.0"
+edition = "2021"
+description = "FreeBSD enigma - public-domain crypt replacement"
+
+[[bin]]
+name = "enigma"
+path = "src/main.rs"
+build = "build.rs"
+>>>
