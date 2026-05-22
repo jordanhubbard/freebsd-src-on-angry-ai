@@ -579,3 +579,5 @@
 {"event_type":"directory_start","timestamp":"2026-05-22T00:06:53.750155","session_id":"20260521_232326","directory":"usr.bin/tty","message":"Started reviewing usr.bin/tty"}
 {"event_type":"build_start","timestamp":"2026-05-22T00:09:17.872631","session_id":"20260521_232326","directory":"usr.bin/tty","message":"Build started: make -C usr.bin/tty"}
 {"event_type":"build_success","timestamp":"2026-05-22T00:09:20.610687","session_id":"20260521_232326","directory":"usr.bin/tty","duration_seconds":1.5473690032958984,"warning_count":0}
+{"event_type":"commit_success","timestamp":"2026-05-22T00:10:51.358936","session_id":"20260521_232326","directory":"usr.bin/tty","files_changed":["usr.bin/tty/Makefile","usr.bin/tty/Cargo.toml","usr.bin/tty/src/main.rs"],"commit_hash":"c4a4fdd17497"}
+{"event_type":"directory_complete","timestamp":"2026-05-22T00:10:51.569530","session_id":"20260521_232326","directory":"usr.bin/tty","message":"Completed usr.bin/tty","duration_seconds":237.819294,"files_changed":["usr.bin/tty/Makefile","usr.bin/tty/Cargo.toml","usr.bin/tty/src/main.rs"],"commit_hash":"c4a4fdd17497"}

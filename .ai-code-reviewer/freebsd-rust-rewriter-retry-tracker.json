@@ -135,10 +135,6 @@
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:48.015580"
   },
-  "usr.bin/tty": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T00:06:53.752329"
-  },
   "usr.bin/uname": {
     "attempts": 1,
     "last_attempt": "2026-05-21T22:50:43.964536"
