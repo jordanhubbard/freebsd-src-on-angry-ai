@@ -1,0 +1,12 @@
+=== STEP 28 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/caesar/Makefile
+OLD:
+```make
+PACKAGE=	games

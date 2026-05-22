@@ -1,0 +1,177 @@
+=== STEP 9 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/caesar/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source file. Let me create the `src` directory and `main.rs`.
+
+ACTION: WRITE_FILE usr.bin/caesar/src/main.rs
+CONTENT:
+```rust
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1989, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::io::{self, Read, Write};
+use std::process;
+
+const LINELENGTH: usize = 2048;
+
+// Letter frequencies (taken from some unix(tm) documentation)
+const STDF: [f64; 26] = [
+    7.97, 1.35, 3.61, 4.78, 12.37, 2.01, 1.46, 4.49, 6.39, 0.04,
+    0.42, 3.81, 2.69, 5.92,  6.96, 2.91, 0.08, 6.63, 8.77, 9.68,
+    2.62, 0.81, 1.88, 0.23,  2.07, 0.06,
+];
+
+fn rotate(ch: u8, perm: usize) -> u8 {
+    if ch.is_ascii() {
+        if ch.is_ascii_uppercase() {
+            b'A' + ((ch - b'A' + perm as u8) % 26)
+        } else if ch.is_ascii_lowercase() {
+            b'a' + ((ch - b'a' + perm as u8) % 26)
+        } else {
+            ch
+        }
+    } else {
+        ch
+    }
+}
+
+fn printit(rot: usize) {
+    let stdin = io::stdin();
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+    let mut buf = [0u8; 1];
+    loop {
+        match stdin.lock().read(&mut buf) {
+            Ok(0) => break,
+            Ok(1) => {
+                let _ = out.write_all(&[rotate(buf[0], rot)]);
+            }
+            Err(e) => {
+                eprintln!("caesar: {}\n", e);
+                process::exit(1);
+            }
+        }
+    }
+    process::exit(0);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
+    if args.len() > 1 {
+        let rot = match args[1].parse::<i32>() {
+            Ok(r) if r >= 0 => r as usize,
+            _ => {
+                eprintln!("caesar: bad rotation value.\n");
+                process::exit(1);
+            }
+        };
+        printit(rot);
+    }
+
+    let mut stdf: [f64; 26] = STDF;
+    // adjust frequency table to weight low probs REAL low
+    for i in 0..26 {
+        stdf[i] = stdf[i].ln() + (26.0 / 100.0).ln();
+    }
+
+    let mut obs = [0i32; 26];
+    let mut inbuf = vec![0u8; LINELENGTH];
+
+    let stdin = io::stdin();
+    let mut handle = stdin.lock();
+
+    let nread = match handle.read(&mut inbuf) {
+        Ok(n) => n,
+        Err(e) => {
+            eprintln!("caesar: {}\n", e);
+            process::exit(1);
+        }
+    };
+
+    for i in 0..nread {
+        let ch = inbuf[i];
+        if ch.is_ascii() {
+            if ch.is_ascii_lowercase() {
+                obs[(ch - b'a') as usize] += 1;
+            } else if ch.is_ascii_uppercase() {
+                obs[(ch - b'A') as usize] += 1;
+            }
+        }
+    }
+
+    // now "dot" the freqs with the observed letter freqs
+    // and keep track of best fit
+    let mut winner = 0;
+    let mut winnerdot = 0i32;
+
+    for try_val in 0..26 {
+        let mut dot = 0i32;
+        for i in 0..26 {
+            dot += obs[i] * stdf[(i + try_val) % 26] as i32;
+        }
+        if try_val == 0 {
+            winnerdot = dot;
+        }
+        if dot > winnerdot {
+            winner = try_val;
+            winnerdot = dot;
+        }
+    }
+
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+
+    let mut nread = nread;
+    loop {
+        for i in 0..nread {
+            let ch = inbuf[i];
+            let _ = out.write_all(&[rotate(ch, winner)]);
+        }
+        if nread < LINELENGTH {
+            break;
+        }
+        nread = match handle.read(&mut inbuf) {
+            Ok(n) => n,
+            Err(e) => {
+                eprintln!("caesar: {}\n", e);
+                process::exit(1);
+            }
+        };
+    }
+
+    process::exit(0);
+}
+```

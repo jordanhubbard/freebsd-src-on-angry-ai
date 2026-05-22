@@ -1,0 +1,64 @@
+=== STEP 35 ===
+
+--- REQUEST ---
+GREP_RESULT for 'make':
+```
+./tests/sys/acl/acl-api-test.c:36:/* Compatibility shim to make it possible to run this test on Linux
+./tests/sys/acl/acl-api-test.c:157:	/* make a dup of non-empty acl and check that they are equal */
+./tests/sys/netinet/so_reuseport_lb_test.c:310: * kqueue, while the other makes connections.  The third thread slowly adds
+./tests/sys/netinet/fibs_multibind_test.c:519: * make sure that connections to the group are only load-balanced within the
+./tests/sys/netinet/fibs_multibind_test.c:568:	 * Initiate connections from FIB 0, make sure they go to s[0] or s[1].
+./tests/sys/netinet/fibs_multibind_test.c:594:	 * Initiate connections from FIB 1, make sure they go to s[2].
+./tests/sys/netinet/tcp_connect_port_test.c:173:	 * otherwise idle system, this makes the kernel try all possible
+./tests/sys/netinet/tcp_connect_port_test.c:174:	 * ports sequentially and makes it more likely it will try the
+./tests/sys/netmap/ctrl-api-test.c:1202:	/* Request a large ring size, to make sure that the kernel
+./tests/sys/kqueue/libkqueue/read.c:26:    /* Drain the read buffer, then make sure there are no more events. */
+./tests/sys/kqueue/libkqueue/read.c:181:    /* Re-add the watch and make sure no events are pending */
+./tests/sys/kqueue/libkqueue/read.c:217:    /* Re-add the watch and make sure no events are pending */
+./tests/sys/kqueue/libkqueue/proc.c:388:    /* Send another one and make sure we get no events */
+./tests/sys/kqueue/libkqueue/signal.c:177:    /* Send another one and make sure we get no events */
+./tests/sys/kqueue/libkqueue/timer.c:29: * sub-second timing to make some timer tests run faster.
+./tests/sys/kqueue/libkqueue/timer.c:469:     * 1 second. This check is to make sure that the original 1 second
+./tests/sys/kqueue/libkqueue/timer.c:515:     * to make sure that the timer re-started and that the event is
+./tests/sys/kqueue/kqueue_fork.c:202:	 * Setup an event on clofd that we can trigger to make it readable,
+./tests/sys/kqueue/kqueue_fork.c:227:	/* Fire off an event to make clofd readable. */
+./tests/sys/kqueue/kqueue_peek_signal.c:73:	 * loop to make it more likely that older kernels without the fix fail
+./tests/sys/file/dup_test.c:126:	 * In today's implementations of dup and dup2 we have to make
+./tests/sys/file/dup_test.c:142:	 * fuckups take out each other and make the end-result the way
+./tests/sys/file/flock_helper.c:70:make_file(const char *pathname, off_t sz)
+./tests/sys/file/flock_helper.c:1435: * is granted, make sure things are sane.
+./tests/sys/file/flock_helper.c:1498:	 * Sleep, then kill the child. This makes me a little sad, but it's
+./tests/sys/sys/bitset_test.c:50:	 * of set and clear bits and make sure they match what we expect.
+./tests/sys/kern/pipe/pipe_kqueue_test.c:71:	/* Filling up the pipe should make the EVFILT_WRITE disappear. */
+./tests/sys/kern/pipe/pipe_kqueue_test.c:122:	 * Closing the read end should make a EV_EOF appear but leave the 'data'
+./tests/sys/kern/pipe/pipe_wraparound_test.c:38: * This program tests to make sure that wraparound writes and reads
+./tests/sys/kern/ptrace_test.c:1277:	 * for the new thread to arrive and make sure it reports a
+./tests/sys/kern/ptrace_test.c:3379: * past, so make no assumption.
+./tests/sys/kern/unix_passfd_test.c:336: * Put a temporary file into a UNIX domain socket, then take it out and make
+./tests/sys/kern/unix_passfd_test.c:589:	/* First make MSG_PEEK recvmsg(2)... */
+./tests/sys/kern/unix_passfd_test.c:610:	/* ... and make sure we did not receive any descriptors! */
+./tests/sys/kern/unix_seqpacket_test.c:481:/* connect(2) can make a connection */
+./tests/sys/kern/sysctl_kern_proc.c:126:	 * Truncate the output buffer ever so slightly and make sure that we get
+./tests/sys/kern/kern_copyin.c:117:	 * Since the shared page address can be randomized we need to make
+./tests/sys/kern/socket_splice.c:669: * however make sure that they are interruptible.
+./tests/sys/kern/listener_wakeup.c:52: * that we have and this test makes sure it is preserved.  The known software
+./tests/sys/kern/sigwait.c:26:make_timespec(time_t s, long int ns)
+./tests/sys/kern/sigwait.c:128:	timeout = make_timespec(sec, zero_tmo ? 0 : TIMESPEC_HZ/2);
+./tests/sys/kern/sigwait.c:213:	ts = make_timespec(LONG_MAX, 0);
+./tests/sys/kern/unix_stream.c:241:	/* Sleep a bit to make sure that thread is put to sleep. */
+./tests/sys/posixshm/posixshm_test.c:821:	 * Fork a child process to make sure the second page is no
+./tests/sys/posixshm/posixshm_test.c:1017:	/* Also make sure that named shm is correct */
+./tests/sys/fifo/fifo_kqueue.c:75:	/* Filling up the pipe should make the EVFILT_WRITE disappear. */
+./tests/sys/fifo/fifo_kqueue.c:126:	 * Closing the read end should make a EV_EOF appear but leave the 'data'
+./tests/sys/fifo/fifo_io.c:99:makefifo(const char *fifoname, const char *testname)
+./tests/sys/fifo/fifo_io.c:103:		err(-1, "%s: makefifo: mkfifo: %s", testname, fifoname);
+./tests/sys/fifo/fifo_io.c:237: * Simple I/O test: write ten integers, and make sure we get back the same
+... [13224 more matches]
+```
+
+--- RESPONSE ---
+
+
+The build fails silently - likely because the Makefile doesn't include the base FreeBSD make infrastructure that defines variables like `.OBJDIR`, `.CURDIR`, `CP`, `INSTALL`, `RM`. Let me check what's available.
+
+ACTION: FIND_FILE bsd.prog.mk

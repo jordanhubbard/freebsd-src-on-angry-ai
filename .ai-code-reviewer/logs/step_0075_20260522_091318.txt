@@ -1,0 +1,13 @@
+=== STEP 75 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/Makefile
+Scope: usr.bin/basename
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Let me verify the Makefile has proper tabs, then build.
+
+ACTION: READ_FILE usr.bin/basename/Makefile

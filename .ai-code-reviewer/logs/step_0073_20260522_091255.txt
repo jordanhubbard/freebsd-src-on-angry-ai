@@ -1,0 +1,76 @@
+=== STEP 73 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The loop logic in my Rust code is broken. Let me fix it properly.
+
+ACTION: EDIT_FILE usr.bin/basename/src/main.rs
+OLD:
+<<<
+    let suffix_str = suffix.as_deref().unwrap_or("");
+
+    for arg in &remaining[..remaining.len().max(1) - 1 + if suffix.is_some() && !aflag && remaining.len() == 2 { 0 } else { remaining.len().max(1) - 1 }] {
+        let c_arg = match CString::new(arg.as_bytes()) {
+            Ok(s) => s,
+            Err(_) => {
+                eprintln!("basename: invalid argument");
+                process::exit(1);
+            }
+        };
+        let result = unsafe { basename(c_arg.as_ptr()) };
+        if result.is_null() {
+            eprintln!("basename: error processing argument");
+            process::exit(1);
+        }
+        let base = unsafe { std::ffi::CStr::from_ptr(result) }
+            .to_string_lossy()
+            .into_owned();
+        let mut base = base;
+        stripsuffix(&mut base, suffix_str);
+        println!("{}", base);
+    }
+
+    process::exit(0);
+}
+>>>
+NEW:
+<<<
+    let suffix_str = suffix.as_deref().unwrap_or("");
+
+    // Determine which arguments are strings to process.
+    // In POSIX two-arg form (no -a, no -s, exactly 2 args), the second arg is suffix.
+    let num_strings = if !aflag && suffix.is_none() && remaining.len() == 2 {
+        1
+    } else {
+        remaining.len()
+    };
+
+    for arg in &remaining[..num_strings] {
+        let c_arg = match CString::new(arg.as_bytes()) {
+            Ok(s) => s,
+            Err(_) => {
+                eprintln!("basename: invalid argument");
+                process::exit(1);
+            }
+        };
+        let result = unsafe { basename(c_arg.as_ptr()) };
+        if result.is_null() {
+            eprintln!("basename: error processing argument");
+            process::exit(1);
+        }
+        let base = unsafe { std::ffi::CStr::from_ptr(result) }
+            .to_string_lossy()
+            .into_owned();
+        let mut base = base;
+        stripsuffix(&mut base, suffix_str);
+        println!("{}", base);
+    }
+
+    process::exit(0);
+}
+>>>
