@@ -1,0 +1,97 @@
+=== STEP 77 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/yes/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/yes
+   Files: 0/3
+📄 File: usr.bin/yes/src/main.rs
+✏️  Edits: 3 files modified
+
+```
+use std::io::{self, Write};
+use std::process;
+
+const EXP: &str = "y\n";
+const OPTBUF: usize = 8190;
+
+fn main() {
+    let args: Vec<String> = std::env::args().skip(1).collect();
+
+    let mut exp = String::from(EXP);
+    if !args.is_empty() {
+        exp.clear();
+        for (i, arg) in args.iter().enumerate() {
+            if i > 0 {
+                exp.push(' ');
+            }
+            exp.push_str(arg);
+        }
+        exp.push('\n');
+    }
+
+    let explen = exp.len();
+    let mut buf = exp.clone();
+    let mut buflen = explen;
+    while buflen < OPTBUF {
+        let old_len = buf.len();
+        buf.push_str(&exp[..buflen.min(old_len)]);
+        buflen += buflen;
+    }
+    if explen < OPTBUF && buflen > OPTBUF {
+        buflen = OPTBUF;
+    }
+    buf.truncate(buflen);
+
+    let stdout = io::stdout();
+    let mut handle = stdout.lock();
+    let mut offset: usize = 0;
+    loop {
+        let chunk = &buf[offset..];
+        match handle.write(chunk) {
+            Ok(0) => break,
+            Ok(n) => {
+                offset = (offset + n) % explen;
+            }
+            Err(e) if e.kind() == io::ErrorKind::Interrupted => continue,
+            Err(e) => {
+                eprintln!("yes: stdout: {}", e);
+                process::exit(1);
+            }
+        }
+    }
+    eprintln!("yes: stdout: Broken pipe");
+    process::exit(1);
+}
+```
+
+--- RESPONSE ---
+
+
+The Makefile likely has spaces instead of tabs for recipe lines. Let me rewrite it properly.
+
+ACTION: WRITE_FILE usr.bin/yes/Makefile
+CONTENT:
+PROG=	yes
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}

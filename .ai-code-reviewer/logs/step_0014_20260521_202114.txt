@@ -1,0 +1,210 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/cp
+   Files: 0/5
+📄 File: bin/cp/cp.c
+   Chunks: 4/7
+
+```
+=== CHUNK 4/7: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/cp/cp.c === [function: main]
+=== Lines 103-290 (188 lines) ===
+
+int
+main(int argc, char *argv[])
+{
+	struct stat to_stat, tmp_stat;
+	enum op type;
+	int ch, fts_options, r;
+	char *sep, *target;
+	bool have_trailing_slash = false;
+
+	fts_options = FTS_NOCHDIR | FTS_PHYSICAL;
+	while ((ch = getopt_long(argc, argv, "+HLPRafilNnprsvx", long_opts,
+	    NULL)) != -1)
+		switch (ch) {
+		case 'H':
+			Hflag = true;
+			Lflag = Pflag = false;
+			break;
+		case 'L':
+			Lflag = true;
+			Hflag = Pflag = false;
+			break;
+		case 'P':
+			Pflag = true;
+			Hflag = Lflag = false;
+			break;
+		case 'R':
+			Rflag = true;
+			break;
+		case 'a':
+			pflag = true;
+			Rflag = true;
+			Pflag = true;
+			Hflag = Lflag = false;
+			break;
+		case 'f':
+			fflag = true;
+			iflag = nflag = false;
+			break;
+		case 'i':
+			iflag = true;
+			fflag = nflag = false;
+			break;
+		case 'l':
+			lflag = true;
+			break;
+		case 'N':
+			Nflag = true;
+			break;
+		case 'n':
+			nflag = true;
+			fflag = iflag = false;
+			break;
+		case 'p':
+			pflag = true;
+			break;
+		case 'r':
+			rflag = Lflag = true;
+			Hflag = Pflag = false;
+			break;
+		case 's':
+			sflag = true;
+			break;
+		case 'v':
+			vflag = true;
+			break;
+		case 'x':
+			fts_options |= FTS_XDEV;
+			break;
+		case SORT_OPT:
+			Sflag = true;
+			break;
+		default:
+			usage();
+		}
+	argc -= optind;
+	argv += optind;
+
+	if (argc < 2)
+		usage();
+
+	if (Rflag && rflag)
+		errx(1, "the -R and -r options may not be specified together");
+	if (lflag && sflag)
+		errx(1, "the -l and -s options may not be specified together");
+	if (rflag)
+		Rflag = true;
+	if (Rflag) {
+		if (Hflag)
+			fts_options |= FTS_COMFOLLOW;
+		if (Lflag) {
+			fts_options &= ~FTS_PHYSICAL;
+			fts_options |= FTS_LOGICAL;
+		}
+	} else if (!Pflag) {
+		fts_options &= ~FTS_PHYSICAL;
+		fts_options |= FTS_LOGICAL | FTS_COMFOLLOW;
+	}
+	(void)signal(SIGINFO, siginfo);
+
+	/* Save the target base in "to". */
+	target = argv[--argc];
+	if (*target == '\0') {
+		target = dot;
+	} else if ((sep = strrchr(target, '/')) != NULL && sep[1] == '\0') {
+		have_trailing_slash = true;
+		while (sep > target && *sep == '/')
+			sep--;
+		sep[1] = '\0';
+	}
+	/*
+	 * Copy target into to.base, leaving room for a possible separator
+	 * which will be appended later in the non-FILE_TO_FILE cases.
+	 */
+	if (strlcpy(to.base, target, sizeof(to.base) - 1) >=
+	    sizeof(to.base) - 1)
+		errc(1, ENAMETOOLONG, "%s", target);
+
+	/* Set end of argument list for fts(3). */
+	argv[argc] = NULL;
+
+	/*
+	 * Cp has two distinct cases:
+	 *
+	 * cp [-R] source target
+	 * cp [-R] source1 ... sourceN directory
+	 *
+	 * In both cases, source can be either a file or a directory.
+	 *
+	 * In (1), the target becomes a copy of the source. That is, if the
+	 * source is a file, the target will be a file, and likewise for
+	 * directories.
+	 *
+	 * In (2), the real target is not directory, but "directory/source".
+	 */
+	r = stat(to.base, &to_stat);
+	if (r == -1 && errno != ENOENT)
+		err(1, "%s", target);
+	if (r == -1 || !S_ISDIR(to_stat.st_mode)) {
+		/*
+		 * Case (1).  Target is not a directory.
+		 */
+		if (argc > 1)
+			errc(1, ENOTDIR, "%s", target);
+
+		/*
+		 * Need to detect the case:
+		 *	cp -R dir foo
+		 * Where dir is a directory and foo does not exist, where
+		 * we want pathname concatenations turned on but not for
+		 * the initial mkdir().
+		 */
+		if (r == -1) {
+			if (Rflag && (Lflag || Hflag))
+				stat(*argv, &tmp_stat);
+			else
+				lstat(*argv, &tmp_stat);
+
+			if (S_ISDIR(tmp_stat.st_mode) && Rflag)
+				type = DIR_TO_DNE;
+			else
+				type = FILE_TO_FILE;
+		} else
+			type = FILE_TO_FILE;
+
+		if (have_trailing_slash && type == FILE_TO_FILE) {
+			if (r == -1)
+				errc(1, ENOENT, "%s", target);
+			else
+				errc(1, ENOTDIR, "%s", target);
+		}
+	} else {
+		/*
+		 * Case (2).  Target is a directory.
+		 */
+		type = FILE_TO_DIR;
+	}
+
+	/*
+	 * For DIR_TO_DNE, we could provide copy() with the to_stat we've
+	 * already allocated on the stack here that isn't being used for
+	 * anything.  Not doing so, though, simplifies later logic a little bit
+	 * as we need to skip checking root_stat on the first iteration and
+	 * ensure that we set it with the first mkdir().
+	 */
+	exit (copy(argv, type, fts_options, (type == DIR_TO_DNE ? NULL :
+	    &to_stat)));
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

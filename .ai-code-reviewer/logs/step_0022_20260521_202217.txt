@@ -1,0 +1,50 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/cp
+   Files: 0/5
+📄 File: bin/cp/utils.c
+   Chunks: 4/10
+
+```
+=== CHUNK 4/10: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/cp/utils.c === [function: copy_link]
+=== Lines 257-284 (28 lines) ===
+
+int
+copy_link(const FTSENT *p, bool dne, bool beneath)
+{
+	ssize_t len;
+	int atflags = beneath ? AT_RESOLVE_BENEATH : 0;
+	char llink[PATH_MAX];
+
+	if (!dne && nflag) {
+		if (vflag)
+			printf("%s%s not overwritten\n", to.base, to.path);
+		return (1);
+	}
+	if ((len = readlink(p->fts_path, llink, sizeof(llink) - 1)) == -1) {
+		warn("readlink: %s", p->fts_path);
+		return (1);
+	}
+	llink[len] = '\0';
+	if (!dne && unlinkat(to.dir, to.path, atflags) != 0) {
+		warn("unlink: %s%s", to.base, to.path);
+		return (1);
+	}
+	if (symlinkat(llink, to.dir, to.path) != 0) {
+		warn("symlink: %s", llink);
+		return (1);
+	}
+	return (pflag ? setfile(p->fts_statp, -1, beneath) : 0);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

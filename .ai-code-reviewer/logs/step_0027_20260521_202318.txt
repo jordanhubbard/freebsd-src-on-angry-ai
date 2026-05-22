@@ -1,0 +1,12 @@
+=== STEP 27 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory bin/chio skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE bin/date
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR bin

@@ -1,0 +1,43 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/cp
+   Files: 0/5
+📄 File: bin/cp/utils.c
+   Chunks: 5/10
+
+```
+=== CHUNK 5/10: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/cp/utils.c === [function: copy_fifo]
+=== Lines 285-305 (21 lines) ===
+
+int
+copy_fifo(struct stat *from_stat, bool dne, bool beneath)
+{
+	int atflags = beneath ? AT_RESOLVE_BENEATH : 0;
+
+	if (!dne && nflag) {
+		if (vflag)
+			printf("%s%s not overwritten\n", to.base, to.path);
+		return (1);
+	}
+	if (!dne && unlinkat(to.dir, to.path, atflags) != 0) {
+		warn("unlink: %s%s", to.base, to.path);
+		return (1);
+	}
+	if (mkfifoat(to.dir, to.path, from_stat->st_mode) != 0) {
+		warn("mkfifo: %s%s", to.base, to.path);
+		return (1);
+	}
+	return (pflag ? setfile(from_stat, -1, beneath) : 0);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

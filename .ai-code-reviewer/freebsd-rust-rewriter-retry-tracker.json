@@ -16,8 +16,8 @@
     "last_attempt": "2026-05-21T18:22:27.014294"
   },
   "bin/cp": {
-    "attempts": 2,
-    "last_attempt": "2026-05-21T19:04:01.335922"
+    "attempts": 3,
+    "last_attempt": "2026-05-21T20:20:42.425773"
   },
   "bin/cpuset": {
     "attempts": 3,
@@ -40,8 +40,8 @@
     "last_attempt": "2026-05-21T18:32:25.358466"
   },
   "bin/ed": {
-    "attempts": 2,
-    "last_attempt": "2026-05-21T18:30:59.984003"
+    "attempts": 3,
+    "last_attempt": "2026-05-21T20:48:08.152540"
   },
   "bin/getfacl": {
     "attempts": 3,
@@ -60,16 +60,16 @@
     "last_attempt": "2026-05-21T18:58:57.695367"
   },
   "bin/ls": {
-    "attempts": 2,
-    "last_attempt": "2026-05-21T19:02:59.954621"
+    "attempts": 3,
+    "last_attempt": "2026-05-21T20:47:40.033483"
   },
   "bin/mv": {
     "attempts": 3,
     "last_attempt": "2026-05-21T19:30:06.013835"
   },
   "bin/pax": {
-    "attempts": 1,
-    "last_attempt": "2026-05-21T18:30:22.777181"
+    "attempts": 2,
+    "last_attempt": "2026-05-21T20:49:09.531554"
   },
   "bin/pkill": {
     "attempts": 3,
@@ -92,8 +92,8 @@
     "last_attempt": "2026-05-21T12:22:31.654359"
   },
   "bin/setfacl": {
-    "attempts": 2,
-    "last_attempt": "2026-05-21T19:03:54.012227"
+    "attempts": 3,
+    "last_attempt": "2026-05-21T20:23:27.975903"
   },
   "bin/sh": {
     "attempts": 1,
@@ -112,7 +112,11 @@
     "last_attempt": "2026-05-21T19:44:21.180208"
   },
   "usr.bin/false": {
+    "attempts": 3,
+    "last_attempt": "2026-05-21T20:49:38.897585"
+  },
+  "usr.bin/yes": {
     "attempts": 2,
-    "last_attempt": "2026-05-21T19:30:19.224424"
+    "last_attempt": "2026-05-21T20:43:09.887859"
   }
 }

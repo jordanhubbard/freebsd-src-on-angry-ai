@@ -1,0 +1,178 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/cp
+   Files: 0/5
+📄 File: bin/cp/utils.c
+   Chunks: 3/10
+
+```
+=== CHUNK 3/10: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/cp/utils.c === [function: copy_file]
+=== Lines 101-256 (156 lines) ===
+
+int
+copy_file(const FTSENT *entp, bool dne, bool beneath)
+{
+	struct stat sb, *fs;
+	ssize_t wcount;
+	off_t wtotal;
+	int ch, checkch, from_fd, rval, to_fd;
+	bool use_copy_file_range = true;
+
+	fs = entp->fts_statp;
+	from_fd = to_fd = -1;
+	if (!lflag && !sflag) {
+		if ((from_fd = open(entp->fts_path, O_RDONLY, 0)) < 0 ||
+		    fstat(from_fd, &sb) != 0) {
+			warn("%s", entp->fts_path);
+			if (from_fd >= 0)
+				(void)close(from_fd);
+			return (1);
+		}
+		/*
+		 * Check that the file hasn't been replaced with one of a
+		 * different type.  This can happen if we've been asked to
+		 * copy something which is actively being modified and
+		 * lost the race, or if we've been asked to copy something
+		 * like /proc/X/fd/Y which stat(2) reports as S_IFREG but
+		 * is actually something else once you open it.
+		 */
+		if ((sb.st_mode & S_IFMT) != (fs->st_mode & S_IFMT)) {
+			warnx("%s: File changed", entp->fts_path);
+			(void)close(from_fd);
+			return (1);
+		}
+	}
+
+	/*
+	 * If the file exists and we're interactive, verify with the user.
+	 * If the file DNE, set the mode to be the from file, minus setuid
+	 * bits, modified by the umask; arguably wrong, but it makes copying
+	 * executables work right and it's been that way forever.  (The
+	 * other choice is 666 or'ed with the execute bits on the from file
+	 * modified by the umask.)
+	 */
+	if (!dne) {
+		if (nflag) {
+			if (vflag)
+				printf("%s%s not overwritten\n",
+				    to.base, to.path);
+			rval = 1;
+			goto done;
+		} else if (iflag) {
+			(void)fprintf(stderr, "overwrite %s%s? %s",
+			    to.base, to.path, YESNO);
+			checkch = ch = getchar();
+			while (ch != '\n' && ch != EOF)
+				ch = getchar();
+			if (checkch != 'y' && checkch != 'Y') {
+				(void)fprintf(stderr, "not overwritten\n");
+				rval = 1;
+				goto done;
+			}
+		}
+
+		if (fflag) {
+			/* remove existing destination file */
+			(void)unlinkat(to.dir, to.path,
+			    beneath ? AT_RESOLVE_BENEATH : 0);
+			dne = 1;
+		}
+	}
+
+	rval = 0;
+
+	if (lflag) {
+		if (linkat(AT_FDCWD, entp->fts_path, to.dir, to.path, 0) != 0) {
+			warn("%s%s", to.base, to.path);
+			rval = 1;
+		}
+		goto done;
+	}
+
+	if (sflag) {
+		if (symlinkat(entp->fts_path, to.dir, to.path) != 0) {
+			warn("%s%s", to.base, to.path);
+			rval = 1;
+		}
+		goto done;
+	}
+
+	if (!dne) {
+		/* overwrite existing destination file */
+		to_fd = openat(to.dir, to.path,
+		    O_WRONLY | O_TRUNC | (beneath ? O_RESOLVE_BENEATH : 0), 0);
+	} else {
+		/* create new destination file */
+		to_fd = openat(to.dir, to.path,
+		    O_WRONLY | O_TRUNC | O_CREAT |
+		    (beneath ? O_RESOLVE_BENEATH : 0),
+		    fs->st_mode & ~(S_ISUID | S_ISGID));
+	}
+	if (to_fd == -1) {
+		warn("%s%s", to.base, to.path);
+		rval = 1;
+		goto done;
+	}
+
+	wtotal = 0;
+	do {
+		if (use_copy_file_range) {
+			wcount = copy_file_range(from_fd, NULL,
+			    to_fd, NULL, SSIZE_MAX, 0);
+			if (wcount < 0 && errno == EINVAL) {
+				/* probably a non-seekable descriptor */
+				use_copy_file_range = false;
+			}
+		}
+		if (!use_copy_file_range) {
+			wcount = copy_fallback(from_fd, to_fd);
+		}
+		if (wcount >= 0)
+			wtotal += wcount;
+		else if (errno != EINTR)
+			break;
+		if (info) {
+			info = 0;
+			(void)fprintf(stderr,
+			    "%s -> %s%s %3d%%\n",
+			    entp->fts_path, to.base, to.path,
+			    cp_pct(wtotal, fs->st_size));
+		}
+	} while (wcount != 0);
+	if (wcount < 0) {
+		warn("%s", entp->fts_path);
+		rval = 1;
+	}
+
+	/*
+	 * Don't remove the target even after an error.  The target might
+	 * not be a regular file, or its attributes might be important,
+	 * or its contents might be irreplaceable.  It would only be safe
+	 * to remove it if we created it and its length is 0.
+	 */
+	if (pflag && setfile(fs, to_fd, beneath))
+		rval = 1;
+	if (pflag && preserve_fd_acls(from_fd, to_fd) != 0)
+		rval = 1;
+	if (close(to_fd)) {
+		warn("%s%s", to.base, to.path);
+		rval = 1;
+	}
+
+done:
+	if (from_fd != -1)
+		(void)close(from_fd);
+	return (rval);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

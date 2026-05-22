@@ -1,0 +1,23 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/cp
+   Files: 0/5
+📄 File: bin/cp/cp.c
+   Chunks: 2/7
+
+```
+=== CHUNK 2/7: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/cp/cp.c === [function: copy]
+=== Lines 79-79 (1 lines) ===
+
+static int copy(char *[], enum op, int, struct stat *);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

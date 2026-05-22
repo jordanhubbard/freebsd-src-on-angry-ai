@@ -1,0 +1,20 @@
+=== STEP 107 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/yes:
+```
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+cargo-target
+src
+tests
+yes.1
+yes.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/true

@@ -1,0 +1,22 @@
+=== STEP 31 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/setfacl/Makefile:
+PROGRESS:
+📁 Directory: bin/setfacl
+   Files: 0/9
+📄 File: bin/setfacl/Makefile
+
+```
+PACKAGE=runtime
+PROG=	setfacl
+SRCS=	file.c mask.c merge.c remove.c setfacl.c util.c
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE bin/setfacl/setfacl.h

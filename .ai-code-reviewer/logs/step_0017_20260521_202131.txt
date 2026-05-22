@@ -1,0 +1,28 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/cp
+   Files: 0/5
+📄 File: bin/cp/cp.c
+   Chunks: 7/7
+
+```
+=== CHUNK 7/7: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/cp/cp.c === [function: siginfo]
+=== Lines 695-700 (6 lines) ===
+
+static void
+siginfo(int sig __unused)
+{
+
+	info = 1;
+}
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE bin/cp/extern.h

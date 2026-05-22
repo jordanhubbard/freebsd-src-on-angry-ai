@@ -1,0 +1,51 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+SET_SCOPE_OK: Now rewriting bin/cp
+
+HIERARCHY:
+  Level 1: Source tree (8132 work units)
+  Level 2: bin/cp ← YOU ARE HERE
+  Level 3: 5 candidate files
+  Level 4: Functions (auto-chunked for large files)
+
+WORK UNIT:
+  Kind: freebsd-command
+  Stage: application
+  Depends on: (none)
+  Build command: make -C bin/cp
+  Related files:
+    - bin/cp/Makefile
+    - bin/cp/cp.1
+    - bin/cp/cp.c
+    - bin/cp/extern.h
+    - bin/cp/utils.c
+
+✓ Directory has Makefile - valid source module
+
+FILES TO REWRITE:
+  - bin/cp/Makefile
+  - bin/cp/cp.1
+  - bin/cp/cp.c
+  - bin/cp/extern.h
+  - bin/cp/utils.c
+
+📁 Directory: bin/cp
+   Files: 0/5
+
+WORKFLOW:
+1. Rewrite each relevant file (READ_FILE, NEXT_CHUNK for large files)
+2. Make changes as needed (EDIT_FILE or WRITE_FILE)
+3. When ALL relevant files are rewritten: ACTION: BUILD
+4. If build succeeds: Changes committed for entire directory
+5. Move to next directory (SET_SCOPE)
+
+Attempts recorded for bin/cp: 3/3.
+Next attempt will auto-skip this directory.
+
+--- RESPONSE ---
+
+
+I need to understand the `bin/cp` codebase before rewriting. Let me read all the relevant files.
+
+ACTION: LIST_DIR bin/cp
