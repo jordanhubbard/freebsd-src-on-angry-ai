@@ -1,0 +1,11 @@
+=== STEP 65 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/printenv*'
+
+--- RESPONSE ---
+
+
+Let me check if there's an obj directory interfering:
+
+ACTION: LIST_DIR usr.bin/printenv

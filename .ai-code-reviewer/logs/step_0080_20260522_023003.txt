@@ -1,0 +1,20 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/fsync:
+```
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+cargo-target
+fsync
+fsync.1
+fsync.c
+src
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/fsync/Makefile

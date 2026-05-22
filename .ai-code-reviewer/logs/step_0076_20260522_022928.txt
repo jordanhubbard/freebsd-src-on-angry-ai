@@ -1,0 +1,28 @@
+=== STEP 76 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printenv:
+```
+.depend
+.depend.printenv.pieo
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+printenv
+printenv.1
+printenv.1.gz
+printenv.c
+printenv.debug
+printenv.full
+printenv.pieo
+src
+tests
+```
+
+--- RESPONSE ---
+
+
+Let me check the capsicum helpers library:
+
+ACTION: FIND_FILE capsicum_helpers

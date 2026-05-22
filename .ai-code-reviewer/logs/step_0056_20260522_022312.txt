@@ -1,0 +1,24 @@
+=== STEP 56 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+Let me write the Makefile cleanly without any markdown fences:
+
+ACTION: WRITE_FILE usr.bin/printenv/Makefile
+CONTENT:
+PROG=	printenv
+SRCS=	printenv.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.include <bsd.prog.mk>
+
+# Override the build to use Rust instead of C
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}

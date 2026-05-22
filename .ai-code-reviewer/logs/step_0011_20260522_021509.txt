@@ -1,0 +1,122 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printenv/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+I need to fix the Rust source - `__errno()` is declared after use, and the error handling needs cleanup. Let me also update the Makefile.
+
+ACTION: WRITE_FILE usr.bin/printenv/src/main.rs
+CONTENT:
+```rust
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1987, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::env;
+use std::io::{self, Write};
+use std::process;
+
+type CInt = i32;
+
+extern "C" {
+    fn caph_limit_stdio() -> CInt;
+    fn caph_enter() -> CInt;
+    fn __error(
+        errnum: CInt,
+        level: CInt,
+        fmt: *const u8,
+        arg1: *const u8,
+    ) -> CInt;
+}
+
+fn usage() -> ! {
+    let _ = io::stderr().write_all(b"usage: printenv [name]\n");
+    process::exit(1);
+}
+
+fn main() {
+    // Capsicum sandboxing
+    unsafe {
+        if caph_limit_stdio() < 0 || caph_enter() < 0 {
+            let msg = b"capsicum\0";
+            __error(1, 1, b"printenv: %s\0".as_ptr(), msg.as_ptr());
+            process::exit(1);
+        }
+    }
+
+    let args: Vec<String> = env::args().skip(1).collect();
+
+    if args.is_empty() {
+        // Print all environment variables
+        for (key, value) in env::vars() {
+            if writeln!(io::stdout(), "{}={}", key, value).is_err() {
+                let msg = b"stdout\0";
+                unsafe {
+                    __error(1, 1, b"printenv: %s\0".as_ptr(), msg.as_ptr());
+                }
+                process::exit(1);
+            }
+        }
+    } else if args.len() == 1 {
+        // Look up a specific environment variable
+        match env::var(&args[0]) {
+            Ok(value) => {
+                if writeln!(io::stdout(), "{}", value).is_err() {
+                    let msg = b"stdout\0";
+                    unsafe {
+                        __error(1, 1, b"printenv: %s\0".as_ptr(), msg.as_ptr());
+                    }
+                    process::exit(1);
+                }
+            }
+            Err(_) => {
+                // Variable not found
+                process::exit(1);
+            }
+        }
+    } else {
+        // Too many arguments
+        usage();
+    }
+
+    // Flush stdout and check for errors
+    if io::stdout().flush().is_err() {
+        let msg = b"stdout\0";
+        unsafe {
+            __error(1, 1, b"printenv: %s\0".as_ptr(), msg.as_ptr());
+        }
+        process::exit(1);
+    }
+
+    process::exit(0);
+}
+```

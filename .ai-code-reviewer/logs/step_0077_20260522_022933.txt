@@ -1,0 +1,15 @@
+=== STEP 77 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*capsicum_helpers*':
+```
+./lib/libcapsicum/capsicum_helpers.3
+./lib/libcapsicum/capsicum_helpers.h
+```
+
+--- RESPONSE ---
+
+
+Let me check the libcapsicum library structure:
+
+ACTION: LIST_DIR lib/libcapsicum
