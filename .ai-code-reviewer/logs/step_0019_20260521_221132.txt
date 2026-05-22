@@ -1,0 +1,12 @@
+=== STEP 19 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*libc/Cargo.toml*'
+
+--- RESPONSE ---
+
+
+Let me check how more complex Rust programs in the tree handle syscalls.
+
+ACTION: READ_FILE bin/uuidgen/Cargo.toml
+ACTION: READ_FILE bin/uuidgen/src/main.rs

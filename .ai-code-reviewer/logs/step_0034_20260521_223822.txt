@@ -1,0 +1,97 @@
+=== STEP 34 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/timeout/src/signals.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me create the util.rs module:
+
+ACTION: WRITE_FILE bin/timeout/src/util.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+// Utility functions for timeout
+
+use std::io::{self, Write};
+use std::process;
+
+use crate::ffi;
+use crate::EXIT_INVALID;
+
+pub fn parse_duration(s: &str) -> f64 {
+    let mut chars = s.chars();
+    let suffix = chars.next_back();
+    let num_str: String = chars.collect();
+    let ret: f64 = match num_str.parse() {
+        Ok(n) => n,
+        Err(_) => {
+            eprintln!("timeout: duration is not a number");
+            process::exit(EXIT_INVALID);
+        }
+    };
+    if ret.is_nan() {
+        eprintln!("timeout: duration is not a number");
+        process::exit(EXIT_INVALID);
+    }
+    let ret = match suffix {
+        None | Some('s') => ret,
+        Some('m') => ret * 60.0,
+        Some('h') => ret * 3600.0,
+        Some('d') => ret * 86400.0,
+        Some(_) => {
+            eprintln!("timeout: duration unit suffix invalid");
+            process::exit(EXIT_INVALID);
+        }
+    };
+    if ret < 0.0 || ret >= 100_000_000.0 {
+        eprintln!("timeout: duration out of range");
+        process::exit(EXIT_INVALID);
+    }
+    ret
+}
+
+pub fn parse_signal(s: &str) -> i32 {
+    let name = std::ffi::CString::new(s).unwrap();
+    let mut val: i32 = 0;
+    if unsafe { ffi::str2sig(name.as_ptr(), &mut val) } == 0 {
+        val
+    } else {
+        match s.parse::<i32>() {
+            Ok(n) => n,
+            Err(_) => {
+                eprintln!("timeout: signal is invalid");
+                process::exit(EXIT_INVALID);
+            }
+        }
+    }
+}
+
+pub fn set_interval(iv: f64) {
+    let mut tim: ffi::itimerval = unsafe { std::mem::zeroed() };
+    if iv > 0.0 {
+        let secs = iv as i64;
+        tim.it_value.tv_sec = secs;
+        tim.it_value.tv_usec = ((iv - secs as f64) * 1_000_000.0) as i64;
+    }
+    if unsafe { ffi::setitimer(ffi::ITIMER_REAL, &tim, std::ptr::null_mut()) } < 0 {
+        eprintln!("timeout: setitimer: {}", io::Error::last_os_error());
+        process::exit(1);
+    }
+}
+
+pub fn signame(signo: i32) -> String {
+    unsafe {
+        let arr = ffi::sys_signame();
+        if signo >= 0 && signo < arr.len() as i32 {
+            let ptr = *arr.as_ptr().add(signo as usize);
+            if !ptr.is_null() {
+                return std::ffi::CStr::from_ptr(ptr).to_string_lossy().into_owned();
+            }
+        }
+    }
+    signo.to_string()
+}
+>>>

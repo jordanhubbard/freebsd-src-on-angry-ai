@@ -1,0 +1,64 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+GREP_RESULT for 'libc':
+```
+./tests/include/endian_test.c:19:	/* glibc doesn't define the {__,}bswap_{16,32,64} */
+./tests/include/endian_test.c:39:	/* glibc doesn't define bswap{16,32,64} */
+./tests/include/endian_test.c:51:	 * glibc defines with two underscores. We don't test for only one since
+./tests/include/byteswap_test.c:23:	/* glibc defines the {__,}bswap_{16,32,64} */
+./tests/include/byteswap_test.c:43:	/* glibc does not define bswap{16,32,64} */
+./tests/sys/capsicum/capsicum-freebsd.h:34:// Use fexecve_() in tests to allow Linux variant to bypass glibc version.
+./tests/sys/kern/ktls_test.c:62:		atf_libc_error(errno, "Failed to read kern.ipc.tls.enable");
+./tests/sys/kern/ktls_test.c:80:			atf_libc_error(errno, "Failed to fetch TLS mode");
+./tests/sys/kern/ktls_test.c:92:			atf_libc_error(errno, "Failed to fetch TLS mode");
+./tests/sys/kern/ptrace_test.c:4165: * Assumes that libc nanosleep(2) is the plain syscall wrapper.
+./tests/sys/kern/ssl_sendfile.c:89:		atf_libc_error(errno, "Failed to read kern.ipc.tls.enable");
+./tests/sys/aio/local.h:60:		atf_libc_error(errno, "Failed to read %s", sysctl_oid_name);	\
+./tests/sys/aio/aio_test.c:1055:		atf_libc_error(errno, "Failed to read debug.iosize_max_clamp");
+./tests/sys/aio/aio_test.c:1826:		atf_libc_error(errno, "Failed to read %s", oid);
+./stand/efi/libefi/time.c:51: * (#defines From FreeBSD 3.2 lib/libc/stdtime/tzfile.h)
+./stand/kboot/libkboot/arch/aarch64/start_arch.h:12: * that glibc and musl have by passing x1 as 0 for the dynamic pointer. We
+./stand/kboot/libkboot/arch/amd64/start_arch.h:11: * thing, we comport to the calling conventions that glibc and musl have and
+./stand/libsa/uuid_to_string.c:28: * Note: some comments taken from lib/libc/uuid/uuid_to_string.c
+./stand/libsa/uuid_from_string.c:27: * Note: some comments taken from lib/libc/uuid/uuid_from_string.c
+./krb5/include/autoconf.h:509:/* Define if sys_errlist in libc */
+./krb5/include/autoconf.h:612:/* Define if in6addr_any is not defined in libc */
+./krb5/include/autoconf.h:737:/* Define to enable extensions in glibc */
+./secure/lib/libcrypt/crypt-des.c:2: * FreeSec: libcrypt for NetBSD
+./secure/lib/libcrypt/crypt-des.c:9: *	binaries of libcrypt exportable from the USA
+./secure/lib/libcrypt/crypt-des.c:13: *	a module that can be optionally included in libcrypt.
+./sys/compat/linprocfs/linprocfs.c:1339:		 * it confuses glibc pthread_getattr_np() method, where both
+./sys/compat/linux/linux_misc.c:412: * Glibc versions prior to 2.2.1 always use hard-coded CLK_TCK value.
+./sys/compat/linux/linux_misc.c:413: * Since 2.2.1 Glibc uses value exported from kernel via AT_CLKTCK
+./sys/compat/linux/linux_misc.c:2145:	 * Currently glibc changes nanosecond number to microsecond.
+./sys/compat/linux/linux_futex.c:237:		 * Glibc does not use this operation since version 2.3.3,
+./sys/compat/linux/linux_futex.c:239:		 * Glibc versions prior to 2.3.3 fall back to FUTEX_WAKE when
+./sys/compat/linux/linux_futex.c:249:		 * The above is true, however musl libc does make use of the
+./sys/compat/linux/linux_socket.c:2173:			 *	with glibc 2.30 and above.
+./sys/compat/linux/linux_socket.c:2184:			 *	with glibc 2.30 and above.
+./sys/compat/linux/linux_stats.c:71: * In glibc dev_t is a 64-bit quantity, with 32-bit major and minor numbers,
+./sys/compat/linux/linux_util.c:244:	 * for this is to work around an idiosyncrasy of glibc getttynam()
+./sys/compat/linux/linux_elf.c:392:	 * Starting with 2.24, glibc depends on a 16-byte stack alignment.
+./sys/compat/linux/linux_elf.c:509:	 * glibc falls back to the hard-coded CLK_TCK value when aux entry
+./sys/compat/linux/linux_file.c:392: * at least glibc-2.7 requires it. That is why l_dirent is padded with 2 bytes.
+./sys/crypto/sha2/sha256.h:46:/* Ensure libmd symbols do not clash with libcrypto */
+./sys/crypto/sha2/sha256c.c:382:   use in libcrypt.
+./sys/crypto/sha2/sha224.h:46:/* Ensure libmd symbols do not clash with libcrypto */
+./sys/crypto/sha2/sha512c.c:501:   use in libcrypt.
+./sys/crypto/sha2/sha512.h:46:/* Ensure libmd symbols do not clash with libcrypto */
+./sys/crypto/sha2/sha384.h:46:/* Ensure libmd symbols do not clash with libcrypto */
+./sys/crypto/sha2/sha512t.h:43:/* Ensure libmd symbols do not clash with libcrypto */
+./sys/crypto/md5c.c:309:   use in libcrypt.
+./sys/crypto/md4c.c:288:   use in libcrypt.
+./sys/crypto/skein/skein_port.h:118:/* Ensure libmd symbols do not clash with libcrypto */
+./sys/crypto/skein/skein.c:835:   use in libcrypt.
+... [3762 more matches]
+```
+
+--- RESPONSE ---
+
+
+Let me check how other Rust programs in the tree handle syscalls and if there's a libc crate available.
+
+ACTION: FIND_FILE Cargo.toml

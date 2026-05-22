@@ -1,0 +1,248 @@
+=== STEP 105 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/uname/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/uname/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-4-Clause
+// Copyright (c) 2002 Juli Mallett.
+// Copyright (c) 1993 The Regents of the University of California.
+
+use std::env;
+use std::ffi::{CStr, CString};
+use std::io::{self, Write};
+use std::process;
+
+const MFLAG: u32 = 0x01;
+const NFLAG: u32 = 0x02;
+const PFLAG: u32 = 0x04;
+const RFLAG: u32 = 0x08;
+const SFLAG: u32 = 0x10;
+const VFLAG: u32 = 0x20;
+const IFLAG: u32 = 0x40;
+const UFLAG: u32 = 0x80;
+const KFLAG: u32 = 0x100;
+const BFLAG: u32 = 0x200;
+
+// FreeBSD sysctl mib constants
+const CTL_KERN: i32 = 1;
+const CTL_HW: i32 = 6;
+const KERN_OSTYPE: i32 = 2;
+const KERN_HOSTNAME: i32 = 10;
+const KERN_OSRELEASE: i32 = 2;
+const KERN_VERSION: i32 = 8;
+const HW_MACHINE: i32 = 1;
+const HW_MACHINE_ARCH: i32 = 8;
+
+extern "C" {
+    fn sysctl(
+        name: *const i32,
+        namelen: u32,
+        oldp: *mut std::os::raw::c_void,
+        oldlenp: *mut usize,
+        newp: *const std::os::raw::c_void,
+        newlen: usize,
+    ) -> i32;
+    fn sysctlbyname(
+        name: *const std::os::raw::c_char,
+        oldp: *mut std::os::raw::c_void,
+        oldlenp: *mut usize,
+        newp: *const std::os::raw::c_void,
+        newlen: usize,
+    ) -> i32;
+}
+
+struct UnameInfo {
+    sysname: Option<String>,
+    hostname: Option<String>,
+    release: Option<String>,
+    version: Option<String>,
+    platform: Option<String>,
+    arch: Option<String>,
+    ident: Option<String>,
+    kernvers: Option<String>,
+    uservers: Option<String>,
+    buildid: Option<String>,
+}
+
+fn sysctl2(mib0: i32, mib1: i32) -> String {
+    let mut buf = [0u8; 1024];
+    let mut len = buf.len();
+    let mib = [mib0, mib1];
+    if unsafe { sysctl(mib.as_ptr(), 2, buf.as_mut_ptr() as *mut _, &mut len, std::ptr::null(), 0) } == -1 {
+        eprintln!("uname: sysctl: {}", io::Error::last_os_error());
+        process::exit(1);
+    }
+    String::from_utf8_lossy(&buf[..len]).to_string()
+}
+
+fn sysctlbyname_get(name: &str) -> String {
+    let cname = CString::new(name).unwrap();
+    let mut buf = [0u8; 1024];
+    let mut len = buf.len();
+    if unsafe { sysctlbyname(cname.as_ptr(), buf.as_mut_ptr() as *mut _, &mut len, std::ptr::null(), 0) } == -1 {
+        eprintln!("uname: sysctlbyname: {}", io::Error::last_os_error());
+        process::exit(1);
+    }
+    String::from_utf8_lossy(&buf[..len]).to_string()
+}
+
+fn native_sysname() -> String {
+    sysctl2(CTL_KERN, KERN_OSTYPE)
+}
+
+fn native_hostname() -> String {
+    sysctl2(CTL_KERN, KERN_HOSTNAME)
+}
+
+fn native_release() -> String {
+    sysctl2(CTL_KERN, KERN_OSRELEASE)
+}
+
+fn native_version() -> String {
+    let raw = sysctl2(CTL_KERN, KERN_VERSION);
+    let mut result = String::new();
+    for (i, ch) in raw.chars().enumerate() {
+        if ch == '\n' || ch == '\t' {
+            if i + 1 < raw.len() {
+                result.push(' ');
+            } else {
+                break;
+            }
+        } else {
+            result.push(ch);
+        }
+    }
+    result
+}
+
+fn native_platform() -> String {
+    sysctl2(CTL_HW, HW_MACHINE)
+}
+
+fn native_arch() -> String {
+    sysctl2(CTL_HW, HW_MACHINE_ARCH)
+}
+
+fn native_ident() -> String {
+    sysctlbyname_get("kern.ident")
+}
+
+fn native_buildid() -> String {
+    sysctlbyname_get("kern.build_id")
+}
+
+fn native_uservers() -> String {
+    // __FreeBSD_version from osreldate.h
+    // We use sysctl to get it
+    let ver = sysctlbyname_get("kern.osreldate");
+    ver
+}
+
+fn native_kernvers() -> String {
+    // getosreldate() returns the OS release date
+    let ver = sysctlbyname_get("kern.osreldate");
+    ver
+}
+
+fn get_info() -> UnameInfo {
+    let sysname = env::var("UNAME_s").ok().or_else(|| Some(native_sysname()));
+    let hostname = env::var("UNAME_n").ok().or_else(|| Some(native_hostname()));
+    let release = env::var("UNAME_r").ok().or_else(|| Some(native_release()));
+    let version = env::var("UNAME_v").ok().or_else(|| Some(native_version()));
+    let platform = env::var("UNAME_m").ok().or_else(|| Some(native_platform()));
+    let arch = env::var("UNAME_p").ok().or_else(|| Some(native_arch()));
+    let ident = env::var("UNAME_i").ok().or_else(|| Some(native_ident()));
+    let kernvers = env::var("UNAME_K").ok().or_else(|| Some(native_kernvers()));
+    let uservers = env::var("UNAME_U").ok().or_else(|| Some(native_uservers()));
+    let buildid = env::var("UNAME_b").ok().or_else(|| Some(native_buildid()));
+
+    UnameInfo {
+        sysname,
+        hostname,
+        release,
+        version,
+        platform,
+        arch,
+        ident,
+        kernvers,
+        uservers,
+        buildid,
+    }
+}
+
+fn print_uname(info: &UnameInfo, flags: u32) {
+    let mut space = false;
+
+    let print = |val: &Option<String>| {
+        if space {
+            print!(" ");
+        } else {
+            space = true;
+        }
+        print!("{}", val.as_ref().map(|s| s.as_str()).unwrap_or(""));
+    };
+
+    if flags & SFLAG != 0 { print(&info.sysname); }
+    if flags & NFLAG != 0 { print(&info.hostname); }
+    if flags & RFLAG != 0 { print(&info.release); }
+    if flags & VFLAG != 0 { print(&info.version); }
+    if flags & MFLAG != 0 { print(&info.platform); }
+    if flags & PFLAG != 0 { print(&info.arch); }
+    if flags & IFLAG != 0 { print(&info.ident); }
+    if flags & KFLAG != 0 { print(&info.kernvers); }
+    if flags & UFLAG != 0 { print(&info.uservers); }
+    if flags & BFLAG != 0 { print(&info.buildid); }
+
+    println!();
+}
+
+fn usage() -> ! {
+    let _ = io::stderr().write_all(b"usage: uname [-abiKmnoprsUv]\n");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut flags: u32 = 0;
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg.starts_with('-') && arg.len() > 1 {
+            for ch in arg[1..].chars() {
+                match ch {
+                    'a' => flags |= MFLAG | NFLAG | RFLAG | SFLAG | VFLAG,
+                    'b' => flags |= BFLAG,
+                    'i' => flags |= IFLAG,
+                    'K' => flags |= KFLAG,
+                    'm' => flags |= MFLAG,
+                    'n' => flags |= NFLAG,
+                    'p' => flags |= PFLAG,
+                    'r' => flags |= RFLAG,
+                    's' | 'o' => flags |= SFLAG,
+                    'U' => flags |= UFLAG,
+                    'v' => flags |= VFLAG,
+                    _ => usage(),
+                }
+            }
+        } else {
+            usage();
+        }
+        i += 1;
+    }
+
+    if flags == 0 {
+        flags |= SFLAG;
+    }
+
+    let info = get_info();
+    print_uname(&info, flags);
+}
+>>>

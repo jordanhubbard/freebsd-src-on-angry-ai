@@ -1,0 +1,24 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*Cargo.toml*':
+```
+./bin/domainname/Cargo.toml
+./bin/hostname/Cargo.toml
+./bin/nproc/Cargo.toml
+./bin/realpath/Cargo.toml
+./bin/sleep/Cargo.toml
+./bin/sync/Cargo.toml
+./bin/uuidgen/Cargo.toml
+./bin/echo/Cargo.toml
+./bin/pwd/Cargo.toml
+./bin/mkdir/Cargo.toml
+./usr.bin/dirname/Cargo.toml
+./usr.bin/true/Cargo.toml
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE bin/sleep/Cargo.toml
+ACTION: READ_FILE bin/sleep/src/main.rs

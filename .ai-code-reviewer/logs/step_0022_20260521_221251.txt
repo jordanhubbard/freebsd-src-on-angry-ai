@@ -1,0 +1,22 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*.cargo/config.toml*'
+
+--- RESPONSE ---
+
+
+This is a complex command requiring FFI for syscalls. Since no `libc` crate is vendored, I'll define all FFI bindings manually. Let me create the Rust implementation.
+
+ACTION: WRITE_FILE bin/timeout/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "timeout"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "timeout"
+path = "src/main.rs"
+<<<
