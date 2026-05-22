@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 13:38 - usr.bin/c99 ✓
+
+**Directory:** `usr.bin/c99`
+
+**Summary:** [ai-code-reviewer] c99: Rewrite C wrapper to Rust with Cargo build
+
+**Files changed:**
+  - usr.bin/c99/Makefile
+  - usr.bin/c99/Cargo.lock
+  - usr.bin/c99/Cargo.toml
+  - usr.bin/c99/cargo-target/.rustc_info.json
+  - usr.bin/c99/cargo-target/CACHEDIR.TAG
+  - usr.bin/c99/cargo-target/debug/.cargo-lock
+  - usr.bin/c99/cargo-target/debug/.fingerprint/c99-388365a62fe5dc3e/invoked.timestamp
+  - usr.bin/c99/cargo-target/debug/.fingerprint/c99-388365a62fe5dc3e/output-bin-c99
+  - usr.bin/c99/cargo-target/debug/deps/c99-388365a62fe5dc3e.d
+  - usr.bin/c99/cargo-target/debug/incremental/c99-0712ayzgwf90d/s-hirurc0v8f-0zgmc6g-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 13:28 - usr.bin/pom ✓
 
 **Directory:** `usr.bin/pom`

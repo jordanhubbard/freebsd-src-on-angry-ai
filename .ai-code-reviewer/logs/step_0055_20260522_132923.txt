@@ -1,0 +1,137 @@
+=== STEP 55 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/pom is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 76a413fffa4c.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE usr.bin/c99
+
+FINAL DIFFS:
+--- usr.bin/pom/Makefile ---
+```diff
+diff --git a/usr.bin/pom/Makefile b/usr.bin/pom/Makefile
+index 54b62eface7..97379a5bf21 100644
+--- a/usr.bin/pom/Makefile
++++ b/usr.bin/pom/Makefile
+@@ -1,7 +1,25 @@
+-PACKAGE=	games
++.include <src.opts.mk>
+ 
+ PROG=	pom
+-MAN=	pom.6
+-LIBADD=	m
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/pom/Makefile.depend ---
+```diff
+diff --git a/usr.bin/pom/Makefile.depend b/usr.bin/pom/Makefile.depend
+index 866f7ef5d25..93249906da4 100644
+--- a/usr.bin/pom/Makefile.depend
++++ b/usr.bin/pom/Makefile.depend
+@@ -2,13 +2,9 @@
+ 
+ DIRDEPS = \
+ 	include \
+-	include/xlocale \
+ 	lib/${CSU_DIR} \
+ 	lib/libc \
+-	lib/libcapsicum \
+-	lib/libcasper/libcasper \
+ 	lib/libcompiler_rt \
+-	lib/msun \
+ 
+ 
+ .include <dirdeps.mk>
+```
+
+--- usr.bin/pom/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/cargo-target/debug/.fingerprint/pom-cbac7645422b2252/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/cargo-target/debug/.fingerprint/pom-cbac7645422b2252/output-bin-pom ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/cargo-target/debug/deps/pom-cbac7645422b2252.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/pom/cargo-target/debug/incremental/pom-172mtfa1uy2ou/s-hiruihtwh2-0xlq81s-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/pom/cargo-target/debug/incremental/pom-172mtfa1uy2ou/s-hiruihtwh2-0xlq81s-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/pom/cargo-target/debug/incremental/pom-172mtfa1uy2ou/s-hiruihtwh2-0xlq81s.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/pom/cargo-target/debug/incremental/pom-172mtfa1uy2ou/s-hiruihtwh2-0xlq81s.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/pom/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for usr.bin/pom. Moving to the next unit: usr.bin/c99.
+
+ACTION: SET_SCOPE usr.bin/c99
