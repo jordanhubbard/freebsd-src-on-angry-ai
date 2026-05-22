@@ -1,0 +1,112 @@
+=== STEP 45 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/ypcat is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 0046a96aecb3.
+
+Completed directories so far: 2
+NEXT: Use SET_SCOPE usr.bin/biff
+
+FINAL DIFFS:
+--- usr.bin/ypcat/Makefile ---
+```diff
+diff --git a/usr.bin/ypcat/Makefile b/usr.bin/ypcat/Makefile
+index 15a48cf94e9..9fb79116e33 100644
+--- a/usr.bin/ypcat/Makefile
++++ b/usr.bin/ypcat/Makefile
+@@ -1,6 +1,24 @@
+ PACKAGE=	yp
+ PROG=	ypcat
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-WARNS?=	3
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+ 
+-.include <bsd.prog.mk>
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/ypcat/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/cargo-target/debug/.fingerprint/ypcat-d5514f930fb39856/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/cargo-target/debug/.fingerprint/ypcat-d5514f930fb39856/output-bin-ypcat ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/cargo-target/debug/deps/ypcat-d5514f930fb39856.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/ypcat/cargo-target/debug/incremental/ypcat-3vwjq3yrrdex2/s-hirho15ws1-0mooeoq-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/ypcat/cargo-target/debug/incremental/ypcat-3vwjq3yrrdex2/s-hirho15ws1-0mooeoq-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/ypcat/cargo-target/debug/incremental/ypcat-3vwjq3yrrdex2/s-hirho15ws1-0mooeoq.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/ypcat/cargo-target/debug/incremental/ypcat-3vwjq3yrrdex2/s-hirho15ws1-0mooeoq.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/ypcat/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `usr.bin/ypcat`. Moving to the next unit.
+
+ACTION: SET_SCOPE usr.bin/biff

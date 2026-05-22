@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 05:55 - usr.bin/biff ✓
+
+**Directory:** `usr.bin/biff`
+
+**Summary:** [ai-code-reviewer] biff: replace Makefile with Cargo build
+
+**Files changed:**
+  - usr.bin/biff/Makefile
+  - usr.bin/biff/Cargo.lock
+  - usr.bin/biff/Cargo.toml
+  - usr.bin/biff/cargo-target/.rustc_info.json
+  - usr.bin/biff/cargo-target/CACHEDIR.TAG
+  - usr.bin/biff/cargo-target/debug/.cargo-lock
+  - usr.bin/biff/cargo-target/debug/.fingerprint/biff-2314349b5b745afc/invoked.timestamp
+  - usr.bin/biff/cargo-target/debug/.fingerprint/biff-2314349b5b745afc/output-bin-biff
+  - usr.bin/biff/cargo-target/debug/deps/biff-2314349b5b745afc.d
+  - usr.bin/biff/cargo-target/debug/incremental/biff-366hcjzib3vte/s-hirhytbilf-0k57ms5-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 05:43 - usr.bin/ypcat ✓
 
 **Directory:** `usr.bin/ypcat`

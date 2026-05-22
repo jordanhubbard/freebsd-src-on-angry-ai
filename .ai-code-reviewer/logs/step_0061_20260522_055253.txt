@@ -1,0 +1,138 @@
+=== STEP 61 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/biff/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/biff/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1980, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::ffi::CStr;
+use std::os::raw::{c_char, c_int};
+use std::os::unix::ffi::OsStrExt;
+use std::os::unix::fs::PermissionsExt;
+use std::path::Path;
+use std::process;
+
+const STDIN_FILENO: c_int = 0;
+const STDOUT_FILENO: c_int = 1;
+const STDERR_FILENO: c_int = 2;
+
+const S_IXUSR: u32 = 0o100;
+const S_IXGRP: u32 = 0o010;
+
+extern "C" {
+    fn ttyname(fd: c_int) -> *mut c_char;
+}
+
+fn usage() -> ! {
+    eprintln!("usage: biff [n | y | b]");
+    process::exit(2);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
+    // biff takes no options, only positional args
+    if args.len() > 2 {
+        usage();
+    }
+
+    // Find tty name
+    let mut name_ptr: *mut c_char = std::ptr::null_mut();
+    unsafe {
+        name_ptr = ttyname(STDIN_FILENO);
+        if name_ptr.is_null() {
+            name_ptr = ttyname(STDOUT_FILENO);
+        }
+        if name_ptr.is_null() {
+            name_ptr = ttyname(STDERR_FILENO);
+        }
+        if name_ptr.is_null() {
+            eprintln!("biff: unknown tty");
+            process::exit(2);
+        }
+    }
+
+    let name_cstr = unsafe { CStr::from_ptr(name_ptr) };
+    let name_os = std::ffi::OsStr::from_bytes(name_cstr.to_bytes());
+    let name_path = Path::new(name_os);
+
+    let metadata = match std::fs::metadata(name_path) {
+        Ok(m) => m,
+        Err(e) => {
+            eprintln!("biff: stat: {e}");
+            process::exit(2);
+        }
+    };
+
+    let mode = metadata.permissions().mode();
+
+    if args.len() == 1 {
+        // No argument: query mode
+        let result = if mode & S_IXUSR != 0 {
+            "y"
+        } else if mode & S_IXGRP != 0 {
+            "b"
+        } else {
+            "n"
+        };
+        println!("is {result}");
+        process::exit(if mode & (S_IXUSR | S_IXGRP) != 0 { 0 } else { 1 });
+    }
+
+    let arg = &args[1];
+    let new_mode = match arg.as_str() {
+        "n" => mode & !(S_IXUSR | S_IXGRP),
+        "y" => (mode & !(S_IXUSR | S_IXGRP)) | S_IXUSR,
+        "b" => (mode & !(S_IXUSR | S_IXGRP)) | S_IXGRP,
+        _ => usage(),
+    };
+
+    let mut perms = metadata.permissions();
+    perms.set_mode(new_mode);
+    if std::fs::set_permissions(name_path, perms).is_err() {
+        eprintln!(
+            "biff: {}: {}",
+            name_os.to_string_lossy(),
+            std::io::Error::last_os_error()
+        );
+        process::exit(2);
+    }
+
+    // Match original C behavior: exit status uses pre-chmod mode (sb.st_mode)
+    process::exit(if mode & (S_IXUSR | S_IXGRP) != 0 { 0 } else { 1 });
+}
+>>>

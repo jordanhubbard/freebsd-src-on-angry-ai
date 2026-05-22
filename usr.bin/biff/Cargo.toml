@@ -1,0 +1,8 @@
+[package]
+name = "biff"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "biff"
+path = "src/main.rs"

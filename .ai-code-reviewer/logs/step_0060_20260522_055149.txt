@@ -1,0 +1,152 @@
+=== STEP 60 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/biff/cargo-target/debug/.fingerprint/biff-2314349b5b745afc/output-bin-biff:
+PROGRESS:
+📁 Directory: usr.bin/biff
+   Files: 0/3
+📄 File: usr.bin/biff/cargo-target/debug/.fingerprint/biff-2314349b5b745afc/output-bin-biff
+✏️  Edits: 3 files modified
+
+```
+{"$message_type":"diagnostic","message":"the trait bound `CStr: AsRef<Path>` is not satisfied","code":{"code":"E0277","explanation":"You tried to use a type which doesn't implement some trait in a place which\nexpected that trait.\n\nErroneous code example:\n\n```compile_fail,E0277\n// here we declare the Foo trait with a bar method\ntrait Foo {\n    fn bar(&self);\n}\n\n// we now declare a function which takes an object implementing the Foo trait\nfn some_func<T: Foo>(foo: T) {\n    foo.bar();\n}\n\nfn main() {\n    // we now call the method with the i32 type, which doesn't implement\n    // the Foo trait\n    some_func(5i32); // error: the trait bound `i32 : Foo` is not satisfied\n}\n```\n\nIn order to fix this error, verify that the type you're using does implement\nthe trait. Example:\n\n```\ntrait Foo {\n    fn bar(&self);\n}\n\n// we implement the trait on the i32 type\nimpl Foo for i32 {\n    fn bar(&self) {}\n}\n\nfn some_func<T: Foo>(foo: T) {\n    foo.bar(); // we can now use this method since i32 implements the\n               // Foo trait\n}\n\nfn main() {\n    some_func(5i32); // ok!\n}\n```\n\nOr in a generic context, an erroneous code example would look like:\n\n```compile_fail,E0277\nfn some_func<T>(foo: T) {\n    println!(\"{:?}\", foo); // error: the trait `core::fmt::Debug` is not\n                           //        implemented for the type `T`\n}\n\nfn main() {\n    // We now call the method with the i32 type,\n    // which *does* implement the Debug trait.\n    some_func(5i32);\n}\n```\n\nNote that the error here is in the definition of the generic function. Although\nwe only call it with a parameter that does implement `Debug`, the compiler\nstill rejects the function. It must work with all possible input types. In\norder to make this example compile, we need to restrict the generic type we're\naccepting:\n\n```\nuse std::fmt;\n\n// Restrict the input type to types that implement Debug.\nfn some_func<T: fmt::Debug>(foo: T) {\n    println!(\"{:?}\", foo);\n}\n\nfn main() {\n    // Calling the method is still fine, as i32 implements Debug.\n    some_func(5i32);\n\n    // This would fail to compile now:\n    // struct WithoutDebug;\n    // some_func(WithoutDebug);\n}\n```\n\nRust only looks at the signature of the called function, as such it must\nalready specify all requirements that will be used for every type parameter.\n"},"level":"error","spans":[{"file_name":"src/main.rs","byte_start":2956,"byte_end":2960,"line_start":82,"line_end":82,"column_start":44,"column_end":48,"is_primary":true,"text":[{"text":"    let metadata = match std::fs::metadata(path) {","highlight_start":44,"highlight_end":48}],"label":"the trait `AsRef<Path>` is not implemented for `CStr`","suggested_replacement":null,"suggestion_applicability":null,"expansion":null},{"file_name":"src/main.rs","byte_start":2938,"byte_end":2955,"line_start":82,"line_end":82,"column_start":26,"column_end":43,"is_primary":false,"text":[{"text":"    let metadata = match std::fs::metadata(path) {","highlight_start":26,"highlight_end":43}],"label":"required by a bound introduced by this call","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[{"message":"the trait `AsRef<Path>` is not implemented for `CStr`\nbut trait `AsRef<CStr>` is implemented for it","code":null,"level":"help","spans":[],"children":[],"rendered":null},{"message":"for that trait implementation, expected `CStr`, found `Path`","code":null,"level":"help","spans":[],"children":[],"rendered":null},{"message":"required for `&CStr` to implement `AsRef<Path>`","code":null,"level":"note","spans":[],"children":[],"rendered":null},{"message":"required by a bound in `std::fs::metadata`","code":null,"level":"note","spans":[{"file_name":"/usr/local/lib/rustlib/src/rust/library/std/src/fs.rs","byte_start":89234,"byte_end":89245,"line_start":2538,"line_end":2538,"column_start":20,"column_end":31,"is_primary":true,"text":[{"text":"pub fn metadata<P: AsRef<Path>>(path: P) -> io::Result<Metadata> {","highlight_start":20,"highlight_end":31}],"label":"required by this bound in `metadata`","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[],"rendered":null}],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror[E0277]\u001b[0m\u001b[0m\u001b[1m: the trait bound `CStr: AsRef<Path>` is not satisfied\u001b[0m\n\u001b[0m    \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/main.rs:82:44\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m82\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0m    let metadata = match std::fs::metadata(path) {\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                          \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m-----------------\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9m^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9mthe trait `AsRef<Path>` is not implemented for `CStr`\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                          \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                          \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12mrequired by a bound introduced by this call\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m= \u001b[0m\u001b[0m\u001b[1mhelp\u001b[0m\u001b[0m: the trait `AsRef<\u001b[0m\u001b[0m\u001b[1m\u001b[35mPath\u001b[0m\u001b[0m>` \u001b[0m\u001b[0m\u001b[1m\u001b[35mis not\u001b[0m\u001b[0m implemented for `CStr`\u001b[0m\n\u001b[0m             but trait `AsRef<\u001b[0m\u001b[0m\u001b[1m\u001b[35mCStr\u001b[0m\u001b[0m>` \u001b[0m\u001b[0m\u001b[1m\u001b[35mis\u001b[0m\u001b[0m implemented for it\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m= \u001b[0m\u001b[0m\u001b[1mhelp\u001b[0m\u001b[0m: for that trait implementation, expected `\u001b[0m\u001b[0m\u001b[1m\u001b[35mCStr\u001b[0m\u001b[0m`, found `\u001b[0m\u001b[0m\u001b[1m\u001b[35mPath\u001b[0m\u001b[0m`\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m= \u001b[0m\u001b[0m\u001b[1mnote\u001b[0m\u001b[0m: required for `&CStr` to implement `AsRef<Path>`\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;10mnote\u001b[0m\u001b[0m: required by a bound in `std::fs::metadata`\u001b[0m\n\u001b[0m    \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0m/usr/local/lib/rustlib/src/rust/library/std/src/fs.rs:2538:20\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m2538\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0mpub fn metadata<P: AsRef<Path>>(path: P) -> io::Result<Metadata> {\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                    \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;10m^^^^^^^^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;10mrequired by this bound in `metadata`\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"the trait bound `CStr: AsRef<Path>` is not satisfied","code":{"code":"E0277","explanation":"You tried to use a type which doesn't implement some trait in a place which\nexpected that trait.\n\nErroneous code example:\n\n```compile_fail,E0277\n// here we declare the Foo trait with a bar method\ntrait Foo {\n    fn bar(&self);\n}\n\n// we now declare a function which takes an object implementing the Foo trait\nfn some_func<T: Foo>(foo: T) {\n    foo.bar();\n}\n\nfn main() {\n    // we now call the method with the i32 type, which doesn't implement\n    // the Foo trait\n    some_func(5i32); // error: the trait bound `i32 : Foo` is not satisfied\n}\n```\n\nIn order to fix this error, verify that the type you're using does implement\nthe trait. Example:\n\n```\ntrait Foo {\n    fn bar(&self);\n}\n\n// we implement the trait on the i32 type\nimpl Foo for i32 {\n    fn bar(&self) {}\n}\n\nfn some_func<T: Foo>(foo: T) {\n    foo.bar(); // we can now use this method since i32 implements the\n               // Foo trait\n}\n\nfn main() {\n    some_func(5i32); // ok!\n}\n```\n\nOr in a generic context, an erroneous code example would look like:\n\n```compile_fail,E0277\nfn some_func<T>(foo: T) {\n    println!(\"{:?}\", foo); // error: the trait `core::fmt::Debug` is not\n                           //        implemented for the type `T`\n}\n\nfn main() {\n    // We now call the method with the i32 type,\n    // which *does* implement the Debug trait.\n    some_func(5i32);\n}\n```\n\nNote that the error here is in the definition of the generic function. Although\nwe only call it with a parameter that does implement `Debug`, the compiler\nstill rejects the function. It must work with all possible input types. In\norder to make this example compile, we need to restrict the generic type we're\naccepting:\n\n```\nuse std::fmt;\n\n// Restrict the input type to types that implement Debug.\nfn some_func<T: fmt::Debug>(foo: T) {\n    println!(\"{:?}\", foo);\n}\n\nfn main() {\n    // Calling the method is still fine, as i32 implements Debug.\n    some_func(5i32);\n\n    // This would fail to compile now:\n    // struct WithoutDebug;\n    // some_func(WithoutDebug);\n}\n```\n\nRust only looks at the signature of the called function, as such it must\nalready specify all requirements that will be used for every type parameter.\n"},"level":"error","spans":[{"file_name":"src/main.rs","byte_start":3835,"byte_end":3839,"line_start":115,"line_end":115,"column_start":33,"column_end":37,"is_primary":true,"text":[{"text":"    if std::fs::set_permissions(path, perms).is_err() {","highlight_start":33,"highlight_end":37}],"label":"the trait `AsRef<Path>` is not implemented for `CStr`","suggested_replacement":null,"suggestion_applicability":null,"expansion":null},{"file_name":"src/main.rs","byte_start":3810,"byte_end":3834,"line_start":115,"line_end":115,"column_start":8,"column_end":32,"is_primary":false,"text":[{"text":"    if std::fs::set_permissions(path, perms).is_err() {","highlight_start":8,"highlight_end":32}],"label":"required by a bound introduced by this call","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[{"message":"the trait `AsRef<Path>` is not implemented for `CStr`\nbut trait `AsRef<CStr>` is implemented for it","code":null,"level":"help","spans":[],"children":[],"rendered":null},{"message":"for that trait implementation, expected `CStr`, found `Path`","code":null,"level":"help","spans":[],"children":[],"rendered":null},{"message":"required for `&CStr` to implement `AsRef<Path>`","code":null,"level":"note","spans":[],"children":[],"rendered":null},{"message":"required by a bound in `set_permissions`","code":null,"level":"note","spans":[{"file_name":"/usr/local/lib/rustlib/src/rust/library/std/src/fs.rs","byte_start":110781,"byte_end":110792,"line_start":3163,"line_end":3163,"column_start":27,"column_end":38,"is_primary":true,"text":[{"text":"pub fn set_permissions<P: AsRef<Path>>(path: P, perm: Permissions) -> io::Result<()> {","highlight_start":27,"highlight_end":38}],"label":"required by this bound in `set_permissions`","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[],"rendered":null}],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror[E0277]\u001b[0m\u001b[0m\u001b[1m: the trait bound `CStr: AsRef<Path>` is not satisfied\u001b[0m\n\u001b[0m    \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/main.rs:115:33\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m115\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0m    if std::fs::set_permissions(path, perms).is_err() {\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m        \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m------------------------\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9m^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9mthe trait `AsRef<Path>` is not implemented for `CStr`\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m        \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m        \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12mrequired by a bound introduced by this call\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m= \u001b[0m\u001b[0m\u001b[1mhelp\u001b[0m\u001b[0m: the trait `AsRef<\u001b[0m\u001b[0m\u001b[1m\u001b[35mPath\u001b[0m\u001b[0m>` \u001b[0m\u001b[0m\u001b[1m\u001b[35mis not\u001b[0m\u001b[0m implemented for `CStr`\u001b[0m\n\u001b[0m             but trait `AsRef<\u001b[0m\u001b[0m\u001b[1m\u001b[35mCStr\u001b[0m\u001b[0m>` \u001b[0m\u001b[0m\u001b[1m\u001b[35mis\u001b[0m\u001b[0m implemented for it\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m= \u001b[0m\u001b[0m\u001b[1mhelp\u001b[0m\u001b[0m: for that trait implementation, expected `\u001b[0m\u001b[0m\u001b[1m\u001b[35mCStr\u001b[0m\u001b[0m`, found `\u001b[0m\u001b[0m\u001b[1m\u001b[35mPath\u001b[0m\u001b[0m`\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m= \u001b[0m\u001b[0m\u001b[1mnote\u001b[0m\u001b[0m: required for `&CStr` to implement `AsRef<Path>`\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;10mnote\u001b[0m\u001b[0m: required by a bound in `set_permissions`\u001b[0m\n\u001b[0m    \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0m/usr/local/lib/rustlib/src/rust/library/std/src/fs.rs:3163:27\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m3163\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0mpub fn set_permissions<P: AsRef<Path>>(path: P, perm: Permissions) -> io::Result<()> {\u001b[0m\n\u001b[0m     \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                           \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;10m^^^^^^^^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;10mrequired by this bound in `set_permissions`\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"aborting due to 2 previous errors","code":null,"level":"error","spans":[],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror\u001b[0m\u001b[0m\u001b[1m: aborting due to 2 previous errors\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"For more information about this error, try `rustc --explain E0277`.","code":null,"level":"failure-note","spans":[],"children":[],"rendered":"\u001b[0m\u001b[1mFor more information about this error, try `rustc --explain E0277`.\u001b[0m\n"}
+
+```
+
+--- RESPONSE ---
+
+
+The issue is `CStr` doesn't implement `AsRef<Path>`. I need to convert to `Path` properly.
+
+ACTION: WRITE_FILE usr.bin/biff/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1980, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::ffi::{CStr, OsStr};
+use std::os::raw::{c_char, c_int};
+use std::os::unix::ffi::OsStrExt;
+use std::os::unix::fs::PermissionsExt;
+use std::path::Path;
+use std::process;
+
+const STDIN_FILENO: c_int = 0;
+const STDOUT_FILENO: c_int = 1;
+const STDERR_FILENO: c_int = 2;
+
+const S_IXUSR: u32 = 0o100;
+const S_IXGRP: u32 = 0o010;
+
+extern "C" {
+    fn ttyname(fd: c_int) -> *mut c_char;
+}
+
+fn usage() -> ! {
+    eprintln!("usage: biff [n | y | b]");
+    process::exit(2);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
+    // biff takes no options, only positional args
+    if args.len() > 2 {
+        usage();
+    }
+
+    // Find tty name
+    let mut name_ptr: *mut c_char = std::ptr::null_mut();
+    unsafe {
+        name_ptr = ttyname(STDIN_FILENO);
+        if name_ptr.is_null() {
+            name_ptr = ttyname(STDOUT_FILENO);
+        }
+        if name_ptr.is_null() {
+            name_ptr = ttyname(STDERR_FILENO);
+        }
+        if name_ptr.is_null() {
+            eprintln!("biff: unknown tty");
+            process::exit(2);
+        }
+    }
+
+    let name_cstr = unsafe { CStr::from_ptr(name_ptr) };
+    let name_os = OsStr::from_bytes(name_cstr.to_bytes());
+    let name_path = Path::new(name_os);
+
+    let metadata = match std::fs::metadata(name_path) {
+        Ok(m) => m,
+        Err(e) => {
+            eprintln!("biff: stat: {e}");
+            process::exit(2);
+        }
+    };
+
+    let mode = metadata.permissions().mode();
+
+    if args.len() == 1 {
+        // No argument: query mode
+        let result = if mode & S_IXUSR != 0 {
+            "y"
+        } else if mode & S_IXGRP != 0 {
+            "b"
+        } else {
+            "n"
+        };
+        println!("is {result}");
+        process::exit(if mode & (S_IXUSR | S_IXGRP) != 0 { 0 } else { 1 });
+    }
+
+    let arg = &args[1];
+    let new_mode = match arg.as_str() {
+        "n" => mode & !(S_IXUSR | S_IXGRP),
+        "y" => (mode & !(S_IXUSR | S_IXGRP)) | S_IXUSR,
+        "b" => (mode & !(S_IXUSR | S_IXGRP)) | S_IXGRP,
+        _ => usage(),
+    };
+
+    let mut perms = metadata.permissions();
+    perms.set_mode(new_mode);
+    if std::fs::set_permissions(name_path, perms).is_err() {
+        eprintln!(
+            "biff: {}: {}",
+            name_os.to_string_lossy(),
+            std::io::Error::last_os_error()
+        );
+        process::exit(2);
+    }
+
+    // Match original C behavior: exit status uses pre-chmod mode (sb.st_mode)
+    process::exit(if mode & (S_IXUSR | S_IXGRP) != 0 { 0 } else { 1 });
+}
+>>>
