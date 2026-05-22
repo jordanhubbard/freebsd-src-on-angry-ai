@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 01:36 - usr.bin/logname ✓
+
+**Directory:** `usr.bin/logname`
+
+**Summary:** [ai-code-reviewer] logname: Rewrite implementation in Rust
+
+**Files changed:**
+  - usr.bin/logname/Makefile
+  - usr.bin/logname/Cargo.toml
+  - usr.bin/logname/src/main.rs
+
+---
+
 ## 2026-05-22 01:33 - usr.bin/users ✓
 
 **Directory:** `usr.bin/users`
