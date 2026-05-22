@@ -135,6 +135,18 @@
     "attempts": 1,
     "last_attempt": "2026-05-22T00:58:28.171024"
   },
+  "usr.bin/mesg": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T02:55:02.145593"
+  },
+  "usr.bin/mkfifo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T02:36:41.175781"
+  },
+  "usr.bin/nice": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T03:23:36.763005"
+  },
   "usr.bin/printf": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:33.681504"
@@ -146,6 +158,10 @@
   "usr.bin/uname": {
     "attempts": 2,
     "last_attempt": "2026-05-22T00:11:03.402137"
+  },
+  "usr.bin/what": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T03:32:23.865445"
   },
   "usr.bin/yes": {
     "attempts": 3,

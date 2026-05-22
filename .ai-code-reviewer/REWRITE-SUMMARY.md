@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 03:45 - usr.bin/what ✓
+
+**Directory:** `usr.bin/what`
+
+**Summary:** [ai-code-reviewer] what: Rewrite utility from C to Rust
+
+**Files changed:**
+  - usr.bin/what/Makefile
+  - usr.bin/what/Cargo.toml
+  - usr.bin/what/src/main.rs
+
+---
+
 ## 2026-05-22 02:36 - usr.bin/printenv ✓
 
 **Directory:** `usr.bin/printenv`

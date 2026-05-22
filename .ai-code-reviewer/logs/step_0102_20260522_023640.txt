@@ -1,0 +1,89 @@
+=== STEP 102 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/printenv is now complete.
+Changes committed and pushed.
+Post-success metadata commit: c303d9e59914.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE usr.bin/mkfifo
+
+FINAL DIFFS:
+--- usr.bin/printenv/Makefile ---
+```diff
+diff --git a/usr.bin/printenv/Makefile b/usr.bin/printenv/Makefile
+index 0add0695a1d..d9f0bf7198c 100644
+--- a/usr.bin/printenv/Makefile
++++ b/usr.bin/printenv/Makefile
+@@ -1,8 +1,20 @@
+-.include <src.opts.mk>
+-
++PACKAGE=	runtime
+ PROG=	printenv
+ 
+-HAS_TESTS=
+-SUBDIR.${MK_TESTS}+= tests
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
+ 
+-.include <bsd.prog.mk>
+\ No newline at end of file
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- usr.bin/printenv/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/printenv/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/printenv/printenv ---
+```diff
+(no changes)
+```
+
+--- usr.bin/printenv/printenv.1.gz ---
+```diff
+(no changes)
+```
+
+--- usr.bin/printenv/printenv.debug ---
+```diff
+(no changes)
+```
+
+--- usr.bin/printenv/printenv.full ---
+```diff
+(no changes)
+```
+
+--- usr.bin/printenv/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for usr.bin/printenv. Moving to the next unit: usr.bin/mkfifo.
+
+ACTION: SET_SCOPE usr.bin/mkfifo

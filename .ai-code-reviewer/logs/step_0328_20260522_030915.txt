@@ -1,0 +1,20 @@
+=== STEP 328 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mesg/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/mesg
+   Files: 0/3
+📄 File: usr.bin/mesg/Makefile
+
+```
+PROG=	mesg
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/mesg/mesg.c

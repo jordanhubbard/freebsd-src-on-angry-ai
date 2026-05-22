@@ -1,0 +1,21 @@
+=== STEP 348 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/what/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/what
+   Files: 0/3
+📄 File: usr.bin/what/Makefile
+
+```
+PACKAGE=	runtime
+PROG=	what
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/what/what.c

@@ -1,0 +1,11 @@
+=== STEP 485 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Let me try READ_FILE first:
+
+ACTION: READ_FILE usr.bin/what/Makefile

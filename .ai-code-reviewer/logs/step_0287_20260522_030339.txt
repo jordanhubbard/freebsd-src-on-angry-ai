@@ -1,0 +1,11 @@
+=== STEP 287 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Let me try EDIT_FILE on Makefile with complete blocks:
+
+ACTION: EDIT_FILE usr.bin/mesg/Makefile

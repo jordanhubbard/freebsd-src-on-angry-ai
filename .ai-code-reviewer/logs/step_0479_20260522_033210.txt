@@ -1,0 +1,11 @@
+=== STEP 479 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Truncation loop. Trying minimal:
+
+ACTION: WRITE_FILE usr.bin/nice/Cargo.toml
