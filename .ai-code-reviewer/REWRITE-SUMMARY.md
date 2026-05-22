@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 11:29 - usr.bin/hesinfo ✓
+
+**Directory:** `usr.bin/hesinfo`
+
+**Summary:** [ai-code-reviewer] hesinfo: Rewrite C implementation in Rust
+
+**Files changed:**
+  - usr.bin/hesinfo/Makefile
+  - usr.bin/hesinfo/Cargo.lock
+  - usr.bin/hesinfo/Cargo.toml
+  - usr.bin/hesinfo/cargo-target/.rustc_info.json
+  - usr.bin/hesinfo/cargo-target/CACHEDIR.TAG
+  - usr.bin/hesinfo/cargo-target/debug/.cargo-lock
+  - usr.bin/hesinfo/cargo-target/debug/.fingerprint/hesinfo-c87e176f8d1cab00/invoked.timestamp
+  - usr.bin/hesinfo/cargo-target/debug/.fingerprint/hesinfo-c87e176f8d1cab00/output-bin-hesinfo
+  - usr.bin/hesinfo/cargo-target/debug/deps/hesinfo-c87e176f8d1cab00.d
+  - usr.bin/hesinfo/cargo-target/debug/incremental/hesinfo-3tw0t5to1gfum/s-hirr7v7mj1-0gcgv8m-30s0r73huvkzn4q45ff3zbjyo/dep-graph.bin
+  - ... and 4 more
+
+---
+
 ## 2026-05-22 11:08 - usr.bin/c89 ✓
 
 **Directory:** `usr.bin/c89`

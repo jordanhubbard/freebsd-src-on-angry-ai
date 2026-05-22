@@ -1,0 +1,154 @@
+=== STEP 90 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/hesinfo/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/hesinfo/src/main.rs
+CONTENT:
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int, c_void};
+use std::process;
+
+#[link(name = "c")]
+extern "C" {
+    fn hesiod_init(context: *mut *mut c_void) -> c_int;
+    fn hesiod_resolve(
+        context: *mut c_void,
+        name: *const c_char,
+        typ: *const c_char,
+    ) -> *mut *mut c_char;
+    fn hesiod_free_list(context: *mut c_void, list: *mut *mut c_char);
+    fn hesiod_to_bind(
+        context: *mut c_void,
+        name: *const c_char,
+        typ: *const c_char,
+    ) -> *mut c_char;
+    fn hesiod_end(context: *mut c_void);
+    fn getopt(ac: c_int, av: *const *const c_char, optstr: *const c_char) -> c_int;
+    static mut optind: c_int;
+    fn free(p: *mut c_void);
+    fn __errno() -> *mut c_int;
+}
+
+fn usage() -> ! {
+    eprintln!("usage: hesinfo [-bl] name type");
+    eprintln!("\t-l selects long format");
+    eprintln!("\t-b also does hes_to_bind conversion");
+    process::exit(2);
+}
+
+fn libc_errno() -> c_int {
+    unsafe { *__errno() }
+}
+
+fn main() {
+    let args: Vec<CString> = std::env::args()
+        .map(|s| CString::new(s).unwrap())
+        .collect();
+    let argc = args.len() as c_int;
+    let argv: Vec<*const c_char> = args.iter().map(|s| s.as_ptr()).collect();
+
+    let mut lflag = 0;
+    let mut errflg = 0;
+    let mut bflag = 0;
+
+    let optstr = CString::new("lb").unwrap();
+    unsafe {
+        loop {
+            let c = getopt(argc, argv.as_ptr(), optstr.as_ptr());
+            if c == -1 {
+                break;
+            }
+            match c as u8 {
+                b'l' => lflag = 1,
+                b'b' => bflag = 1,
+                _ => errflg += 1,
+            }
+        }
+
+        if argc - optind != 2 || errflg != 0 {
+            usage();
+        }
+
+        let name = CStr::from_ptr(argv[optind as usize]).to_str().unwrap();
+        let typ = CStr::from_ptr(argv[optind as usize + 1]).to_str().unwrap();
+
+        let name_c = CString::new(name).unwrap();
+        let typ_c = CString::new(typ).unwrap();
+
+        let mut context: *mut c_void = std::ptr::null_mut();
+        if hesiod_init(&mut context) < 0 {
+            let errno = libc_errno();
+            if errno == 78 {
+                // ENOEXEC
+                eprintln!("hesinfo: hesiod_init: Invalid Hesiod configuration file.");
+            } else {
+                eprint!("hesinfo: hesiod_init: ");
+            }
+        }
+
+        if bflag != 0 {
+            if lflag != 0 {
+                eprint!("hes_to_bind({}, {}) expands to\n", name, typ);
+            }
+            let bindname = hesiod_to_bind(context, name_c.as_ptr(), typ_c.as_ptr());
+            if bindname.is_null() {
+                if lflag != 0 {
+                    eprint!("nothing\n");
+                }
+                let errno = libc_errno();
+                if errno == 2 {
+                    // ENOENT
+                    eprintln!("hesinfo: hesiod_to_bind: Unknown rhs-extension.");
+                } else {
+                    eprint!("hesinfo: hesiod_to_bind: ");
+                }
+                process::exit(1);
+            }
+            let bindname_str = CStr::from_ptr(bindname).to_str().unwrap();
+            println!("{}", bindname_str);
+            free(bindname as *mut c_void);
+            if lflag != 0 {
+                eprint!("which ");
+            }
+        }
+        if lflag != 0 {
+            eprint!("resolves to\n");
+        }
+
+        let list = hesiod_resolve(context, name_c.as_ptr(), typ_c.as_ptr());
+        if list.is_null() {
+            if lflag != 0 {
+                eprint!("nothing\n");
+            }
+            let errno = libc_errno();
+            if errno == 2 {
+                // ENOENT
+                eprintln!("hesinfo: hesiod_resolve: Hesiod name not found.");
+            } else {
+                eprint!("hesinfo: hesiod_resolve: ");
+            }
+            process::exit(1);
+        }
+
+        let mut p = list;
+        loop {
+            let entry = *p;
+            if entry.is_null() {
+                break;
+            }
+            let s = CStr::from_ptr(entry).to_str().unwrap();
+            println!("{}", s);
+            p = p.add(1);
+        }
+
+        hesiod_free_list(context, list);
+        hesiod_end(context);
+    }
+
+    process::exit(0);
+}

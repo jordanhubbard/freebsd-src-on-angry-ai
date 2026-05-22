@@ -1,0 +1,114 @@
+=== STEP 71 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/c89 is now complete.
+Changes committed and pushed.
+Post-success metadata commit: ac72183cc4af.
+
+Completed directories so far: 2
+NEXT: Use SET_SCOPE usr.bin/hesinfo
+
+FINAL DIFFS:
+--- usr.bin/c89/Makefile ---
+```diff
+diff --git a/usr.bin/c89/Makefile b/usr.bin/c89/Makefile
+index e86604c797b..270e9634ba7 100644
+--- a/usr.bin/c89/Makefile
++++ b/usr.bin/c89/Makefile
+@@ -1,4 +1,25 @@
+-PACKAGE= toolchain
++.include <src.opts.mk>
++
+ PROG=	c89
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
++
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
+ 
+-.include <bsd.prog.mk>
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- usr.bin/c89/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/c89/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/c89/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/c89/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/c89/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/c89/cargo-target/debug/.fingerprint/c89-b6ed795b128803f2/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/c89/cargo-target/debug/.fingerprint/c89-b6ed795b128803f2/output-bin-c89 ---
+```diff
+fatal: ambiguous argument 'usr.bin/c89/cargo-target/debug/.fingerprint/c89-b6ed795b128803f2/output-bin-c89': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/c89/cargo-target/debug/deps/c89-b6ed795b128803f2.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/c89/cargo-target/debug/incremental/c89-1xcd6svkcwfh9/s-hirqoftg5l-0zhhqfn-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/c89/cargo-target/debug/incremental/c89-1xcd6svkcwfh9/s-hirqoftg5l-0zhhqfn-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/c89/cargo-target/debug/incremental/c89-1xcd6svkcwfh9/s-hirqoftg5l-0zhhqfn.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/c89/cargo-target/debug/incremental/c89-1xcd6svkcwfh9/s-hirqoftg5l-0zhhqfn.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/c89/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/hesinfo

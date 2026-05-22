@@ -1,0 +1,51 @@
+=== STEP 76 ===
+
+--- REQUEST ---
+GREP_RESULT for 'hesiod':
+```
+./include/hesiod.h:1:/*	$NetBSD: hesiod.h,v 1.3 1999/01/24 23:53:18 lukem Exp $	*/
+./include/hesiod.h:59:#define _PATH_HESIOD_CONF	"/etc/hesiod.conf"
+./include/hesiod.h:78:int	hesiod_init(void **);
+./crypto/heimdal/appl/push/push_locl.h:86:#include <hesiod.h>
+./crypto/heimdal/appl/push/push.c:572:hesiod_get_pobox (const char **user)
+./crypto/heimdal/appl/push/push.c:575:    struct hesiod_postoffice *hpo;
+./crypto/heimdal/appl/push/push.c:578:    if(hesiod_init (&context) != 0)
+./crypto/krb5/src/lib/kadm5/server_internal.h:202:/* The hesiod module checks passwords against GECOS fields from Hesiod passwd
+./crypto/krb5/src/lib/kadm5/server_internal.h:205:pwqual_hesiod_initvt(krb5_context context, int maj_ver, int min_ver,
+./crypto/krb5/src/lib/kadm5/srv/server_misc.c:54:                             "hesiod", pwqual_hesiod_initvt);
+./crypto/krb5/src/lib/kadm5/srv/pwqual_hesiod.c:2:/* lib/kadm5/srv/pwqual_hesiod.c */
+./crypto/krb5/src/lib/kadm5/srv/pwqual_hesiod.c:95:hesiod_check(krb5_context context, krb5_pwqual_moddata data,
+./crypto/krb5/src/lib/kadm5/srv/pwqual_hesiod.c:123:pwqual_hesiod_initvt(krb5_context context, int maj_ver, int min_ver,
+./contrib/sendmail/src/sendmail.h:136:# include <hesiod.h>
+./contrib/sendmail/src/conf.c:598:	MAPDEF("hesiod", NULL, MCF_ALIASOK,
+./contrib/sendmail/src/conf.c:847:		else if (strcmp(maptype[i], "hesiod") == 0 &&
+./contrib/sendmail/src/conf.c:848:			 stab("aliases.hesiod", ST_MAP, ST_FIND) == NULL)
+./contrib/sendmail/src/udb.c:87:# define UDB_HESIOD	5	/* look up via hesiod */
+./contrib/sendmail/src/udb.c:395:				sm_dprintf("udbexpand: trying %s (%d) via hesiod\n",
+./contrib/sendmail/src/udb.c:397:			/* look up the key via hesiod */
+./contrib/sendmail/src/map.c:6120:	if (HesiodContext != NULL || hesiod_init(&HesiodContext) == 0)
+./contrib/sendmail/src/map.c:6171:		hp = hesiod_resolve(HesiodContext, np, map->map_file);
+./contrib/sendmail/src/map.c:6183:		hp = hesiod_resolve(HesiodContext, name, map->map_file);
+./contrib/tcsh/sh.h:519:# include <hesiod.h>
+./lib/libc/gen/getgrent.c:46:#include <hesiod.h>
+./lib/libc/gen/getgrent.c:988:	if (hesiod_init(&ctx) != 0) {
+./lib/libc/gen/getgrent.c:1014:		hes = hesiod_resolve(ctx, label,
+./lib/libc/gen/getpwent.c:46:#include <hesiod.h>
+./lib/libc/gen/getpwent.c:1126:	if (hesiod_init(&ctx) != 0) {
+./lib/libc/gen/getpwent.c:1152:		hes = hesiod_resolve(ctx, label,
+./lib/libc/gen/getusershell.c:50:#include <hesiod.h>
+./lib/libc/gen/getusershell.c:148:	if (hesiod_init(&context) == -1)
+./lib/libc/gen/getusershell.c:153:		hp = hesiod_resolve(context, shellname, "shells");
+./lib/libc/net/hesiod.c:1:/*	$NetBSD: hesiod.c,v 1.9 1999/02/11 06:16:38 simonb Exp $	*/
+./lib/libc/net/hesiod.c:34:/* This file is part of the hesiod library.  It implements the core
+./lib/libc/net/hesiod.c:35: * portion of the hesiod resolver.
+./kerberos5/include/config.h:1300:/* Define if you have the hesiod package. */
+./usr.bin/hesinfo/hesinfo.c:24:#include <hesiod.h>
+./usr.bin/hesinfo/hesinfo.c:59:	if (hesiod_init(&context) < 0) {
+./usr.bin/hesinfo/hesinfo.c:62:			    "hesiod_init: Invalid Hesiod configuration file.");
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE include/hesiod.h

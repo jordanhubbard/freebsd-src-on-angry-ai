@@ -1,0 +1,212 @@
+=== STEP 98 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/hesinfo/cargo-target/debug/.fingerprint/hesinfo-c87e176f8d1cab00/output-bin-hesinfo:
+PROGRESS:
+📁 Directory: usr.bin/hesinfo
+   Files: 0/3
+📄 File: usr.bin/hesinfo/cargo-target/debug/.fingerprint/hesinfo-c87e176f8d1cab00/output-bin-hesinfo
+✏️  Edits: 3 files modified
+
+```
+{"$message_type":"diagnostic","message":"non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut *mut c_void) -> i32`","code":{"code":"E0605","explanation":"An invalid cast was attempted.\n\nErroneous code examples:\n\n```compile_fail,E0605\nlet x = 0u8;\nx as Vec<u8>; // error: non-primitive cast: `u8` as `std::vec::Vec<u8>`\n\n// Another example\n\nlet v = core::ptr::null::<u8>(); // So here, `v` is a `*const u8`.\nv as &u8; // error: non-primitive cast: `*const u8` as `&u8`\n```\n\nOnly primitive types can be cast into each other. Examples:\n\n```\nlet x = 0u8;\nx as u32; // ok!\n\nlet v = core::ptr::null::<u8>();\nv as *const i8; // ok!\n```\n\nFor more information about casts, take a look at the Type cast section in\n[The Reference Book][1].\n\n[1]: https://doc.rust-lang.org/reference/expressions/operator-expr.html#type-cast-expressions\n"},"level":"error","spans":[{"file_name":"src/main.rs","byte_start":1518,"byte_end":1552,"line_start":46,"line_end":46,"column_start":20,"column_end":54,"is_primary":true,"text":[{"text":"        let init = sym(\"hesiod_init\") as HesiodInitFn;","highlight_start":20,"highlight_end":54}],"label":"invalid cast","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror[E0605]\u001b[0m\u001b[0m\u001b[1m: non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut *mut c_void) -> i32`\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/main.rs:46:20\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m46\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0m        let init = sym(\"hesiod_init\") as HesiodInitFn;\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                    \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9minvalid cast\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void, *const i8, *const i8) -> *mut *mut i8`","code":{"code":"E0605","explanation":"An invalid cast was attempted.\n\nErroneous code examples:\n\n```compile_fail,E0605\nlet x = 0u8;\nx as Vec<u8>; // error: non-primitive cast: `u8` as `std::vec::Vec<u8>`\n\n// Another example\n\nlet v = core::ptr::null::<u8>(); // So here, `v` is a `*const u8`.\nv as &u8; // error: non-primitive cast: `*const u8` as `&u8`\n```\n\nOnly primitive types can be cast into each other. Examples:\n\n```\nlet x = 0u8;\nx as u32; // ok!\n\nlet v = core::ptr::null::<u8>();\nv as *const i8; // ok!\n```\n\nFor more information about casts, take a look at the Type cast section in\n[The Reference Book][1].\n\n[1]: https://doc.rust-lang.org/reference/expressions/operator-expr.html#type-cast-expressions\n"},"level":"error","spans":[{"file_name":"src/main.rs","byte_start":1576,"byte_end":1616,"line_start":47,"line_end":47,"column_start":23,"column_end":63,"is_primary":true,"text":[{"text":"        let resolve = sym(\"hesiod_resolve\") as HesiodResolveFn;","highlight_start":23,"highlight_end":63}],"label":"invalid cast","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror[E0605]\u001b[0m\u001b[0m\u001b[1m: non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void, *const i8, *const i8) -> *mut *mut i8`\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/main.rs:47:23\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m47\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0m        let resolve = sym(\"hesiod_resolve\") as HesiodResolveFn;\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                       \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9minvalid cast\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void, *mut *mut i8)`","code":{"code":"E0605","explanation":"An invalid cast was attempted.\n\nErroneous code examples:\n\n```compile_fail,E0605\nlet x = 0u8;\nx as Vec<u8>; // error: non-primitive cast: `u8` as `std::vec::Vec<u8>`\n\n// Another example\n\nlet v = core::ptr::null::<u8>(); // So here, `v` is a `*const u8`.\nv as &u8; // error: non-primitive cast: `*const u8` as `&u8`\n```\n\nOnly primitive types can be cast into each other. Examples:\n\n```\nlet x = 0u8;\nx as u32; // ok!\n\nlet v = core::ptr::null::<u8>();\nv as *const i8; // ok!\n```\n\nFor more information about casts, take a look at the Type cast section in\n[The Reference Book][1].\n\n[1]: https://doc.rust-lang.org/reference/expressions/operator-expr.html#type-cast-expressions\n"},"level":"error","spans":[{"file_name":"src/main.rs","byte_start":1642,"byte_end":1685,"line_start":48,"line_end":48,"column_start":25,"column_end":68,"is_primary":true,"text":[{"text":"        let free_list = sym(\"hesiod_free_list\") as HesiodFreeListFn;","highlight_start":25,"highlight_end":68}],"label":"invalid cast","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror[E0605]\u001b[0m\u001b[0m\u001b[1m: non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void, *mut *mut i8)`\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/main.rs:48:25\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m48\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0m        let free_list = sym(\"hesiod_free_list\") as HesiodFreeListFn;\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                         \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9minvalid cast\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void, *const i8, *const i8) -> *mut i8`","code":{"code":"E0605","explanation":"An invalid cast was attempted.\n\nErroneous code examples:\n\n```compile_fail,E0605\nlet x = 0u8;\nx as Vec<u8>; // error: non-primitive cast: `u8` as `std::vec::Vec<u8>`\n\n// Another example\n\nlet v = core::ptr::null::<u8>(); // So here, `v` is a `*const u8`.\nv as &u8; // error: non-primitive cast: `*const u8` as `&u8`\n```\n\nOnly primitive types can be cast into each other. Examples:\n\n```\nlet x = 0u8;\nx as u32; // ok!\n\nlet v = core::ptr::null::<u8>();\nv as *const i8; // ok!\n```\n\nFor more information about casts, take a look at the Type cast section in\n[The Reference Book][1].\n\n[1]: https://doc.rust-lang.org/reference/expressions/operator-expr.html#type-cast-expressions\n"},"level":"error","spans":[{"file_name":"src/main.rs","byte_start":1709,"byte_end":1748,"line_start":49,"line_end":49,"column_start":23,"column_end":62,"is_primary":true,"text":[{"text":"        let to_bind = sym(\"hesiod_to_bind\") as HesiodToBindFn;","highlight_start":23,"highlight_end":62}],"label":"invalid cast","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror[E0605]\u001b[0m\u001b[0m\u001b[1m: non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void, *const i8, *const i8) -> *mut i8`\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/main.rs:49:23\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m49\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0m        let to_bind = sym(\"hesiod_to_bind\") as HesiodToBindFn;\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                       \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9minvalid cast\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void)`","code":{"code":"E0605","explanation":"An invalid cast was attempted.\n\nErroneous code examples:\n\n```compile_fail,E0605\nlet x = 0u8;\nx as Vec<u8>; // error: non-primitive cast: `u8` as `std::vec::Vec<u8>`\n\n// Another example\n\nlet v = core::ptr::null::<u8>(); // So here, `v` is a `*const u8`.\nv as &u8; // error: non-primitive cast: `*const u8` as `&u8`\n```\n\nOnly primitive types can be cast into each other. Examples:\n\n```\nlet x = 0u8;\nx as u32; // ok!\n\nlet v = core::ptr::null::<u8>();\nv as *const i8; // ok!\n```\n\nFor more information about casts, take a look at the Type cast section in\n[The Reference Book][1].\n\n[1]: https://doc.rust-lang.org/reference/expressions/operator-expr.html#type-cast-expressions\n"},"level":"error","spans":[{"file_name":"src/main.rs","byte_start":1768,"byte_end":1800,"line_start":50,"line_end":50,"column_start":19,"column_end":51,"is_primary":true,"text":[{"text":"        let end = sym(\"hesiod_end\") as HesiodEndFn;","highlight_start":19,"highlight_end":51}],"label":"invalid cast","suggested_replacement":null,"suggestion_applicability":null,"expansion":null}],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror[E0605]\u001b[0m\u001b[0m\u001b[1m: non-primitive cast: `*mut c_void` as `unsafe extern \"C\" fn(*mut c_void)`\u001b[0m\n\u001b[0m  \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m--> \u001b[0m\u001b[0msrc/main.rs:50:19\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\n\u001b[0m\u001b[1m\u001b[38;5;12m50\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m \u001b[0m\u001b[0m        let end = sym(\"hesiod_end\") as HesiodEndFn;\u001b[0m\n\u001b[0m   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;12m|\u001b[0m\u001b[0m                   \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\u001b[0m\u001b[0m \u001b[0m\u001b[0m\u001b[1m\u001b[38;5;9minvalid cast\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"aborting due to 5 previous errors","code":null,"level":"error","spans":[],"children":[],"rendered":"\u001b[0m\u001b[1m\u001b[38;5;9merror\u001b[0m\u001b[0m\u001b[1m: aborting due to 5 previous errors\u001b[0m\n\n"}
+{"$message_type":"diagnostic","message":"For more information about this error, try `rustc --explain E0605`.","code":null,"level":"failure-note","spans":[],"children":[],"rendered":"\u001b[0m\u001b[1mFor more information about this error, try `rustc --explain E0605`.\u001b[0m\n"}
+
+```
+
+--- RESPONSE ---
+
+
+Need to use `std::mem::transmute` for function pointer casts from `dlsym`.
+
+ACTION: WRITE_FILE usr.bin/hesinfo/src/main.rs
+CONTENT:
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int, c_void};
+use std::process;
+
+type HesiodInitFn = unsafe extern "C" fn(*mut *mut c_void) -> c_int;
+type HesiodResolveFn =
+    unsafe extern "C" fn(*mut c_void, *const c_char, *const c_char) -> *mut *mut c_char;
+type HesiodFreeListFn = unsafe extern "C" fn(*mut c_void, *mut *mut c_char);
+type HesiodToBindFn =
+    unsafe extern "C" fn(*mut c_void, *const c_char, *const c_char) -> *mut c_char;
+type HesiodEndFn = unsafe extern "C" fn(*mut c_void);
+
+struct HesiodFns {
+    hesiod_init: HesiodInitFn,
+    hesiod_resolve: HesiodResolveFn,
+    hesiod_free_list: HesiodFreeListFn,
+    hesiod_to_bind: HesiodToBindFn,
+    hesiod_end: HesiodEndFn,
+}
+
+extern "C" {
+    fn dlopen(filename: *const c_char, flag: c_int) -> *mut c_void;
+    fn dlsym(handle: *mut c_void, symbol: *const c_char) -> *mut c_void;
+    fn getopt(ac: c_int, av: *const *const c_char, optstr: *const c_char) -> c_int;
+    static mut optind: c_int;
+    fn free(p: *mut c_void);
+    fn __errno() -> *mut c_int;
+}
+
+fn load_hesiod() -> Option<HesiodFns> {
+    unsafe {
+        let handle = dlopen(std::ptr::null(), 2); // RTLD_NOW
+        if handle.is_null() {
+            return None;
+        }
+
+        let sym = |name: &str| -> *mut c_void {
+            let c_name = CString::new(name).unwrap();
+            dlsym(handle, c_name.as_ptr())
+        };
+
+        let init = std::mem::transmute::<*mut c_void, HesiodInitFn>(sym("hesiod_init"));
+        let resolve = std::mem::transmute::<*mut c_void, HesiodResolveFn>(sym("hesiod_resolve"));
+        let free_list =
+            std::mem::transmute::<*mut c_void, HesiodFreeListFn>(sym("hesiod_free_list"));
+        let to_bind = std::mem::transmute::<*mut c_void, HesiodToBindFn>(sym("hesiod_to_bind"));
+        let end = std::mem::transmute::<*mut c_void, HesiodEndFn>(sym("hesiod_end"));
+
+        Some(HesiodFns {
+            hesiod_init: init,
+            hesiod_resolve: resolve,
+            hesiod_free_list: free_list,
+            hesiod_to_bind: to_bind,
+            hesiod_end: end,
+        })
+    }
+}
+
+fn usage() -> ! {
+    eprintln!("usage: hesinfo [-bl] name type");
+    eprintln!("\t-l selects long format");
+    eprintln!("\t-b also does hes_to_bind conversion");
+    process::exit(2);
+}
+
+fn libc_errno() -> c_int {
+    unsafe { *__errno() }
+}
+
+fn main() {
+    let args: Vec<CString> = std::env::args()
+        .map(|s| CString::new(s).unwrap())
+        .collect();
+    let argc = args.len() as c_int;
+    let argv: Vec<*const c_char> = args.iter().map(|s| s.as_ptr()).collect();
+
+    let mut lflag = 0;
+    let mut errflg = 0;
+    let mut bflag = 0;
+
+    let optstr = CString::new("lb").unwrap();
+    unsafe {
+        loop {
+            let c = getopt(argc, argv.as_ptr(), optstr.as_ptr());
+            if c == -1 {
+                break;
+            }
+            match c as u8 {
+                b'l' => lflag = 1,
+                b'b' => bflag = 1,
+                _ => errflg += 1,
+            }
+        }
+
+        if argc - optind != 2 || errflg != 0 {
+            usage();
+        }
+
+        let name = CStr::from_ptr(argv[optind as usize]).to_str().unwrap();
+        let typ = CStr::from_ptr(argv[optind as usize + 1]).to_str().unwrap();
+
+        let name_c = CString::new(name).unwrap();
+        let typ_c = CString::new(typ).unwrap();
+
+        let fns = match load_hesiod() {
+            Some(f) => f,
+            None => {
+                eprintln!("hesinfo: cannot load hesiod functions");
+                process::exit(1);
+            }
+        };
+
+        let mut context: *mut c_void = std::ptr::null_mut();
+        if (fns.hesiod_init)(&mut context) < 0 {
+            let errno = libc_errno();
+            if errno == 78 {
+                // ENOEXEC
+                eprintln!("hesinfo: hesiod_init: Invalid Hesiod configuration file.");
+            } else {
+                eprint!("hesinfo: hesiod_init: ");
+            }
+        }
+
+        if bflag != 0 {
+            if lflag != 0 {
+                eprint!("hes_to_bind({}, {}) expands to\n", name, typ);
+            }
+            let bindname = (fns.hesiod_to_bind)(context, name_c.as_ptr(), typ_c.as_ptr());
+            if bindname.is_null() {
+                if lflag != 0 {
+                    eprint!("nothing\n");
+                }
+                let errno = libc_errno();
+                if errno == 2 {
+                    // ENOENT
+                    eprintln!("hesinfo: hesiod_to_bind: Unknown rhs-extension.");
+                } else {
+                    eprint!("hesinfo: hesiod_to_bind: ");
+                }
+                process::exit(1);
+            }
+            let bindname_str = CStr::from_ptr(bindname).to_str().unwrap();
+            println!("{}", bindname_str);
+            free(bindname as *mut c_void);
+            if lflag != 0 {
+                eprint!("which ");
+            }
+        }
+        if lflag != 0 {
+            eprint!("resolves to\n");
+        }
+
+        let list = (fns.hesiod_resolve)(context, name_c.as_ptr(), typ_c.as_ptr());
+        if list.is_null() {
+            if lflag != 0 {
+                eprint!("nothing\n");
+            }
+            let errno = libc_errno();
+            if errno == 2 {
+                // ENOENT
+                eprintln!("hesinfo: hesiod_resolve: Hesiod name not found.");
+            } else {
+                eprint!("hesinfo: hesiod_resolve: ");
+            }
+            process::exit(1);
+        }
+
+        let mut p = list;
+        loop {
+            let entry = *p;
+            if entry.is_null() {
+                break;
+            }
+            let s = CStr::from_ptr(entry).to_str().unwrap();
+            println!("{}", s);
+            p = p.add(1);
+        }
+
+        (fns.hesiod_free_list)(context, list);
+        (fns.hesiod_end)(context);
+    }
+
+    process::exit(0);
+}

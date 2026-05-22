@@ -1,0 +1,43 @@
+=== STEP 107 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/hesinfo/src/main.rs
+Scope: usr.bin/hesinfo
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/hesinfo/src/main.rs
+OLD:
+<<<
+            if bindname.is_null() {
+                if lflag != 0 {
+                    eprint!("nothing\n");
+                }
+                let errno = libc_errno();
+                if errno == 2 {
+                    // ENOENT
+                    eprintln!("hesinfo: hesiod_to_bind: Unknown rhs-extension.");
+                } else {
+                    eprint!("hesinfo: hesiod_to_bind: ");
+                }
+                process::exit(1);
+            }
+>>>
+NEW:
+<<<
+            if bindname.is_null() {
+                if lflag != 0 {
+                    eprint!("nothing\n");
+                }
+                let err = libc_errno();
+                if err == 2 {
+                    // ENOENT
+                    eprintln!("hesinfo: hesiod_to_bind: Unknown rhs-extension.");
+                } else {
+                    eprint!("hesinfo: hesiod_to_bind: ");
+                }
+                process::exit(1);
+            }
+>>>
