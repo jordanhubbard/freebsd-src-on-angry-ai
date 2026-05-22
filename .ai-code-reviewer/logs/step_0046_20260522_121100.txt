@@ -1,0 +1,11 @@
+=== STEP 46 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/rwho/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check what files exist in the rwho directory:
+
+ACTION: FIND_FILE usr.bin/rwho/*

@@ -1,0 +1,21 @@
+=== STEP 48 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwho:
+```
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+cargo-target
+rwho.1
+rwho.c
+src
+```
+
+--- RESPONSE ---
+
+
+Let me check the original C source to understand the behavior better:
+
+ACTION: READ_FILE usr.bin/rwho/rwho.c

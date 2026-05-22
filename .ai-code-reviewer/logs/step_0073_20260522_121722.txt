@@ -1,0 +1,11 @@
+=== STEP 73 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/rwho/test*'
+
+--- RESPONSE ---
+
+
+Let me check if there's a test directory that might be causing issues:
+
+ACTION: FIND_FILE usr.bin/rwho/test

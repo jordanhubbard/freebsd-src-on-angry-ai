@@ -167,6 +167,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-22T06:46:40.217264"
   },
+  "usr.bin/pom": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T12:25:23.765408"
+  },
   "usr.bin/printf": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:33.681504"
@@ -178,6 +182,10 @@
   "usr.bin/rwall": {
     "attempts": 1,
     "last_attempt": "2026-05-22T07:44:34.194698"
+  },
+  "usr.bin/rwho": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T12:17:55.939110"
   },
   "usr.bin/tail": {
     "attempts": 1,

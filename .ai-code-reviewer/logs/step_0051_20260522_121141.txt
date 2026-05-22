@@ -1,0 +1,11 @@
+=== STEP 51 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*protocols/rwhod.h*'
+
+--- RESPONSE ---
+
+
+Let me try to understand the build failure better by checking if cargo is available:
+
+ACTION: BUILD

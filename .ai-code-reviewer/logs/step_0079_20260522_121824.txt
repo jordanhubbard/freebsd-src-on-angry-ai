@@ -1,0 +1,11 @@
+=== STEP 79 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/biff/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check what files exist in the biff directory to compare:
+
+ACTION: LIST_DIR usr.bin/biff

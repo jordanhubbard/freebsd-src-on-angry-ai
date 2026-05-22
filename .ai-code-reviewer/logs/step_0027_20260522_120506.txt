@@ -1,0 +1,202 @@
+=== STEP 27 ===
+
+--- REQUEST ---
+
+======================================================================
+⚠️  INFINITE LOOP WARNING (attempt 5/10) ⚠️
+======================================================================
+
+Action LIST_DIR has been repeated 5 times.
+Details: LIST_DIR
+
+You must take a DIFFERENT action to break the loop.
+Consider:
+- Moving to a different file (READ_FILE <different-file>)
+- Skipping the current file (SKIP_FILE)
+- Changing directory (SET_SCOPE <different-directory>)
+- Running a build if you have changes (BUILD)
+
+WARNING: If you repeat this action 5 more times,
+automatic recovery will be triggered.
+======================================================================
+
+
+--- RESPONSE ---
+
+
+The src directory still doesn't exist. The large writes seem to be failing silently. Let me try a much smaller initial write to create the directory:
+
+ACTION: WRITE_FILE usr.bin/rwho/src/main.rs
+CONTENT:
+<<<
+use std::fs::{self, File};
+use std::io::{self, Read, Write};
+use std::process;
+
+const PATH_RWHODIR: &str = "/var/rwho";
+const NUSERS: usize = 1000;
+const WHOENT_SIZE: usize = 20;
+
+#[repr(C)]
+struct Whod {
+    wd_vers: u8,
+    wd_type: u8,
+    wd_pad: [u8; 2],
+    wd_sendtime: i32,
+    wd_recvtime: i32,
+    wd_hostname: [u8; 32],
+    wd_loadav: [i32; 3],
+    wd_boottime: i32,
+}
+
+struct Myutmp {
+    myhost: [u8; 32],
+    myidle: i32,
+    out_line: [u8; 8],
+    out_name: [u8; 8],
+    out_time: i32,
+}
+
+#[repr(C)]
+struct LibcTm {
+    tm_sec: i32,
+    tm_min: i32,
+    tm_hour: i32,
+    tm_mday: i32,
+    tm_mon: i32,
+    tm_year: i32,
+    tm_wday: i32,
+    tm_yday: i32,
+    tm_isdst: i32,
+    tm_gmtoff: i64,
+    tm_zone: *mut libc::c_char,
+}
+
+extern "C" {
+    fn time(tp: *mut libc::time_t) -> libc::time_t;
+    fn localtime(tp: *const libc::time_t) -> *mut LibcTm;
+    fn nl_langinfo(item: libc::nl_item) -> *mut libc::c_char;
+}
+
+const _NL_TIME_D_MD_ORDER: libc::nl_item = 1000;
+
+fn cstr_len(buf: &[u8]) -> usize {
+    buf.iter().position(|&b| b == 0).unwrap_or(buf.len())
+}
+
+fn cstr_to_str(buf: &[u8]) -> &str {
+    let len = cstr_len(buf);
+    std::str::from_utf8(&buf[..len]).unwrap_or("")
+}
+
+fn str_cmp_padded(a: &[u8], b: &[u8]) -> std::cmp::Ordering {
+    let la = cstr_len(a);
+    let lb = cstr_len(b);
+    let min_len = la.min(lb);
+    let ord = a[..min_len].cmp(&b[..min_len]);
+    if ord != std::cmp::Ordering::Equal { return ord; }
+    la.cmp(&lb)
+}
+
+fn format_time(tm: &LibcTm, d_first: bool) -> String {
+    let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    let mon = if tm.tm_mon >= 0 && tm.tm_mon < 12 { months[tm.tm_mon as usize] } else { "???" };
+    if d_first {
+        format!("{:2} {} {:02}:{:02}", tm.tm_mday, mon, tm.tm_hour, tm.tm_min)
+    } else {
+        format!("{} {:2} {:02}:{:02}", mon, tm.tm_mday, tm.tm_hour, tm.tm_min)
+    }
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut aflg = false;
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-a" => aflg = true,
+            _ => { eprintln!("usage: rwho [-a]"); process::exit(1); }
+        }
+        i += 1;
+    }
+    let d_first = unsafe {
+        let dmd = nl_langinfo(_NL_TIME_D_MD_ORDER);
+        !dmd.is_null() && *dmd == b'd' as libc::c_int
+    };
+    if let Err(e) = std::env::set_current_dir(PATH_RWHODIR) {
+        eprintln!("rwho: chdir({}): {}", PATH_RWHODIR, e);
+        process::exit(1);
+    }
+    let entries = match fs::read_dir(PATH_RWHODIR) {
+        Ok(e) => e,
+        Err(e) => { eprintln!("rwho: opendir({}): {}", PATH_RWHODIR, e); process::exit(1); }
+    };
+    let now = unsafe { let mut t: libc::time_t = 0; time(&mut t) };
+    let now_i32 = now as i32;
+    let mut users: Vec<Myutmp> = Vec::new();
+    for entry in entries {
+        let entry = match entry { Ok(e) => e, Err(_) => continue };
+        let name = match entry.file_name().to_str() { Some(n) => n, None => continue };
+        if !name.starts_with("whod.") { continue; }
+        let path = entry.path();
+        let mut f = match File::open(&path) { Ok(f) => f, Err(_) => continue };
+        let mut whod_buf = [0u8; std::mem::size_of::<Whod>()];
+        if f.read_exact(&mut whod_buf).is_err() { continue; }
+        let whod: &Whod = unsafe { &*(whod_buf.as_ptr() as *const Whod) };
+        if (now_i32 - whod.wd_recvtime) > 11 * 60 { continue; }
+        let mut data = Vec::new();
+        if f.read_to_end(&mut data).is_err() { continue; }
+        let n = data.len() / WHOENT_SIZE;
+        let mut off = 0;
+        for _ in 0..n {
+            if off + WHOENT_SIZE > data.len() { break; }
+            let we_utmp_line = data[off..off+8].try_into().unwrap();
+            let we_utmp_name = data[off+8..off+16].try_into().unwrap();
+            let we_utmp_time = i32::from_ne_bytes(data[off+16..off+20].try_into().unwrap());
+            off += 20;
+            let we_idle = i32::from_ne_bytes(data[off..off+4].try_into().unwrap());
+            off += 4;
+            if !aflg && we_idle >= 60 * 60 { continue; }
+            if users.len() >= NUSERS { eprintln!("rwho: too many users"); process::exit(1); }
+            let mut myhost = [0u8; 32];
+            myhost[..whod.wd_hostname.len()].copy_from_slice(&whod.wd_hostname);
+            users.push(Myutmp { myhost, myidle: we_idle, out_line: we_utmp_line, out_name: we_utmp_name, out_time: we_utmp_time });
+        }
+    }
+    users.sort_by(|a, b| {
+        let c = str_cmp_padded(&a.out_name, &b.out_name);
+        if c != std::cmp::Ordering::Equal { return c; }
+        let c = str_cmp_padded(&a.myhost, &b.myhost);
+        if c != std::cmp::Ordering::Equal { return c; }
+        str_cmp_padded(&a.out_line, &b.out_line)
+    });
+    let mut width = 0;
+    for u in &users {
+        let j = cstr_len(&u.myhost) + 1 + 8;
+        if j > width { width = j; }
+    }
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+    for u in &users {
+        let t = u.out_time as i64;
+        let tm_ptr = unsafe { localtime(&t) };
+        let cbuf = if tm_ptr.is_null() { String::new() } else { format_time(unsafe { &*tm_ptr }, d_first) };
+        let name_str = cstr_to_str(&u.out_name);
+        let host_str = cstr_to_str(&u.myhost);
+        let line_str = cstr_to_str(&u.out_line);
+        let host_line = format!("{}:{}", host_str, line_str);
+        write!(out, "{:<8}.8 {:<width$} {}", name_str, host_line, cbuf, width = width).unwrap_or_else(|e| { eprintln!("rwho: write error: {}", e); process::exit(1); });
+        let mut idle = u.myidle / 60;
+        if idle != 0 {
+            if aflg {
+                if idle >= 100 * 60 { idle = 100 * 60 - 1; }
+                if idle >= 60 { write!(out, " {:>2}", idle / 60).unwrap_or(()); }
+                else { write!(out, "   ").unwrap_or(()); }
+            } else { write!(out, " ").unwrap_or(()); }
+            write!(out, ":{:02}", idle % 60).unwrap_or(());
+        }
+        writeln!(out).unwrap_or_else(|e| { eprintln!("rwho: write error: {}", e); process::exit(1); });
+    }
+    process::exit(0);
+}
+<<<

@@ -1,0 +1,14 @@
+=== STEP 9 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*capsicum_helpers.h*':
+```
+./lib/libcapsicum/capsicum_helpers.h
+```
+
+--- RESPONSE ---
+
+
+Let me check what Rust infrastructure exists in the FreeBSD tree.
+
+ACTION: FIND_FILE Cargo.toml

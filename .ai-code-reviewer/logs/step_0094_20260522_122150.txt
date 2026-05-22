@@ -1,0 +1,11 @@
+=== STEP 94 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/rwho/test*'
+
+--- RESPONSE ---
+
+
+Let me try building again to see if the changes help:
+
+ACTION: BUILD

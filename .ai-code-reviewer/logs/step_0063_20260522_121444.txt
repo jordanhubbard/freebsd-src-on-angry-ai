@@ -1,0 +1,11 @@
+=== STEP 63 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/biff/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check if the Makefile.depend is causing issues:
+
+ACTION: FIND_FILE usr.bin/biff/Makefile.depend

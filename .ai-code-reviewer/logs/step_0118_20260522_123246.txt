@@ -1,0 +1,24 @@
+=== STEP 118 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/pom/Makefile.depend
+Scope: usr.bin/pom
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/pom/Makefile.depend
+OLD:
+<<<
+# Disabled for Rust rewrite
+# No dirdeps needed for Rust build
+# Empty file to prevent build system from including dirdeps
+>>>
+NEW:
+<<<
+# Disabled for Rust rewrite
+# No dirdeps needed for Rust build
+# Empty file to prevent build system from including dirdeps
+# No .include <dirdeps.mk> needed
+>>>

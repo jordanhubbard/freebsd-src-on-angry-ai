@@ -1,0 +1,21 @@
+=== STEP 60 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/rwho/test*'
+
+--- RESPONSE ---
+
+
+Let me check if the Makefile.depend is causing issues by removing it:
+
+ACTION: EDIT_FILE usr.bin/rwho/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	rwho
+>>>
+NEW:
+<<<
+PROG=	rwho
+>>>

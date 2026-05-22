@@ -1,0 +1,27 @@
+=== STEP 35 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/rwho/src/main.rs
+Scope: usr.bin/rwho
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to fix the remaining `libc::c_int` reference in the code:
+
+ACTION: EDIT_FILE usr.bin/rwho/src/main.rs
+OLD:
+<<<
+    let d_first = unsafe {
+        let dmd = nl_langinfo(_NL_TIME_D_MD_ORDER);
+        !dmd.is_null() && *dmd == b'd' as libc::c_int
+    };
+>>>
+NEW:
+<<<
+    let d_first = unsafe {
+        let dmd = nl_langinfo(_NL_TIME_D_MD_ORDER);
+        !dmd.is_null() && *dmd == b'd' as i8
+    };
+>>>

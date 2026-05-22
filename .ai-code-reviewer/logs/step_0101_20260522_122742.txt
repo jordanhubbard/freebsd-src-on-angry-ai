@@ -1,0 +1,9 @@
+=== STEP 101 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*lib/libc*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE lib/libc/

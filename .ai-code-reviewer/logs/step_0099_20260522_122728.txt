@@ -1,0 +1,199 @@
+=== STEP 99 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/pom/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/pom/src/main.rs
+CONTENT:
+use std::env;
+use std::ffi::CString;
+use std::os::raw::c_char;
+use std::process;
+
+const PI: f64 = 3.14159265358979323846;
+const EPOCH: i32 = 85;
+const EPSILONg: f64 = 279.611371;
+const RHOg: f64 = 282.680403;
+const ECCEN: f64 = 0.01671542;
+const lzero: f64 = 18.251907;
+const Pzero: f64 = 192.917585;
+const Nzero: f64 = 55.204723;
+
+fn isleap(y: i32) -> bool {
+    (y % 4 == 0 && y % 100 != 0) || y % 400 == 0
+}
+
+fn adj360(deg: &mut f64) {
+    loop {
+        if *deg < 0.0 {
+            *deg += 360.0;
+        } else if *deg > 360.0 {
+            *deg -= 360.0;
+        } else {
+            break;
+        }
+    }
+}
+
+fn dtor(deg: f64) -> f64 {
+    deg * PI / 180.0
+}
+
+fn potm(days: f64) -> f64 {
+    let mut n = 360.0 * days / 365.2422;
+    adj360(&mut n);
+    let mut msol = n + EPSILONg - RHOg;
+    adj360(&mut msol);
+    let ec = 360.0 / PI * ECCEN * (dtor(msol)).sin();
+    let mut lambdasol = n + ec + EPSILONg;
+    adj360(&mut lambdasol);
+    let mut l = 13.1763966 * days + lzero;
+    adj360(&mut l);
+    let mut mm = l - (0.1114041 * days) - Pzero;
+    adj360(&mut mm);
+    let mut nm = Nzero - (0.0529539 * days);
+    adj360(&mut nm);
+    let ev = 1.2739 * (dtor(2.0 * (l - lambdasol) - mm)).sin();
+    let ac = 0.1858 * (dtor(msol)).sin();
+    let a3 = 0.37 * (dtor(msol)).sin();
+    let mmprime = mm + ev - ac - a3;
+    let ec = 6.2886 * (dtor(mmprime)).sin();
+    let a4 = 0.214 * (dtor(2.0 * mmprime)).sin();
+    let mut lprime = l + ev + ec - ac + a4;
+    adj360(&mut lprime);
+    let v = 0.6583 * (dtor(2.0 * (lprime - lambdasol))).sin();
+    let ldprime = lprime + v;
+    let d = ldprime - lambdasol;
+    50.0 * (1.0 - (dtor(d)).cos())
+}
+
+fn usage(progname: &str) {
+    eprintln!("Usage: {} [-p] [-d yyyy.mm.dd] [-t hh:mm:ss]", progname);
+    process::exit(64); // EX_USAGE
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let progname = &args[0];
+
+    let mut odate: Option<String> = None;
+    let mut otime: Option<String> = None;
+    let mut pflag = false;
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-d" => {
+                i += 1;
+                if i < args.len() {
+                    odate = Some(args[i].clone());
+                } else {
+                    usage(progname);
+                }
+            }
+            "-p" => {
+                pflag = true;
+            }
+            "-t" => {
+                i += 1;
+                if i < args.len() {
+                    otime = Some(args[i].clone());
+                } else {
+                    usage(progname);
+                }
+            }
+            _ => {
+                usage(progname);
+            }
+        }
+        i += 1;
+    }
+
+    let mut tt = unsafe { libc::time(std::ptr::null_mut()) };
+
+    if odate.is_some() || otime.is_some() {
+        let mut tmd: libc::tm = unsafe { std::mem::zeroed() };
+        unsafe {
+            libc::localtime_r(&tt, &mut tmd);
+        }
+
+        if let Some(ref d) = odate {
+            let parts: Vec<&str> = d.split('.').collect();
+            if parts.len() == 3 {
+                tmd.tm_year = parts[0].parse::<i32>().unwrap_or(0) - 1900;
+                tmd.tm_mon = parts[1].parse::<i32>().unwrap_or(0) - 1;
+                tmd.tm_mday = parts[2].parse::<i32>().unwrap_or(0);
+                tmd.tm_hour = 0;
+                tmd.tm_min = 0;
+                tmd.tm_sec = 0;
+                tmd.tm_isdst = -1;
+            }
+        }
+
+        if let Some(ref t) = otime {
+            let parts: Vec<&str> = t.split(':').collect();
+            if parts.len() == 3 {
+                tmd.tm_hour = parts[0].parse::<i32>().unwrap_or(0);
+                tmd.tm_min = parts[1].parse::<i32>().unwrap_or(0);
+                tmd.tm_sec = parts[2].parse::<i32>().unwrap_or(0);
+                tmd.tm_isdst = -1;
+            }
+        }
+
+        tt = unsafe { libc::mktime(&mut tmd) };
+    }
+
+    let mut gmt: libc::tm = unsafe { std::mem::zeroed() };
+    unsafe {
+        libc::gmtime_r(&tt, &mut gmt);
+    }
+
+    let days = (gmt.tm_yday + 1) as f64
+        + ((gmt.tm_hour as f64
+            + gmt.tm_min as f64 / 60.0
+            + gmt.tm_sec as f64 / 3600.0)
+            / 24.0);
+
+    let mut total_days = days;
+    for cnt in EPOCH..gmt.tm_year {
+        total_days += if isleap(1900 + cnt) { 366.0 } else { 365.0 };
+    }
+
+    let today = potm(total_days);
+
+    if pflag {
+        println!("{:.0}", today);
+        return;
+    }
+
+    print!("The Moon is ");
+    if today >= 99.5 {
+        println!("Full");
+    } else if today < 0.5 {
+        println!("New");
+    } else {
+        let tomorrow = potm(total_days + 1.0);
+        if today >= 49.5 && today < 50.5 {
+            if tomorrow > today {
+                println!("at the First Quarter");
+            } else {
+                println!("at the Last Quarter");
+            }
+        } else {
+            if tomorrow > today {
+                print!("Waxing ");
+            } else {
+                print!("Waning ");
+            }
+            if today > 50.0 {
+                println!("Gibbous ({:.0}% of Full)", today);
+            } else if today < 50.0 {
+                println!("Crescent ({:.0}% of Full)", today);
+            }
+        }
+    }
+}

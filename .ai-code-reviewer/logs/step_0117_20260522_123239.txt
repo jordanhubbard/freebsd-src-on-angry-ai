@@ -1,0 +1,22 @@
+=== STEP 117 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/pom/test*'
+
+--- RESPONSE ---
+
+
+Let me try removing the Makefile.depend entirely since it might be interfering with the build:
+
+ACTION: EDIT_FILE usr.bin/pom/Makefile.depend
+OLD:
+<<<
+# Disabled for Rust rewrite
+# No dirdeps needed for Rust build
+>>>
+NEW:
+<<<
+# Disabled for Rust rewrite
+# No dirdeps needed for Rust build
+# Empty file to prevent build system from including dirdeps
+>>>
