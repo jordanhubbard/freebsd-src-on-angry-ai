@@ -1,0 +1,111 @@
+=== STEP 85 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/file2c is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 58e95310e0e5.
+
+Completed directories so far: 3
+NEXT: Use SET_SCOPE usr.bin/lsvfs
+
+FINAL DIFFS:
+--- usr.bin/file2c/Makefile ---
+```diff
+diff --git a/usr.bin/file2c/Makefile b/usr.bin/file2c/Makefile
+index 8ddd9ecb424..e78c6672d23 100644
+--- a/usr.bin/file2c/Makefile
++++ b/usr.bin/file2c/Makefile
+@@ -1,9 +1,19 @@
+-.include <src.opts.mk>
+-
+-PACKAGE= toolchain
+ PROG=	file2c
+ 
+-HAS_TESTS=
+-SUBDIR.${MK_TESTS}+= tests
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
+ 
+-.include <bsd.prog.mk>
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/file2c/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/file2c/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/file2c/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/file2c/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/file2c/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/file2c/cargo-target/debug/.fingerprint/file2c-b0b538c79d0cc8a8/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/file2c/cargo-target/debug/.fingerprint/file2c-b0b538c79d0cc8a8/output-bin-file2c ---
+```diff
+fatal: ambiguous argument 'usr.bin/file2c/cargo-target/debug/.fingerprint/file2c-b0b538c79d0cc8a8/output-bin-file2c': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/file2c/cargo-target/debug/deps/file2c-b0b538c79d0cc8a8.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/file2c/cargo-target/debug/incremental/file2c-12rolo9fd4t5s/s-hirbmv81ai-1s1jyxu-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/file2c/cargo-target/debug/incremental/file2c-12rolo9fd4t5s/s-hirbmv81ai-1s1jyxu-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/file2c/cargo-target/debug/incremental/file2c-12rolo9fd4t5s/s-hirbmv81ai-1s1jyxu.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/file2c/cargo-target/debug/incremental/file2c-12rolo9fd4t5s/s-hirbmv81ai-1s1jyxu.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/file2c/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/lsvfs

@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 02:05 - usr.bin/lsvfs ✓
+
+**Directory:** `usr.bin/lsvfs`
+
+**Summary:** [ai-code-reviewer] lsvfs: Rewrite to Rust and update build system
+
+**Files changed:**
+  - usr.bin/lsvfs/Makefile
+  - usr.bin/lsvfs/Cargo.toml
+  - usr.bin/lsvfs/src/main.rs
+
+---
+
 ## 2026-05-22 02:02 - usr.bin/file2c ✓
 
 **Directory:** `usr.bin/file2c`
