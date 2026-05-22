@@ -350,3 +350,5 @@
 {"event_type":"build_failure","timestamp":"2026-05-21T19:27:26.652906","session_id":"20260521_192358","directory":"usr.bin/true","duration_seconds":0.12184977531433105,"error_count":0,"warning_count":0}
 {"event_type":"build_start","timestamp":"2026-05-21T19:27:43.696905","session_id":"20260521_192358","directory":"usr.bin/true","message":"Build started: make -C usr.bin/true"}
 {"event_type":"build_success","timestamp":"2026-05-21T19:27:45.437078","session_id":"20260521_192358","directory":"usr.bin/true","duration_seconds":0.8253085613250732,"warning_count":0}
+{"event_type":"commit_success","timestamp":"2026-05-21T19:29:54.896818","session_id":"20260521_192358","directory":"usr.bin/true","files_changed":["usr.bin/true/Makefile","usr.bin/true/Cargo.toml","usr.bin/true/src/main.rs"],"commit_hash":"4f83e90220b0"}
+{"event_type":"directory_complete","timestamp":"2026-05-21T19:29:55.100359","session_id":"20260521_192358","directory":"usr.bin/true","message":"Completed usr.bin/true","duration_seconds":187.795322,"files_changed":["usr.bin/true/Makefile","usr.bin/true/Cargo.toml","usr.bin/true/src/main.rs"],"commit_hash":"4f83e90220b0"}
