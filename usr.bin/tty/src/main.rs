@@ -1,0 +1,51 @@
+use std::env;
+use std::io::{self, Write};
+use std::os::unix::io::AsRawFd;
+use std::process;
+
+extern "C" {
+    fn ttyname(fd: std::os::raw::c_int) -> *mut std::os::raw::c_char;
+}
+
+fn usage() -> ! {
+    let prog = env::args()
+        .next()
+        .map(|p| {
+            let s = p.as_str();
+            s.rsplit('/').next().unwrap_or(s).to_string()
+        })
+        .unwrap_or_else(|| "tty".to_string());
+    eprintln!("usage: {prog} [-s]");
+    process::exit(2);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut sflag = false;
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-s" => sflag = true,
+            _ => usage(),
+        }
+        i += 1;
+    }
+
+    let stdin = io::stdin();
+    let fd = stdin.as_raw_fd();
+    let t = unsafe { ttyname(fd) };
+
+    if !sflag {
+        if t.is_null() {
+            let _ = io::stdout().write_all(b"not a tty\n");
+        } else {
+            let name = unsafe { std::ffi::CStr::from_ptr(t) };
+            let _ = io::stdout().write_all(name.to_bytes_with_nul());
+        }
+    }
+
+    if t.is_null() {
+        process::exit(1);
+    }
+}

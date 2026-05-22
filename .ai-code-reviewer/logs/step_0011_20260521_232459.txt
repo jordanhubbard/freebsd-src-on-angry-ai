@@ -1,0 +1,12 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory bin/date skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE bin/setfacl
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/setfacl

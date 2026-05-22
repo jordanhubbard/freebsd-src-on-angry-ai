@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 00:10 - usr.bin/tty ✓
+
+**Directory:** `usr.bin/tty`
+
+**Summary:** [ai-code-reviewer] tty: Rewrite utility in Rust
+
+**Files changed:**
+  - usr.bin/tty/Makefile
+  - usr.bin/tty/Cargo.toml
+  - usr.bin/tty/src/main.rs
+
+---
+
 ## 2026-05-21 19:29 - usr.bin/true ✓
 
 **Directory:** `usr.bin/true`

@@ -1,0 +1,14 @@
+=== STEP 103 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory bin/ps skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE bin/pax
+
+--- RESPONSE ---
+
+
+Let me try a simpler unit:
+
+ACTION: SET_SCOPE bin/pax

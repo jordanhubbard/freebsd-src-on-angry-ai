@@ -68,8 +68,8 @@
     "last_attempt": "2026-05-21T19:30:06.013835"
   },
   "bin/pax": {
-    "attempts": 2,
-    "last_attempt": "2026-05-21T20:49:09.531554"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T00:04:39.257466"
   },
   "bin/pkill": {
     "attempts": 3,
@@ -96,8 +96,8 @@
     "last_attempt": "2026-05-21T20:23:27.975903"
   },
   "bin/sh": {
-    "attempts": 1,
-    "last_attempt": "2026-05-21T18:32:48.346002"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T00:05:49.724590"
   },
   "bin/stty": {
     "attempts": 3,
@@ -110,6 +110,14 @@
   "bin/timeout": {
     "attempts": 3,
     "last_attempt": "2026-05-21T19:44:21.180208"
+  },
+  "usr.bin/cksum": {
+    "attempts": 1,
+    "last_attempt": "2026-05-21T23:26:14.041313"
+  },
+  "usr.bin/env": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T00:06:33.829160"
   },
   "usr.bin/false": {
     "attempts": 3,
@@ -126,6 +134,10 @@
   "usr.bin/rev": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:48.015580"
+  },
+  "usr.bin/tty": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T00:06:53.752329"
   },
   "usr.bin/uname": {
     "attempts": 1,
