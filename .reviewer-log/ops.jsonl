@@ -677,3 +677,5 @@
 {"event_type":"directory_start","timestamp":"2026-05-22T01:27:16.343909","session_id":"20260522_011529","directory":"usr.bin/perror","message":"Started reviewing usr.bin/perror"}
 {"event_type":"build_start","timestamp":"2026-05-22T01:28:18.644118","session_id":"20260522_011529","directory":"usr.bin/perror","message":"Build started: make -C usr.bin/perror"}
 {"event_type":"build_success","timestamp":"2026-05-22T01:28:21.109496","session_id":"20260522_011529","directory":"usr.bin/perror","duration_seconds":1.3083245754241943,"warning_count":0}
+{"event_type":"commit_success","timestamp":"2026-05-22T01:30:18.228650","session_id":"20260522_011529","directory":"usr.bin/perror","files_changed":["usr.bin/perror/Makefile","usr.bin/perror/Cargo.toml","usr.bin/perror/src/main.rs"],"commit_hash":"245994035cc8"}
+{"event_type":"directory_complete","timestamp":"2026-05-22T01:30:18.436621","session_id":"20260522_011529","directory":"usr.bin/perror","message":"Completed usr.bin/perror","duration_seconds":182.092672,"files_changed":["usr.bin/perror/Makefile","usr.bin/perror/Cargo.toml","usr.bin/perror/src/main.rs"],"commit_hash":"245994035cc8"}

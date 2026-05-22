@@ -135,10 +135,6 @@
     "attempts": 1,
     "last_attempt": "2026-05-22T00:58:28.171024"
   },
-  "usr.bin/perror": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T01:27:16.346502"
-  },
   "usr.bin/printf": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:33.681504"
