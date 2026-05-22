@@ -1,0 +1,47 @@
+=== STEP 60 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/timeout/Makefile:
+PROGRESS:
+📁 Directory: bin/timeout
+📄 File: bin/timeout/Makefile
+✏️  Edits: 4 files modified
+
+```
+PROG=	timeout
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+SYMLINKS=	../..${BINDIR}/timeout /usr/bin/timeout
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	@${ECHO} "=== Building ${PROG} (Rust) ==="
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+	@${ECHO} "=== Done building ${PROG} (Rust) ==="
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
+	    ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- RESPONSE ---
+
+
+The Makefile looks correct. The issue might be that the build system can't find cargo or there's a deeper infrastructure issue. Let me check if the main.rs properly references the lib module.
+
+ACTION: READ_FILE bin/timeout/src/main.rs

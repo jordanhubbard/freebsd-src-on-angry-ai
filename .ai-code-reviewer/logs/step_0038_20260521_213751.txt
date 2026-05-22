@@ -1,0 +1,229 @@
+=== STEP 38 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/timeout/src/lib.rs
+Scope: bin/timeout
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to write the main.rs file with the main() function. Let me write it compactly.
+
+ACTION: WRITE_FILE bin/timeout/src/main.rs
+CONTENT:
+```
+/*-
+ * Copyright (c) 2014 Baptiste Daroussin <bapt@FreeBSD.org>
+ * Copyright (c) 2014 Vsevolod Stakhov <vsevolod@FreeBSD.org>
+ * Copyright (c) 2025 Aaron LI <aly@aaronly.me>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer
+ *    in this position and unchanged.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR(S) ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR(S) BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+use std::ffi::CString;
+use std::os::unix::process::CommandExt;
+use std::process;
+
+use timeout::*;
+
+fn main() {
+    let mut foreground = false;
+    let mut preserve = false;
+    let mut second_kill: f64 = 0.0;
+    let mut do_second_kill = false;
+    let mut killsig = SIGTERM;
+    let mut args: Vec<String> = std::env::args().collect();
+    let mut optind = 1;
+
+    while optind < args.len() {
+        let arg = &args[optind];
+        if arg == "--foreground" { foreground = true; }
+        else if arg == "--help" { usage(); }
+        else if arg == "--kill-after" {
+            optind += 1;
+            if optind >= args.len() { usage(); }
+            second_kill = parse_duration(&args[optind]);
+            do_second_kill = true;
+        }
+        else if arg == "--preserve-status" { preserve = true; }
+        else if arg == "--signal" {
+            optind += 1;
+            if optind >= args.len() { usage(); }
+            let sn = CString::new(args[optind].as_str()).unwrap();
+            let mut sig: i32 = 0;
+            if unsafe { str2sig(sn.as_ptr(), &mut sig) } != 0 {
+                unsafe { errx(EXIT_INVALID, "invalid signal") };
+            }
+            killsig = sig;
+        }
+        else if arg == "--verbose" { VERBOSE.store(true, Ordering::Relaxed); }
+        else if arg.starts_with('-') { usage(); }
+        else { break; }
+        optind += 1;
+    }
+
+    if optind + 1 >= args.len() { usage(); }
+    let first_kill = parse_duration(&args[optind]);
+    optind += 1;
+    let cmd_args: Vec<String> = args[optind..].to_vec();
+    let command_str = cmd_args[0].clone();
+    let cmd_cstr = CString::new(command_str.as_str()).unwrap();
+    COMMAND_PTR.store(cmd_cstr.as_ptr() as *mut u8, Ordering::Relaxed);
+    let _cmd_cstr_guard = cmd_cstr;
+
+    KILLSIG.store(killsig, Ordering::Relaxed);
+
+    if !foreground {
+        if unsafe { procctl(P_PID, std::process::id() as i32, PROC_REAP_ACQUIRE, std::ptr::null_mut()) } < 0 {
+            unsafe { err(1, "procctl(PROC_REAP_ACQUIRE)"); }
+        }
+    }
+
+    let mut allmask: sigset_t = unsafe { std::mem::zeroed() };
+    unsafe { sigfillset(&mut allmask) };
+    let mut oldmask: sigset_t = unsafe { std::mem::zeroed() };
+    if unsafe { sigprocmask(SIG_BLOCK, &allmask, &mut oldmask) } < 0 {
+        unsafe { err(1, "sigprocmask()"); }
+    }
+
+    let mut pp = [0i32; 2];
+    if unsafe { pipe2(pp.as_mut_ptr(), O_CLOEXEC) } < 0 {
+        unsafe { err(1, "pipe2"); }
+    }
+
+    let pid = unsafe { process::Command::new("/bin/sh").arg("-c").arg(&command_str).args(&cmd_args[1..]).pre_exec(|| {
+        signal(killsig, SIG_DFL);
+        sigprocmask(SIG_SETMASK, &oldmask, std::ptr::null_mut());
+        Ok(())
+    }).spawn() };
+
+    let pid = match pid {
+        Ok(c) => c.id() as i32,
+        Err(_) => unsafe { err(1, "fork()") },
+    };
+
+    unsafe { close(pp[0]) };
+
+    let mut sa: sigaction_t = unsafe { std::mem::zeroed() };
+    sa.sa_handler = sig_handler;
+    sa.sa_flags = SA_RESTART;
+    let mut sa_mask: sigset_t = unsafe { std::mem::zeroed() };
+    unsafe { sigfillset(&mut sa_mask) };
+    sa.sa_mask = sa_mask;
+
+    let nsig = unsafe { sys_nsig() };
+    for sig in 1..nsig {
+        match sig {
+            SIGTTIN | SIGTTOU => {
+                unsafe { signal(sig, SIG_IGN) };
+            }
+            SIGKILL | SIGSTOP | SIGCONT => {}
+            _ => {
+                if unsafe { sigaction(sig, &sa, std::ptr::null_mut()) } < 0 {
+                    unsafe { err(1, "sigaction({})", sig); }
+                }
+            }
+        }
+    }
+
+    set_interval(first_kill);
+
+    let error = unsafe { write(pp[1], b"a", 1) };
+    if error < 0 { unsafe { err(1, "write to control pipe"); } }
+    if error == 0 { unsafe { errx(1, "short write to control pipe"); } }
+    unsafe { close(pp[1]) };
+
+    let mut zeromask: sigset_t = unsafe { std::mem::zeroed() };
+    unsafe { sigemptyset(&mut zeromask) };
+
+    let mut timedout = false;
+    let mut child_done = false;
+    let mut child_si: siginfo_t = unsafe { std::mem::zeroed() };
+
+    loop {
+        unsafe { sigsuspend(&zeromask) };
+
+        if SIG_CHLD.swap(false, Ordering::Relaxed) {
+            loop {
+                let mut si: siginfo_t = unsafe { std::mem::zeroed() };
+                if unsafe { waitid(P_ALL, -1, &mut si, WEXITED | WNOHANG) } < 0 {
+                    if io::Error::last_os_error().raw_os_error().unwrap_or(0) != 4 { break; }
+                } else if si.si_pid == pid {
+                    child_si = si;
+                    child_done = true;
+                    log_termination("child terminated", &child_si);
+                } else if si.si_pid != 0 {
+                    log_termination("collected zombie", &si);
+                } else { break; }
+            }
+            if child_done {
+                if foreground { break; }
+                else {
+                    let mut info: procctl_reaper_status = unsafe { std::mem::zeroed() };
+                    unsafe { procctl(P_PID, std::process::id() as i32, PROC_REAP_STATUS, &mut info as *mut _ as *mut std::ffi::c_void) };
+                    if info.rs_children == 0 { break; }
+                }
+            }
+        } else if SIG_ALRM.swap(false, Ordering::Relaxed) || SIG_TERM.swap(false, Ordering::Relaxed) {
+            let sig = if SIG_ALRM.load(Ordering::Relaxed) {
+                let s = KILLSIG.load(Ordering::Relaxed);
+                SIG_ALRM.store(false, Ordering::Relaxed);
+                timedout = true;
+                logv("time limit reached or received SIGALRM");
+                s
+            } else {
+                let s = SIG_TERM_VAL.load(Ordering::Relaxed);
+                logv(&format!("received terminating signal {}({})", signame(s), s));
+                s
+            };
+            send_sig(pid, sig, foreground);
+            if do_second_kill {
+                set_interval(second_kill);
+                do_second_kill = false;
+                KILLSIG.store(SIGKILL, Ordering::Relaxed);
+            }
+        } else if SIG_OTHER.swap(false, Ordering::Relaxed) {
+            let sig = SIG_OTHER_VAL.load(Ordering::Relaxed);
+            logv(&format!("received signal {}({})", signame(sig), sig));
+            send_sig(pid, sig, foreground);
+        }
+    }
+
+    if !foreground {
+        unsafe { procctl(P_PID, std::process::id() as i32, PROC_REAP_RELEASE, std::ptr::null_mut()) };
+    }
+
+    let pstat = if timedout && !preserve {
+        EXIT_TIMEOUT
+    } else if child_si.si_code == CLD_DUMPED || child_si.si_code == CLD_KILLED {
+        kill_self(child_si.si_status);
+    } else if child_si.si_code == CLD_EXITED {
+        child_si.si_status
+    } else {
+        1
+    };
+
+    process::exit(pstat);
+}
+>>>

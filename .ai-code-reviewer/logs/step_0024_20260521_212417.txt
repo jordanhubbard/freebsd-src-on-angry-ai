@@ -1,0 +1,298 @@
+=== STEP 24 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/timeout/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The file was truncated again. Let me write the complete implementation in a more compact form. I'll write it all at once:
+
+ACTION: WRITE_FILE bin/timeout/src/main.rs
+CONTENT:
+```
+/*-
+ * Copyright (c) 2014 Baptiste Daroussin <bapt@FreeBSD.org>
+ * Copyright (c) 2014 Vsevolod Stakhov <vsevolod@FreeBSD.org>
+ * Copyright (c) 2025 Aaron LI <aly@aaronly.me>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer
+ *    in this position and unchanged.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR(S) ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR(S) BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+use std::ffi::{CStr, CString};
+use std::io::{self, Write};
+use std::os::unix::process::CommandExt;
+use std::process;
+use std::sync::atomic::{AtomicBool, AtomicI32, AtomicPtr, Ordering};
+
+const EXIT_TIMEOUT: i32 = 124;
+const EXIT_INVALID: i32 = 125;
+const EXIT_CMD_ERROR: i32 = 126;
+const EXIT_CMD_NOENT: i32 = 127;
+const SIGKILL: i32 = 9;
+const SIGSTOP: i32 = 19;
+const SIGCONT: i32 = 18;
+const SIGTERM: i32 = 15;
+const SIGCHLD: i32 = 20;
+const SIGALRM: i32 = 14;
+const SIGHUP: i32 = 1;
+const SIGINT: i32 = 2;
+const SIGQUIT: i32 = 3;
+const SIGILL: i32 = 4;
+const SIGTRAP: i32 = 5;
+const SIGABRT: i32 = 6;
+const SIGEMT: i32 = 7;
+const SIGFPE: i32 = 8;
+const SIGBUS: i32 = 10;
+const SIGSEGV: i32 = 11;
+const SIGSYS: i32 = 12;
+const SIGPIPE: i32 = 13;
+const SIGXCPU: i32 = 24;
+const SIGXFSZ: i32 = 25;
+const SIGVTALRM: i32 = 26;
+const SIGPROF: i32 = 27;
+const SIGUSR1: i32 = 30;
+const SIGUSR2: i32 = 31;
+const SIGTTIN: i32 = 21;
+const SIGTTOU: i32 = 22;
+const P_PID: i32 = 1;
+const PROC_REAP_ACQUIRE: i32 = 1;
+const PROC_REAP_RELEASE: i32 = 2;
+const PROC_REAP_KILL: i32 = 3;
+const PROC_REAP_STATUS: i32 = 4;
+const WEXITED: i32 = 0x00000004;
+const WNOHANG: i32 = 0x00000001;
+const P_ALL: i32 = -1;
+const CLD_EXITED: i32 = 1;
+const CLD_KILLED: i32 = 2;
+const CLD_DUMPED: i32 = 3;
+const RLIMIT_CORE: i32 = 4;
+const ITIMER_REAL: i32 = 0;
+const SIG_BLOCK: i32 = 1;
+const SIG_SETMASK: i32 = 2;
+const SA_RESTART: i32 = 0x00000040;
+const O_CLOEXEC: i32 = 0x00200000;
+
+static SIG_CHLD: AtomicBool = AtomicBool::new(false);
+static SIG_ALRM: AtomicBool = AtomicBool::new(false);
+static SIG_TERM: AtomicBool = AtomicBool::new(false);
+static SIG_OTHER: AtomicBool = AtomicBool::new(false);
+static KILLSIG: AtomicI32 = AtomicI32::new(SIGTERM);
+static SIG_OTHER_VAL: AtomicI32 = AtomicI32::new(0);
+static SIG_TERM_VAL: AtomicI32 = AtomicI32::new(0);
+static VERBOSE: AtomicBool = AtomicBool::new(false);
+static COMMAND_PTR: AtomicPtr = AtomicPtr::new(std::ptr::null::<u8>());
+
+extern "C" {
+    fn procctl(t: i32, pid: i32, req: i32, data: *mut std::ffi::c_void) -> i32;
+    fn setitimer(w: i32, nv: *const itimerval, ov: *mut itimerval) -> i32;
+    fn sigaction(s: i32, act: *const sigaction_t, oa: *mut sigaction_t) -> i32;
+    fn sigprocmask(h: i32, set: *const sigset_t, old: *mut sigset_t) -> i32;
+    fn sigfillset(set: *mut sigset_t) -> i32;
+    fn sigemptyset(set: *mut sigset_t) -> i32;
+    fn sigsuspend(mask: *const sigset_t) -> i32;
+    fn sigaddset(set: *mut sigset_t, s: i32) -> i32;
+    fn waitid(idt: i32, id: i32, infop: *mut siginfo_t, opt: i32) -> i32;
+    fn kill(pid: i32, s: i32) -> i32;
+    fn setrlimit(r: i32, rl: *const rlimit) -> i32;
+    fn str2sig(n: *const i8, sp: *mut i32) -> i32;
+    fn pipe2(fds: *mut i32, flags: i32) -> i32;
+    fn getprogname() -> *const i8;
+    fn sys_signame() -> *const i8;
+    fn sys_nsig() -> i32;
+    fn vwarnx(fmt: *const i8, ap: *mut std::ffi::c_void);
+    fn warn(fmt: *const i8, ...);
+    fn warnx(fmt: *const i8, ...);
+    fn err(code: i32, fmt: *const i8, ...);
+    fn errx(code: i32, fmt: *const i8, ...);
+}
+
+#[repr(C)] struct itimerval { it_value: timeval, it_interval: timeval }
+#[repr(C)] struct timeval { tv_sec: i64, tv_usec: i64 }
+#[repr(C)] struct sigset_t { val: [u64; 4] }
+#[repr(C)] struct sigaction_t { sa_handler: extern "C" fn(i32), sa_mask: sigset_t, sa_flags: i32 }
+#[repr(C)] struct siginfo_t { si_signo: i32, si_code: i32, si_pid: i32, si_status: i32, _pad: [u8; 48] }
+#[repr(C)] struct rlimit { rlim_cur: u64, rlim_max: u64 }
+#[repr(C)] struct procctl_reaper_kill { rk_sig: i32, rk_killed: u32, rk_fpid: i32 }
+#[repr(C)] struct procctl_reaper_status { rs_children: i32, rs_zombies: i32 }
+
+fn usage() -> ! {
+    let pn = unsafe { CStr::from_ptr(getprogname()).to_string_lossy().into_owned() };
+    let msg = format!("Usage: {} [-f | --foreground] [-k time | --kill-after time][-p | --preserve-status] [-s signal | --signal signal] [-v | --verbose] <duration> <command> [arg ...]\n", pn);
+    let mut h = io::stderr().lock();
+    let _ = h.write_all(msg.as_bytes());
+    process::exit(1);
+}
+
+fn logv(msg: &str) {
+    if !VERBOSE.load(Ordering::Relaxed) { return; }
+    let mut h = io::stderr().lock();
+    let _ = h.write_all(msg.as_bytes());
+    let _ = h.write_all(b"\n");
+}
+
+fn parse_duration(d: &str) -> f64 {
+    let b = d.as_bytes();
+    let mut end = b.len();
+    let mut suf = '\0';
+    for (i, &c) in b.iter().enumerate() {
+        if !c.is_ascii_digit() && c != b'.' && c != b'-' && c != b'+' && c != b'e' && c != b'E' {
+            end = i; suf = c as char; break;
+        }
+    }
+    let ret: f64 = match d[..end].parse() {
+        Ok(v) => v,
+        Err(_) => errx(EXIT_INVALID, "duration is not a number"),
+    };
+    if suf == '\0' { return ret; }
+    if end + 1 != b.len() { errx(EXIT_INVALID, "duration unit suffix too long"); }
+    let ret = match suf {
+        's' => ret, 'm' => ret * 60.0, 'h' => ret * 3600.0, 'd' => ret * 86400.0,
+        _ => errx(EXIT_INVALID, "duration unit suffix invalid"),
+    };
+    if ret < 0.0 || ret >= 100000000.0 { errx(EXIT_INVALID, "duration out of range"); }
+    ret
+}
+
+extern "C" fn sig_handler(signo: i32) {
+    if signo == KILLSIG.load(Ordering::Relaxed) {
+        SIG_TERM_VAL.store(signo, Ordering::Relaxed);
+        SIG_TERM.store(true, Ordering::Relaxed);
+        return;
+    }
+    match signo {
+        SIGCHLD => { SIG_CHLD.store(true, Ordering::Relaxed); }
+        SIGALRM => { SIG_ALRM.store(true, Ordering::Relaxed); }
+        SIGHUP|SIGINT|SIGQUIT|SIGILL|SIGTRAP|SIGABRT|SIGEMT|SIGFPE|SIGBUS|SIGSEGV|SIGSYS|SIGPIPE|SIGTERM|SIGXCPU|SIGXFSZ|SIGVTALRM|SIGPROF|SIGUSR1|SIGUSR2 => {
+            SIG_TERM_VAL.store(signo, Ordering::Relaxed);
+            SIG_TERM.store(true, Ordering::Relaxed);
+        }
+        _ => { SIG_OTHER_VAL.store(signo, Ordering::Relaxed); SIG_OTHER.store(true, Ordering::Relaxed); }
+    }
+}
+
+fn signame(s: i32) -> String {
+    unsafe { CStr::from_ptr(sys_signame().add(s as usize) as *const i8).to_string_lossy().into_owned() }
+}
+
+fn get_command() -> String {
+    unsafe {
+        let p = COMMAND_PTR.load(Ordering::Relaxed);
+        if p.is_null() { String::from("(null)") }
+        else { CStr::from_ptr(p as *const i8).to_string_lossy().into_owned() }
+    }
+}
+
+fn send_sig(pid: i32, signo: i32, fg: bool) {
+    let sn = signame(signo);
+    let cmd = get_command();
+    logv(&format!("sending signal {}({}) to command '{}'", sn, signo, cmd));
+    if fg {
+        if unsafe { kill(pid, signo) } < 0 {
+            if io::Error::last_os_error().raw_os_error().unwrap_or(0) != 3 {
+                warn(&format!("kill({}, {})", pid, sn));
+            }
+        }
+    } else {
+        let mut rk: procctl_reaper_kill = unsafe { std::mem::zeroed() };
+        rk.rk_sig = signo;
+        if unsafe { procctl(P_PID, std::process::id() as i32, PROC_REAP_KILL, &mut rk as *mut _ as *mut std::ffi::c_void) } < 0 {
+            if io::Error::last_os_error().raw_os_error().unwrap_or(0) != 3 {
+                warn("procctl(PROC_REAP_KILL)");
+                if rk.rk_fpid > 0 { warnx(&format!("failed to signal some processes: first pid={}", rk.rk_fpid)); }
+            }
+        }
+        logv(&format!("signaled {} processes", rk.rk_killed));
+    }
+    if signo != SIGKILL && signo != SIGSTOP && signo != SIGCONT {
+        let cn = signame(SIGCONT);
+        logv(&format!("sending signal {}({}) to command '{}'", cn, SIGCONT, get_command()));
+        if fg {
+            unsafe { kill(pid, SIGCONT) };
+        } else {
+            let mut rk: procctl_reaper_kill = unsafe { std::mem::zeroed() };
+            rk.rk_sig = SIGCONT;
+            unsafe { procctl(P_PID, std::process::id() as i32, PROC_REAP_KILL, &mut rk as *mut _ as *mut std::ffi::c_void) };
+        }
+    }
+}
+
+fn set_interval(iv: f64) {
+    let mut tim: itimerval = unsafe { std::mem::zeroed() };
+    if iv > 0.0 {
+        tim.it_value.tv_sec = iv as i64;
+        tim.it_value.tv_usec = ((iv - (iv as i64) as f64) * 1000000.0) as i64;
+    }
+    if unsafe { setitimer(ITIMER_REAL, &tim, std::ptr::null_mut()) } < 0 {
+        err(1, "setitimer()");
+    }
+}
+
+fn kill_self(signo: i32) -> ! {
+    let sn = signame(signo);
+    logv(&format!("killing self with signal {}({})", sn, signo));
+    let mut rl: rlimit = unsafe { std::mem::zeroed() };
+    unsafe { setrlimit(RLIMIT_CORE, &rl) };
+    unsafe {
+        let mut mask: sigset_t = std::mem::zeroed();
+        sigemptyset(&mut mask);
+        sigprocmask(SIG_SETMASK, &mask, std::ptr::null_mut());
+        kill(std::process::id() as i32, signo);
+    }
+    process::exit(128 + signo as i32);
+}
+
+fn log_termination(name: &str, si: &siginfo_t) {
+    let msg = if si.si_code == CLD_EXITED {
+        format!("{}: pid={}, exit={}", name, si.si_pid, si.si_status)
+    } else if si.si_code == CLD_DUMPED || si.si_code == CLD_KILLED {
+        format!("{}: pid={}, sig={}", name, si.si_pid, si.si_status)
+    } else {
+        format!("{}: pid={}, reason={}, status={}", name, si.si_pid, si.si_code, si.si_status)
+    };
+    logv(&msg);
+}
+
+fn main() {
+    let mut foreground = false;
+    let mut preserve = false;
+    let mut second_kill: f64 = 0.0;
+    let mut do_second_kill = false;
+    let mut killsig = SIGTERM;
+
+    let optstr = "+fhk:ps:v";
+    let longopts: [(&str, bool, char); 7] = [
+        ("foreground", false, 'f'),
+        ("help", false, 'h'),
+        ("kill-after", true, 'k'),
+        ("preserve-status", false, 'p'),
+        ("signal", true, 's'),
+        ("verbose", false, 'v'),
+        (std::ptr::null(), false, 0),
+    ];
+
+    let mut args: Vec<String> = std::env::args().collect();
+    let mut optind = 1;
+
+    while optind < args.len() {
