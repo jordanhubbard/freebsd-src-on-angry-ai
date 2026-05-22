@@ -111,10 +111,6 @@
     "attempts": 3,
     "last_attempt": "2026-05-21T19:44:21.180208"
   },
-  "usr.bin/basename": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T09:10:37.982474"
-  },
   "usr.bin/caesar": {
     "attempts": 2,
     "last_attempt": "2026-05-22T08:55:04.328352"
