@@ -139,10 +139,6 @@
     "attempts": 1,
     "last_attempt": "2026-05-21T23:16:48.015580"
   },
-  "usr.bin/tee": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T01:01:11.183256"
-  },
   "usr.bin/uname": {
     "attempts": 2,
     "last_attempt": "2026-05-22T00:11:03.402137"
