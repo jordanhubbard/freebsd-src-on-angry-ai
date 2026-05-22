@@ -144,8 +144,8 @@
     "last_attempt": "2026-05-22T02:36:41.175781"
   },
   "usr.bin/nice": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T03:23:36.763005"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T03:45:59.312336"
   },
   "usr.bin/printf": {
     "attempts": 1,

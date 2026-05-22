@@ -1,0 +1,62 @@
+=== STEP 547 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/what is now complete.
+Changes committed and pushed.
+Post-success metadata commit: 522ffa037025.
+
+Completed directories so far: 2
+NEXT: Use SET_SCOPE usr.bin/nice
+
+FINAL DIFFS:
+--- usr.bin/what/Makefile ---
+```diff
+diff --git a/usr.bin/what/Makefile b/usr.bin/what/Makefile
+index 7b242889d37..2b305833e7b 100644
+--- a/usr.bin/what/Makefile
++++ b/usr.bin/what/Makefile
+@@ -1,4 +1,23 @@
+-PACKAGE=	runtime
+ PROG=	what
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/what/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/what/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for usr.bin/what. Moving to next unit.
+
+ACTION: SET_SCOPE usr.bin/nice
