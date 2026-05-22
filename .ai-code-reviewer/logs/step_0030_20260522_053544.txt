@@ -1,0 +1,111 @@
+=== STEP 30 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/unexpand is now complete.
+Changes committed and pushed.
+Post-success metadata commit: e0eb091f3876.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE usr.bin/ypcat
+
+FINAL DIFFS:
+--- usr.bin/unexpand/Makefile ---
+```diff
+diff --git a/usr.bin/unexpand/Makefile b/usr.bin/unexpand/Makefile
+index ef5cf30459b..0ce252efd12 100644
+--- a/usr.bin/unexpand/Makefile
++++ b/usr.bin/unexpand/Makefile
+@@ -1,4 +1,23 @@
+ PROG=	unexpand
+-MAN=
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/unexpand/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/cargo-target/debug/.fingerprint/unexpand-c77b249fb3d14261/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/cargo-target/debug/.fingerprint/unexpand-c77b249fb3d14261/output-bin-unexpand ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/cargo-target/debug/deps/unexpand-c77b249fb3d14261.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/unexpand/cargo-target/debug/incremental/unexpand-2b2qfmm55e1ot/s-hirhi7t13e-0oqtqzb-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/unexpand/cargo-target/debug/incremental/unexpand-2b2qfmm55e1ot/s-hirhi7t13e-0oqtqzb-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/unexpand/cargo-target/debug/incremental/unexpand-2b2qfmm55e1ot/s-hirhi7t13e-0oqtqzb.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/unexpand/cargo-target/debug/incremental/unexpand-2b2qfmm55e1ot/s-hirhi7t13e-0oqtqzb.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/unexpand/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `usr.bin/unexpand`. Moving to the next unit.
+
+ACTION: SET_SCOPE usr.bin/ypcat

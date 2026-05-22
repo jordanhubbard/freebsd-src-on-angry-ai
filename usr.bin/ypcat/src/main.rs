@@ -1,0 +1,210 @@
+// SPDX-License-Identifier: BSD-2-Clause
+//
+// Copyright (c) 1992, 1993, 1996 Theo de Raadt <deraadt@theos.com>
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int, c_ulong};
+use std::process;
+
+// YP constants
+const YP_TRUE: c_ulong = 1;
+const YPERR_YPBIND: c_int = 13;
+
+// FFI types for YP callback
+#[repr(C)]
+struct YpallCallback {
+    foreach: unsafe extern "C" fn(
+        instatus: c_ulong,
+        inkey: *mut c_char,
+        inkeylen: c_int,
+        inval: *mut c_char,
+        invallen: c_int,
+        indata: *mut std::ffi::c_void,
+    ) -> c_int,
+    data: *mut std::ffi::c_void,
+}
+
+extern "C" {
+    fn yp_get_default_domain(domain: *mut *const c_char) -> c_int;
+    fn yp_all(
+        domain: *const c_char,
+        map: *const c_char,
+        callback: *const YpallCallback,
+    ) -> c_int;
+    fn yperr_string(err: c_int) -> *const c_char;
+}
+
+static YPALIASES: &[(&str, &str)] = &[
+    ("passwd", "passwd.byname"),
+    ("master.passwd", "master.passwd.byname"),
+    ("shadow", "shadow.byname"),
+    ("group", "group.byname"),
+    ("networks", "networks.byaddr"),
+    ("hosts", "hosts.byaddr"),
+    ("protocols", "protocols.bynumber"),
+    ("services", "services.byname"),
+    ("aliases", "mail.aliases"),
+    ("ethers", "ethers.byname"),
+];
+
+static mut PRINT_KEY: bool = false;
+
+unsafe extern "C" fn printit(
+    instatus: c_ulong,
+    inkey: *mut c_char,
+    inkeylen: c_int,
+    inval: *mut c_char,
+    invallen: c_int,
+    _indata: *mut std::ffi::c_void,
+) -> c_int {
+    if instatus != YP_TRUE {
+        return instatus as c_int;
+    }
+    let keylen = inkeylen as usize;
+    let vallen = invallen as usize;
+
+    if PRINT_KEY {
+        let key_bytes = std::slice::from_raw_parts(inkey as *const u8, keylen);
+        let key_str = String::from_utf8_lossy(key_bytes);
+        print!("{key_str} ");
+    }
+    let val_bytes = std::slice::from_raw_parts(inval as *const u8, vallen);
+    let val_str = String::from_utf8_lossy(val_bytes);
+    println!("{val_str}");
+    0
+}
+
+fn usage() -> ! {
+    eprintln!(
+        "usage: ypcat [-kt] [-d domainname] mapname\n\
+         ypcat -x"
+    );
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
+    let mut domain_str: Option<String> = None;
+    let mut notrans = false;
+    unsafe { PRINT_KEY = false };
+    let mut mapname: Option<String> = None;
+    let mut show_aliases = false;
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg == "-x" {
+            show_aliases = true;
+        } else if arg == "-d" {
+            i += 1;
+            if i >= args.len() {
+                usage();
+            }
+            domain_str = Some(args[i].clone());
+        } else if arg == "-t" {
+            notrans = true;
+        } else if arg == "-k" {
+            unsafe { PRINT_KEY = true };
+        } else if arg.starts_with('-') {
+            usage();
+        } else {
+            if mapname.is_some() {
+                usage();
+            }
+            mapname = Some(arg.clone());
+        }
+        i += 1;
+    }
+
+    if show_aliases {
+        for (alias, name) in YPALIASES {
+            println!("Use \"{alias}\" for \"{name}\"");
+        }
+        process::exit(0);
+    }
+
+    let mapname = match mapname {
+        Some(m) => m,
+        None => usage(),
+    };
+
+    // Resolve domain
+    let mut domain_cstring: Option<CString> = None;
+    let mut domain_ptr: *const c_char = std::ptr::null();
+    let mut use_default = false;
+
+    if let Some(ref d) = domain_str {
+        domain_cstring = Some(CString::new(d.as_str()).unwrap_or_else(|_| usage()));
+        domain_ptr = domain_cstring.as_ref().unwrap().as_ptr();
+    } else {
+        use_default = true;
+    }
+
+    if use_default {
+        let mut default_domain: *const c_char = std::ptr::null_mut();
+        unsafe {
+            let ret = yp_get_default_domain(&mut default_domain);
+            if ret != 0 || default_domain.is_null() {
+                eprintln!("ypcat: cannot get default domain");
+                process::exit(1);
+            }
+            domain_ptr = default_domain;
+        }
+    }
+
+    // Resolve map alias
+    let mut inmap = mapname.as_str();
+    if !notrans {
+        for (alias, name) in YPALIASES {
+            if mapname == *alias {
+                inmap = name;
+                break;
+            }
+        }
+    }
+
+    let map_cstring = CString::new(inmap).unwrap_or_else(|_| usage());
+
+    let mut callback = YpallCallback {
+        foreach: printit,
+        data: std::ptr::null_mut(),
+    };
+
+    let r = unsafe { yp_all(domain_ptr, map_cstring.as_ptr(), &mut callback) };
+
+    match r {
+        0 => {}
+        YPERR_YPBIND => {
+            eprintln!("ypcat: not running ypbind");
+            process::exit(1);
+        }
+        _ => {
+            let err_str = unsafe { CStr::from_ptr(yperr_string(r)).to_string_lossy() };
+            eprintln!("ypcat: no such map {inmap}. Reason: {err_str}");
+            process::exit(1);
+        }
+    }
+}

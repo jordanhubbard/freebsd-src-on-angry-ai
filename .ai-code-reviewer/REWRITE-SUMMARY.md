@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 05:43 - usr.bin/ypcat ✓
+
+**Directory:** `usr.bin/ypcat`
+
+**Summary:** [ai-code-reviewer] ypcat: Rewrite utility in Rust
+
+**Files changed:**
+  - usr.bin/ypcat/Makefile
+  - usr.bin/ypcat/Cargo.lock
+  - usr.bin/ypcat/Cargo.toml
+  - usr.bin/ypcat/cargo-target/.rustc_info.json
+  - usr.bin/ypcat/cargo-target/CACHEDIR.TAG
+  - usr.bin/ypcat/cargo-target/debug/.cargo-lock
+  - usr.bin/ypcat/cargo-target/debug/.fingerprint/ypcat-d5514f930fb39856/invoked.timestamp
+  - usr.bin/ypcat/cargo-target/debug/.fingerprint/ypcat-d5514f930fb39856/output-bin-ypcat
+  - usr.bin/ypcat/cargo-target/debug/deps/ypcat-d5514f930fb39856.d
+  - usr.bin/ypcat/cargo-target/debug/incremental/ypcat-3vwjq3yrrdex2/s-hirho15ws1-0mooeoq-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 05:35 - usr.bin/unexpand ✓
 
 **Directory:** `usr.bin/unexpand`
