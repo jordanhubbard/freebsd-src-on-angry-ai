@@ -1,0 +1,64 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+GREP_RESULT for 'capsicum_helpers':
+```
+./tests/sys/kern/ktrace_test.c:47:#include <capsicum_helpers.h>
+./sbin/savecore/savecore.c:72:#include <capsicum_helpers.h>
+./sbin/md5/md5.c:49:#include <capsicum_helpers.h>
+./sbin/dhclient/dhclient.c:65:#include <capsicum_helpers.h>
+./sbin/dhclient/bpf.c:59:#include <capsicum_helpers.h>
+./sbin/decryptcore/decryptcore.c:36:#include <capsicum_helpers.h>
+./sbin/dumpon/dumpon.c:40:#include <capsicum_helpers.h>
+./sbin/ping/ping6.c:106:#include <capsicum_helpers.h>
+./sbin/ping/ping.c:74:#include <capsicum_helpers.h>
+./crypto/openssh/config.h:292:/* Define to 1 if you have the <capsicum_helpers.h> header file. */
+./crypto/openssh/sandbox-capsicum.c:33:#include <capsicum_helpers.h>
+./tools/build/cross-build/include/linux/sys/filio.h:39:/* Not actually used but the constant is needed to compile capsicum_helpers.h */
+./contrib/elftoolchain/size/size.c:28:#include <capsicum_helpers.h>
+./contrib/elftoolchain/strings/strings.c:31:#include <capsicum_helpers.h>
+./contrib/elftoolchain/addr2line/addr2line.c:30:#include <capsicum_helpers.h>
+./contrib/elftoolchain/readelf/readelf.c:32:#include <capsicum_helpers.h>
+./contrib/elftoolchain/cxxfilt/cxxfilt.c:29:#include <capsicum_helpers.h>
+./contrib/elftoolchain/nm/nm.c:32:#include <capsicum_helpers.h>
+./contrib/dma/dma-mbox-create.c:51:#include <capsicum_helpers.h>
+./lib/libvmmapi/vmmapi.c:41:#include <capsicum_helpers.h>
+./bin/uuidgen/uuidgen.c:33:#include <capsicum_helpers.h>
+./bin/echo/echo.c:36:#include <capsicum_helpers.h>
+./bin/dd/dd.c:46:#include <capsicum_helpers.h>
+./bin/cat/cat.c:44:#include <capsicum_helpers.h>
+./usr.bin/locate/bigram/locate.bigram.c:38:#include <capsicum_helpers.h>
+./usr.bin/uniq/uniq.c:37:#include <capsicum_helpers.h>
+./usr.bin/leave/leave.c:40:#include <capsicum_helpers.h>
+./usr.bin/colrm/colrm.c:43:#include <capsicum_helpers.h>
+./usr.bin/tee/tee.c:39:#include <capsicum_helpers.h>
+./usr.bin/iconv/iconv.c:33:#include <capsicum_helpers.h>
+./usr.bin/elfdump/elfdump.c:38:#include <capsicum_helpers.h>
+./usr.bin/last/last.c:38:#include <capsicum_helpers.h>
+./usr.bin/logname/logname.c:32:#include <capsicum_helpers.h>
+./usr.bin/yes/yes.c:32:#include <capsicum_helpers.h>
+./usr.bin/kdump/kdump.c:67:#include <capsicum_helpers.h>
+./usr.bin/basename/basename.c:32:#include <capsicum_helpers.h>
+./usr.bin/head/head.c:35:#include <capsicum_helpers.h>
+./usr.bin/jot/jot.c:39:#include <capsicum_helpers.h>
+./usr.bin/units/units.c:31:#include <capsicum_helpers.h>
+./usr.bin/ktrdump/ktrdump.c:36:#include <capsicum_helpers.h>
+./usr.bin/wc/wc.c:36:#include <capsicum_helpers.h>
+./usr.bin/beep/beep.c:30:#include <capsicum_helpers.h>
+./usr.bin/paste/paste.c:39:#include <capsicum_helpers.h>
+./usr.bin/tr/tr.c:35:#include <capsicum_helpers.h>
+./usr.bin/dirname/dirname.c:32:#include <capsicum_helpers.h>
+./usr.bin/tail/tail.c:40:#include <capsicum_helpers.h>
+./usr.bin/rwho/rwho.c:39:#include <capsicum_helpers.h>
+./usr.bin/diff/diffreg_new.c:25:#include <capsicum_helpers.h>
+./usr.bin/diff/diffreg.c:70:#include <capsicum_helpers.h>
+./usr.bin/col/col.c:37:#include <capsicum_helpers.h>
+... [55 more matches]
+```
+
+--- RESPONSE ---
+
+
+Let me check how previous successful rewrites handled capsicum to understand the pattern:
+
+ACTION: READ_FILE usr.bin/basename/src/main.rs
