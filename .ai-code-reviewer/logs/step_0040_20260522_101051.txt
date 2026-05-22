@@ -1,0 +1,120 @@
+=== STEP 40 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/enigma/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+I need to fix the type handling in the Rust code. Let me rewrite the main processing loop more carefully:
+
+ACTION: EDIT_FILE usr.bin/enigma/src/main.rs
+OLD:
+<<<
+    let stdin = std::io::stdin();
+    let stdout = std::io::stdout();
+    let mut out = stdout.lock();
+    let mut n1: usize = 0;
+    let mut n2: usize = 0;
+    let mut nr2: u8 = 0;
+
+    for byte_result in stdin.bytes() {
+        let i = match byte_result {
+            Ok(b) => b,
+            Err(_) => break,
+        };
+
+        let nr1;
+        unsafe {
+            if secureflg {
+                nr1 = DECK[n1] & MASK as u8;
+                let nr1_val = nr1 as usize;
+                let nr2_val = DECK[nr1_val] & MASK as u8;
+                nr2 = nr2_val;
+            } else {
+                nr1 = i;
+            }
+
+            let val = (i.wrapping_add(nr1) & MASK as u8) as usize;
+            let val2 = (T1[val].wrapping_add(nr2) & MASK as u8) as usize;
+            let val3 = (T3[val2].wrapping_sub(nr2) & MASK as u8) as usize;
+            let val4 = (T2[val3].wrapping_sub(nr1) & MASK as u8);
+            out.write_all(&[val4]).unwrap();
+        }
+
+        n1 += 1;
+        if n1 == ROTORSZ {
+            n1 = 0;
+            n2 += 1;
+            if n2 == ROTORSZ {
+                n2 = 0;
+            }
+            unsafe {
+                if secureflg {
+                    shuffle();
+                } else {
+                    nr2 = n2 as u8;
+                }
+            }
+        }
+    }
+
+    process::exit(0);
+}
+>>>
+NEW:
+<<<
+    let stdin = std::io::stdin();
+    let stdout = std::io::stdout();
+    let mut out = stdout.lock();
+    let mut n1: usize = 0;
+    let mut n2: usize = 0;
+    let mut nr2: i32 = 0;
+
+    for byte_result in stdin.bytes() {
+        let i = match byte_result {
+            Ok(b) => b as i32,
+            Err(_) => break,
+        };
+
+        let nr1: i32;
+        unsafe {
+            if secureflg {
+                nr1 = (DECK[n1] & MASK as u8) as i32;
+                nr2 = (DECK[nr1 as usize] & MASK as u8) as i32;
+            } else {
+                nr1 = i;
+            }
+
+            let val = ((i + nr1) & MASK as i32) as usize;
+            let val2 = ((T1[val] as i32 + nr2) & MASK as i32) as usize;
+            let val3 = ((T3[val2] as i32 + nr2) & MASK as i32) as usize;
+            let val4 = ((T2[val3] as i32 - nr2) & MASK as i32) as usize;
+            let result = (T2[val3] as i32 - nr2) as i32;
+            let result2 = (result & MASK as i32) as usize;
+            let final_val = (T2[result2] as i32 - nr1) as i32;
+            let final_byte = (final_val & MASK as i32) as u8;
+            out.write_all(&[final_byte]).unwrap();
+        }
+
+        n1 += 1;
+        if n1 == ROTORSZ {
+            n1 = 0;
+            n2 += 1;
+            if n2 == ROTORSZ {
+                n2 = 0;
+            }
+            unsafe {
+                if secureflg {
+                    shuffle();
+                } else {
+                    nr2 = n2 as i32;
+                }
+            }
+        }
+    }
+
+    process::exit(0);
+}
+>>>

@@ -1,0 +1,124 @@
+=== STEP 41 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/enigma/src/main.rs
+Scope: usr.bin/enigma
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Let me fix the processing loop to match the original C code exactly:
+
+ACTION: EDIT_FILE usr.bin/enigma/src/main.rs
+OLD:
+<<<
+    let stdin = std::io::stdin();
+    let stdout = std::io::stdout();
+    let mut out = stdout.lock();
+    let mut n1: usize = 0;
+    let mut n2: usize = 0;
+    let mut nr2: i32 = 0;
+
+    for byte_result in stdin.bytes() {
+        let i = match byte_result {
+            Ok(b) => b as i32,
+            Err(_) => break,
+        };
+
+        let nr1: i32;
+        unsafe {
+            if secureflg {
+                nr1 = (DECK[n1] & MASK as u8) as i32;
+                nr2 = (DECK[nr1 as usize] & MASK as u8) as i32;
+            } else {
+                nr1 = i;
+            }
+
+            let val = ((i + nr1) & MASK as i32) as usize;
+            let val2 = ((T1[val] as i32 + nr2) & MASK as i32) as usize;
+            let val3 = ((T3[val2] as i32 + nr2) & MASK as i32) as usize;
+            let val4 = ((T2[val3] as i32 - nr2) & MASK as i32) as usize;
+            let result = (T2[val3] as i32 - nr2) as i32;
+            let result2 = (result & MASK as i32) as usize;
+            let final_val = (T2[result2] as i32 - nr1) as i32;
+            let final_byte = (final_val & MASK as i32) as u8;
+            out.write_all(&[final_byte]).unwrap();
+        }
+
+        n1 += 1;
+        if n1 == ROTORSZ {
+            n1 = 0;
+            n2 += 1;
+            if n2 == ROTORSZ {
+                n2 = 0;
+            }
+            unsafe {
+                if secureflg {
+                    shuffle();
+                } else {
+                    nr2 = n2 as i32;
+                }
+            }
+        }
+    }
+
+    process::exit(0);
+}
+>>>
+NEW:
+<<<
+    let stdin = std::io::stdin();
+    let stdout = std::io::stdout();
+    let mut out = stdout.lock();
+    let mut n1: usize = 0;
+    let mut n2: usize = 0;
+    let mut nr2: i32 = 0;
+
+    for byte_result in stdin.bytes() {
+        let mut i = match byte_result {
+            Ok(b) => b as i32,
+            Err(_) => break,
+        };
+
+        let nr1: i32;
+        unsafe {
+            if secureflg {
+                nr1 = (DECK[n1] & MASK as u8) as i32;
+                nr2 = (DECK[nr1 as usize] & MASK as u8) as i32;
+            } else {
+                nr1 = i;
+            }
+
+            // i = t2[(t3[(t1[(i+nr1)&MASK]+nr2)&MASK]-nr2)&MASK]-nr1;
+            let step1 = ((i + nr1) & MASK as i32) as usize;
+            let step2 = (T1[step1] as i32 + nr2) & MASK as i32;
+            let step3 = step2 as usize;
+            let step4 = (T3[step3] as i32 - nr2) & MASK as i32;
+            let step5 = step4 as usize;
+            let step6 = (T2[step5] as i32 - nr1);
+            i = step6;
+        }
+
+        out.write_all(&[(i & MASK as i32) as u8]).unwrap();
+
+        n1 += 1;
+        if n1 == ROTORSZ {
+            n1 = 0;
+            n2 += 1;
+            if n2 == ROTORSZ {
+                n2 = 0;
+            }
+            unsafe {
+                if secureflg {
+                    shuffle();
+                } else {
+                    nr2 = n2 as i32;
+                }
+            }
+        }
+    }
+
+    process::exit(0);
+}
+>>>

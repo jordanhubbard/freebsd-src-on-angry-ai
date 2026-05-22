@@ -1,0 +1,59 @@
+=== STEP 36 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/which is now complete.
+Changes committed and pushed.
+Post-success metadata commit: none.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE usr.bin/enigma
+
+FINAL DIFFS:
+--- usr.bin/which/Makefile ---
+```diff
+diff --git a/usr.bin/which/Makefile b/usr.bin/which/Makefile
+index 097d238dfbb..df2cea6044d 100644
+--- a/usr.bin/which/Makefile
++++ b/usr.bin/which/Makefile
+@@ -1,3 +1,23 @@
+ PROG=	which
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- usr.bin/which/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/which/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/enigma

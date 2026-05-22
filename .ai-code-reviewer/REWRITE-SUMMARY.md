@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 10:12 - usr.bin/soelim ✓
+
+**Directory:** `usr.bin/soelim`
+
+**Summary:** [ai-code-reviewer] soelim: Initialize Rust rewrite with Cargo build
+
+**Files changed:**
+  - usr.bin/soelim/Makefile
+  - usr.bin/soelim/src/lib.rs
+  - usr.bin/soelim/src/main.rs
+  - usr.bin/enigma/src/main.rs
+  - usr.bin/soelim/Cargo.toml
+  - usr.bin/soelim/soelim
+  - usr.bin/soelim/soelim.1.gz
+  - usr.bin/soelim/soelim.debug
+  - usr.bin/soelim/soelim.full
+  - usr.bin/soelim/tests/Kyuafile
+  - ... and 1 more
+
+---
+
 ## 2026-05-22 10:07 - usr.bin/which ✓
 
 **Directory:** `usr.bin/which`
