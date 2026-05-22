@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 02:02 - usr.bin/file2c ✓
+
+**Directory:** `usr.bin/file2c`
+
+**Summary:** [ai-code-reviewer] file2c: Rewrite to Rust and update Makefile
+
+**Files changed:**
+  - usr.bin/file2c/Makefile
+  - usr.bin/file2c/Cargo.lock
+  - usr.bin/file2c/Cargo.toml
+  - usr.bin/file2c/cargo-target/.rustc_info.json
+  - usr.bin/file2c/cargo-target/CACHEDIR.TAG
+  - usr.bin/file2c/cargo-target/debug/.cargo-lock
+  - usr.bin/file2c/cargo-target/debug/.fingerprint/file2c-b0b538c79d0cc8a8/invoked.timestamp
+  - usr.bin/file2c/cargo-target/debug/.fingerprint/file2c-b0b538c79d0cc8a8/output-bin-file2c
+  - usr.bin/file2c/cargo-target/debug/deps/file2c-b0b538c79d0cc8a8.d
+  - usr.bin/file2c/cargo-target/debug/incremental/file2c-12rolo9fd4t5s/s-hirbmv81ai-1s1jyxu-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 01:56 - usr.bin/runat ✓
 
 **Directory:** `usr.bin/runat`

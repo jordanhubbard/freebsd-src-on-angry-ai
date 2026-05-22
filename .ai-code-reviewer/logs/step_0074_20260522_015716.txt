@@ -1,0 +1,109 @@
+=== STEP 74 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/runat is now complete.
+Changes committed and pushed.
+Post-success metadata commit: ecfee8832e8b.
+
+Completed directories so far: 2
+NEXT: Use SET_SCOPE usr.bin/file2c
+
+FINAL DIFFS:
+--- usr.bin/runat/Makefile ---
+```diff
+diff --git a/usr.bin/runat/Makefile b/usr.bin/runat/Makefile
+index 6be86ce4a60..fcfa0da638f 100644
+--- a/usr.bin/runat/Makefile
++++ b/usr.bin/runat/Makefile
+@@ -1,3 +1,19 @@
+ PROG=	runat
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- usr.bin/runat/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/runat/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/runat/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/runat/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/runat/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/runat/cargo-target/debug/.fingerprint/runat-217a5bfe5bb22d09/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/runat/cargo-target/debug/.fingerprint/runat-217a5bfe5bb22d09/output-bin-runat ---
+```diff
+fatal: ambiguous argument 'usr.bin/runat/cargo-target/debug/.fingerprint/runat-217a5bfe5bb22d09/output-bin-runat': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/runat/cargo-target/debug/deps/runat-217a5bfe5bb22d09.d ---
+```diff
+(no changes)
+```
+
+--- usr.bin/runat/cargo-target/debug/incremental/runat-2uabr76u70372/s-hirbgyeq4v-0bdf1w0-working/dep-graph.part.bin ---
+```diff
+fatal: ambiguous argument 'usr.bin/runat/cargo-target/debug/incremental/runat-2uabr76u70372/s-hirbgyeq4v-0bdf1w0-working/dep-graph.part.bin': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/runat/cargo-target/debug/incremental/runat-2uabr76u70372/s-hirbgyeq4v-0bdf1w0.lock ---
+```diff
+fatal: ambiguous argument 'usr.bin/runat/cargo-target/debug/incremental/runat-2uabr76u70372/s-hirbgyeq4v-0bdf1w0.lock': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/runat/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `usr.bin/runat`. Moving to the next unit.
+
+ACTION: SET_SCOPE usr.bin/file2c
