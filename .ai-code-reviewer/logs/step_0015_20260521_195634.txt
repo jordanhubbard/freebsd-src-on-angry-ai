@@ -1,0 +1,21 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+GREP_RESULT for '^libc':
+```
+./crypto/openssh/libcrux_mlkem768_sha3.h:647:libcrux_secrets_int_public_integers_classify_27_90(uint8_t self) {
+./crypto/openssh/libcrux_mlkem768_sha3.h:660:libcrux_secrets_int_public_integers_declassify_d8_39(int16_t self) {
+./crypto/openssh/libcrux_mlkem768_sha3.h:681:libcrux_secrets_int_public_integers_classify_27_39(int16_t self) {
+./contrib/atf/atf-c/error.c:187:libc_format(const atf_error_t err, char *buf, size_t buflen)
+./lib/libc/gen/libc_dlopen.c:40:libc_dlopen(const char *path, int mode)
+./lib/libc/gen/tls.c:108:libc_malloc_aligned(size_t size, size_t align)
+./lib/libc/gen/tls.c:124:libc_free_aligned(void *ptr)
+```
+
+--- RESPONSE ---
+
+
+Let me check how the existing Rust rewrites handle syscalls and what crates are available.
+
+ACTION: FIND_FILE **/Cargo.toml
+ACTION: LIST_DIR usr.bin/dirname
