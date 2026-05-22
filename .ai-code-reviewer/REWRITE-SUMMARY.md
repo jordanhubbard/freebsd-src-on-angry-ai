@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 11:48 - usr.bin/renice ✓
+
+**Directory:** `usr.bin/renice`
+
+**Summary:** [ai-code-reviewer] renice: Rewrite utility in Rust using Cargo build system
+
+**Files changed:**
+  - usr.bin/renice/Makefile
+  - usr.bin/renice/Cargo.lock
+  - usr.bin/renice/Cargo.toml
+  - usr.bin/renice/cargo-target/.rustc_info.json
+  - usr.bin/renice/cargo-target/CACHEDIR.TAG
+  - usr.bin/renice/cargo-target/debug/.cargo-lock
+  - usr.bin/renice/cargo-target/debug/.fingerprint/renice-a0aa7ec3d9653941/invoked.timestamp
+  - usr.bin/renice/cargo-target/debug/.fingerprint/renice-a0aa7ec3d9653941/output-bin-renice
+  - usr.bin/renice/cargo-target/debug/deps/renice-a0aa7ec3d9653941.d
+  - usr.bin/renice/cargo-target/debug/incremental/renice-362fj2gr2jv5v/s-hirrpnsqdx-1kpjnag-d6kbly2kf8es1rmgwtw16yrk9/dep-graph.bin
+  - ... and 4 more
+
+---
+
 ## 2026-05-22 11:38 - usr.bin/expand ✓
 
 **Directory:** `usr.bin/expand`

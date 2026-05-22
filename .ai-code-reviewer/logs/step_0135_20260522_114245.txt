@@ -1,0 +1,198 @@
+=== STEP 135 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/renice/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+I need to fix the `passwd` struct layout - `pw_uid` is not the first field. Let me also update the Makefile.
+
+ACTION: WRITE_FILE usr.bin/renice/src/main.rs
+CONTENT:
+use std::env;
+use std::ffi::CString;
+use std::os::raw::{c_char, c_int};
+use std::process;
+
+extern "C" {
+    fn getpriority(which: c_int, who: c_int) -> c_int;
+    fn setpriority(which: c_int, who: c_int, prio: c_int) -> c_int;
+    fn getpwnam(name: *const c_char) -> *mut passwd;
+    fn errno() -> *mut c_int;
+}
+
+// FreeBSD passwd struct - we only need fields up to pw_uid
+#[repr(C)]
+struct passwd {
+    pw_name: *mut c_char,
+    pw_passwd: *mut c_char,
+    pw_uid: c_int,
+}
+
+const PRIO_PROCESS: c_int = 0;
+const PRIO_PGRP: c_int = 1;
+const PRIO_USER: c_int = 2;
+const PRIO_MIN: c_int = -20;
+const PRIO_MAX: c_int = 20;
+
+fn warnx(msg: &str) {
+    eprintln!("{}", msg);
+}
+
+fn warn(msg: &str) {
+    let err = unsafe { *errno() };
+    let err_str = std::io::Error::from_raw_os_error(err).to_string();
+    eprintln!("{}: {}", msg, err_str);
+}
+
+fn getnum(com: &str, str: &str, val: &mut c_int) -> bool {
+    match str.parse::<i64>() {
+        Ok(v) => {
+            if v < i32::MIN as i64 || v > i32::MAX as i64 {
+                warnx(&format!("{} argument {} is out of range.", com, str));
+                return true;
+            }
+            *val = v as c_int;
+            false
+        }
+        Err(_) => {
+            warnx(&format!("{} argument {} is invalid.", com, str));
+            true
+        }
+    }
+}
+
+fn donice(which: c_int, who: c_int, prio: c_int, incr: bool) -> c_int {
+    let oldprio;
+    unsafe {
+        *errno() = 0;
+        oldprio = getpriority(which, who);
+    }
+    if oldprio == -1 && unsafe { *errno() } != 0 {
+        warn(&format!("{}: getpriority", who));
+        return 1;
+    }
+    let prio = if incr { oldprio + prio } else { prio };
+    let prio = if prio > PRIO_MAX {
+        PRIO_MAX
+    } else if prio < PRIO_MIN {
+        PRIO_MIN
+    } else {
+        prio
+    };
+    if unsafe { setpriority(which, who, prio) } < 0 {
+        warn(&format!("{}: setpriority", who));
+        return 1;
+    }
+    eprintln!("{}: old priority {}, new priority {}", who, oldprio, prio);
+    0
+}
+
+fn usage() -> ! {
+    eprintln!(
+        "{}\n{}",
+        "usage: renice priority [[-p] pid ...] [[-g] pgrp ...] [[-u] user ...]",
+        "       renice -n increment [[-p] pid ...] [[-g] pgrp ...] [[-u] user ..."
+    );
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.is_empty() {
+        usage();
+    }
+
+    let mut args_iter = args.into_iter();
+    args_iter.next(); // skip program name
+
+    let mut havedelim = false;
+    let mut haveprio = false;
+    let mut incr = false;
+    let mut errs: c_int = 0;
+    let mut prio: c_int = 0;
+    let mut who: c_int = 0;
+    let mut which: c_int = PRIO_PROCESS;
+
+    let mut remaining: Vec<String> = args_iter.collect();
+
+    while !remaining.is_empty() {
+        let arg = remaining.remove(0);
+
+        if !havedelim {
+            if arg == "-g" {
+                which = PRIO_PGRP;
+                continue;
+            }
+            if arg == "-u" {
+                which = PRIO_USER;
+                continue;
+            }
+            if arg == "-p" {
+                which = PRIO_PROCESS;
+                continue;
+            }
+            if arg == "--" {
+                havedelim = true;
+                continue;
+            }
+            if arg == "-n" {
+                if haveprio || incr || remaining.is_empty() {
+                    usage();
+                }
+                incr = true;
+                // fall through to priority parsing
+            }
+        }
+
+        if !haveprio {
+            if getnum("priority", &arg, &mut prio) {
+                process::exit(1);
+            }
+            haveprio = true;
+            continue;
+        }
+
+        if which == PRIO_USER {
+            let c_name = match CString::new(&arg[..]) {
+                Ok(c) => c,
+                Err(_) => {
+                    warnx(&format!("{}: bad value", arg));
+                    errs += 1;
+                    continue;
+                }
+            };
+            let pwd = unsafe { getpwnam(c_name.as_ptr()) };
+            if !pwd.is_null() {
+                who = unsafe { (*pwd).pw_uid };
+            } else if getnum("uid", &arg, &mut who) {
+                errs += 1;
+                continue;
+            } else if who < 0 {
+                warnx(&format!("{}: bad value", arg));
+                errs += 1;
+                continue;
+            }
+        } else {
+            if getnum("pid", &arg, &mut who) {
+                errs += 1;
+                continue;
+            }
+            if who < 0 {
+                warnx(&format!("{}: bad value", arg));
+                errs += 1;
+                continue;
+            }
+        }
+
+        errs += donice(which, who, prio, incr);
+    }
+
+    if !haveprio {
+        usage();
+    }
+
+    process::exit(if errs != 0 { 1 } else { 0 });
+}
