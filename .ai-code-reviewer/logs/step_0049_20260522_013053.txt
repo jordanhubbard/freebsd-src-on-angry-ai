@@ -1,0 +1,32 @@
+=== STEP 49 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/users/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/users
+   Files: 0/3
+📄 File: usr.bin/users/Makefile
+
+```
+WARNS?=		3
+PROG_CXX=	users
+PACKAGE=	acct
+CXXFLAGS+=	-fno-rtti
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/users/Cargo.toml
+CONTENT:
+[package]
+name = "users"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "users"
+path = "src/main.rs"

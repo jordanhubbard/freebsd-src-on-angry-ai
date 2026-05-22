@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 01:33 - usr.bin/users ✓
+
+**Directory:** `usr.bin/users`
+
+**Summary:** [ai-code-reviewer] users: Rewrite utility from C++ to Rust
+
+**Files changed:**
+  - usr.bin/users/Makefile
+  - usr.bin/users/Cargo.toml
+  - usr.bin/users/src/main.rs
+
+---
+
 ## 2026-05-22 01:30 - usr.bin/perror ✓
 
 **Directory:** `usr.bin/perror`
