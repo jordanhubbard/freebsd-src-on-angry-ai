@@ -1,0 +1,32 @@
+=== STEP 38 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/ln/Makefile:
+PROGRESS:
+📁 Directory: bin/chflags
+   Files: 0/3
+📄 File: bin/ln/Makefile
+
+```
+.include <src.opts.mk>
+
+PACKAGE=runtime
+PROG=	ln
+MAN=	ln.1 symlink.7
+
+LINKS=	${BINDIR}/ln ${BINDIR}/link
+MLINKS=	ln.1 link.1
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+Let me check how a completed unit that needs syscalls handles FFI:
+
+ACTION: READ_FILE bin/domainname/src/main.rs

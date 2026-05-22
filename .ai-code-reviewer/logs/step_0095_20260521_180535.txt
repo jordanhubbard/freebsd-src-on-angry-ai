@@ -1,0 +1,302 @@
+=== STEP 95 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/chflags/src/main.rs:
+PROGRESS:
+📁 Directory: bin/chflags
+   Files: 0/3
+📄 File: bin/chflags/src/main.rs
+✏️  Edits: 5 files modified
+
+```
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1992, 1993, 1994
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::env;
+use std::ffi::CString;
+use std::fs;
+use std::io::{self, Write};
+use std::os::unix::fs::MetadataExt;
+use std::path::Path;
+use std::process;
+
+const AT_FDCWD: i32 = -100;
+const AT_SYMLINK_NOFOLLOW: i32 = 0x200;
+
+extern "C" {
+    fn chflagsat(
+        fd: i32,
+        path: *const std::os::raw::c_char,
+        flags: u32,
+        atflag: i32,
+    ) -> i32;
+    fn strtofflags(
+        s: *const std::os::raw::c_char,
+        set: *mut u64,
+        clear: *mut u64,
+    ) -> i32;
+}
+
+fn usage() -> ! {
+    let _ = io::stderr().write_all(
+        b"usage: chflags [-fhvx] [-R [-H | -L | -P]] flags file ...\n",
+    );
+    process::exit(1);
+}
+
+fn parse_flags(flags_str: &str) -> Result<(u32, u32, bool), String> {
+    if flags_str.starts_with(|c: char| c.is_ascii_digit() && c >= '0' && c <= '7') {
+        if flags_str.chars().any(|c| !('0'..='7').contains(&c)) {
+            return Err(format!("invalid flags: {}", flags_str));
+        }
+        let val = u32::from_str_radix(flags_str, 8)
+            .map_err(|_| format!("invalid flags: {}", flags_str))?;
+        Ok((val, 0, true))
+    } else {
+        let cstr = CString::new(flags_str).map_err(|_| "invalid flags".to_string())?;
+        let mut set: u64 = 0;
+        let mut clear: u64 = 0;
+        unsafe {
+            if strtofflags(cstr.as_ptr(), &mut set, &mut clear) != 0 {
+                return Err(format!("invalid flag: {}", flags_str));
+            }
+        }
+        Ok((set as u32, (!clear) as u32, false))
+    }
+}
+
+fn chflags_for_path(path: &Path, newflags: u32, hflag: bool) -> Result<(), i32> {
+    let cpath = CString::new(path.as_os_str().as_encoded_bytes())
+        .map_err(|_| io::Error::from(io::ErrorKind::InvalidInput).raw_os_error().unwrap_or(1))?;
+    let atflag = if hflag { AT_SYMLINK_NOFOLLOW } else { 0 };
+    unsafe {
+        if chflagsat(AT_FDCWD, cpath.as_ptr(), newflags, atflag) == -1 {
+            return Err(io::Error::last_os_error().raw_os_error().unwrap_or(1));
+        }
+    }
+    Ok(())
+}
+
+fn process_path(
+    path: &Path,
+    set: u32,
+    clear: u32,
+    oct: bool,
+    hflag: bool,
+    fflag: bool,
+    vflag: usize,
+) -> i32 {
+    let meta = if hflag {
+        fs::symlink_metadata(path)
+    } else {
+        fs::metadata(path)
+    };
+    let meta = match meta {
+        Ok(m) => m,
+        Err(e) => {
+            if !fflag {
+                eprintln!("chflags: {}: {}", path.display(), e);
+            }
+            return 1;
+        }
+    };
+    let oldflags = meta.st_flags() as u32;
+    let newflags = if oct { set } else { (oldflags | set) & clear };
+    if newflags == oldflags {
+        return 0;
+    }
+    match chflags_for_path(path, newflags, hflag) {
+        Ok(()) => {
+            if vflag > 0 {
+                let mut stdout = io::stdout().lock();
+                let _ = write!(stdout, "{}", path.display());
+                if vflag > 1 {
+                    let _ = write!(stdout, ": 0{:o} -> 0{:o}", oldflags, newflags);
+                }
+                let _ = writeln!(stdout);
+            }
+            0
+        }
+        Err(e) => {
+            if !fflag {
+                eprintln!(
+                    "chflags: {}: {}",
+                    path.display(),
+                    io::Error::from_raw_os_error(e)
+                );
+            }
+            1
+        }
+    }
+}
+
+fn process_recursive(
+    path: &Path,
+    set: u32,
+    clear: u32,
+    oct: bool,
+    hflag: bool,
+    fflag: bool,
+    vflag: usize,
+    xflag: bool,
+    follow_links: bool,
+) -> i32 {
+    let mut rval = 0;
+    rval |= process_path(path, set, clear, oct, hflag, fflag, vflag);
+    let meta = match fs::symlink_metadata(path) {
+        Ok(m) => m,
+        Err(_) => return rval,
+    };
+    if meta.is_dir() {
+        let entries = match fs::read_dir(path) {
+            Ok(e) => e,
+            Err(e) => {
+                eprintln!("chflags: {}: {}", path.display(), e);
+                rval = 1;
+                return rval;
+            }
+        };
+        for entry in entries {
+            let entry = match entry {
+                Ok(e) => e,
+                Err(e) => {
+                    eprintln!("chflags: {}: {}", path.display(), e);
+                    rval = 1;
+                    continue;
+                }
+            };
+            let entry_path = entry.path();
+            if xflag {
+                let entry_meta = match fs::symlink_metadata(&entry_path) {
+                    Ok(m) => m,
+                    Err(_) => continue,
+                };
+                if entry_meta.dev() != meta.dev() {
+                    continue;
+                }
+            }
+            if follow_links {
+                rval |= process_recursive(
+                    &entry_path, set, clear, oct, hflag, fflag, vflag, xflag, follow_links,
+                );
+            } else {
+                let entry_meta = match fs::symlink_metadata(&entry_path) {
+                    Ok(m) => m,
+                    Err(_) => continue,
+                };
+                if entry_meta.is_dir() {
+                    rval |= process_recursive(
+                        &entry_path, set, clear, oct, hflag, fflag, vflag, xflag, false,
+                    );
+                } else {
+                    rval |= process_path(&entry_path, set, clear, oct, hflag, fflag, vflag);
+                }
+            }
+        }
+    }
+    rval
+}
+
+fn main() {
+    let args: Vec<String> = env::args().skip(1).collect();
+    let mut Hflag = false;
+    let mut Lflag = false;
+    let mut Rflag = false;
+    let mut fflag = false;
+    let mut hflag = false;
+    let mut vflag: usize = 0;
+    let mut xflag = false;
+    let mut i = 0;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg == "-H" {
+            Hflag = true;
+            Lflag = false;
+        } else if arg == "-L" {
+            Lflag = true;
+            Hflag = false;
+        } else if arg == "-P" {
+            Hflag = false;
+            Lflag = false;
+        } else if arg == "-R" {
+            Rflag = true;
+        } else if arg == "-f" {
+            fflag = true;
+        } else if arg == "-h" {
+            hflag = true;
+        } else if arg == "-v" {
+            vflag += 1;
+        } else if arg == "-x" {
+            xflag = true;
+        } else if arg.starts_with('-') {
+            usage();
+        } else {
+            break;
+        }
+        i += 1;
+    }
+    let remaining: Vec<String> = args[i..].to_vec();
+    if remaining.len() < 2 {
+        usage();
+    }
+    if Rflag && hflag {
+        eprintln!("chflags: the -R and -h options may not be specified together.");
+        process::exit(1);
+    }
+    let flags_str = &remaining[0];
+    let files: Vec<String> = remaining[1..].to_vec();
+    let (set, clear, oct) = match parse_flags(flags_str) {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("chflags: {}", e);
+            process::exit(1);
+        }
+    };
+    let follow_links = if Rflag { Lflag } else { !hflag };
+    let mut rval = 0;
+    for file in &files {
+        let path = Path::new(file.as_str());
+        if Rflag {
+            rval |= process_recursive(
+                path, set, clear, oct, hflag, fflag, vflag, xflag, follow_links,
+            );
+        } else {
+            rval |= process_path(path, set, clear, oct, hflag, fflag, vflag);
+        }
+    }
+    process::exit(rval);
+}
+```
+
+--- RESPONSE ---
+
+
+Let me check the tests directory structure for comparison:
+
+ACTION: LIST_DIR bin/echo/tests

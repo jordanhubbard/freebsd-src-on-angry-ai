@@ -1,0 +1,70 @@
+=== STEP 457 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/false/Makefile
+Scope: usr.bin/false
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The issue is that bsd.prog.mk defines the `${PROG}` target before my override. Let me remove SRCS so bsd.prog.mk doesn't generate a C build rule, and use a post-include override.
+
+ACTION: EDIT_FILE usr.bin/false/Makefile
+OLD:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build C binary under different name for comparison
+.false_c: ${.CURDIR}/false.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.CURDIR}/false.c
+
+CLEANFILES+=	false_c
+
+# Build C binary as a dependency so it's available for comparison
+all: false_c
+
+.include <bsd.prog.mk>
+
+# Override the default build rule to use Rust instead of C
+# This must come AFTER bsd.prog.mk to override its rules
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+# Replace the PROG target with Rust build
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>
+NEW:
+<<<
+PROG=	false
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build C binary under different name for comparison
+.false_c: ${.CURDIR}/false.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.CURDIR}/false.c
+
+CLEANFILES+=	false_c
+
+# Build C binary as a dependency so it's available for comparison
+all: false_c
+
+.include <bsd.prog.mk>
+
+# Override the default build rule to use Rust instead of C
+# This must come AFTER bsd.prog.mk to override its rules
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+# Replace the PROG target with Rust build
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>

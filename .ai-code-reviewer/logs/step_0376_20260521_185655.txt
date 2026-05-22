@@ -1,0 +1,31 @@
+=== STEP 376 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/rm
+   Files: 0/3
+📄 File: bin/rm/rm.c
+   Chunks: 9/18
+
+```
+=== CHUNK 9/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/rm/rm.c === [function: usage]
+=== Lines 61-69 (9 lines) ===
+
+static void	usage(void);
+
+/*
+ * rm --
+ *	This rm is different from historic rm's, but is expected to match
+ *	POSIX 1003.2 behavior.	The most visible difference is that -f
+ *	has two specific effects now, ignore non-existent files and force
+ *	file removal.
+ */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

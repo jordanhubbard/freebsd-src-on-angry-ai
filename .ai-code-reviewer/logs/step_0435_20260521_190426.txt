@@ -1,0 +1,12 @@
+=== STEP 435 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/true is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE bin/csh
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/false

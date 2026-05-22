@@ -1,0 +1,64 @@
+=== STEP 454 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/false/Makefile
+Scope: usr.bin/false
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/false/Makefile
+OLD:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build Rust version alongside C for validation
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+# Build both C and Rust, install Rust version
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+# Build C binary under different name for comparison
+.false_c: ${.CURDIR}/false.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.CURDIR}/false.c
+
+CLEANFILES+=	false_c
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build Rust version alongside C for validation
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+# Build both C and Rust, install Rust version
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+# Build C binary under different name for comparison
+.false_c: ${.CURDIR}/false.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.CURDIR}/false.c
+
+CLEANFILES+=	false_c
+
+# Build C binary as a dependency so it's available for comparison
+all: false_c
+
+.include <bsd.prog.mk>
+>>>

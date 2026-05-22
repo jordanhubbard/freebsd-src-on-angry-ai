@@ -1,0 +1,11 @@
+=== STEP 429 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/rmail has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE bin/rm
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/rm

@@ -1,0 +1,29 @@
+=== STEP 474 ===
+
+--- REQUEST ---
+CONTRACT_REJECTED: CLI case 1 exit-code mismatch (source=127, rust=1).
+
+--- RESPONSE ---
+
+
+The test framework needs the original C binary for comparison. I need to include `bsd.prog.mk` to get proper build infrastructure, then override the PROG target.
+
+ACTION: WRITE_FILE usr.bin/false/Makefile
+CONTENT:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.include <bsd.prog.mk>
+
+# Override the PROG target to build Rust instead of C
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>

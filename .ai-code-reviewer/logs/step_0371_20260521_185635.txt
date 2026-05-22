@@ -1,0 +1,23 @@
+=== STEP 371 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: bin/rm
+   Files: 0/3
+📄 File: bin/rm/rm.c
+   Chunks: 4/18
+
+```
+=== CHUNK 4/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/rm/rm.c === [function: checkdot]
+=== Lines 56-56 (1 lines) ===
+
+static void	checkdot(char **);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

@@ -1,0 +1,37 @@
+=== STEP 463 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/false/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The issue is likely that `.OBJDIR` isn't set without `bsd.prog.mk`. Let me try including it and using a proper override pattern.
+
+ACTION: WRITE_FILE usr.bin/false/Makefile
+CONTENT:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build C binary for comparison testing
+.false_c: ${.CURDIR}/false.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.CURDIR}/false.c
+
+CLEANFILES+=	false_c
+
+.include <bsd.prog.mk>
+
+# Override the PROG target to build Rust instead of C
+# Must come after bsd.prog.mk
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>

@@ -1,0 +1,9 @@
+=== STEP 481 ===
+
+--- REQUEST ---
+CONTRACT_REJECTED: CLI case 1 exit-code mismatch (source=127, rust=1).
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/yes

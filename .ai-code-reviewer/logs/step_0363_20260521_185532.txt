@@ -1,0 +1,24 @@
+=== STEP 363 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/csh:
+```
+Makefile
+Makefile.depend
+config.h
+config_p.h
+csh.cshrc
+csh.login
+csh.logout
+dot.cshrc
+dot.login
+iconv_stub.c
+iconv_stub.h
+```
+
+--- RESPONSE ---
+
+
+I need to examine the Makefile to understand the build structure for bin/csh.
+
+ACTION: READ_FILE bin/csh/Makefile

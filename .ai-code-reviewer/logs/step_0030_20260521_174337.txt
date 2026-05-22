@@ -1,0 +1,11 @@
+=== STEP 30 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for '\.include.*bsd\.prog'
+
+--- RESPONSE ---
+
+
+Let me check the current scope's Makefile directly:
+
+ACTION: READ_FILE bin/chflags/Makefile

@@ -1,0 +1,35 @@
+=== STEP 488 ===
+
+--- REQUEST ---
+CONTRACT_REJECTED: CLI case 1 exit-code mismatch (source=127, rust=1).
+
+--- RESPONSE ---
+
+
+The test framework needs the original C binary for comparison. Let me build both C and Rust versions, with the C binary available for comparison.
+
+ACTION: WRITE_FILE usr.bin/false/Makefile
+CONTENT:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build C binary for comparison testing
+.false_c: ${.CURDIR}/false.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.CURDIR}/false.c
+
+CLEANFILES+=	false_c
+
+.include <bsd.prog.mk>
+
+# Override the PROG target to build Rust instead of C
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>

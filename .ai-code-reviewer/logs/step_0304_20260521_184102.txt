@@ -1,0 +1,9 @@
+=== STEP 304 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/true/Cargo.toml

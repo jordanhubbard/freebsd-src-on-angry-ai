@@ -1,0 +1,30 @@
+=== STEP 475 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/false/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+I need to include bsd.prog.mk to get proper build infrastructure, then override the PROG target to use Rust. Let me try this approach:
+
+ACTION: WRITE_FILE usr.bin/false/Makefile
+CONTENT:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.include <bsd.prog.mk>
+
+# Override the PROG target to build Rust instead of C
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>

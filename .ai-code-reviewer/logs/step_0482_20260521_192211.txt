@@ -1,0 +1,48 @@
+=== STEP 482 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: usr.bin/false
+Pending source/build changes: 3 files modified
+Files: usr.bin/false/Cargo.toml, usr.bin/false/src/main.rs, usr.bin/false/Makefile
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in usr.bin/false
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: usr.bin/yes
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/false/Makefile
+CONTENT:
+<<<
+PROG=	false
+SRCS=	false.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build C binary for comparison testing
+.false_c: ${.CURDIR}/false.c
+	${CC} ${CFLAGS} ${LDFLAGS} -o ${.TARGET} ${.CURDIR}/false.c
+
+CLEANFILES+=	false_c
+
+.include <bsd.prog.mk>
+
+# Override the PROG target to build Rust instead of C
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+${PROG}: rust-build
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+>>>
