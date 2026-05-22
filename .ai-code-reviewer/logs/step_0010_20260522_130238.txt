@@ -1,0 +1,14 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*capsicum_helpers.h*':
+```
+./lib/libcapsicum/capsicum_helpers.h
+```
+
+--- RESPONSE ---
+
+
+Let me check if there's a vendored libc crate or Rust support in the tree:
+
+ACTION: FIND_FILE Cargo.toml
