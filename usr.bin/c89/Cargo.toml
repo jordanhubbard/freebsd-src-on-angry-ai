@@ -1,0 +1,9 @@
+[package]
+name = "c89"
+version = "0.1.0"
+edition = "2021"
+description = "FreeBSD c89 - POSIX C compiler wrapper"
+
+[[bin]]
+name = "c89"
+path = "src/main.rs"

@@ -1,0 +1,217 @@
+=== STEP 55 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/c89/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/c89
+   Files: 0/3
+📄 File: usr.bin/c89/Makefile
+
+```
+PACKAGE= toolchain
+PROG=	c89
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/c89/src/main.rs
+CONTENT:
+use std::env;
+use std::ffi::CString;
+use std::os::unix::ffi::OsStrExt;
+use std::os::unix::process::CommandExt;
+use std::process;
+
+const CC: &str = "/usr/bin/cc";
+const ARGS_PREPENDED: &[&str] = &["-std=iso9899:199409", "-pedantic"];
+
+fn usage() -> ! {
+    eprintln!(
+        "usage: c89 [-cEgOs] [-D name[=value]] ... [-I directory] ... [-L directory] ...\n\
+         [-o outfile] [-U name] ... operand ...\n\
+         \n\
+         where operand is one or more of file.c, file.o, file.a\n\
+         or -llibrary"
+    );
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let argc = args.len();
+
+    if argc < 2 {
+        eprintln!("missing operand");
+        usage();
+    }
+
+    let mut cmd = process::Command::new(CC);
+
+    // Prepend the standard flags
+    for arg in ARGS_PREPENDED {
+        cmd.arg(arg);
+    }
+
+    // Parse options, accepting only POSIX c89 mandated options
+    let valid_opts = "cD:EgI:l:L:o:OsU:";
+    let mut i = 1;
+    let mut found_operand = false;
+
+    while i < argc {
+        let arg = &args[i];
+        if !arg.starts_with('-') || arg == "-" {
+            found_operand = true;
+            cmd.arg(arg);
+            i += 1;
+            continue;
+        }
+
+        // Check if this is a valid option
+        let opt_char = arg[1..].chars().next();
+        match opt_char {
+            Some(c) if valid_opts.contains(c) => {
+                // Handle -l specially: it starts operands
+                if c == 'l' {
+                    // -llib or -l lib starts the operands
+                    found_operand = true;
+                    cmd.arg(arg);
+                    i += 1;
+                    // Append remaining args as-is
+                    while i < argc {
+                        cmd.arg(&args[i]);
+                        i += 1;
+                    }
+                    break;
+                }
+
+                // Check if option takes an argument
+                let opt_pos = valid_opts.find(c).unwrap();
+                let takes_arg = opt_pos + 1 < valid_opts.len() && valid_opts.as_bytes()[opt_pos + 1] == b':';
+
+                if takes_arg {
+                    // Check if argument is attached (e.g., -Dfoo) or separate (-D foo)
+                    let after_flag = &arg[2..];
+                    if after_flag.is_empty() {
+                        // Argument should be next
+                        if i + 1 < argc {
+                            cmd.arg(arg);
+                            i += 1;
+                            cmd.arg(&args[i]);
+                            i += 1;
+                        } else {
+                            eprintln!("missing operand");
+                            usage();
+                        }
+                    } else {
+                        cmd.arg(arg);
+                        i += 1;
+                    }
+                } else {
+                    cmd.arg(arg);
+                    i += 1;
+                }
+            }
+            _ => {
+                // Unknown option - treat as operand
+                found_operand = true;
+                cmd.arg(arg);
+                i += 1;
+            }
+        }
+    }
+
+    if !found_operand {
+        eprintln!("missing operand");
+        usage();
+    }
+
+    // Build the final argv for exec
+    let mut final_args: Vec<CString> = Vec::new();
+    final_args.push(CString::new(CC).unwrap());
+    for arg in ARGS_PREPENDED {
+        final_args.push(CString::new(arg).unwrap());
+    }
+
+    // Re-parse to build final argv properly
+    let mut i = 1;
+    let mut found_operand = false;
+    let mut final_argv: Vec<CString> = Vec::new();
+    final_argv.push(CString::new(CC).unwrap());
+    for arg in ARGS_PREPENDED {
+        final_argv.push(CString::new(arg).unwrap());
+    }
+
+    while i < argc {
+        let arg = &args[i];
+        if !arg.starts_with('-') || arg == "-" {
+            found_operand = true;
+            final_argv.push(CString::new(arg.as_bytes()).unwrap());
+            i += 1;
+            continue;
+        }
+
+        let opt_char = arg[1..].chars().next();
+        match opt_char {
+            Some(c) if valid_opts.contains(c) => {
+                if c == 'l' {
+                    found_operand = true;
+                    final_argv.push(CString::new(arg.as_bytes()).unwrap());
+                    i += 1;
+                    while i < argc {
+                        final_argv.push(CString::new(args[i].as_bytes()).unwrap());
+                        i += 1;
+                    }
+                    break;
+                }
+
+                let opt_pos = valid_opts.find(c).unwrap();
+                let takes_arg = opt_pos + 1 < valid_opts.len() && valid_opts.as_bytes()[opt_pos + 1] == b':';
+
+                if takes_arg {
+                    let after_flag = &arg[2..];
+                    if after_flag.is_empty() {
+                        if i + 1 < argc {
+                            final_argv.push(CString::new(arg.as_bytes()).unwrap());
+                            i += 1;
+                            final_argv.push(CString::new(args[i].as_bytes()).unwrap());
+                            i += 1;
+                        } else {
+                            eprintln!("missing operand");
+                            usage();
+                        }
+                    } else {
+                        final_argv.push(CString::new(arg.as_bytes()).unwrap());
+                        i += 1;
+                    }
+                } else {
+                    final_argv.push(CString::new(arg.as_bytes()).unwrap());
+                    i += 1;
+                }
+            }
+            _ => {
+                found_operand = true;
+                final_argv.push(CString::new(arg.as_bytes()).unwrap());
+                i += 1;
+            }
+        }
+    }
+
+    if !found_operand {
+        eprintln!("missing operand");
+        usage();
+    }
+
+    // exec the compiler
+    let mut cmd = process::Command::new(CC);
+    for arg in &final_argv[1..] {
+        cmd.arg(arg);
+    }
+
+    let err = cmd.exec();
+    eprintln!("execv({}): {}", CC, err);
+    process::exit(1);
+}

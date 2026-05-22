@@ -3,6 +3,27 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 11:08 - usr.bin/c89 ✓
+
+**Directory:** `usr.bin/c89`
+
+**Summary:** [ai-code-reviewer] c89: Rewrite C implementation in Rust
+
+**Files changed:**
+  - usr.bin/c89/Makefile
+  - usr.bin/c89/Cargo.lock
+  - usr.bin/c89/Cargo.toml
+  - usr.bin/c89/cargo-target/.rustc_info.json
+  - usr.bin/c89/cargo-target/CACHEDIR.TAG
+  - usr.bin/c89/cargo-target/debug/.cargo-lock
+  - usr.bin/c89/cargo-target/debug/.fingerprint/c89-b6ed795b128803f2/invoked.timestamp
+  - usr.bin/c89/cargo-target/debug/.fingerprint/c89-b6ed795b128803f2/output-bin-c89
+  - usr.bin/c89/cargo-target/debug/deps/c89-b6ed795b128803f2.d
+  - usr.bin/c89/cargo-target/debug/incremental/c89-1xcd6svkcwfh9/s-hirqoftg5l-0zhhqfn-working/dep-graph.part.bin
+  - ... and 2 more
+
+---
+
 ## 2026-05-22 11:01 - usr.bin/leave ✓
 
 **Directory:** `usr.bin/leave`
