@@ -1,0 +1,96 @@
+=== STEP 30 ===
+
+--- REQUEST ---
+BUILD_SUCCESS: Build completed successfully.
+Directory usr.bin/revoke is now complete.
+Changes committed and pushed.
+Post-success metadata commit: ab6cc6122a84.
+
+Completed directories so far: 1
+NEXT: Use SET_SCOPE usr.bin/fortune/unstr
+
+FINAL DIFFS:
+--- usr.bin/revoke/Makefile ---
+```diff
+diff --git a/usr.bin/revoke/Makefile b/usr.bin/revoke/Makefile
+index f468f6483b5..43d999cef26 100644
+--- a/usr.bin/revoke/Makefile
++++ b/usr.bin/revoke/Makefile
+@@ -1,3 +1,25 @@
+ PROG=	revoke
++BINDIR?=	/usr/bin
++BINOWN?=	root
++BINGRP?=	wheel
++BINMODE?=	555
+ 
+-.include <bsd.prog.mk>
++CARGO?=		cargo
++CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
++
++.PHONY: all install clean
++
++${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
++	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
++	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
++
++all: ${PROG}
++
++install: ${PROG}
++	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
++
++clean:
++	${RM} ${PROG}
++	${RM} -rf ${CARGO_TARGET_DIR}
++
++CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+\ No newline at end of file
+```
+
+--- usr.bin/revoke/Cargo.lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/revoke/Cargo.toml ---
+```diff
+(no changes)
+```
+
+--- usr.bin/revoke/cargo-target/.rustc_info.json ---
+```diff
+(no changes)
+```
+
+--- usr.bin/revoke/cargo-target/CACHEDIR.TAG ---
+```diff
+(no changes)
+```
+
+--- usr.bin/revoke/cargo-target/debug/.cargo-lock ---
+```diff
+(no changes)
+```
+
+--- usr.bin/revoke/cargo-target/debug/.fingerprint/revoke-a026797ca573fb11/invoked.timestamp ---
+```diff
+(no changes)
+```
+
+--- usr.bin/revoke/cargo-target/debug/.fingerprint/revoke-a026797ca573fb11/output-bin-revoke ---
+```diff
+fatal: ambiguous argument 'usr.bin/revoke/cargo-target/debug/.fingerprint/revoke-a026797ca573fb11/output-bin-revoke': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
+```
+
+--- usr.bin/revoke/src/main.rs ---
+```diff
+(no changes)
+```
+
+--- RESPONSE ---
+
+
+Build succeeded for `usr.bin/revoke`. Moving to the next unit.
+
+ACTION: SET_SCOPE usr.bin/fortune/unstr

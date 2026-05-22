@@ -1,0 +1,163 @@
+=== STEP 36 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/fortune/unstr/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/fortune/unstr/src/main.rs
+CONTENT:
+// Copyright (c) 1991, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::fs::File;
+use std::io::{self, Read, Seek, SeekFrom, Write};
+use std::process;
+
+const STR_RANDOM: u32 = 0x1;
+const STR_ORDERED: u32 = 0x2;
+
+#[repr(C)]
+#[derive(Debug)]
+struct StrFile {
+    str_version: u32,
+    str_numstr: u32,
+    str_longlen: u32,
+    str_shortlen: u32,
+    str_flags: u32,
+    stuff: [u8; 4],
+}
+
+impl StrFile {
+    fn str_delim(&self) -> u8 {
+        self.stuff[0]
+    }
+}
+
+fn str_endstring(line: &[u8], tbl: &StrFile) -> bool {
+    line.len() >= 2 && line[0] == tbl.str_delim() && line[1] == b'\n'
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() != 2 {
+        eprintln!("usage: unstr datafile");
+        process::exit(1);
+    }
+
+    let infile_name = &args[1];
+    let datafile_name = format!("{}.dat", infile_name);
+
+    let mut inf = match File::open(infile_name) {
+        Ok(f) => f,
+        Err(e) => {
+            eprintln!("{}: {}", infile_name, e);
+            process::exit(1);
+        }
+    };
+
+    let mut dataf = match File::open(&datafile_name) {
+        Ok(f) => f,
+        Err(e) => {
+            eprintln!("{}: {}", datafile_name, e);
+            process::exit(1);
+        }
+    };
+
+    let mut header_buf = [0u8; std::mem::size_of::<StrFile>()];
+    if dataf.read_exact(&mut header_buf).is_err() {
+        eprintln!("{}: read EOF", datafile_name);
+        process::exit(1);
+    }
+
+    let tbl = unsafe { std::ptr::read::<StrFile>(header_buf.as_ptr() as *const StrFile) };
+
+    let str_version = u32::from_be(tbl.str_version);
+    let str_numstr = u32::from_be(tbl.str_numstr);
+    let _str_longlen = u32::from_be(tbl.str_longlen);
+    let _str_shortlen = u32::from_be(tbl.str_shortlen);
+    let str_flags = u32::from_be(tbl.str_flags);
+
+    let _ = str_version;
+
+    if str_flags & (STR_ORDERED | STR_RANDOM) == 0 {
+        eprintln!("nothing to do -- table in file order");
+        process::exit(1);
+    }
+
+    let delimch = tbl.str_delim();
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+
+    for i in 0..str_numstr {
+        let mut pos_buf = [0u8; 8];
+        if dataf.read_exact(&mut pos_buf).is_err() {
+            eprintln!("{}: read error", datafile_name);
+            process::exit(1);
+        }
+        let pos = i64::from_be_bytes(pos_buf);
+
+        if inf.seek(SeekFrom::Start(pos as u64)).is_err() {
+            eprintln!("{}: seek error", infile_name);
+            process::exit(1);
+        }
+
+        if i != 0 {
+            let _ = out.write_all(&[delimch, b'\n']);
+        }
+
+        let mut buf = [0u8; 8192];
+        loop {
+            let mut line_buf = Vec::new();
+            let mut total = 0;
+            loop {
+                let n = match inf.read(&mut buf) {
+                    Ok(0) => break,
+                    Ok(n) => n,
+                    Err(_) => {
+                        eprintln!("{}: read error", infile_name);
+                        process::exit(1);
+                    }
+                };
+                total += n;
+                for b in &buf[..n] {
+                    line_buf.push(*b);
+                    if *b == b'\n' {
+                        if str_endstring(&line_buf, &tbl) {
+                            // Don't output the delimiter line
+                            return;
+                        }
+                        let _ = out.write_all(&line_buf);
+                        line_buf.clear();
+                    }
+                }
+            }
+            if total == 0 {
+                break;
+            }
+        }
+    }
+}

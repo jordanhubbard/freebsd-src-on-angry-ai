@@ -3,6 +3,19 @@
 Progress tracking for code rewrite sessions.
 
 ---
+## 2026-05-22 01:26 - usr.bin/fortune/unstr ✓
+
+**Directory:** `usr.bin/fortune/unstr`
+
+**Summary:** [ai-code-reviewer] unstr: Rewrite Makefile to use Cargo build system
+
+**Files changed:**
+  - usr.bin/fortune/unstr/Makefile
+  - usr.bin/fortune/unstr/Cargo.toml
+  - usr.bin/fortune/unstr/src/main.rs
+
+---
+
 ## 2026-05-22 01:23 - usr.bin/revoke ✓
 
 **Directory:** `usr.bin/revoke`

@@ -1,0 +1,22 @@
+=== STEP 33 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/fortune/unstr/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/fortune/unstr
+   Files: 0/2
+📄 File: usr.bin/fortune/unstr/Makefile
+
+```
+PROG=	unstr
+MAN=
+CFLAGS+= -I${FORTUNE_SRC}/strfile
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE strfile.h
