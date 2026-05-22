@@ -1,0 +1,8 @@
+[package]
+name = "fsync"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "fsync"
+path = "src/main.rs"
