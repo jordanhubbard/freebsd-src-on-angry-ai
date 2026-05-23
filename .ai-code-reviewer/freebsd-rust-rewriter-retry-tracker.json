@@ -132,8 +132,8 @@
     "last_attempt": "2026-05-22T16:49:40.321088"
   },
   "usr.bin/apply": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T19:46:41.808369"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T19:48:54.069639"
   },
   "usr.bin/bluetooth/bthost": {
     "attempts": 3,
