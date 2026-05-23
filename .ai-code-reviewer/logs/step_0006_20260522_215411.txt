@@ -1,0 +1,12 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/semaphore/pthread:
+```
+t_sem_pth.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/netbsd-tests/lib/semaphore

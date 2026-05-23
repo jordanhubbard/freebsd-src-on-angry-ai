@@ -1,0 +1,28 @@
+=== STEP 34 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tests:
+```
+Kyuafile
+Makefile
+Makefile.depend
+Makefile.inc0
+README
+__init__.py
+atf_python
+ci
+conftest.py
+etc
+examples
+freebsd_test_suite
+include
+oclo
+sys
+```
+
+--- RESPONSE ---
+
+
+The current scope is a test-only directory with no Makefile. The build errors are system-level `.info` lines being treated as errors. This unit cannot be meaningfully rewritten as a Rust replacement since it's a test harness using ATF/rump infrastructure. I need to move to the next pending unit.
+
+ACTION: SET_SCOPE contrib/file/python/file_magic

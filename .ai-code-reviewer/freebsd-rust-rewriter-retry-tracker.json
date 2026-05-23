@@ -115,13 +115,17 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T16:48:20.861620"
   },
+  "contrib/llvm-project/lldb/tools/argdumper": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T22:05:08.644125"
+  },
   "contrib/llvm-project/llvm/lib/Frontend/OpenACC": {
     "attempts": 2,
     "last_attempt": "2026-05-22T21:07:43.325248"
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T21:43:24.287728"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T21:53:01.061395"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,
@@ -130,6 +134,10 @@
   "crypto/openssl/crypto/kdf": {
     "attempts": 2,
     "last_attempt": "2026-05-22T21:46:57.529904"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_hash": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T22:09:30.497789"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha256": {
     "attempts": 3,

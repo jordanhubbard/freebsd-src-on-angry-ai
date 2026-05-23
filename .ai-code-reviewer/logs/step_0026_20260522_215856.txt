@@ -1,0 +1,9 @@
+=== STEP 26 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE contrib/netbsd-tests/Makefile

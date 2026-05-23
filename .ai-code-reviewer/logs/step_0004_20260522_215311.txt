@@ -1,0 +1,26 @@
+=== STEP 4 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*sem.c*':
+```
+./sys/arm64/arm64/disassem.c
+./sys/security/mac/mac_sysv_sem.c
+./sys/security/mac/mac_posix_sem.c
+./sys/kern/uipc_sem.c
+./sys/kern/sysv_sem.c
+./sys/arm/arm/disassem.c
+./tools/regression/posixsem/posixsem.c
+./contrib/sendmail/libsm/sem.c
+./contrib/sendmail/libsm/t-sem.c
+./contrib/netbsd-tests/lib/semaphore/sem.c
+./contrib/netbsd-tests/lib/libpthread/t_sem.c
+./contrib/netbsd-tests/lib/librt/t_sem.c
+./contrib/tcsh/sh.sem.c
+./lib/libc/gen/sem.c
+./lib/libthr/thread/thr_sem.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE contrib/netbsd-tests/lib/semaphore/sem.c

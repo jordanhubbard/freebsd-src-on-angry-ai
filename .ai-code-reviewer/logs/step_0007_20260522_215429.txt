@@ -1,0 +1,15 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/semaphore:
+```
+pthread
+sem.c
+```
+
+--- RESPONSE ---
+
+
+This unit is a test-only directory with no Makefile, uses ATF/rump kernel infrastructure, and has already hit 3/3 attempts. It will auto-skip. Let me move to the next pending unit from the rewrite index.
+
+ACTION: SET_SCOPE contrib/file/python/file_magic

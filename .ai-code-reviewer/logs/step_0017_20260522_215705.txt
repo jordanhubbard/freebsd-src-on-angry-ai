@@ -1,0 +1,11 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/Makefile*'
+
+--- RESPONSE ---
+
+
+The build is failing due to system-level libclang issues. Let me check the Makefile.inc1 to understand the build system.
+
+ACTION: READ_FILE Makefile.inc1

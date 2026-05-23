@@ -1,0 +1,20 @@
+=== STEP 50 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/lldb:
+```
+LICENSE.TXT
+bindings
+docs
+include
+source
+tools
+utils
+```
+
+--- RESPONSE ---
+
+
+This unit is part of the LLVM project which uses CMake, not FreeBSD's make build system. There's no Makefile in this directory. Let me check the parent CMakeLists.txt to understand the build integration.
+
+ACTION: LIST_DIR contrib/llvm-project/lldb

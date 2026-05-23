@@ -1,0 +1,20 @@
+=== STEP 51 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/lldb:
+```
+LICENSE.TXT
+bindings
+docs
+include
+source
+tools
+utils
+```
+
+--- RESPONSE ---
+
+
+This unit is part of the LLVM project which uses CMake, not FreeBSD's make build system. There's no Makefile in this directory. This is not a suitable unit for the FreeBSD Rust rewrite objective since it's part of the LLVM build system, not the FreeBSD userland build system.
+
+ACTION: SET_SCOPE bin/cat/tests

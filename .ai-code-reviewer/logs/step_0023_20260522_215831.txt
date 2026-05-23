@@ -1,0 +1,9 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/semaphore/pthread/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE contrib/netbsd-tests/lib/semaphore/Makefile

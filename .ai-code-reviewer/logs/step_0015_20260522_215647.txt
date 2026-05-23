@@ -1,0 +1,11 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/semaphore/Makefile*'
+
+--- RESPONSE ---
+
+
+No Makefile exists in this directory. Let me check the parent directory for build infrastructure.
+
+ACTION: FIND_FILE contrib/netbsd-tests/lib/Makefile
