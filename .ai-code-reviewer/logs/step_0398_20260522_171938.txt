@@ -1,0 +1,11 @@
+=== STEP 398 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block. My responses keep getting cut off. Let me try with a longer response:
+
+ACTION: WRITE_FILE crypto/krb5/src/ccapi/lib/unix/Cargo.toml

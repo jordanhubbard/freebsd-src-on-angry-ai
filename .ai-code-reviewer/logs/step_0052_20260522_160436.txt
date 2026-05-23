@@ -1,0 +1,20 @@
+=== STEP 52 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/printf/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "printf"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "printf"
+path = "src/main.rs"
+<<<

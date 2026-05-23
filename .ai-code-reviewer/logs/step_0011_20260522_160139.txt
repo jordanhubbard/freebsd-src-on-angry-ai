@@ -1,0 +1,14 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/libpcap/cmake
+
+--- RESPONSE ---
+
+
+Let me try other small commands in `bin/`.
+
+ACTION: SET_SCOPE bin/echo

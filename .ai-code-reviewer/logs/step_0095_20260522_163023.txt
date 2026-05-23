@@ -1,0 +1,27 @@
+=== STEP 95 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/libpcap/cmake/have_siocglifconf.c:
+PROGRESS:
+📁 Directory: contrib/libpcap/cmake
+   Files: 0/1
+📄 File: contrib/libpcap/cmake/have_siocglifconf.c
+
+```
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <sys/sockio.h>
+int main() {
+    ioctl(0, SIOCGLIFCONF, (char *)0);
+}
+
+```
+
+--- RESPONSE ---
+
+
+This is a CMake compile-check probe file — a tiny test program used by CMake's `check_c_source_compiles()` to detect whether `SIOCGLIFCONF` is available. It is not a userland command or library; it's build-system infrastructure. Rewriting this to Rust would be meaningless and would break the CMake configuration detection.
+
+Per the constraints: *"If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite."*
+
+ACTION: SET_SCOPE bin/cat/tests

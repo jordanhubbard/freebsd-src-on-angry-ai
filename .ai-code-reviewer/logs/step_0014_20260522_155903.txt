@@ -1,0 +1,11 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'bsd.rust.mk'
+
+--- RESPONSE ---
+
+
+No `bsd.rust.mk` exists. Let me check how the recently completed units handled Rust integration.
+
+ACTION: LIST_DIR usr.bin/basename

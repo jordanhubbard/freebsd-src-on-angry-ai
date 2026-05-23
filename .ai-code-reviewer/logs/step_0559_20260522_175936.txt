@@ -1,0 +1,14 @@
+=== STEP 559 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_hash/sha256
+
+--- RESPONSE ---
+
+
+I keep getting truncated before the CONTENT block. Let me move to a different directory.
+
+ACTION: SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_hash/sha256

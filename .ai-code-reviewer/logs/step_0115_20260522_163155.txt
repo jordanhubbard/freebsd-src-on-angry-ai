@@ -1,0 +1,17 @@
+=== STEP 115 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/freebsd-version:
+```
+Makefile
+Makefile.depend
+freebsd-version.1
+freebsd-version.sh.in
+```
+
+--- RESPONSE ---
+
+
+bin/freebsd-version is a shell script, not C/C++. Let me find a C unit without Rust.
+
+ACTION: LIST_DIR bin/uuidgen

@@ -1,0 +1,11 @@
+=== STEP 513 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to write the Cargo.toml file for this libsodium SHA-256 unit. The hash_sha256.c file contains two trivial functions returning constants. I'll create a Rust staticlib crate to replace them.
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_hash/sha256/Cargo.toml

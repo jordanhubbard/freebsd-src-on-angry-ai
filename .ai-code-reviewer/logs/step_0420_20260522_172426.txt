@@ -1,0 +1,24 @@
+=== STEP 420 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: crypto/krb5/src/ccapi/lib/unix
+Pending source/build changes: 3 files modified
+Files: usr.bin/printf/Cargo.toml, usr.bin/printf/src/helpers.rs, usr.bin/printf/src/main.rs
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in crypto/krb5/src/ccapi/lib/unix
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

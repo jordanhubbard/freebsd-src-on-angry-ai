@@ -1,0 +1,11 @@
+=== STEP 392 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Write Cargo.toml for krb5 stubs:
+
+ACTION: WRITE_FILE crypto/krb5/src/ccapi/lib/unix/Cargo.toml

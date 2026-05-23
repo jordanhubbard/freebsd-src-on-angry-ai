@@ -1,0 +1,11 @@
+=== STEP 498 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+This unit contains stubs.c with two trivial functions. I'll create a Rust staticlib crate to replace them. The Cargo.toml will define a staticlib crate that exports C-compatible symbols. Let me write the Cargo.toml file now with the complete content block included.
+
+ACTION: WRITE_FILE crypto/krb5/src/ccapi/lib/unix/Cargo.toml

@@ -1,0 +1,19 @@
+=== STEP 115 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/libyy/yy.c:
+PROGRESS:
+📁 Directory: tools/regression/tls/libyy
+   Files: 0/2
+📄 File: tools/regression/tls/libyy/yy.c
+
+```
+
+int __thread yy1 = 101;
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE tools/regression/tls/libyy/Makefile

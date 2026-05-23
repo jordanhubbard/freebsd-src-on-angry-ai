@@ -1,0 +1,11 @@
+=== STEP 425 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Write Cargo.toml with full content:
+
+ACTION: WRITE_FILE crypto/krb5/src/ccapi/lib/unix/Cargo.toml

@@ -1,0 +1,47 @@
+=== STEP 20 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/printf
+   Files: 0/3
+📄 File: usr.bin/printf/printf.c
+   Chunks: 18/19
+
+```
+=== CHUNK 18/19: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printf/printf.c === [function: asciicode]
+=== Lines 643-667 (25 lines) ===
+
+static int
+asciicode(void)
+{
+	int ch;
+	wchar_t wch;
+	mbstate_t mbs;
+
+	ch = (unsigned char)**gargv;
+	if (ch == '\'' || ch == '"') {
+		memset(&mbs, 0, sizeof(mbs));
+		switch (mbrtowc(&wch, *gargv + 1, MB_LEN_MAX, &mbs)) {
+		case (size_t)-2:
+		case (size_t)-1:
+			wch = (unsigned char)gargv[0][1];
+			break;
+		case 0:
+			wch = 0;
+			break;
+		}
+		ch = wch;
+	}
+	++gargv;
+	return (ch);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

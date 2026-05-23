@@ -1,0 +1,23 @@
+=== STEP 36 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/printf
+   Files: 0/3
+📄 File: usr.bin/printf/printf.c
+   Chunks: 6/19
+
+```
+=== CHUNK 6/19: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printf/printf.c === [function: getint]
+=== Lines 76-76 (1 lines) ===
+
+static int	 getint(int *);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

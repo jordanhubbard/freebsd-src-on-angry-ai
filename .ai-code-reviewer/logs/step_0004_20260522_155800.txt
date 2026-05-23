@@ -1,0 +1,21 @@
+=== STEP 4 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/libyy/yy.c:
+PROGRESS:
+📁 Directory: tools/regression/tls/libyy
+   Files: 0/2
+📄 File: tools/regression/tls/libyy/yy.c
+
+```
+
+int __thread yy1 = 101;
+
+```
+
+--- RESPONSE ---
+
+
+This is a minimal TLS regression test library. It exports a single thread-local variable `yy1` with value 101. Let me check the parent directory to understand the full test context.
+
+ACTION: LIST_DIR tools/regression/tls

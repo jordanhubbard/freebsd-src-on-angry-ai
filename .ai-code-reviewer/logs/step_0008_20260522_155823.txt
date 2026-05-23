@@ -1,0 +1,25 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/libxx/Makefile:
+PROGRESS:
+📁 Directory: tools/regression/tls/libyy
+   Files: 0/2
+📄 File: tools/regression/tls/libxx/Makefile
+
+```
+SHLIB_NAME=	libxx.so
+
+SRCS=	xx.c
+#CFLAGS+=-mtls-dialect=sun
+
+.include <bsd.lib.mk>
+
+```
+
+--- RESPONSE ---
+
+
+Let me check how the test programs use libyy to ensure ABI compatibility.
+
+ACTION: READ_FILE tools/regression/tls/ttls1

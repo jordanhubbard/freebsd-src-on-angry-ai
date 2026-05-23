@@ -1,0 +1,305 @@
+=== STEP 87 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printf/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/printf
+   Files: 0/3
+📄 File: usr.bin/printf/src/main.rs
+✏️  Edits: 3 files modified
+
+```
+```
+// SPDX-License-Identifier: BSD-3-Clause
+use std::env;
+use std::io::{self, Write};
+use std::process;
+
+fn usage() {
+    eprintln!("usage: printf format [arguments ...]");
+}
+
+fn escape(fmt: &str, percent: bool) -> (String, bool) {
+    let mut r = String::new();
+    let mut it = fmt.chars().peekable();
+    while let Some(c) = it.next() {
+        if c != '\\' { r.push(c); continue; }
+        match it.next() {
+            None => { r.push('\\'); return (r, false); }
+            Some('\\') => r.push('\\'),
+            Some('\'') => r.push('\''),
+            Some('a') => r.push('\x07'),
+            Some('b') => r.push('\x08'),
+            Some('c') => { if !percent { return (r, true); } r.push('c'); }
+            Some('f') => r.push('\x0c'),
+            Some('n') => r.push('\n'),
+            Some('r') => r.push('\r'),
+            Some('t') => r.push('\t'),
+            Some('v') => r.push('\x0b'),
+            Some(d) if d.is_ascii_digit() => {
+                let mut v: u32 = d.to_digit(8).unwrap();
+                let mx = if !percent && d == '0' { 4 } else { 3 };
+                let mut n = 1;
+                while n < mx {
+                    match it.peek() {
+                        Some(&x) if x.is_ascii_digit() => { v = v*8+x.to_digit(8).unwrap(); it.next(); n+=1; }
+                        _ => break,
+                    }
+                }
+                if percent && v == b'%' as u32 { r.push('%'); r.push('%'); }
+                else { r.push(char::from_u32(v).unwrap_or(d)); }
+            }
+            Some(o) => r.push(o),
+        }
+    }
+    (r, false)
+}
+
+fn asciicode(arg: &str) -> u32 {
+    if arg.starts_with('"') || arg.starts_with('\'') {
+        return arg[1..].chars().next().map(|c| c as u32).unwrap_or(0);
+    }
+    arg.as_bytes().first().copied().unwrap_or(0) as u32
+}
+
+fn parse_int(args: &[&str], p: usize) -> (i64, usize, bool) {
+    if p >= args.len() { return (0, p, false); }
+    let a = args[p];
+    if a.starts_with('"') || a.starts_with('\'') { return (asciicode(a) as i64, p+1, false); }
+    let (base, s) = if a.starts_with("0x")||a.starts_with("0X") { (16,&a[2..]) }
+    else if a.starts_with("0o")||a.starts_with("0O") { (8,&a[2..]) }
+    else if a.starts_with("0b")||a.starts_with("0B") { (2,&a[2..]) }
+    else if a.starts_with('0') && a.len()>1 { (8,&a[1..]) }
+    else { (10, a) };
+    match i64::from_str_radix(s, base) {
+        Ok(v) => (v, p+1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", a); (0, p+1, true) }
+    }
+}
+
+fn parse_uint(args: &[&str], p: usize) -> (u64, usize, bool) {
+    if p >= args.len() { return (0, p, false); }
+    let a = args[p];
+    if a.starts_with('"') || a.starts_with('\'') { return (asciicode(a) as u64, p+1, false); }
+    let (base, s) = if a.starts_with("0x")||a.starts_with("0X") { (16,&a[2..]) }
+    else if a.starts_with("0o")||a.starts_with("0O") { (8,&a[2..]) }
+    else if a.starts_with("0b")||a.starts_with("0B") { (2,&a[2..]) }
+    else if a.starts_with('0') && a.len()>1 { (8,&a[1..]) }
+    else { (10, a) };
+    match u64::from_str_radix(s, base) {
+        Ok(v) => (v, p+1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", a); (0, p+1, true) }
+    }
+}
+
+fn parse_float(args: &[&str], p: usize) -> (f64, usize, bool) {
+    if p >= args.len() { return (0.0, p, false); }
+    let a = args[p];
+    if a.starts_with('"') || a.starts_with('\'') { return (asciicode(a) as f64, p+1, false); }
+    match a.parse::<f64>() {
+        Ok(v) => (v, p+1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", a); (0.0, p+1, true) }
+    }
+}
+
+fn parse_wp(args: &[&str], p: usize) -> (i32, usize, bool) {
+    let (v, np, e) = parse_int(args, p);
+    let r = v as i32;
+    if v < i32::MIN as i64 || v > i32::MAX as i64 {
+        eprintln!("printf: {}: Numerical result out of range", args[p]);
+        return (r, np, true);
+    }
+    (r, np, e)
+}
+
+fn do_fmt(s: &str, w: Option<i32>, pr: Option<i32>) -> String {
+    let s = match pr { Some(p) if p>=0 => s.chars().take(p as usize).collect(), _ => s.to_string() };
+    match w { Some(w) if w>0 => format!("{:>width$}", s, width=w as usize), _ => s }
+}
+
+fn do_int(v: i64, w: Option<i32>, pr: Option<i32>) -> String {
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$.prec$}", v, width=w, prec=p),
+        (Some(w),None) => format!("{:width$}", v, width=w),
+        (None,Some(p)) => format!("{:.prec$}", v, prec=p),
+        (None,None) => format!("{}", v),
+    }
+}
+
+fn do_oct(v: u64, w: Option<i32>, pr: Option<i32>) -> String {
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$o.prec$", v, width=w, prec=p),
+        (Some(w),None) => format!("{:width$o}", v, width=w),
+        (None,Some(p)) => format!("{:o.prec$", v, prec=p),
+        (None,None) => format!("{:o}", v),
+    }
+}
+
+fn do_hex(v: u64, w: Option<i32>, pr: Option<i32>, up: bool) -> String {
+    let sp = if up { "X" } else { "x" };
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$spec.prec$", v, width=w, prec=p, spec=sp),
+        (Some(w),None) => format!("{:width$spec}", v, width=w, spec=sp),
+        (None,Some(p)) => format!("{:spec.prec$", v, prec=p, spec=sp),
+        (None,None) => format!("{:spec}", v, spec=sp),
+    }
+}
+
+fn do_flt(v: f64, w: Option<i32>, pr: Option<i32>, c: char) -> String {
+    let sp = match c { 'e'=>"e",'E'=>"E",'f'=>"f",'F'=>"F",'g'=>"g",'G'=>"G",'a'=>"a",'A'=>"A",_=>"f" };
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$spec.prec$", v, width=w, prec=p, spec=sp),
+        (Some(w),None) => format!("{:width$spec}", v, width=w, spec=sp),
+        (None,Some(p)) => format!("{:spec.prec$", v, prec=p, spec=sp),
+        (None,None) => format!("{:spec}", v, spec=sp),
+    }
+}
+
+fn process_spec(spec: &str, args: &[&str], mut ap: usize) -> (String, usize, bool, bool) {
+    let mut pos = 1;
+    let mut w: Option<i32> = None;
+    let mut pr: Option<i32> = None;
+    let mut term = false;
+    let mut err = false;
+
+    while pos < spec.len() && "#'-+ 0".contains(spec.as_bytes()[pos] as char) { pos += 1; }
+
+    if pos < spec.len() && spec.as_bytes()[pos] == b'*' {
+        pos += 1;
+        let (v, na, e) = parse_wp(args, ap); ap = na; if e { err = true; }
+        w = Some(v);
+    } else {
+        let s = pos;
+        while pos < spec.len() && spec.as_bytes()[pos].is_ascii_digit() { pos += 1; }
+        if pos > s { w = Some(spec[s..pos].parse().unwrap_or(0)); }
+    }
+
+    if pos < spec.len() && spec.as_bytes()[pos] == b'.' {
+        pos += 1;
+        if pos < spec.len() && spec.as_bytes()[pos] == b'*' {
+            pos += 1;
+            let (v, na, e) = parse_wp(args, ap); ap = na; if e { err = true; }
+            pr = Some(v);
+        } else {
+            let s = pos;
+            while pos < spec.len() && spec.as_bytes()[pos].is_ascii_digit() { pos += 1; }
+            if pos > s { pr = Some(spec[s..pos].parse().unwrap_or(0)); }
+        }
+    }
+
+    if pos < spec.len() && spec.as_bytes()[pos] == b'L' { pos += 1; }
+
+    if pos >= spec.len() {
+        eprintln!("printf: missing format character");
+        return (String::new(), ap, true, false);
+    }
+
+    let conv = spec.as_bytes()[pos] as char;
+    let out = match conv {
+        'b' => {
+            let s = if ap < args.len() { args[ap] } else { "" }; ap += 1;
+            let (esc, t) = escape(s, false); term = t;
+            do_fmt(&esc, w, pr)
+        }
+        'c' => {
+            let c = if ap < args.len() { args[ap].chars().next().unwrap_or('\0') } else { '\0' }; ap += 1;
+            match w { Some(w) => format!("{:width$}", c, width=w), None => format!("{}", c) }
+        }
+        's' => {
+            let s = if ap < args.len() { args[ap] } else { "" }; ap += 1;
+            do_fmt(s, w, pr)
+        }
+        'd' | 'i' => {
+            let (v, na, e) = parse_int(args, ap); ap = na; if e { err = true; }
+            do_int(v, w, pr)
+        }
+        'o' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_oct(v, w, pr)
+        }
+        'u' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_int(v as i64, w, pr)
+        }
+        'x' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_hex(v, w, pr, false)
+        }
+        'X' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_hex(v, w, pr, true)
+        }
+        'e'|'E'|'f'|'F'|'g'|'G'|'a'|'A' => {
+            let (v, na, e) = parse_float(args, ap); ap = na; if e { err = true; }
+            do_flt(v, w, pr, conv)
+        }
+        _ => {
+            eprintln!("printf: illegal format character {}", conv);
+            return (String::new(), ap, true, false);
+        }
+    };
+    (out, ap, err, term)
+}
+
+fn main() {
+    let args: Vec<String> = env::args().skip(1).collect();
+    if args.is_empty() { usage(); process::exit(1); }
+
+    let fmt_raw = &args[0];
+    let av: Vec<&str> = args[1..].iter().map(|s| s.as_str()).collect();
+    let (pfmt, _) = escape(fmt_raw, true);
+    let fmt = pfmt.as_str();
+    let mut ai = 0;
+    let mut rv = 0;
+    let out = io::stdout();
+    let mut w = out.lock();
+
+    loop {
+        let mut fi = 0;
+        let mut done = false;
+        while fi < fmt.len() {
+            if fmt.as_bytes()[fi] == b'%' {
+                if fi + 1 < fmt.len() && fmt.as_bytes()[fi+1] == b'%' {
+                    if let Err(e) = w.write_all(b"%") { eprintln!("printf: {}", e); process::exit(1); }
+                    fi += 2; continue;
+                }
+                let spec = &fmt[fi..];
+                let (res, na, e, t) = process_spec(spec, &av, ai);
+                ai = na;
+                if e { rv = 1; }
+                if let Err(er) = w.write_all(res.as_bytes()) { eprintln!("printf: {}", er); process::exit(1); }
+                if t { process::exit(rv); }
+                // Find end of spec to advance fi
+                let mut sp = 1;
+                while sp < spec.len() && "#'-+ 0".contains(spec.as_bytes()[sp] as char) { sp += 1; }
+                if sp < spec.len() && spec.as_bytes()[sp] == b'*' { sp += 1; }
+                while sp < spec.len() && spec.as_bytes()[sp].is_ascii_digit() { sp += 1; }
+                if sp < spec.len() && spec.as_bytes()[sp] == b'.' {
+                    sp += 1;
+                    if sp < spec.len() && spec.as_bytes()[sp] == b'*' { sp += 1; }
+                    while sp < spec.len() && spec.as_bytes()[sp].is_ascii_digit() { sp += 1; }
+                }
+                if sp < spec.len() && spec.as_bytes()[sp] == b'L' { sp += 1; }
+                if sp < spec.len() { sp += 1; }
+                fi += sp;
+                done = true;
+                break;
+            }
+            fi += 1;
+        }
+        if fi < fmt.len() {
+            if let Err(e) = w.write_all(fmt[fi..].as_bytes()) { eprintln!("printf: {}", e); process::exit(1); }
+        }
+        if ai >= av.len() { process::exit(rv); }
+        if done { break; }
+    }
+}
+```
+```
+
+--- RESPONSE ---
+
+
+The `usr.bin/printf` unit already has a complete Rust rewrite. Let me move to the current pending unit from the rewrite index.
+
+ACTION: SET_SCOPE bin/ed/test

@@ -1,0 +1,23 @@
+=== STEP 42 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/printf
+   Files: 0/3
+📄 File: usr.bin/printf/printf.c
+   Chunks: 5/19
+
+```
+=== CHUNK 5/19: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printf/printf.c === [function: getfloating]
+=== Lines 75-75 (1 lines) ===
+
+static int	 getfloating(long double *, int);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

@@ -1,0 +1,26 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/Cargo.toml:
+PROGRESS:
+📁 Directory: tools/regression/tls/libyy
+   Files: 0/2
+📄 File: usr.bin/basename/Cargo.toml
+
+```
+[package]
+name = "basename"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "basename"
+path = "src/main.rs"
+```
+
+--- RESPONSE ---
+
+
+Now I understand the pattern. This is a shared library with a single TLS variable `yy1 = 101`. I need to create a Rust cdylib that exports this symbol with C ABI compatibility. Let me create the Rust crate and update the Makefile.
+
+ACTION: WRITE_FILE tools/regression/tls/libyy/Cargo.toml

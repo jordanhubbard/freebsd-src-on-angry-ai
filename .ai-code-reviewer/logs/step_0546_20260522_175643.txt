@@ -1,0 +1,23 @@
+=== STEP 546 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to write the Cargo.toml file for this libsodium SHA-512 unit. The hash_sha512.c file contains two trivial functions returning constants. I'll create a Rust staticlib crate to replace them. The Cargo.toml will define a staticlib crate type so it produces a .a file that can be linked into the libsodium build. The package will be named crypto_hash_sha512 with version 0.1.0 and edition 2021.
+
+The hash_sha512.c file exports:
+1. `crypto_hash_sha512_bytes()` - returns `crypto_hash_sha512_BYTES` which is defined as 64U in the header
+2. `crypto_hash_sha512_statebytes()` - returns `sizeof(crypto_hash_sha512_state)` which is the size of the state struct
+
+The state struct contains:
+- `uint64_t state[8]` - 64 bytes
+- `uint64_t count[2]` - 16 bytes
+- `uint8_t buf[128]` - 128 bytes
+Total: 208 bytes
+
+The Rust replacement will use `#[no_mangle]` and `extern "C"` to export the same symbols with the same behavior. The Cargo.toml will define a staticlib crate type.
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_hash/sha512/Cargo.toml

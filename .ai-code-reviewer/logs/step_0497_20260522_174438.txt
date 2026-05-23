@@ -1,0 +1,19 @@
+=== STEP 497 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to create a Cargo.toml file for this Kerberos ccapi unix library unit. The stubs.c file contains two trivial functions that I will replace with Rust. The Cargo.toml will define a staticlib crate that exports C-compatible symbols. I need to ensure the full CONTENT block is included in my response. Let me provide a very detailed analysis first to ensure the response is long enough to contain everything.
+
+The stubs.c file exports:
+1. `cci_os_ipc_thread_init()` - returns EINVAL (22)
+2. `cci_os_ipc_thread_fini()` - does nothing
+
+These are simple stub functions for Kerberos IPC threading initialization and finalization. The Rust replacement will use `#[no_mangle]` and `extern "C"` to export the same symbols with the same behavior. The Cargo.toml will define a staticlib crate type so it produces a .a file that can be linked into the Kerberos build.
+
+Now I will write the Cargo.toml file:
+
+ACTION: WRITE_FILE crypto/krb5/src/ccapi/lib/unix/Cargo.toml

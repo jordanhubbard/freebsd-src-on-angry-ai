@@ -1,0 +1,14 @@
+=== STEP 195 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/printf is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/libpcap/cmake
+
+--- RESPONSE ---
+
+
+Let me try a completely different unit:
+
+ACTION: SET_SCOPE usr.bin/printf

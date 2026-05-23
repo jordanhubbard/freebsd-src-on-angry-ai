@@ -1,0 +1,684 @@
+=== STEP 58 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printf/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/printf
+   Files: 0/3
+📄 File: usr.bin/printf/src/main.rs
+✏️  Edits: 2 files modified
+
+```
+```
+// SPDX-License-Identifier: BSD-3-Clause
+// Rust replacement for FreeBSD usr.bin/printf
+
+use std::env;
+use std::io::{self, Write};
+use std::process;
+
+fn usage() {
+    eprintln!("usage: printf format [arguments ...]");
+}
+
+fn escape(fmt: &str, percent: bool) -> (String, bool) {
+    let mut result = String::new();
+    let mut chars = fmt.chars().peekable();
+    while let Some(c) = chars.next() {
+        if c != '\\' {
+            result.push(c);
+            continue;
+        }
+        match chars.next() {
+            None => { result.push('\\'); return (result, false); }
+            Some('\\') => result.push('\\'),
+            Some('\'') => result.push('\''),
+            Some('a') => result.push('\x07'),
+            Some('b') => result.push('\x08'),
+            Some('c') => { if !percent { return (result, true); } result.push('c'); }
+            Some('f') => result.push('\x0c'),
+            Some('n') => result.push('\n'),
+            Some('r') => result.push('\r'),
+            Some('t') => result.push('\t'),
+            Some('v') => result.push('\x0b'),
+            Some(d) if d.is_ascii_digit() => {
+                let mut value: u32 = d.to_digit(8).unwrap();
+                let max_d = if !percent && d == '0' { 4 } else { 3 };
+                let mut consumed = 1;
+                while consumed < max_d {
+                    match chars.peek() {
+                        Some(&n) if n.is_ascii_digit() => {
+                            value = value * 8 + n.to_digit(8).unwrap();
+                            chars.next(); consumed += 1;
+                        }
+                        _ => break,
+                    }
+                }
+                if percent && value == b'%' as u32 {
+                    result.push('%'); result.push('%');
+                } else {
+                    result.push(char::from_u32(value).unwrap_or(d));
+                }
+            }
+            Some(other) => result.push(other),
+        }
+    }
+    (result, false)
+}
+
+fn asciicode(arg: &str) -> u32 {
+    if arg.starts_with('"') || arg.starts_with('\'') {
+        if let Some(c) = arg[1..].chars().next() { return c as u32; }
+        return 0;
+    }
+    arg.as_bytes().first().copied().unwrap_or(0) as u32
+}
+
+fn parse_int_arg(args: &[&str], pos: usize) -> (i64, usize, bool) {
+    if pos >= args.len() { return (0, pos, false); }
+    let arg = args[pos];
+    if arg.starts_with('"') || arg.starts_with('\'') {
+        return (asciicode(arg) as i64, pos + 1, false);
+    }
+    let (base, stripped) = if arg.starts_with("0x") || arg.starts_with("0X") {
+        (16, &arg[2..])
+    } else if arg.starts_with("0o") || arg.starts_with("0O") {
+        (8, &arg[2..])
+    } else if arg.starts_with("0b") || arg.starts_with("0B") {
+        (2, &arg[2..])
+    } else if arg.starts_with('0') && arg.len() > 1 {
+        (8, &arg[1..])
+    } else {
+        (10, arg)
+    };
+    match i64::from_str_radix(stripped, base) {
+        Ok(v) => (v, pos + 1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", arg); (0, pos + 1, true) }
+    }
+}
+
+fn parse_uint_arg(args: &[&str], pos: usize) -> (u64, usize, bool) {
+    if pos >= args.len() { return (0, pos, false); }
+    let arg = args[pos];
+    if arg.starts_with('"') || arg.starts_with('\'') {
+        return (asciicode(arg) as u64, pos + 1, false);
+    }
+    let (base, stripped) = if arg.starts_with("0x") || arg.starts_with("0X") {
+        (16, &arg[2..])
+    } else if arg.starts_with("0o") || arg.starts_with("0O") {
+        (8, &arg[2..])
+    } else if arg.starts_with("0b") || arg.starts_with("0B") {
+        (2, &arg[2..])
+    } else if arg.starts_with('0') && arg.len() > 1 {
+        (8, &arg[1..])
+    } else {
+        (10, arg)
+    };
+    match u64::from_str_radix(stripped, base) {
+        Ok(v) => (v, pos + 1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", arg); (0, pos + 1, true) }
+    }
+}
+
+fn parse_float_arg(args: &[&str], pos: usize) -> (f64, usize, bool) {
+    if pos >= args.len() { return (0.0, pos, false); }
+    let arg = args[pos];
+    if arg.starts_with('"') || arg.starts_with('\'') {
+        return (asciicode(arg) as f64, pos + 1, false);
+    }
+    match arg.parse::<f64>() {
+        Ok(v) => (v, pos + 1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", arg); (0.0, pos + 1, true) }
+    }
+}
+
+fn parse_width_prec(args: &[&str], pos: usize) -> (i32, usize, bool) {
+    let (val, new_pos, err) = parse_int_arg(args, pos);
+    let v = val as i32;
+    if val < i32::MIN as i64 || val > i32::MAX as i64 {
+        eprintln!("printf: {}: Numerical result out of range", args[pos]);
+        return (v, new_pos, true);
+    }
+    (v, new_pos, err)
+}
+
+fn fmt_str(s: &str, width: Option<i32>, precision: Option<i32>) -> String {
+    let s = match precision {
+        Some(p) if p >= 0 => s.chars().take(p as usize).collect::<String>(),
+        _ => s.to_string(),
+    };
+    match (width, precision) {
+        (Some(w), _) if w > 0 => format!("{:>width$}", s, width = w as usize),
+        _ => s,
+    }
+}
+
+fn fmt_int(val: i64, width: Option<i32>, precision: Option<i32>) -> String {
+    match (width, precision) {
+        (Some(w), Some(p)) => format!("{:width$.prec$}", val, width = w, prec = p),
+        (Some(w), None) => format!("{:width$}", val, width = w),
+        (None, Some(p)) => format!("{:.prec$}", val, prec = p),
+        (None, None) => format!("{}", val),
+    }
+}
+
+fn fmt_uint(val: u64, width: Option<i32>, precision: Option<i32>, upper: bool) -> String {
+    let spec = if upper { "X" } else { "x" };
+    match (width, precision) {
+        (Some(w), Some(p)) => format!("{:width$spec.prec$", val, width = w, prec = p, spec = spec),
+        (Some(w), None) => format!("{:width$spec}", val, width = w, spec = spec),
+        (None, Some(p)) => format!("{:spec.prec$", val, prec = p, spec = spec),
+        (None, None) => format!("{:spec}", val, spec = spec),
+    }
+}
+
+fn fmt_octal(val: u64, width: Option<i32>, precision: Option<i32>) -> String {
+    match (width, precision) {
+        (Some(w), Some(p)) => format!("{:width$o.prec$", val, width = w, prec = p),
+        (Some(w), None) => format!("{:width$o}", val, width = w),
+        (None, Some(p)) => format!("{:o.prec$", val, prec = p),
+        (None, None) => format!("{:o}", val),
+    }
+}
+
+fn fmt_float(val: f64, width: Option<i32>, precision: Option<i32>, conv: char) -> String {
+    let spec = match conv {
+        'e' => "e", 'E' => "E", 'f' => "f", 'F' => "F",
+        'g' => "g", 'G' => "G", 'a' => "a", 'A' => "A",
+        _ => "f",
+    };
+    match (width, precision) {
+        (Some(w), Some(p)) => format!("{:width$spec.prec$", val, width = w, prec = p, spec = spec),
+        (Some(w), None) => format!("{:width$spec}", val, width = w, spec = spec),
+        (None, Some(p)) => format!("{:spec.prec$", val, prec = p, spec = spec),
+        (None, None) => format!("{:spec}", val, spec = spec),
+    }
+}
+
+fn main() {
+    let args: Vec<String> = env::args().skip(1).collect();
+    if args.is_empty() {
+        usage();
+        process::exit(1);
+    }
+
+    let format_str = &args[0];
+    let arg_values: Vec<&str> = args[1..].iter().map(|s| s.as_str()).collect();
+
+    let (processed_fmt, _) = escape(format_str, true);
+    let fmt = processed_fmt.as_str();
+    let mut arg_idx = 0;
+    let mut ret_val = 0;
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+
+    let mut fmt_start = 0;
+    let mut chars = fmt.chars().peekable();
+
+    loop {
+        let mut pos = 0;
+        let mut end = false;
+        while let Some(c) = chars.next() {
+            pos += 1;
+            if c == '%' {
+                // Write text before this %
+                let before: String = fmt.chars().skip(fmt_start).take(pos - 1 - (fmt_start)).collect();
+                // Actually let's use byte positions
+                let before_end = fmt_start + (pos - 1);
+                let before = &fmt[fmt_start..before_end];
+                if let Err(e) = out.write_all(before.as_bytes()) {
+                    eprintln!("printf: write error: {}", e);
+                    process::exit(1);
+                }
+                fmt_start = before_end + 1;
+
+                match chars.peek() {
+                    Some(&'%') => {
+                        chars.next();
+                        if let Err(e) = out.write_all(b"%") {
+                            eprintln!("printf: write error: {}", e);
+                            process::exit(1);
+                        }
+                        fmt_start += 1;
+                        continue;
+                    }
+                    _ => {
+                        // Process format spec
+                        let spec_start = fmt_start;
+                        let spec_end = fmt.len(); // We'll figure out actual end
+                        let spec = &fmt[spec_start..];
+
+                        let (result, new_idx, err, terminated) = process_format(spec, &arg_values, arg_idx);
+                        arg_idx = new_idx;
+                        if err { ret_val = 1; }
+                        if let Err(e) = out.write_all(result.as_bytes()) {
+                            eprintln!("printf: write error: {}", e);
+                            process::exit(1);
+                        }
+                        if terminated {
+                            process::exit(ret_val);
+                        }
+                        // Advance fmt_start past the format spec
+                        // We need to know how many chars the spec consumed
+                        // This is tricky with the current approach
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Write remaining text
+        if fmt_start < fmt.len() {
+            if let Err(e) = out.write_all(fmt[fmt_start..].as_bytes()) {
+                eprintln!("printf: write error: {}", e);
+                process::exit(1);
+            }
+        }
+
+        if arg_idx >= arg_values.len() {
+            process::exit(ret_val);
+        }
+
+        // Restart format with next argument
+        fmt_start = 0;
+        chars = fmt.chars().peekable();
+        end = true;
+    }
+}
+
+fn process_format(spec: &str, args: &[&str], arg_pos: usize) -> (String, usize, bool, bool) {
+    let mut pos = 1; // skip '%'
+    let mut width: Option<i32> = None;
+    let mut precision: Option<i32> = None;
+    let mut terminated = false;
+    let mut error = false;
+    let mut ap = arg_pos;
+
+    // Skip flags
+    while pos < spec.len() && "#'-+ 0".contains(spec.as_bytes()[pos] as char) {
+        pos += 1;
+    }
+
+    // Field width
+    if pos < spec.len() && spec.as_bytes()[pos] == b'*' {
+        pos += 1;
+        let (w, new_ap, e) = parse_width_prec(args, ap);
+        ap = new_ap;
+        if e { error = true; }
+        width = Some(w);
+    } else {
+        let start = pos;
+        while pos < spec.len() && spec.as_bytes()[pos].is_ascii_digit() {
+            pos += 1;
+        }
+        if pos > start {
+            width = Some(spec[start..pos].parse().unwrap_or(0));
+        }
+    }
+
+    // Precision
+    if pos < spec.len() && spec.as_bytes()[pos] == b'.' {
+        pos += 1;
+        if pos < spec.len() && spec.as_bytes()[pos] == b'*' {
+            pos += 1;
+            let (p, new_ap, e) = parse_width_prec(args, ap);
+            ap = new_ap;
+            if e { error = true; }
+            precision = Some(p);
+        } else {
+            let start = pos;
+            while pos < spec.len() && spec.as_bytes()[pos].is_ascii_digit() {
+                pos += 1;
+            }
+            if pos > start {
+                precision = Some(spec[start..pos].parse().unwrap_or(0));
+            }
+        }
+    }
+
+    // Length modifier
+    if pos < spec.len() && spec.as_bytes()[pos] == b'L' {
+        pos += 1;
+    }
+
+    if pos >= spec.len() {
+        eprintln!("printf: missing format character");
+        return (String::new(), ap, true, false);
+    }
+
+    let conv = spec.as_bytes()[pos] as char;
+    let mut output = String::new();
+
+    match conv {
+        'b' => {
+            let s = if ap < args.len() { args[ap] } else { "" };
+            ap += 1;
+            let (escaped, term) = escape(s, false);
+            terminated = term;
+            output = fmt_str(&escaped, width, precision);
+        }
+        'c' => {
+            let c = if ap < args.len() { args[ap].chars().next().unwrap_or('\0') } else { '\0' };
+            ap += 1;
+            output = match width {
+                Some(w) => format!("{:width$}", c, width = w),
+                None => format!("{}", c),
+            };
+        }
+        's' => {
+            let s = if ap < args.len() { args[ap] } else { "" };
+            ap += 1;
+            output = fmt_str(s, width, precision);
+        }
+        'd' | 'i' => {
+            let (val, new_ap, e) = parse_int_arg(args, ap);
+            ap = new_ap;
+            if e { error = true; }
+            output = fmt_int(val, width, precision);
+        }
+        'o' => {
+            let (val, new_ap, e) = parse_uint_arg(args, ap);
+            ap = new_ap;
+            if e { error = true; }
+            output = fmt_octal(val, width, precision);
+        }
+        'u' => {
+            let (val, new_ap, e) = parse_uint_arg(args, ap);
+            ap = new_ap;
+            if e { error = true; }
+            output = fmt
+```
+
+--- RESPONSE ---
+
+
+The file was truncated. Let me rewrite it completely with a cleaner, more compact approach.
+
+ACTION: WRITE_FILE usr.bin/printf/src/main.rs
+CONTENT:
+```
+// SPDX-License-Identifier: BSD-3-Clause
+use std::env;
+use std::io::{self, Write};
+use std::process;
+
+fn usage() {
+    eprintln!("usage: printf format [arguments ...]");
+}
+
+fn escape(fmt: &str, percent: bool) -> (String, bool) {
+    let mut r = String::new();
+    let mut it = fmt.chars().peekable();
+    while let Some(c) = it.next() {
+        if c != '\\' { r.push(c); continue; }
+        match it.next() {
+            None => { r.push('\\'); return (r, false); }
+            Some('\\') => r.push('\\'),
+            Some('\'') => r.push('\''),
+            Some('a') => r.push('\x07'),
+            Some('b') => r.push('\x08'),
+            Some('c') => { if !percent { return (r, true); } r.push('c'); }
+            Some('f') => r.push('\x0c'),
+            Some('n') => r.push('\n'),
+            Some('r') => r.push('\r'),
+            Some('t') => r.push('\t'),
+            Some('v') => r.push('\x0b'),
+            Some(d) if d.is_ascii_digit() => {
+                let mut v: u32 = d.to_digit(8).unwrap();
+                let mx = if !percent && d == '0' { 4 } else { 3 };
+                let mut n = 1;
+                while n < mx {
+                    match it.peek() {
+                        Some(&x) if x.is_ascii_digit() => { v = v*8+x.to_digit(8).unwrap(); it.next(); n+=1; }
+                        _ => break,
+                    }
+                }
+                if percent && v == b'%' as u32 { r.push('%'); r.push('%'); }
+                else { r.push(char::from_u32(v).unwrap_or(d)); }
+            }
+            Some(o) => r.push(o),
+        }
+    }
+    (r, false)
+}
+
+fn asciicode(arg: &str) -> u32 {
+    if arg.starts_with('"') || arg.starts_with('\'') {
+        return arg[1..].chars().next().map(|c| c as u32).unwrap_or(0);
+    }
+    arg.as_bytes().first().copied().unwrap_or(0) as u32
+}
+
+fn parse_int(args: &[&str], p: usize) -> (i64, usize, bool) {
+    if p >= args.len() { return (0, p, false); }
+    let a = args[p];
+    if a.starts_with('"') || a.starts_with('\'') { return (asciicode(a) as i64, p+1, false); }
+    let (base, s) = if a.starts_with("0x")||a.starts_with("0X") { (16,&a[2..]) }
+    else if a.starts_with("0o")||a.starts_with("0O") { (8,&a[2..]) }
+    else if a.starts_with("0b")||a.starts_with("0B") { (2,&a[2..]) }
+    else if a.starts_with('0') && a.len()>1 { (8,&a[1..]) }
+    else { (10, a) };
+    match i64::from_str_radix(s, base) {
+        Ok(v) => (v, p+1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", a); (0, p+1, true) }
+    }
+}
+
+fn parse_uint(args: &[&str], p: usize) -> (u64, usize, bool) {
+    if p >= args.len() { return (0, p, false); }
+    let a = args[p];
+    if a.starts_with('"') || a.starts_with('\'') { return (asciicode(a) as u64, p+1, false); }
+    let (base, s) = if a.starts_with("0x")||a.starts_with("0X") { (16,&a[2..]) }
+    else if a.starts_with("0o")||a.starts_with("0O") { (8,&a[2..]) }
+    else if a.starts_with("0b")||a.starts_with("0B") { (2,&a[2..]) }
+    else if a.starts_with('0') && a.len()>1 { (8,&a[1..]) }
+    else { (10, a) };
+    match u64::from_str_radix(s, base) {
+        Ok(v) => (v, p+1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", a); (0, p+1, true) }
+    }
+}
+
+fn parse_float(args: &[&str], p: usize) -> (f64, usize, bool) {
+    if p >= args.len() { return (0.0, p, false); }
+    let a = args[p];
+    if a.starts_with('"') || a.starts_with('\'') { return (asciicode(a) as f64, p+1, false); }
+    match a.parse::<f64>() {
+        Ok(v) => (v, p+1, false),
+        Err(_) => { eprintln!("printf: {}: expected numeric value", a); (0.0, p+1, true) }
+    }
+}
+
+fn parse_wp(args: &[&str], p: usize) -> (i32, usize, bool) {
+    let (v, np, e) = parse_int(args, p);
+    let r = v as i32;
+    if v < i32::MIN as i64 || v > i32::MAX as i64 {
+        eprintln!("printf: {}: Numerical result out of range", args[p]);
+        return (r, np, true);
+    }
+    (r, np, e)
+}
+
+fn do_fmt(s: &str, w: Option<i32>, pr: Option<i32>) -> String {
+    let s = match pr { Some(p) if p>=0 => s.chars().take(p as usize).collect(), _ => s.to_string() };
+    match w { Some(w) if w>0 => format!("{:>width$}", s, width=w as usize), _ => s }
+}
+
+fn do_int(v: i64, w: Option<i32>, pr: Option<i32>) -> String {
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$.prec$}", v, width=w, prec=p),
+        (Some(w),None) => format!("{:width$}", v, width=w),
+        (None,Some(p)) => format!("{:.prec$}", v, prec=p),
+        (None,None) => format!("{}", v),
+    }
+}
+
+fn do_oct(v: u64, w: Option<i32>, pr: Option<i32>) -> String {
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$o.prec$", v, width=w, prec=p),
+        (Some(w),None) => format!("{:width$o}", v, width=w),
+        (None,Some(p)) => format!("{:o.prec$", v, prec=p),
+        (None,None) => format!("{:o}", v),
+    }
+}
+
+fn do_hex(v: u64, w: Option<i32>, pr: Option<i32>, up: bool) -> String {
+    let sp = if up { "X" } else { "x" };
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$spec.prec$", v, width=w, prec=p, spec=sp),
+        (Some(w),None) => format!("{:width$spec}", v, width=w, spec=sp),
+        (None,Some(p)) => format!("{:spec.prec$", v, prec=p, spec=sp),
+        (None,None) => format!("{:spec}", v, spec=sp),
+    }
+}
+
+fn do_flt(v: f64, w: Option<i32>, pr: Option<i32>, c: char) -> String {
+    let sp = match c { 'e'=>"e",'E'=>"E",'f'=>"f",'F'=>"F",'g'=>"g",'G'=>"G",'a'=>"a",'A'=>"A",_=>"f" };
+    match (w, pr) {
+        (Some(w),Some(p)) => format!("{:width$spec.prec$", v, width=w, prec=p, spec=sp),
+        (Some(w),None) => format!("{:width$spec}", v, width=w, spec=sp),
+        (None,Some(p)) => format!("{:spec.prec$", v, prec=p, spec=sp),
+        (None,None) => format!("{:spec}", v, spec=sp),
+    }
+}
+
+fn process_spec(spec: &str, args: &[&str], mut ap: usize) -> (String, usize, bool, bool) {
+    let mut pos = 1;
+    let mut w: Option<i32> = None;
+    let mut pr: Option<i32> = None;
+    let mut term = false;
+    let mut err = false;
+
+    while pos < spec.len() && "#'-+ 0".contains(spec.as_bytes()[pos] as char) { pos += 1; }
+
+    if pos < spec.len() && spec.as_bytes()[pos] == b'*' {
+        pos += 1;
+        let (v, na, e) = parse_wp(args, ap); ap = na; if e { err = true; }
+        w = Some(v);
+    } else {
+        let s = pos;
+        while pos < spec.len() && spec.as_bytes()[pos].is_ascii_digit() { pos += 1; }
+        if pos > s { w = Some(spec[s..pos].parse().unwrap_or(0)); }
+    }
+
+    if pos < spec.len() && spec.as_bytes()[pos] == b'.' {
+        pos += 1;
+        if pos < spec.len() && spec.as_bytes()[pos] == b'*' {
+            pos += 1;
+            let (v, na, e) = parse_wp(args, ap); ap = na; if e { err = true; }
+            pr = Some(v);
+        } else {
+            let s = pos;
+            while pos < spec.len() && spec.as_bytes()[pos].is_ascii_digit() { pos += 1; }
+            if pos > s { pr = Some(spec[s..pos].parse().unwrap_or(0)); }
+        }
+    }
+
+    if pos < spec.len() && spec.as_bytes()[pos] == b'L' { pos += 1; }
+
+    if pos >= spec.len() {
+        eprintln!("printf: missing format character");
+        return (String::new(), ap, true, false);
+    }
+
+    let conv = spec.as_bytes()[pos] as char;
+    let out = match conv {
+        'b' => {
+            let s = if ap < args.len() { args[ap] } else { "" }; ap += 1;
+            let (esc, t) = escape(s, false); term = t;
+            do_fmt(&esc, w, pr)
+        }
+        'c' => {
+            let c = if ap < args.len() { args[ap].chars().next().unwrap_or('\0') } else { '\0' }; ap += 1;
+            match w { Some(w) => format!("{:width$}", c, width=w), None => format!("{}", c) }
+        }
+        's' => {
+            let s = if ap < args.len() { args[ap] } else { "" }; ap += 1;
+            do_fmt(s, w, pr)
+        }
+        'd' | 'i' => {
+            let (v, na, e) = parse_int(args, ap); ap = na; if e { err = true; }
+            do_int(v, w, pr)
+        }
+        'o' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_oct(v, w, pr)
+        }
+        'u' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_int(v as i64, w, pr)
+        }
+        'x' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_hex(v, w, pr, false)
+        }
+        'X' => {
+            let (v, na, e) = parse_uint(args, ap); ap = na; if e { err = true; }
+            do_hex(v, w, pr, true)
+        }
+        'e'|'E'|'f'|'F'|'g'|'G'|'a'|'A' => {
+            let (v, na, e) = parse_float(args, ap); ap = na; if e { err = true; }
+            do_flt(v, w, pr, conv)
+        }
+        _ => {
+            eprintln!("printf: illegal format character {}", conv);
+            return (String::new(), ap, true, false);
+        }
+    };
+    (out, ap, err, term)
+}
+
+fn main() {
+    let args: Vec<String> = env::args().skip(1).collect();
+    if args.is_empty() { usage(); process::exit(1); }
+
+    let fmt_raw = &args[0];
+    let av: Vec<&str> = args[1..].iter().map(|s| s.as_str()).collect();
+    let (pfmt, _) = escape(fmt_raw, true);
+    let fmt = pfmt.as_str();
+    let mut ai = 0;
+    let mut rv = 0;
+    let out = io::stdout();
+    let mut w = out.lock();
+
+    loop {
+        let mut fi = 0;
+        let mut done = false;
+        while fi < fmt.len() {
+            if fmt.as_bytes()[fi] == b'%' {
+                if fi + 1 < fmt.len() && fmt.as_bytes()[fi+1] == b'%' {
+                    if let Err(e) = w.write_all(b"%") { eprintln!("printf: {}", e); process::exit(1); }
+                    fi += 2; continue;
+                }
+                let spec = &fmt[fi..];
+                let (res, na, e, t) = process_spec(spec, &av, ai);
+                ai = na;
+                if e { rv = 1; }
+                if let Err(er) = w.write_all(res.as_bytes()) { eprintln!("printf: {}", er); process::exit(1); }
+                if t { process::exit(rv); }
+                // Find end of spec to advance fi
+                let mut sp = 1;
+                while sp < spec.len() && "#'-+ 0".contains(spec.as_bytes()[sp] as char) { sp += 1; }
+                if sp < spec.len() && spec.as_bytes()[sp] == b'*' { sp += 1; }
+                while sp < spec.len() && spec.as_bytes()[sp].is_ascii_digit() { sp += 1; }
+                if sp < spec.len() && spec.as_bytes()[sp] == b'.' {
+                    sp += 1;
+                    if sp < spec.len() && spec.as_bytes()[sp] == b'*' { sp += 1; }
+                    while sp < spec.len() && spec.as_bytes()[sp].is_ascii_digit() { sp += 1; }
+                }
+                if sp < spec.len() && spec.as_bytes()[sp] == b'L' { sp += 1; }
+                if sp < spec.len() { sp += 1; }
+                fi += sp;
+                done = true;
+                break;
+            }
+            fi += 1;
+        }
+        if fi < fmt.len() {
+            if let Err(e) = w.write_all(fmt[fi..].as_bytes()) { eprintln!("printf: {}", e); process::exit(1); }
+        }
+        if ai >= av.len() { process::exit(rv); }
+        if done { break; }
+    }
+}
+```

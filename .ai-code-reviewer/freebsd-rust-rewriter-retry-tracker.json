@@ -111,6 +111,26 @@
     "attempts": 3,
     "last_attempt": "2026-05-21T19:44:21.180208"
   },
+  "contrib/libpcap/cmake": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T16:48:20.861620"
+  },
+  "crypto/krb5/src/ccapi/lib/unix": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T17:13:24.963236"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_hash/sha256": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T17:59:37.898430"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_hash/sha512": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T17:51:37.271797"
+  },
+  "tools/regression/tls/libyy": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T16:49:40.321088"
+  },
   "usr.bin/bluetooth/bthost": {
     "attempts": 3,
     "last_attempt": "2026-05-22T09:42:44.986549"
@@ -126,6 +146,10 @@
   "usr.bin/colrm": {
     "attempts": 1,
     "last_attempt": "2026-05-22T07:03:11.300903"
+  },
+  "usr.bin/comm": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T16:58:09.899107"
   },
   "usr.bin/enigma": {
     "attempts": 3,
@@ -168,8 +192,8 @@
     "last_attempt": "2026-05-22T06:46:40.217264"
   },
   "usr.bin/printf": {
-    "attempts": 1,
-    "last_attempt": "2026-05-21T23:16:33.681504"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T16:02:58.003120"
   },
   "usr.bin/protect": {
     "attempts": 1,

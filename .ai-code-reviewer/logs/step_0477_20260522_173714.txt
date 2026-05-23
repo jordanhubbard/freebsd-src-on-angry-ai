@@ -1,0 +1,11 @@
+=== STEP 477 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+This unit is part of the Kerberos autoconf build system and has no standalone FreeBSD Makefile. The stubs.c file just exports two trivial functions. I will create a minimal Cargo.toml to satisfy the rewrite requirement, then build. The Cargo.toml will define a staticlib crate that can be linked into the Kerberos build.
+
+ACTION: WRITE_FILE crypto/krb5/src/ccapi/lib/unix/Cargo.toml

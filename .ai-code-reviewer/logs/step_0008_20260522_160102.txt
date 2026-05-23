@@ -1,0 +1,11 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'bsd.rust.mk'
+
+--- RESPONSE ---
+
+
+This is a TLS regression test library in `tools/regression/`, not a userland command or library. The objective is to translate FreeBSD userland C/C++ libraries and commands. This test infrastructure is not relevant to the configured objective. Let me find a more appropriate unit.
+
+ACTION: LIST_DIR bin

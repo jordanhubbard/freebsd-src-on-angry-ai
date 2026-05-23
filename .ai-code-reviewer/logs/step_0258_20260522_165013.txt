@@ -1,0 +1,25 @@
+=== STEP 258 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/libyy/Makefile:
+PROGRESS:
+📁 Directory: tools/regression/tls/libyy
+   Files: 0/2
+📄 File: tools/regression/tls/libyy/Makefile
+
+```
+SHLIB_NAME=	libyy.so
+
+SRCS=	yy.c
+CFLAGS+=-fpic
+
+.include <bsd.lib.mk>
+
+```
+
+--- RESPONSE ---
+
+
+This is a TLS regression test library, not a userland command or library. Let me choose a more appropriate unit.
+
+ACTION: SET_SCOPE usr.bin/comm

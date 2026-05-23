@@ -1,0 +1,11 @@
+=== STEP 125 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/*/Makefile'
+
+--- RESPONSE ---
+
+
+Let me find a different work unit to rewrite.
+
+ACTION: LIST_DIR usr.bin
