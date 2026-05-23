@@ -1,0 +1,9 @@
+=== STEP 63 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/mktemp/mktemp.1

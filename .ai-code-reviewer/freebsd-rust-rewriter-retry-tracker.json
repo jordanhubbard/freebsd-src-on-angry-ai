@@ -115,6 +115,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T16:48:20.861620"
   },
+  "contrib/llvm-project/llvm/lib/Frontend/OpenACC": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:02:27.485796"
+  },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,
     "last_attempt": "2026-05-22T19:37:35.699854"
@@ -124,8 +128,8 @@
     "last_attempt": "2026-05-22T18:12:11.512071"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha512": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T19:43:11.121234"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T20:01:23.115564"
   },
   "tools/regression/tls/libyy": {
     "attempts": 3,
@@ -183,6 +187,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-22T00:58:28.171024"
   },
+  "usr.bin/look": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:06:09.177657"
+  },
   "usr.bin/mesg": {
     "attempts": 1,
     "last_attempt": "2026-05-22T02:55:02.145593"
@@ -190,6 +198,10 @@
   "usr.bin/mkfifo": {
     "attempts": 1,
     "last_attempt": "2026-05-22T02:36:41.175781"
+  },
+  "usr.bin/mktemp": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T20:07:22.281552"
   },
   "usr.bin/nice": {
     "attempts": 3,
@@ -215,9 +227,17 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T12:55:31.529110"
   },
+  "usr.bin/seq": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:06:27.390497"
+  },
   "usr.bin/tail": {
     "attempts": 1,
     "last_attempt": "2026-05-22T01:11:28.327863"
+  },
+  "usr.bin/ul": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:02:57.536651"
   },
   "usr.bin/uname": {
     "attempts": 2,

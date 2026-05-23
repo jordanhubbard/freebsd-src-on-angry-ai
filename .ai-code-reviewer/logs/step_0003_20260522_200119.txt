@@ -1,0 +1,14 @@
+=== STEP 3 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE crypto/krb5/src/ccapi/lib/unix
+
+--- RESPONSE ---
+
+
+Let me try the suggested next unit from the error message.
+
+ACTION: SET_SCOPE crypto/krb5/src/ccapi/lib/unix
