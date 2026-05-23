@@ -1,0 +1,11 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/krb5/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check if there's a FreeBSD-level Makefile that builds krb5.
+
+ACTION: FIND_FILE crypto/krb5/src/Makefile

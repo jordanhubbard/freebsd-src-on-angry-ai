@@ -1,0 +1,12 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*ccapi_os_ipc.h*':
+```
+./crypto/krb5/src/ccapi/lib/ccapi_os_ipc.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE crypto/krb5/src/ccapi/lib/ccapi_os_ipc.h

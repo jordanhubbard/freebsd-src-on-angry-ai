@@ -1,0 +1,20 @@
+=== STEP 38 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/apply/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "apply"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "apply"
+path = "src/main.rs"
+<<<

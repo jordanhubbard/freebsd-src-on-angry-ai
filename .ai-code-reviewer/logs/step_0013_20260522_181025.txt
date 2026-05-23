@@ -1,0 +1,12 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*cci_common.h*':
+```
+./crypto/krb5/src/ccapi/common/cci_common.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE crypto/krb5/src/ccapi/common/cci_common.h

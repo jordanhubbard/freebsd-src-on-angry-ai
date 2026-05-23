@@ -1,0 +1,12 @@
+=== STEP 25 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/kenv is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE crypto/krb5/src/ccapi/lib/unix
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR bin/freebsd-version

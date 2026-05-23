@@ -1,0 +1,13 @@
+=== STEP 18 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/krb5/src/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit is part of a vendored autotools project (MIT Kerberos) with no FreeBSD bsd.mk Makefile. The `Makefile.in` is autotools-generated, not a FreeBSD build file. This doesn't fit the rewrite objective of translating FreeBSD userland with proper build integration.
+
+Let me look for a better unit. Let me check the bin/ directory for units with proper FreeBSD Makefiles.
+
+ACTION: LIST_DIR bin

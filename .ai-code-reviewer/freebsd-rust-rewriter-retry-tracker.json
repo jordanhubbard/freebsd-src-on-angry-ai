@@ -116,12 +116,12 @@
     "last_attempt": "2026-05-22T16:48:20.861620"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T17:13:24.963236"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T18:30:40.739032"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha256": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T17:59:37.898430"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T18:11:33.552450"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha512": {
     "attempts": 1,
@@ -130,6 +130,10 @@
   "tools/regression/tls/libyy": {
     "attempts": 3,
     "last_attempt": "2026-05-22T16:49:40.321088"
+  },
+  "usr.bin/apply": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T18:19:39.589285"
   },
   "usr.bin/bluetooth/bthost": {
     "attempts": 3,
