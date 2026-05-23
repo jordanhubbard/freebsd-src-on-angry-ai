@@ -1,0 +1,66 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/openssl:
+```
+.ctags.d
+ACKNOWLEDGEMENTS.md
+AUTHORS.md
+BSDmakefile
+CHANGES.md
+CODE-OF-CONDUCT.md
+CONTRIBUTING.md
+Configurations
+Configure
+FREEBSD-upgrade.md
+HACKING.md
+INSTALL.md
+LICENSE.txt
+NEWS.md
+NOTES-ANDROID.md
+NOTES-ANSI.md
+NOTES-DJGPP.md
+NOTES-NONSTOP.md
+NOTES-PERL.md
+NOTES-POSIX.md
+NOTES-UNIX.md
+NOTES-VALGRIND.md
+NOTES-VMS.md
+NOTES-WINDOWS.md
+README-ENGINES.md
+README-FIPS.md
+README-PROVIDERS.md
+README-QUIC.md
+README.md
+SUPPORT.md
+VERSION.dat
+VMS
+apps
+build.info
+config
+config.com
+configdata.pm.in
+crypto
+demos
+doc
+engines
+exporters
+external
+freebsd
+funding.json
+fuzz
+include
+ms
+os-dep
+patch
+providers
+ssl
+test
+tools
+util
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR crypto/openssl/crypto

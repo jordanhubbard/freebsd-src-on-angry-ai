@@ -1,0 +1,281 @@
+=== STEP 9 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/openssl/include/openssl/cryptoerr_legacy.h:
+
+📋 CHUNKED FILE REWRITE MODE
+   File: /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/openssl/include/openssl/cryptoerr_legacy.h
+   Total chunks: 6
+   Strategy: Function-by-function rewrite
+   Use ACTION: NEXT_CHUNK to continue
+   Use ACTION: SKIP_FILE to move to next file
+
+PROGRESS:
+📁 Directory: crypto/openssl/crypto/kdf
+   Files: 0/1
+📄 File: crypto/openssl/include/openssl/cryptoerr_legacy.h
+   Chunks: 1/6
+
+```
+=== CHUNK 1/6: /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/openssl/include/openssl/cryptoerr_legacy.h === [line_chunk: chunk_1]
+=== Lines 1-250 (250 lines) ===
+
+/*
+ * Copyright 2020-2021 The OpenSSL Project Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License 2.0 (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
+ */
+
+/*
+ * This header file preserves symbols from pre-3.0 OpenSSL.
+ * It should never be included directly, as it's already included
+ * by the public {lib}err.h headers, and since it will go away some
+ * time in the future.
+ */
+
+#ifndef OPENSSL_CRYPTOERR_LEGACY_H
+#define OPENSSL_CRYPTOERR_LEGACY_H
+#pragma once
+
+#include <openssl/macros.h>
+#include <openssl/symhacks.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef OPENSSL_NO_DEPRECATED_3_0
+OSSL_DEPRECATEDIN_3_0 int ERR_load_ASN1_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_ASYNC_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_BIO_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_BN_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_BUF_strings(void);
+#ifndef OPENSSL_NO_CMS
+OSSL_DEPRECATEDIN_3_0 int ERR_load_CMS_strings(void);
+#endif
+#ifndef OPENSSL_NO_COMP
+OSSL_DEPRECATEDIN_3_0 int ERR_load_COMP_strings(void);
+#endif
+OSSL_DEPRECATEDIN_3_0 int ERR_load_CONF_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_CRYPTO_strings(void);
+#ifndef OPENSSL_NO_CT
+OSSL_DEPRECATEDIN_3_0 int ERR_load_CT_strings(void);
+#endif
+#ifndef OPENSSL_NO_DH
+OSSL_DEPRECATEDIN_3_0 int ERR_load_DH_strings(void);
+#endif
+#ifndef OPENSSL_NO_DSA
+OSSL_DEPRECATEDIN_3_0 int ERR_load_DSA_strings(void);
+#endif
+#ifndef OPENSSL_NO_EC
+OSSL_DEPRECATEDIN_3_0 int ERR_load_EC_strings(void);
+#endif
+#ifndef OPENSSL_NO_ENGINE
+OSSL_DEPRECATEDIN_3_0 int ERR_load_ENGINE_strings(void);
+#endif
+OSSL_DEPRECATEDIN_3_0 int ERR_load_ERR_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_EVP_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_KDF_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_OBJ_strings(void);
+#ifndef OPENSSL_NO_OCSP
+OSSL_DEPRECATEDIN_3_0 int ERR_load_OCSP_strings(void);
+#endif
+OSSL_DEPRECATEDIN_3_0 int ERR_load_PEM_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_PKCS12_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_PKCS7_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_RAND_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_RSA_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_OSSL_STORE_strings(void);
+#ifndef OPENSSL_NO_TS
+OSSL_DEPRECATEDIN_3_0 int ERR_load_TS_strings(void);
+#endif
+OSSL_DEPRECATEDIN_3_0 int ERR_load_UI_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_X509_strings(void);
+OSSL_DEPRECATEDIN_3_0 int ERR_load_X509V3_strings(void);
+
+/* Collected _F_ macros from OpenSSL 1.1.1 */
+
+/*
+ * ASN1 function codes.
+ */
+#define ASN1_F_A2D_ASN1_OBJECT 0
+#define ASN1_F_A2I_ASN1_INTEGER 0
+#define ASN1_F_A2I_ASN1_STRING 0
+#define ASN1_F_APPEND_EXP 0
+#define ASN1_F_ASN1_BIO_INIT 0
+#define ASN1_F_ASN1_BIT_STRING_SET_BIT 0
+#define ASN1_F_ASN1_CB 0
+#define ASN1_F_ASN1_CHECK_TLEN 0
+#define ASN1_F_ASN1_COLLECT 0
+#define ASN1_F_ASN1_D2I_EX_PRIMITIVE 0
+#define ASN1_F_ASN1_D2I_FP 0
+#define ASN1_F_ASN1_D2I_READ_BIO 0
+#define ASN1_F_ASN1_DIGEST 0
+#define ASN1_F_ASN1_DO_ADB 0
+#define ASN1_F_ASN1_DO_LOCK 0
+#define ASN1_F_ASN1_DUP 0
+#define ASN1_F_ASN1_ENC_SAVE 0
+#define ASN1_F_ASN1_EX_C2I 0
+#define ASN1_F_ASN1_FIND_END 0
+#define ASN1_F_ASN1_GENERALIZEDTIME_ADJ 0
+#define ASN1_F_ASN1_GENERATE_V3 0
+#define ASN1_F_ASN1_GET_INT64 0
+#define ASN1_F_ASN1_GET_OBJECT 0
+#define ASN1_F_ASN1_GET_UINT64 0
+#define ASN1_F_ASN1_I2D_BIO 0
+#define ASN1_F_ASN1_I2D_FP 0
+#define ASN1_F_ASN1_ITEM_D2I_FP 0
+#define ASN1_F_ASN1_ITEM_DUP 0
+#define ASN1_F_ASN1_ITEM_EMBED_D2I 0
+#define ASN1_F_ASN1_ITEM_EMBED_NEW 0
+#define ASN1_F_ASN1_ITEM_FLAGS_I2D 0
+#define ASN1_F_ASN1_ITEM_I2D_BIO 0
+#define ASN1_F_ASN1_ITEM_I2D_FP 0
+#define ASN1_F_ASN1_ITEM_PACK 0
+#define ASN1_F_ASN1_ITEM_SIGN 0
+#define ASN1_F_ASN1_ITEM_SIGN_CTX 0
+#define ASN1_F_ASN1_ITEM_UNPACK 0
+#define ASN1_F_ASN1_ITEM_VERIFY 0
+#define ASN1_F_ASN1_MBSTRING_NCOPY 0
+#define ASN1_F_ASN1_OBJECT_NEW 0
+#define ASN1_F_ASN1_OUTPUT_DATA 0
+#define ASN1_F_ASN1_PCTX_NEW 0
+#define ASN1_F_ASN1_PRIMITIVE_NEW 0
+#define ASN1_F_ASN1_SCTX_NEW 0
+#define ASN1_F_ASN1_SIGN 0
+#define ASN1_F_ASN1_STR2TYPE 0
+#define ASN1_F_ASN1_STRING_GET_INT64 0
+#define ASN1_F_ASN1_STRING_GET_UINT64 0
+#define ASN1_F_ASN1_STRING_SET 0
+#define ASN1_F_ASN1_STRING_TABLE_ADD 0
+#define ASN1_F_ASN1_STRING_TO_BN 0
+#define ASN1_F_ASN1_STRING_TYPE_NEW 0
+#define ASN1_F_ASN1_TEMPLATE_EX_D2I 0
+#define ASN1_F_ASN1_TEMPLATE_NEW 0
+#define ASN1_F_ASN1_TEMPLATE_NOEXP_D2I 0
+#define ASN1_F_ASN1_TIME_ADJ 0
+#define ASN1_F_ASN1_TYPE_GET_INT_OCTETSTRING 0
+#define ASN1_F_ASN1_TYPE_GET_OCTETSTRING 0
+#define ASN1_F_ASN1_UTCTIME_ADJ 0
+#define ASN1_F_ASN1_VERIFY 0
+#define ASN1_F_B64_READ_ASN1 0
+#define ASN1_F_B64_WRITE_ASN1 0
+#define ASN1_F_BIO_NEW_NDEF 0
+#define ASN1_F_BITSTR_CB 0
+#define ASN1_F_BN_TO_ASN1_STRING 0
+#define ASN1_F_C2I_ASN1_BIT_STRING 0
+#define ASN1_F_C2I_ASN1_INTEGER 0
+#define ASN1_F_C2I_ASN1_OBJECT 0
+#define ASN1_F_C2I_IBUF 0
+#define ASN1_F_C2I_UINT64_INT 0
+#define ASN1_F_COLLECT_DATA 0
+#define ASN1_F_D2I_ASN1_OBJECT 0
+#define ASN1_F_D2I_ASN1_UINTEGER 0
+#define ASN1_F_D2I_AUTOPRIVATEKEY 0
+#define ASN1_F_D2I_PRIVATEKEY 0
+#define ASN1_F_D2I_PUBLICKEY 0
+#define ASN1_F_DO_BUF 0
+#define ASN1_F_DO_CREATE 0
+#define ASN1_F_DO_DUMP 0
+#define ASN1_F_DO_TCREATE 0
+#define ASN1_F_I2A_ASN1_OBJECT 0
+#define ASN1_F_I2D_ASN1_BIO_STREAM 0
+#define ASN1_F_I2D_ASN1_OBJECT 0
+#define ASN1_F_I2D_DSA_PUBKEY 0
+#define ASN1_F_I2D_EC_PUBKEY 0
+#define ASN1_F_I2D_PRIVATEKEY 0
+#define ASN1_F_I2D_PUBLICKEY 0
+#define ASN1_F_I2D_RSA_PUBKEY 0
+#define ASN1_F_LONG_C2I 0
+#define ASN1_F_NDEF_PREFIX 0
+#define ASN1_F_NDEF_SUFFIX 0
+#define ASN1_F_OID_MODULE_INIT 0
+#define ASN1_F_PARSE_TAGGING 0
+#define ASN1_F_PKCS5_PBE2_SET_IV 0
+#define ASN1_F_PKCS5_PBE2_SET_SCRYPT 0
+#define ASN1_F_PKCS5_PBE_SET 0
+#define ASN1_F_PKCS5_PBE_SET0_ALGOR 0
+#define ASN1_F_PKCS5_PBKDF2_SET 0
+#define ASN1_F_PKCS5_SCRYPT_SET 0
+#define ASN1_F_SMIME_READ_ASN1 0
+#define ASN1_F_SMIME_TEXT 0
+#define ASN1_F_STABLE_GET 0
+#define ASN1_F_STBL_MODULE_INIT 0
+#define ASN1_F_UINT32_C2I 0
+#define ASN1_F_UINT32_NEW 0
+#define ASN1_F_UINT64_C2I 0
+#define ASN1_F_UINT64_NEW 0
+#define ASN1_F_X509_CRL_ADD0_REVOKED 0
+#define ASN1_F_X509_INFO_NEW 0
+#define ASN1_F_X509_NAME_ENCODE 0
+#define ASN1_F_X509_NAME_EX_D2I 0
+#define ASN1_F_X509_NAME_EX_NEW 0
+#define ASN1_F_X509_PKEY_NEW 0
+
+/*
+ * ASYNC function codes.
+ */
+#define ASYNC_F_ASYNC_CTX_NEW 0
+#define ASYNC_F_ASYNC_INIT_THREAD 0
+#define ASYNC_F_ASYNC_JOB_NEW 0
+#define ASYNC_F_ASYNC_PAUSE_JOB 0
+#define ASYNC_F_ASYNC_START_FUNC 0
+#define ASYNC_F_ASYNC_START_JOB 0
+#define ASYNC_F_ASYNC_WAIT_CTX_SET_WAIT_FD 0
+
+/*
+ * BIO function codes.
+ */
+#define BIO_F_ACPT_STATE 0
+#define BIO_F_ADDRINFO_WRAP 0
+#define BIO_F_ADDR_STRINGS 0
+#define BIO_F_BIO_ACCEPT 0
+#define BIO_F_BIO_ACCEPT_EX 0
+#define BIO_F_BIO_ACCEPT_NEW 0
+#define BIO_F_BIO_ADDR_NEW 0
+#define BIO_F_BIO_BIND 0
+#define BIO_F_BIO_CALLBACK_CTRL 0
+#define BIO_F_BIO_CONNECT 0
+#define BIO_F_BIO_CONNECT_NEW 0
+#define BIO_F_BIO_CTRL 0
+#define BIO_F_BIO_GETS 0
+#define BIO_F_BIO_GET_HOST_IP 0
+#define BIO_F_BIO_GET_NEW_INDEX 0
+#define BIO_F_BIO_GET_PORT 0
+#define BIO_F_BIO_LISTEN 0
+#define BIO_F_BIO_LOOKUP 0
+#define BIO_F_BIO_LOOKUP_EX 0
+#define BIO_F_BIO_MAKE_PAIR 0
+#define BIO_F_BIO_METH_NEW 0
+#define BIO_F_BIO_NEW 0
+#define BIO_F_BIO_NEW_DGRAM_SCTP 0
+#define BIO_F_BIO_NEW_FILE 0
+#define BIO_F_BIO_NEW_MEM_BUF 0
+#define BIO_F_BIO_NREAD 0
+#define BIO_F_BIO_NREAD0 0
+#define BIO_F_BIO_NWRITE 0
+#define BIO_F_BIO_NWRITE0 0
+#define BIO_F_BIO_PARSE_HOSTSERV 0
+#define BIO_F_BIO_PUTS 0
+#define BIO_F_BIO_READ 0
+#define BIO_F_BIO_READ_EX 0
+#define BIO_F_BIO_READ_INTERN 0
+#define BIO_F_BIO_SOCKET 0
+#define BIO_F_BIO_SOCKET_NBIO 0
+#define BIO_F_BIO_SOCK_INFO 0
+#define BIO_F_BIO_SOCK_INIT 0
+#define BIO_F_BIO_WRITE 0
+#define BIO_F_BIO_WRITE_EX 0
+#define BIO_F_BIO_WRITE_INTERN 0
+
+```
+
+--- RESPONSE ---
+
+
+This is a large legacy header. Let me skip it and understand the build structure better.
+
+ACTION: SKIP_FILE

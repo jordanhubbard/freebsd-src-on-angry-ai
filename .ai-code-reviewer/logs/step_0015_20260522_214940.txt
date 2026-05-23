@@ -1,0 +1,12 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/openssl/freebsd:
+```
+include
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE secure/lib/libcrypto

@@ -128,8 +128,8 @@
     "last_attempt": "2026-05-22T19:37:35.699854"
   },
   "crypto/openssl/crypto/kdf": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T21:43:49.144136"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T21:46:57.529904"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha256": {
     "attempts": 3,

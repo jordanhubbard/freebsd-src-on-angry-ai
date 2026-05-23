@@ -1,0 +1,11 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*secure/lib/libcrypto*'
+
+--- RESPONSE ---
+
+
+Let me understand the broader build structure for this OpenSSL component.
+
+ACTION: FIND_FILE crypto/openssl/crypto/build.info
