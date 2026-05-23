@@ -1,0 +1,42 @@
+=== STEP 24 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE tools/regression/tls/ttls1/Makefile
+OLD:
+<<<
+PROG=	ttls1
+LDFLAGS+= -L../libxx -lxx -Wl,--rpath=${.OBJDIR}/../libxx
+LDFLAGS+= -L../libyy -lyy -Wl,--rpath=${.OBJDIR}/../libyy
+MAN=
+DEBUG_FLAGS= -g
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	ttls1
+LDFLAGS+= -L../libxx -lxx -Wl,--rpath=${.OBJDIR}/../libxx
+LDFLAGS+= -L../libyy -lyy -Wl,--rpath=${.OBJDIR}/../libyy
+MAN=
+DEBUG_FLAGS= -g
+
+RUSTPROG=	ttls1
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} \
+	    ${CARGOFLAGS}
+	${INSTALL} -s ${CARGO_TARGET_DIR}/debug/ttls1 \
+	    ${DESTDIR}${PREFIX}/bin/ttls1
+
+.include <bsd.prog.mk>
+
+all: rust-build
+>>>

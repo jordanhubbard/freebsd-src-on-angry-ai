@@ -1,0 +1,30 @@
+=== STEP 37 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: OLD text not found in /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls1/Makefile
+Closest match found in file (copy this EXACT block for OLD):
+<<<
+LDFLAGS+= -L../libxx -lxx -Wl,--rpath=${.OBJDIR}/../libxx
+LDFLAGS+= -L../libyy -lyy -Wl,--rpath=${.OBJDIR}/../libyy
+MAN=
+DEBUG_FLAGS= -g
+
+RUSTPROG=	ttls1
+
+.cargo:
+	@cargo build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	@${TOUCH} ${.TARGET}
+
+${RUSTPROG}: .cargo
+	@cp ${CARGO_TARGET_DIR}/release/${RUSTPROG} ${.TARGET}
+>>>
+
+HINT: The OLD block must be EXACTLY copied from the file.
+Re-read the file and copy the exact text you want to replace,
+including all whitespace and indentation. Do not paraphrase.
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE tools/regression/tls/ttls1/Makefile

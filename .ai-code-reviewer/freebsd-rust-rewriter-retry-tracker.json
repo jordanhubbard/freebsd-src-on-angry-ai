@@ -136,8 +136,8 @@
     "last_attempt": "2026-05-22T19:37:35.699854"
   },
   "crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd": {
-    "attempts": 1,
-    "last_attempt": "2026-05-23T07:28:50.262836"
+    "attempts": 2,
+    "last_attempt": "2026-05-23T09:45:16.363063"
   },
   "crypto/openssl/crypto/kdf": {
     "attempts": 2,
@@ -168,8 +168,8 @@
     "last_attempt": "2026-05-22T20:01:23.115564"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24": {
-    "attempts": 2,
-    "last_attempt": "2026-05-23T08:00:25.383996"
+    "attempts": 3,
+    "last_attempt": "2026-05-23T10:01:32.971754"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_stream/salsa2012": {
     "attempts": 1,
@@ -184,8 +184,8 @@
     "last_attempt": "2026-05-22T16:49:40.321088"
   },
   "tools/regression/tls/ttls1": {
-    "attempts": 2,
-    "last_attempt": "2026-05-23T07:22:13.884358"
+    "attempts": 3,
+    "last_attempt": "2026-05-23T08:16:37.282405"
   },
   "usr.bin/apply": {
     "attempts": 3,

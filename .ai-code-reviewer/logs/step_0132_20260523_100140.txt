@@ -1,0 +1,28 @@
+=== STEP 132 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24/shorthash_siphash24.c:
+PROGRESS:
+📁 Directory: sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24
+   Files: 0/2
+📄 File: sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24/shorthash_siphash24.c
+
+```
+#include "crypto_shorthash_siphash24.h"
+
+size_t
+crypto_shorthash_siphash24_bytes(void) {
+    return crypto_shorthash_siphash24_BYTES;
+}
+
+size_t
+crypto_shorthash_siphash24_keybytes(void) {
+    return crypto_shorthash_siphash24_KEYBYTES;
+}
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24/shorthash_siphashx24.c

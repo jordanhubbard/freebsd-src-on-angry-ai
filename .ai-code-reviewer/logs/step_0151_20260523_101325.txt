@@ -1,0 +1,47 @@
+=== STEP 151 ===
+
+--- REQUEST ---
+No valid ACTION found in your response.
+
+
+Correct format:
+ACTION: EDIT_FILE src/example.c
+OLD:
+<<<
+exact text
+>>>
+NEW:
+<<<
+new text
+>>>
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24/src/lib.rs
+CONTENT:
+#![no_std]
+
+// crypto_shorthash_siphash24_BYTES = 8U
+#[no_mangle]
+pub extern "C" fn crypto_shorthash_siphash24_bytes() -> usize {
+    8
+}
+
+// crypto_shorthash_siphash24_KEYBYTES = 16U
+#[no_mangle]
+pub extern "C" fn crypto_shorthash_siphash24_keybytes() -> usize {
+    16
+}
+
+// crypto_shorthash_siphashx24_BYTES = 16U
+#[no_mangle]
+pub extern "C" fn crypto_shorthash_siphashx24_bytes() -> usize {
+    16
+}
+
+// crypto_shorthash_siphashx24_KEYBYTES = 16U
+#[no_mangle]
+pub extern "C" fn crypto_shorthash_siphashx24_keybytes() -> usize {
+    16
+}

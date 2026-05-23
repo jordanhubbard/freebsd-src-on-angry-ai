@@ -1,0 +1,21 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls:
+```
+Makefile
+Makefile.inc
+libxx
+libyy
+ttls1
+ttls2
+ttls3
+ttls4
+```
+
+--- RESPONSE ---
+
+
+Let me understand the libraries this depends on.
+
+ACTION: LIST_DIR tools/regression/tls/libxx

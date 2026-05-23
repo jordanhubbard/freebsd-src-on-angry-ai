@@ -1,0 +1,26 @@
+=== STEP 139 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24
+Pending source/build changes: 2 files modified
+Files: lib/libssp_nonshared/Cargo.toml, lib/libssp_nonshared/src/lib.rs
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: usr.bin/hostname
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+This is a kernel-adjacent contrib library without a standalone Makefile. These files are tiny stubs that just return constants. This is not a good candidate for a standalone Rust rewrite. Let me try to build to clear the state.
+
+ACTION: BUILD

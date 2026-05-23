@@ -1,0 +1,14 @@
+=== STEP 41 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd
+
+--- RESPONSE ---
+
+
+I need to move to a different unit since this one has infrastructure-level build issues. Let me try the suggested unit.
+
+ACTION: SET_SCOPE crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd

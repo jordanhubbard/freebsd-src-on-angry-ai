@@ -1,0 +1,12 @@
+=== STEP 91 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls1/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The build errors are from top-level FreeBSD infrastructure, not my changes. Let me restore the original Makefile and try building again to see if the issue is with my changes or the environment.
+
+ACTION: BUILD

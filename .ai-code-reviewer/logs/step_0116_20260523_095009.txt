@@ -1,0 +1,9 @@
+=== STEP 116 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/krb5/src/plugins/kdb/db2/libdb2/test/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR crypto/krb5/src/plugins/kdb/db2/libdb2

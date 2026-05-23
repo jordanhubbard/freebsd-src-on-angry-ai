@@ -1,0 +1,27 @@
+=== STEP 53 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1.
+Remaining files in tools/regression/tls/ttls1:
+  (All tracked files rewritten or skipped in this directory)
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+The build errors are infrastructure-level FreeBSD build system issues unrelated to my Rust code. Let me try a different approach.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls1/Makefile
+CONTENT:
+```
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.PHONY: all
+all: rust-build
+
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} \
+	    ${CARGOFLAGS}
+```

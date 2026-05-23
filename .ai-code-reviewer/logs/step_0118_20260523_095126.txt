@@ -1,0 +1,143 @@
+=== STEP 118 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/plugins/kdb/db2/libdb2/test:
+```
+Makefile.in
+README
+SEQ_TEST
+btree.tests
+dbtest.c
+deps
+dictionary
+hash1.tests
+hash2.tests
+run.test
+t.be.txt
+t.le.txt
+```
+
+--- RESPONSE ---
+
+
+The build is failing with 0 errors and 0 warnings, which suggests the build system isn't finding anything to build in this scope. This is a deeply nested test directory without its own Makefile. Let me try to make the Rust code compile standalone first.
+
+ACTION: WRITE_FILE crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/src/main.rs
+CONTENT:
+use std::env;
+use std::process;
+
+// FreeBSD random() PRNG implementation (type 3, 32-state)
+// This matches the behavior of libc's srandom()/random()
+struct RandomState {
+    state: [i32; 32],
+    fptr: usize,
+    rptr: usize,
+    end_ptr: usize,
+    max_type: usize,
+    count: i32,
+}
+
+impl RandomState {
+    fn new() -> Self {
+        RandomState {
+            state: [0i32; 32],
+            fptr: 0,
+            rptr: 0,
+            end_ptr: 0,
+            max_type: 0,
+            count: 0,
+        }
+    }
+
+    fn seed(&mut self, seed: u32) {
+        let mut val = seed as i32;
+        self.state[0] = val;
+        for i in 1..32 {
+            self.state[i] = 16807 * self.state[i - 1];
+        }
+        self.fptr = 31;
+        self.rptr = 0;
+        self.end_ptr = self.state.len();
+        self.max_type = self.state.len();
+        self.count = self.max_type - 1;
+    }
+
+    fn next(&mut self) -> i64 {
+        let mut val: i32;
+        let fptr = self.fptr;
+        let rptr = self.rptr;
+
+        if self.fptr >= self.end_ptr {
+            self.fptr = 1;
+            self.rptr = 0;
+        } else if self.rptr == 0 {
+            self.rptr = 1;
+            self.fptr += 1;
+        } else {
+            self.fptr += 1;
+            self.rptr += 1;
+        }
+
+        val = self.state[self.fptr] + self.state[self.rptr];
+        if val < 0 {
+            val += 2147483647;
+        }
+        self.state[self.fptr] = val;
+        self.count -= 1;
+        if self.count <= 0 {
+            self.seed(1);
+            self.count = self.max_type - 1;
+        }
+        val as i64
+    }
+}
+
+static mut GLOBAL_RNG: Option<RandomState> = None;
+
+fn init_rng() -> &'static mut RandomState {
+    unsafe {
+        if GLOBAL_RNG.is_none() {
+            GLOBAL_RNG = Some(RandomState::new());
+        }
+        GLOBAL_RNG.as_mut().unwrap()
+    }
+}
+
+fn srandom(seed: u32) {
+    let rng = init_rng();
+    rng.seed(seed);
+}
+
+fn random() -> i64 {
+    let rng = init_rng();
+    rng.next()
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        eprintln!("Usage: genpass <count>");
+        process::exit(1);
+    }
+
+    let n: usize = match args[1].parse() {
+        Ok(v) => v,
+        Err(_) => {
+            eprintln!("Invalid count: {}", args[1]);
+            process::exit(1);
+        }
+    };
+
+    srandom(101173);
+    for _ in 0..n {
+        for _ in 0..8 {
+            let mut r = (random() % 122) as i32;
+            while r < 48 {
+                r += (random() % (122 - r as i64)) as i32;
+            }
+            print!("{}", r as u8 as char);
+        }
+        println!();
+    }
+}

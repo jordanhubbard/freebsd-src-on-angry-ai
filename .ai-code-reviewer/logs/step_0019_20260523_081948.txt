@@ -1,0 +1,35 @@
+=== STEP 19 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls1/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source file. Let me create the src directory and main.rs.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls1/src/main.rs
+CONTENT:
+extern "C" {
+    static xx1: i32;
+    static xx2: i32;
+    static xxa: [i32; 10];
+    fn xxyy() -> i32;
+}
+
+#[thread_local]
+static A: [i32; 10] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+fn main() {
+    unsafe {
+        let val = std::ffi::c_std::printf(
+            b"xx1=%d, xx2=%d, xxa[5]=%d, a[5]=%d, xxyy()=%d\n\0" as *const u8 as *const _,
+            xx1,
+            xx2,
+            xxa[5],
+            A[5],
+            xxyy(),
+        );
+    }
+}

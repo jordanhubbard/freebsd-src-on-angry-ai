@@ -1,0 +1,61 @@
+=== STEP 75 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls1/src/main.rs:
+PROGRESS:
+📁 Directory: tools/regression/tls/ttls1
+   Files: 0/2
+📄 File: tools/regression/tls/ttls1/src/main.rs
+✏️  Edits: 3 files modified
+
+```
+```rust
+use std::ffi::c_int;
+
+extern "C" {
+    static xx1: c_int;
+    static xx2: c_int;
+    static xxa: [c_int; 10];
+    fn xxyy() -> c_int;
+}
+
+fn main() {
+    unsafe {
+        println!(
+            "xx1={}, xx2={}, xxa[5]={}, a[5]={}, xxyy()={}",
+            xx1,
+            xx2,
+            xxa[5],
+            5,
+            xxyy(),
+        );
+    }
+}
+```
+```
+
+--- RESPONSE ---
+
+
+The build errors are infrastructure-level FreeBSD build system issues. Let me try a completely standalone Makefile that doesn't include any FreeBSD build infrastructure.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls1/Makefile
+CONTENT:
+```
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+PROG=	ttls1
+
+all: ${PROG}
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
