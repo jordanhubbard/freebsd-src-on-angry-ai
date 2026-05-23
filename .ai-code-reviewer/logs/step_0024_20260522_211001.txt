@@ -1,0 +1,12 @@
+=== STEP 24 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory usr.bin/ul skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/netbsd-tests/lib/semaphore/pthread
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/cksum
