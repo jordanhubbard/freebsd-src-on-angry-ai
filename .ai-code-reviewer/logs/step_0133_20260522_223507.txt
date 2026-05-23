@@ -1,0 +1,20 @@
+=== STEP 133 ===
+
+--- REQUEST ---
+LIST_DIR_ERROR: Directory not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/fold/rust
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/fold/rust/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "fold"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "fold"
+path = "src/main.rs"
+<<<

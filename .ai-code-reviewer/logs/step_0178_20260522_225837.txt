@@ -1,0 +1,219 @@
+=== STEP 178 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/fold/rust/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/fold
+   Files: 0/3
+📄 File: usr.bin/fold/rust/src/main.rs
+✏️  Edits: 3 files modified
+
+```
+// SPDX-License-Identifier: BSD-3-Clause
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Write, stdin, stdout};
+use std::process;
+
+const DEFLINEWIDTH: usize = 80;
+
+fn usage() -> ! {
+    eprintln!("usage: fold [-bs] [-w width] [file ...]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut bflag = false;
+    let mut sflag = false;
+    let mut width: Option<usize> = None;
+
+    let mut i = 1;
+    let mut prev_ch: u8 = 0;
+    while i < args.len() {
+        let arg = &args[i];
+        if !arg.starts_with('-') {
+            break;
+        }
+        let mut j = 1;
+        while j < arg.len() {
+            let ch = arg.as_bytes()[j];
+            match ch {
+                b'b' => bflag = true,
+                b's' => sflag = true,
+                b'w' => {
+                    j += 1;
+                    let wstr = &arg[j..];
+                    match wstr.parse::<usize>() {
+                        Ok(w) if w > 0 => width = Some(w),
+                        _ => usage(),
+                    }
+                    break;
+                }
+                b'0'..=b'9' => {
+                    let digit = (ch - b'0') as usize;
+                    if prev_ch >= b'0' && prev_ch <= b'9' {
+                        width = width.map(|w| w * 10 + digit);
+                    } else if width.is_none() {
+                        width = Some(digit);
+                    }
+                }
+                _ => usage(),
+            }
+            prev_ch = ch;
+            j += 1;
+        }
+        i += 1;
+    }
+
+    let width = width.unwrap_or(DEFLINEWIDTH);
+    let files: Vec<String> = args[i..].to_vec();
+
+    let mut rval = 0;
+    if files.is_empty() {
+        if let Err(_) = fold_reader(stdin().lock(), width, bflag, sflag) {
+            rval = 1;
+        }
+    } else {
+        for f in &files {
+            match File::open(f) {
+                Ok(file) => {
+                    let reader = BufReader::new(file);
+                    if let Err(_) = fold_reader(reader, width, bflag, sflag) {
+                        eprintln!("fold: {}: $!", f);
+                        rval = 1;
+                    }
+                }
+                Err(_) => {
+                    eprintln!("fold: {}: $!", f);
+                    rval = 1;
+                }
+            }
+        }
+    }
+    process::exit(rval);
+}
+
+fn fold_reader<R: BufRead>(mut reader: R, width: usize, bflag: bool, sflag: bool) -> io::Result<()> {
+    let mut buf: Vec<char> = Vec::new();
+    let mut col = 0usize;
+    let mut out = stdout().lock();
+
+    let mut byte_buf = Vec::new();
+    loop {
+        let mut b = [0u8; 1];
+        match reader.read(&mut b) {
+            Ok(0) => break,
+            Ok(_) => byte_buf.push(b[0]),
+            Err(e) if e.kind() == io::ErrorKind::Interrupted => continue,
+            Err(e) => return Err(e),
+        }
+    }
+
+    let s = String::from_utf8_lossy(&byte_buf);
+    let mut chars = s.chars().peekable();
+
+    while let Some(c) = chars.next() {
+        if c == '\n' {
+            if !buf.is_empty() {
+                write_chars(&mut out, &buf)?;
+                out.write_all(b"\n")?;
+            }
+            buf.clear();
+            col = 0;
+        } else {
+            let new_col = newpos(col, c, bflag);
+            if new_col > width && !buf.is_empty() {
+                if sflag {
+                    let space = find_last_blank(&buf);
+                    if let Some(sp) = space {
+                        let sp = sp + 1;
+                        write_chars(&mut out, &buf[..sp])?;
+                        out.write_all(b"\n")?;
+                        let rest: Vec<char> = buf[sp..].to_vec();
+                        buf = rest;
+                        col = 0;
+                        for &rc in buf.iter() {
+                            col = newpos(col, rc, bflag);
+                        }
+                    } else {
+                        write_chars(&mut out, &buf)?;
+                        out.write_all(b"\n")?;
+                        buf.clear();
+                        col = 0;
+                    }
+                } else {
+                    write_chars(&mut out, &buf)?;
+                    out.write_all(b"\n")?;
+                    buf.clear();
+                    col = 0;
+                }
+                col = newpos(col, c, bflag);
+            }
+            buf.push(c);
+            col = new_col;
+        }
+    }
+
+    if !buf.is_empty() {
+        write_chars(&mut out, &buf)?;
+    }
+
+    out.flush()?;
+    Ok(())
+}
+
+fn write_chars<W: Write>(out: &mut W, chars: &[char]) -> io::Result<()> {
+    let mut tmp = [0u8; 4];
+    for &c in chars {
+        let s = c.encode_utf8(&mut tmp);
+        out.write_all(s.as_bytes())?;
+    }
+    Ok(())
+}
+
+fn find_last_blank(chars: &[char]) -> Option<usize> {
+    for i in (0..chars.len()).rev() {
+        if chars[i].is_whitespace() {
+            return Some(i);
+        }
+    }
+    None
+}
+
+fn newpos(col: usize, ch: char, bflag: bool) -> usize {
+    if bflag {
+        col + ch.len_utf8()
+    } else {
+        match ch {
+            '\b' => col.saturating_sub(1),
+            '\r' => 0,
+            '\t' => (col + 8) & !7,
+            c => {
+                let w = char_width(c);
+                if w > 0 { col + w } else { col }
+            }
+        }
+    }
+}
+
+fn char_width(c: char) -> usize {
+    match c {
+        '\0'..='\x1f' | '\x7f' | '\x80'..='\x9f' => 0,
+        '\u{0300}'..='\u{036f}' => 0,
+        '\u{2000}'..='\u{200f}' | '\u{2028}'..='\u{202f}' | '\u{2060}'..='\u{206f}' => 0,
+        '\u{fe00}'..='\u{fe0f}' => 0,
+        '\u{fff0}'..='\u{fff8}' | '\u{ffe7}'..='\u{fffe}' | '\uffff' => 0,
+        '\u{d800}'..='\udfff' => 0,
+        '\u{2e80}'..='\u{9fff}' | '\u{ac00}'..='\u{d7af}' | '\u{f900}'..='\u{faff}' => 2,
+        _ => 1,
+    }
+}
+```
+
+--- RESPONSE ---
+
+
+The build errors are pre-existing infrastructure issues in Makefile.inc1, not caused by my changes. Let me try a different approach.
+
+ACTION: BUILD

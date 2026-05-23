@@ -1,0 +1,16 @@
+=== STEP 148 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/truncate:
+```
+Makefile
+Makefile.depend
+tests
+truncate.1
+truncate.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/truncate/src

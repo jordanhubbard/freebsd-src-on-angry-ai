@@ -1,0 +1,56 @@
+=== STEP 139 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+No bsd.rust.mk exists. I need to add explicit Makefile rules for the Rust build.
+
+ACTION: EDIT_FILE usr.bin/fold/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	fold
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	fold
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+RUSTPROG=	fold
+RUSTSRC=	rust
+
+.if exists(${RUSTSRC}/Cargo.toml)
+SRCS=
+PROG=
+RUST_TARGET=	${.OBJDIR}/${RUSTSRC}/target/release/${RUSTPROG}
+
+all: ${RUST_TARGET}
+
+${RUST_TARGET}:
+	@cargo build --manifest-path ${.CURDIR}/${RUSTSRC}/Cargo.toml \
+	    --target-dir ${.OBJDIR}/${RUSTSRC}/target --release
+	@cp ${.OBJDIR}/${RUSTSRC}/target/release/${RUSTPROG} ${.OBJDIR}/${RUSTPROG}
+
+install: ${RUST_TARGET}
+	${INSTALL_PROGRAM} ${.OBJDIR}/${RUSTPROG} ${DESTDIR}${PREFIX}/bin/${RUSTPROG}
+
+clean:
+	@rm -rf ${.OBJDIR}/${RUSTSRC}/target
+.else
+.endif
+
+.include <bsd.prog.mk>
+>>>

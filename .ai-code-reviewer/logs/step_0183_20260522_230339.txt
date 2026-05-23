@@ -1,0 +1,14 @@
+=== STEP 183 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/lldb/tools/argdumper:
+```
+argdumper.cpp
+```
+
+--- RESPONSE ---
+
+
+This is LLVM/LLDB contrib code built by LLVM's CMake system, not a FreeBSD userland unit. It has no Makefile and would require complex LLVM build integration. Let me skip this and pick a simpler FreeBSD userland unit.
+
+ACTION: SET_SCOPE bin/cat/tests

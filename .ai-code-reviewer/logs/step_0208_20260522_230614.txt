@@ -1,0 +1,12 @@
+=== STEP 208 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory usr.bin/printf skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/llvm-project/clang/lib/DirectoryWatcher/default
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE contrib/file/python/file_magic

@@ -1,0 +1,16 @@
+=== STEP 181 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/lldb/tools/argdumper:
+```
+argdumper.cpp
+```
+
+--- RESPONSE ---
+
+
+This is LLVM contrib code, not FreeBSD userland. However, I need to complete this scope to move on. Let me create a minimal Rust replacement for this simple tool.
+
+The C++ code takes command-line arguments and outputs them as JSON. I can do this with just the standard library.
+
+ACTION: WRITE_FILE contrib/llvm-project/lldb/tools/argdumper/rust/Cargo.toml

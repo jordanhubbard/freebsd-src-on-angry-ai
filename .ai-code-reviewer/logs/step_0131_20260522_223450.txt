@@ -1,0 +1,324 @@
+=== STEP 131 ===
+
+--- REQUEST ---
+
+⚠️  INCOMPLETE RESPONSE DETECTED
+
+Problem: Mismatched <<< >>> delimiters (incomplete EDIT_FILE)
+Response length: 169 chars
+Last 100 chars: ...ge]
+name = "fold"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "fold"
+path = "src/main.rs"
+<<<
+
+Your response appears to have been cut off before completion.
+Please provide a COMPLETE response including:
+1. Your analysis
+2. A SINGLE, COMPLETE ACTION directive
+3. For EDIT_FILE: both complete OLD and NEW blocks
+
+If you're working with a large file causing timeouts:
+- Focus on ONE specific issue at a time
+- Use smaller OLD/NEW blocks
+- Consider SKIP_FILE if the file is too complex
+
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/fold/rust/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+// Rust replacement for FreeBSD usr.bin/fold
+
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Write, stdout};
+use std::process;
+
+const DEFLINEWIDTH: usize = 80;
+
+fn usage() -> ! {
+    eprintln!("usage: fold [-bs] [-w width] [file ...]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut bflag = false;
+    let mut sflag = false;
+    let mut width: Option<usize> = None;
+
+    let mut i = 1;
+    let mut previous_ch: u8 = 0;
+    while i < args.len() {
+        let arg = &args[i];
+        if !arg.starts_with('-') {
+            break;
+        }
+        let mut j = 1; // skip leading '-'
+        while j < arg.len() {
+            let ch = arg.as_bytes()[j];
+            match ch {
+                b'b' => bflag = true,
+                b's' => sflag = true,
+                b'w' => {
+                    j += 1;
+                    let wstr = &arg[j..];
+                    match wstr.parse::<usize>() {
+                        Ok(w) if w > 0 => width = Some(w),
+                        _ => usage(),
+                    }
+                    break;
+                }
+                b'0'..=b'9' => {
+                    let digit = (ch - b'0') as usize;
+                    if width.is_none() {
+                        // Check if previous was also a digit (multi-digit number)
+                        if previous_ch >= b'0' && previous_ch <= b'9' {
+                            width = width.map(|w| w * 10 + digit);
+                        } else {
+                            width = Some(digit);
+                        }
+                    } else {
+                        width = width.map(|w| w * 10 + digit);
+                    }
+                }
+                _ => usage(),
+            }
+            previous_ch = ch;
+            j += 1;
+        }
+        i += 1;
+    }
+
+    let width = width.unwrap_or(DEFLINEWIDTH);
+    let files: Vec<String> = args[i..].to_vec();
+
+    let mut rval = 0;
+    if files.is_empty() {
+        if let Err(_) = fold_stdin(width, bflag, sflag) {
+            rval = 1;
+        }
+    } else {
+        for f in &files {
+            match File::open(f) {
+                Ok(file) => {
+                    let reader = BufReader::new(file);
+                    if let Err(_) = fold_reader(reader, width, bflag, sflag) {
+                        eprintln!("fold: {}: $!", f);
+                        rval = 1;
+                    }
+                }
+                Err(_) => {
+                    eprintln!("fold: {}: $!", f);
+                    rval = 1;
+                }
+            }
+        }
+    }
+    process::exit(rval);
+}
+
+fn fold_stdin(width: usize, bflag: bool, sflag: bool) -> io::Result<()> {
+    let stdin = io::stdin();
+    fold_reader(stdin.lock(), width, bflag, sflag)
+}
+
+fn fold_reader<R: BufRead>(mut reader: R, width: usize, bflag: bool, sflag: bool) -> io::Result<()> {
+    let mut buf = Vec::new();
+    let mut col = 0usize;
+    let mut out = stdout().lock();
+
+    loop {
+        let ch = read_char(&mut reader)?;
+        match ch {
+            Some('\n') => {
+                if !buf.is_empty() {
+                    write_str(&mut out, &buf)?;
+                    out.write_all(b"\n")?;
+                }
+                buf.clear();
+                col = 0;
+            }
+            Some(c) => {
+                let new_col = newpos(col, c, bflag);
+                if new_col > width && !buf.is_empty() {
+                    if sflag {
+                        // Find last blank in buf
+                        let space = find_last_blank(&buf);
+                        if let Some(sp) = space {
+                            let sp = sp + 1;
+                            write_str(&mut out, &buf[..sp])?;
+                            out.write_all(b"\n")?;
+                            let rest: Vec<char> = buf[sp..].to_vec();
+                            buf = rest;
+                            col = 0;
+                            for &rc in buf.iter() {
+                                col = newpos(col, rc, bflag);
+                            }
+                        } else {
+                            write_str(&mut out, &buf)?;
+                            out.write_all(b"\n")?;
+                            buf.clear();
+                            col = 0;
+                        }
+                    } else {
+                        write_str(&mut out, &buf)?;
+                        out.write_all(b"\n")?;
+                        buf.clear();
+                        col = 0;
+                    }
+                    col = newpos(col, c, bflag);
+                }
+                buf.push(c);
+                col = new_col;
+            }
+            None => break,
+        }
+    }
+
+    if !buf.is_empty() {
+        write_str(&mut out, &buf)?;
+    }
+
+    out.flush()?;
+    Ok(())
+}
+
+fn read_char<R: BufRead>(reader: &mut R) -> io::Result<Option<char>> {
+    let mut buf = [0u8; 4];
+    let mut total = 0u8;
+    loop {
+        match reader.read(&mut buf[total as usize..]) {
+            Ok(0) => {
+                if total == 0 {
+                    return Ok(None);
+                }
+                break;
+            }
+            Ok(n) => {
+                total += n as u8;
+                if total >= 1 {
+                    break;
+                }
+            }
+            Err(e) if e.kind() == io::ErrorKind::Interrupted => continue,
+            Err(e) => return Err(e),
+        }
+    }
+    let s = std::str::from_utf8(&buf[..total as usize])
+        .unwrap_or("?");
+    Ok(s.chars().next())
+}
+
+fn write_str<W: Write>(out: &mut W, chars: &[char]) -> io::Result<()> {
+    for &c in chars {
+        out.write_all(c.encode_utf8(&mut [0; 4]).as_bytes())?;
+    }
+    Ok(())
+}
+
+fn find_last_blank(chars: &[char]) -> Option<usize> {
+    for i in (0..chars.len()).rev() {
+        if chars[i].is_whitespace() {
+            return Some(i);
+        }
+    }
+    None
+}
+
+fn newpos(col: usize, ch: char, bflag: bool) -> usize {
+    if bflag {
+        col + ch.len_utf8()
+    } else {
+        match ch {
+            '\b' => col.saturating_sub(1),
+            '\r' => 0,
+            '\t' => (col + 8) & !7,
+            c => {
+                let w = char_width(c);
+                if w > 0 { col + w } else { col }
+            }
+        }
+    }
+}
+
+fn char_width(c: char) -> usize {
+    // Simple width estimation
+    match c {
+        '\0'..='\x1f' => 0,
+        '\x7f' => 0,
+        '\x80'..='\x9f' => 0,
+        '\u{00a0}' => 1,
+        '\u{0300}'..='\u{036f}' => 0, // combining marks
+        '\u{0600}'..='\u{06ff}' => 1,
+        '\u{0900}'..='\u{097f}' => 1,
+        '\u{0a00}'..='\u{0a7f}' => 1,
+        '\u{0f00}'..='\u{0fff}' => 1,
+        '\u{1100}'..='\u{11ff}' => 1,
+        '\u{1300}'..='\u{137f}' => 1,
+        '\u{1780}'..='\u{17ff}' => 1,
+        '\u{1800}'..='\u{18af}' => 1,
+        '\u{2000}'..='\u{200f}' => 0,
+        '\u{2028}'..='\u{202f}' => 0,
+        '\u{2060}'..='\u{206f}' => 0,
+        '\u{20a0}'..='\u{20cf}' => 1,
+        '\u{2100}'..='\u{218f}' => 1,
+        '\u{2190}'..='\u{21ff}' => 1,
+        '\u{2200}'..='\u{22ff}' => 1,
+        '\u{2300}'..='\u{23ff}' => 1,
+        '\u{2400}'..='\u{243f}' => 1,
+        '\u{2500}'..='\u{257f}' => 1,
+        '\u{2580}'..='\u{259f}' => 1,
+        '\u{25a0}'..='\u{25ff}' => 1,
+        '\u{2600}'..='\u{26ff}' => 1,
+        '\u{2700}'..='\u{27bf}' => 1,
+        '\u{27c0}'..='\u{27ef}' => 1,
+        '\u{27f0}'..='\u{27ff}' => 1,
+        '\u{2800}'..='\u{28ff}' => 1,
+        '\u{2900}'..='\u{297f}' => 1,
+        '\u{2980}'..='\u{29ff}' => 1,
+        '\u{2a00}'..='\u{2aff}' => 1,
+        '\u{2e80}'..='\u{9fff}' => 2,
+        '\u{a000}'..='\u{a48f}' => 1,
+        '\u{a490}'..='\u{a4cf}' => 1,
+        '\u{a960}'..='\u{a97f}' => 1,
+        '\u{ac00}'..='\u{d7af}' => 2,
+        '\u{d800}'..='\u{db7f}' => 0, // surrogate
+        '\u{db80}'..='\u{dbff}' => 0, // surrogate
+        '\u{dc00}'..='\u{dfff}' => 0, // surrogate
+        '\u{e000}'..='\u{f8ff}' => 1,
+        '\u{f900}'..='\u{faff}' => 2,
+        '\u{fb00}'..='\u{fb06}' => 1,
+        '\u{fb07}'..='\u{fb4f}' => 1,
+        '\u{fb50}'..='\u{fbbf}' => 1,
+        '\u{fbc0}'..='\u{fbd2}' => 1,
+        '\u{fbd3}'..='\u{fd3d}' => 1,
+        '\u{fd40}'..='\u{fd4f}' => 1,
+        '\u{fd50}'..='\u{fd8f}' => 1,
+        '\u{fd90}'..='\u{fddc}' => 1,
+        '\u{fdd5}'..='\u{fdef}' => 0,
+        '\u{fdf0}'..='\u{fdfd}' => 1,
+        '\u{fe00}'..='\u{fe0f}' => 0,
+        '\u{fe10}'..='\u{fe1f}' => 1,
+        '\u{fe20}'..='\u{fe2f}' => 1,
+        '\u{fe30}'..='\u{fe4f}' => 1,
+        '\u{fe50}'..='\u{fe6f}' => 1,
+        '\u{fe70}'..='\u{feff}' => 1,
+        '\u{ff00}'..='\u{ffef}' => 1,
+        '\u{fff0}'..='\u{fff8}' => 0,
+        '\u{fff9}'..='\u{fffd}' => 1,
+        '\u{ffe0}'..='\u{ffe6}' => 1,
+        '\u{ffe7}'..='\u{fffe}' => 0,
+        '\uffff' => 0,
+        _ => 1,
+    }
+}
+<<<

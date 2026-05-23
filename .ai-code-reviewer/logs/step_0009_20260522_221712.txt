@@ -1,0 +1,12 @@
+=== STEP 9 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Directory not found: usr.bin/y
+TIP: Use LIST_DIR to see available directories
+
+--- RESPONSE ---
+
+
+Let me find a small FreeBSD userland command to rewrite.
+
+ACTION: LIST_DIR usr.bin

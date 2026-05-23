@@ -1,0 +1,13 @@
+=== STEP 74 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/semaphore:
+```
+pthread
+sem.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE contrib/netbsd-tests/lib/semaphore/sem.c

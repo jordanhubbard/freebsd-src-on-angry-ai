@@ -1,0 +1,132 @@
+=== STEP 254 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/md5/md5.c:
+
+📋 CHUNKED FILE REWRITE MODE
+   File: /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/md5/md5.c
+   Total chunks: 17
+   Strategy: Function-by-function rewrite
+   Use ACTION: NEXT_CHUNK to continue
+   Use ACTION: SKIP_FILE to move to next file
+
+PROGRESS:
+📁 Directory: sbin/md5
+   Files: 0/3
+📄 File: sbin/md5/md5.c
+   Chunks: 1/17
+
+```
+=== CHUNK 1/17: /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/md5/md5.c === [header: file_header]
+=== Lines 1-103 (103 lines) ===
+
+/*
+ * Derived from:
+ *
+ * MDDRIVER.C - test driver for MD2, MD4 and MD5
+ */
+
+/*
+ *  Copyright (C) 1990-2, RSA Data Security, Inc. Created 1990. All
+ *  rights reserved.
+ *
+ *  RSA Data Security, Inc. makes no representations concerning either
+ *  the merchantability of this software or the suitability of this
+ *  software for any particular purpose. It is provided "as is"
+ *  without express or implied warranty of any kind.
+ *
+ *  These notices must be retained in any copies of any part of this
+ *  documentation and/or software.
+ */
+
+#include <sys/param.h>
+#include <sys/resource.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <getopt.h>
+#include <md5.h>
+#include <osreldate.h>
+#include <ripemd.h>
+#include <sha.h>
+#include <sha224.h>
+#include <sha256.h>
+#include <sha384.h>
+#include <sha512.h>
+#include <sha512t.h>
+#include <skein.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+#include <vis.h>
+
+#ifdef HAVE_CAPSICUM
+#include <sys/capsicum.h>
+#include <capsicum_helpers.h>
+#include <libcasper.h>
+#include <casper/cap_fileargs.h>
+#endif
+
+/*
+ * Length of test block, number of test blocks.
+ */
+#define TEST_BLOCK_LEN 10000
+#define TEST_BLOCK_COUNT 100000
+#define MDTESTCOUNT 8
+
+static char *progname;
+
+static bool cflag;
+static bool pflag;
+static bool qflag;
+static bool sflag;
+static bool wflag;
+static bool strict;
+static bool skip;
+static bool ignoreMissing;
+static char* checkAgainst;
+static int checksFailed;
+static bool failed;
+static int endl = '\n';
+
+typedef void (DIGEST_Init)(void *);
+typedef void (DIGEST_Update)(void *, const unsigned char *, size_t);
+typedef char *(DIGEST_End)(void *, char *);
+
+extern const char *MD5TestOutput[MDTESTCOUNT];
+extern const char *SHA1_TestOutput[MDTESTCOUNT];
+extern const char *SHA224_TestOutput[MDTESTCOUNT];
+extern const char *SHA256_TestOutput[MDTESTCOUNT];
+extern const char *SHA384_TestOutput[MDTESTCOUNT];
+extern const char *SHA512_TestOutput[MDTESTCOUNT];
+extern const char *SHA512t224_TestOutput[MDTESTCOUNT];
+extern const char *SHA512t256_TestOutput[MDTESTCOUNT];
+extern const char *RIPEMD160_TestOutput[MDTESTCOUNT];
+extern const char *SKEIN256_TestOutput[MDTESTCOUNT];
+extern const char *SKEIN512_TestOutput[MDTESTCOUNT];
+extern const char *SKEIN1024_TestOutput[MDTESTCOUNT];
+
+typedef struct Algorithm_t {
+	const char *progname;
+	const char *perlname;
+	const char *name;
+	const char *(*TestOutput)[MDTESTCOUNT];
+	DIGEST_Init *Init;
+	DIGEST_Update *Update;
+	DIGEST_End *End;
+	char *(*Data)(const void *, unsigned int, char *);
+} Algorithm_t;
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

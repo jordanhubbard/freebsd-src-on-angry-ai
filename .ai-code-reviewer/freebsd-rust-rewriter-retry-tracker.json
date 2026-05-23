@@ -115,9 +115,13 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T16:48:20.861620"
   },
-  "contrib/llvm-project/lldb/tools/argdumper": {
+  "contrib/llvm-project/clang/lib/DirectoryWatcher/default": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T22:05:08.644125"
+    "last_attempt": "2026-05-22T23:04:13.236090"
+  },
+  "contrib/llvm-project/lldb/tools/argdumper": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T22:47:34.874900"
   },
   "contrib/llvm-project/llvm/lib/Frontend/OpenACC": {
     "attempts": 2,
@@ -125,7 +129,7 @@
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
-    "last_attempt": "2026-05-22T21:53:01.061395"
+    "last_attempt": "2026-05-22T22:17:17.637990"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,
@@ -135,9 +139,13 @@
     "attempts": 2,
     "last_attempt": "2026-05-22T21:46:57.529904"
   },
-  "sys/contrib/libsodium/src/libsodium/crypto_hash": {
+  "sbin/md5": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T22:09:30.497789"
+    "last_attempt": "2026-05-22T23:06:35.707184"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_hash": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T23:09:06.271731"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha256": {
     "attempts": 3,
@@ -188,16 +196,16 @@
     "last_attempt": "2026-05-22T10:22:16.739825"
   },
   "usr.bin/env": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T20:59:32.388226"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T22:22:19.823290"
   },
   "usr.bin/false": {
     "attempts": 3,
     "last_attempt": "2026-05-21T20:49:38.897585"
   },
   "usr.bin/head": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T21:00:58.436350"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T22:24:21.579556"
   },
   "usr.bin/id": {
     "attempts": 3,
@@ -260,8 +268,8 @@
     "last_attempt": "2026-05-22T20:52:48.563756"
   },
   "usr.bin/printf": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T16:02:58.003120"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T22:23:07.340580"
   },
   "usr.bin/protect": {
     "attempts": 1,
@@ -276,16 +284,20 @@
     "last_attempt": "2026-05-22T12:55:31.529110"
   },
   "usr.bin/seq": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T20:59:52.378328"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T22:24:06.261005"
   },
   "usr.bin/tail": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T01:11:28.327863"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T22:24:40.708331"
   },
   "usr.bin/tr": {
     "attempts": 1,
     "last_attempt": "2026-05-22T20:59:47.573336"
+  },
+  "usr.bin/truncate": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T22:25:10.842756"
   },
   "usr.bin/ul": {
     "attempts": 3,

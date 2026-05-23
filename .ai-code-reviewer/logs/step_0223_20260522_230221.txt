@@ -1,0 +1,11 @@
+=== STEP 223 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/src/libsodium/include/sodium/crypto_hash.h*'
+
+--- RESPONSE ---
+
+
+This is libsodium contrib code, not FreeBSD userland. Let me find a proper FreeBSD userland unit.
+
+ACTION: SET_SCOPE usr.bin/

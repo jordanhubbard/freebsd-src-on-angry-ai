@@ -1,0 +1,70 @@
+=== STEP 150 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: usr.bin/fold
+Pending source/build changes: 3 files modified
+Files: usr.bin/fold/rust/Cargo.toml, usr.bin/fold/rust/src/main.rs, usr.bin/fold/Makefile
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in usr.bin/fold
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: usr.bin/hostname
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/fold/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	fold
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.if exists(rust/Cargo.toml)
+RUST_TARGET=	${.OBJDIR}/fold-rust
+
+all: ${RUST_TARGET}
+
+${RUST_TARGET}:
+	@cargo build --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${.OBJDIR}/rust-target --release
+
+clean:
+	@rm -rf ${.OBJDIR}/rust-target
+.endif
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	fold
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.if exists(rust/Cargo.toml)
+RUST_TARGET=	${.OBJDIR}/fold-rust
+
+${RUST_TARGET}:
+	@cargo build --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${.OBJDIR}/rust-target --release
+
+clean:
+	@rm -rf ${.OBJDIR}/rust-target
+.endif
+
+.include <bsd.prog.mk>
+>>>

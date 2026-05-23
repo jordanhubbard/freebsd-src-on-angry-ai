@@ -1,0 +1,83 @@
+=== STEP 157 ===
+
+--- REQUEST ---
+
+======================================================================
+⚠️  INFINITE LOOP WARNING (attempt 5/10) ⚠️
+======================================================================
+
+Action GREP has been repeated 5 times.
+Details: GREP
+
+You must take a DIFFERENT action to break the loop.
+Consider:
+- Moving to a different file (READ_FILE <different-file>)
+- Skipping the current file (SKIP_FILE)
+- Changing directory (SET_SCOPE <different-directory>)
+- Running a build if you have changes (BUILD)
+
+WARNING: If you repeat this action 5 more times,
+automatic recovery will be triggered.
+======================================================================
+
+
+--- RESPONSE ---
+
+
+The FreeBSD build system has no Rust infrastructure. I need to add explicit Makefile rules using `rustc` directly. Let me fix the Makefile:
+
+ACTION: EDIT_FILE usr.bin/truncate/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	truncate
+LIBADD=	util
+
+SRCS=	truncate.c
+
+RUSTPROG=	truncate
+RUSTSRC=	src/main.rs
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.if defined(WITH_RUST)
+PROG=	truncate
+SRCS=
+LIBADD=
+RUSTPROG=	truncate
+RUSTSRC=	src/main.rs
+.endif
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	truncate
+LIBADD=	util
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+
+# Rust replacement build
+RUSTC?=	rustc
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+${PROG}.rust: ${.CURDIR}/src/main.rs
+	${MKDIR} ${RUST_TARGET_DIR}
+	${RUSTC} --crate-type bin -o ${.TARGET} ${.ALLSRC} \
+	    --out-dir ${RUST_TARGET_DIR}
+
+all.rust: ${RUST_TARGET_DIR}/${PROG}
+${RUST_TARGET_DIR}/${PROG}: ${.CURDIR}/src/main.rs
+	${MKDIR} ${RUST_TARGET_DIR}
+	${RUSTC} --crate-type bin -o ${.TARGET} ${.ALLSRC}
+
+clean.rust:
+	${RM} -rf ${RUST_TARGET_DIR}
+>>>

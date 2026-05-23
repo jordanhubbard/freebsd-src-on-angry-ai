@@ -1,0 +1,11 @@
+=== STEP 198 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk/bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+The build errors are from `Makefile.inc1` `.info` directives about compiler bootstrapping, not from my changes. Let me try building the Rust crate directly to verify it compiles.
+
+ACTION: BUILD

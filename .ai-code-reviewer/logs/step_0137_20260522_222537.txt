@@ -1,0 +1,26 @@
+=== STEP 137 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/truncate/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/truncate
+   Files: 0/3
+📄 File: usr.bin/truncate/Makefile
+
+```
+.include <src.opts.mk>
+
+PROG=	truncate
+LIBADD=	util
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/truncate/truncate.1
