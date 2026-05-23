@@ -1,0 +1,11 @@
+=== STEP 65 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Let me search the rewrite index for the mktemp entry to understand how it's marked.
+
+ACTION: GREP mktemp

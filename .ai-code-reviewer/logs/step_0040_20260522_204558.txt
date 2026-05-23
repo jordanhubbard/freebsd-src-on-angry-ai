@@ -1,0 +1,64 @@
+=== STEP 40 ===
+
+--- REQUEST ---
+GREP_RESULT for 'mktemp':
+```
+./tests/sys/file/path_test.c:621:	ATF_REQUIRE_MSG(mktemp(path) == path, FMT_ERR("mktemp"));
+./tests/sys/file/path_test.c:639:	ATF_REQUIRE_MSG(mktemp(path) == path, FMT_ERR("mktemp"));
+./tests/sys/file/path_test.c:689:	ATF_REQUIRE_MSG(mktemp(path) == path, FMT_ERR("mktemp"));
+./tests/sys/aio/aio_test.c:1273:	mktemp(sun.sun_path);
+./tests/sys/aio/aio_test.c:1309:	mktemp(sun.sun_path);
+./sys/contrib/openzfs/lib/libzfs/libzfs_share_nfs.c:83:	 * This only needs to be as wide as ZFS_EXPORTS_FILE and mktemp suffix,
+./include/stdlib.h:209: * FreeBSD also does not have, and mktemp(), are to be deleted.
+./include/stdlib.h:225:char	*mktemp(char *);
+./include/unistd.h:553:char	*mktemp(char *);
+./sbin/restore/restore.c:180:				mktempname(ep);
+./sbin/restore/restore.c:265:			dprintf(stdout, "name/inode conflict, mktempname %s\n",
+./sbin/restore/restore.c:267:			mktempname(np);
+./sbin/restore/extern.h:66:void		 mktempname(struct entry *);
+./sbin/restore/utilities.c:80:mktempname(struct entry *ep)
+./sbin/restore/utilities.c:85:		badentry(ep, "mktempname: called with TMPNAME");
+./crypto/krb5/src/util/support/mkstemp.c:36:static char sccsid[] = "@(#)mktemp.c	8.1 (Berkeley) 6/4/93";
+./crypto/openssh/ssh_namespace.h:441:#define mktemp_proto				Fssh_mktemp_proto
+./crypto/openssh/misc.h:195:void mktemp_proto(char *, size_t);
+./crypto/openssh/openbsd-compat/mktemp.c:2:/* Changes: Removed mktemp */
+./crypto/openssh/openbsd-compat/mktemp.c:4:/*	$OpenBSD: mktemp.c,v 1.30 2010/03/21 23:09:30 schwarze Exp $ */
+./crypto/openssh/openbsd-compat/mktemp.c:22:/* OPENBSD ORIGINAL: lib/libc/stdio/mktemp.c */
+./crypto/openssh/misc.c:1910:mktemp_proto(char *s, size_t len)
+./crypto/openssh/ssh-agent.c:2470:			mktemp_proto(socket_dir, sizeof(socket_dir));
+./crypto/openssh/regress/netcat.c:328:			if (mktemp(unix_dg_tmp_socket_buf) == NULL)
+./crypto/openssh/regress/netcat.c:329:				err(1, "mktemp");
+./crypto/openssh/regress/mkdtemp.c:17:/* Roughly equivalent to "mktemp -d -t TEMPLATE", but portable. */
+./crypto/openssh/clientloop.c:337:			mktemp_proto(xauthdir, sizeof(xauthdir));
+./tools/regression/security/proc_to_proc/scenario.c:340:				tracefile = mktemp("/tmp/testuid_ktrace.XXXXXX");
+./tools/regression/security/proc_to_proc/scenario.c:343:					perror("mktemp");
+./tools/regression/sockets/zerosend/zerosend.c:214:		err(1, "%s: setup_fifo: mktemp", test);
+./contrib/sendmail/mail.local/mail.local.c:1902:static char sccsid[] = "@(#)mktemp.c	8.1 (Berkeley) 6/4/93";
+./contrib/tcpdump/lbl/os-sunos4.h:123:char	*mktemp(char *);
+./contrib/bsnmp/lib/snmpclient.c:1019:		if (mktemp(snmp_client.local_path) == NULL) {
+./contrib/bsnmp/lib/snmpclient.c:1020:			seterr(&snmp_client, "mktemp(3): %s", strerror(errno));
+./contrib/flex/src/tblcmp.c:41:void mktemplate(int[], int, int);
+./contrib/flex/src/tblcmp.c:177:					mktemplate (state, statenum,
+./contrib/flex/src/tblcmp.c:671:/* mktemplate - create a template entry based on a state, and connect the state
+./contrib/libarchive/libarchive/archive_write_set_format_7zip.c:681:		zip->temp_fd = __archive_mktemp(NULL);
+./contrib/libarchive/libarchive/archive_util.c:230: * Also Windows version of mktemp family including _mktemp_s
+./contrib/libarchive/libarchive/archive_util.c:234:__archive_mktempx(const char *tmpdir, wchar_t *template)
+./contrib/libarchive/libarchive/archive_util.c:434:__archive_mktemp(const char *tmpdir)
+./contrib/libarchive/libarchive/archive_write_disk_posix.c:359:static int	la_mktemp(struct archive_write_disk *);
+./contrib/libarchive/libarchive/archive_write_disk_posix.c:413:la_mktemp(struct archive_write_disk *a)
+./contrib/libarchive/libarchive/archive_write_disk_posix.c:2211:				if ((a->fd = la_mktemp(a)) == -1) {
+./contrib/libarchive/libarchive/archive_write_set_format_iso9660.c:1625:		iso9660->temp_fd = __archive_mktemp(NULL);
+./contrib/libarchive/libarchive/archive_private.h:162:int	__archive_mktemp(const char *tmpdir);
+./contrib/libarchive/libarchive/archive_write_set_format_xar.c:623:		xar->temp_fd = __archive_mktemp(NULL);
+./contrib/ntp/include/l_stdlib.h:93:extern	char   *mktemp		(char *);	
+./contrib/ntp/libntp/lib/isc/include/isc/file.h:69:isc_file_mktemplate(const char *path, char *buf, size_t buflen);
+./contrib/ntp/libntp/lib/isc/include/isc/file.h:123: *\li	isc_file_mktemplate is a good, portable way to get a template.
+... [44 more matches]
+```
+
+--- RESPONSE ---
+
+
+I removed mktemp from the retry tracker. Let me try setting scope again.
+
+ACTION: SET_SCOPE usr.bin/mktemp

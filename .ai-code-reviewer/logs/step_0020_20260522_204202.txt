@@ -1,0 +1,11 @@
+=== STEP 20 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'SYSTEM_COMPILER'
+
+--- RESPONSE ---
+
+
+The build errors are at the top-level `Makefile.inc1` level. Let me check what build command is being used and try to understand the build infrastructure better.
+
+ACTION: LIST_DIR .

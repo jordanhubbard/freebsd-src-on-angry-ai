@@ -1,0 +1,278 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mktemp/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me create the Rust source file.
+
+ACTION: WRITE_FILE usr.bin/mktemp/src/main.rs
+CONTENT:
+use std::env;
+use std::ffi::CString;
+use std::io::{self, Write};
+use std::os::unix::fs::OpenOptionsExt;
+use std::path::Path;
+use std::process;
+
+fn usage() -> ! {
+    let stderr = io::stderr();
+    let mut handle = stderr.lock();
+    let _ = writeln!(
+        handle,
+        "usage: mktemp [-d] [-p tmpdir] [-q] [-t prefix] [-u] template ..."
+    );
+    let _ = writeln!(
+        handle,
+        "       mktemp [-d] [-p tmpdir] [-q] [-u] -t prefix"
+    );
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut dflag = false;
+    let mut qflag = false;
+    let mut tflag = false;
+    let mut uflag = false;
+    let mut prefer_tmpdir = true;
+    let mut prefix = "mktemp";
+    let mut tmpdir: Option<String> = None;
+    let mut templates: Vec<String> = Vec::new();
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg == "-d" || arg == "--directory" {
+            dflag = true;
+        } else if arg == "-p" {
+            i += 1;
+            if i >= args.len() {
+                tmpdir = None;
+            } else {
+                let val = &args[i];
+                if val.is_empty() {
+                    tmpdir = env::var_os("TMPDIR").map(|v| v.into_string().unwrap_or_default());
+                } else {
+                    tmpdir = Some(val.clone());
+                }
+            }
+            prefer_tmpdir = false;
+        } else if arg == "--tmpdir" {
+            // --tmpdir with optional argument
+            i += 1;
+            if i < args.len() && !args[i].starts_with('-') {
+                tmpdir = Some(args[i].clone());
+            } else {
+                tmpdir = env::var_os("TMPDIR").map(|v| v.into_string().unwrap_or_default());
+            }
+            prefer_tmpdir = false;
+        } else if arg == "--tmpdir=" {
+            // --tmpdir=value form
+            tmpdir = Some(arg[9..].to_string());
+            prefer_tmpdir = false;
+        } else if arg == "-q" || arg == "--quiet" {
+            qflag = true;
+        } else if arg == "-t" {
+            i += 1;
+            if i >= args.len() {
+                usage();
+            }
+            prefix = &args[i];
+            tflag = true;
+        } else if arg == "-u" || arg == "--dry-run" {
+            uflag = true;
+        } else if arg.starts_with('-') {
+            usage();
+        } else {
+            templates.push(arg.clone());
+        }
+        i += 1;
+    }
+
+    // If no -t and no templates, imply -t tmp
+    if !tflag && templates.is_empty() {
+        tflag = true;
+        prefix = "tmp";
+        prefer_tmpdir = false;
+    }
+
+    // Determine tmpdir for -t mode
+    let mut t_tmpdir: Option<String> = None;
+    if tflag {
+        let envtmp = env::var_os("TMPDIR").map(|v| v.into_string().unwrap_or_default());
+        if prefer_tmpdir || tmpdir.is_none() {
+            t_tmpdir = envtmp;
+        } else {
+            t_tmpdir = tmpdir.clone();
+        }
+        if t_tmpdir.is_none() {
+            t_tmpdir = Some("/tmp".to_string());
+        }
+    }
+
+    let mut ret = 0;
+
+    // Process the implied -t template first
+    if tflag {
+        let td = t_tmpdir.as_ref().unwrap();
+        let template = if td.ends_with('/') {
+            format!("{}{}.XXXXXXXXXX", td, prefix)
+        } else {
+            format!("{}/{}.XXXXXXXXXX", td, prefix)
+        };
+        if let Err(e) = process_template(&template, dflag, qflag, uflag) {
+            ret = 1;
+            if !qflag {
+                let stderr = io::stderr();
+                let mut handle = stderr.lock();
+                let _ = writeln!(handle, "mktemp: {}: {}", template, e);
+            }
+        }
+    }
+
+    // Process explicit templates
+    for tmpl in &templates {
+        let full_tmpl = if !tflag {
+            if let Some(ref td) = tmpdir {
+                format!("{}/{}", td, tmpl)
+            } else {
+                tmpl.clone()
+            }
+        } else {
+            tmpl.clone()
+        };
+        if let Err(e) = process_template(&full_tmpl, dflag, qflag, uflag) {
+            ret = 1;
+            if !qflag {
+                let stderr = io::stderr();
+                let mut handle = stderr.lock();
+                let _ = writeln!(handle, "mktemp: {}: {}", full_tmpl, e);
+            }
+        }
+    }
+
+    process::exit(ret);
+}
+
+fn process_template(
+    template: &str,
+    dflag: bool,
+    qflag: bool,
+    uflag: bool,
+) -> Result<(), String> {
+    if dflag {
+        // Create directory with mkdtemp-like behavior
+        let dir_name = mkdtemp(template)?;
+        if uflag {
+            std::fs::remove_dir(&dir_name).map_err(|e| e.to_string())?;
+        }
+        println!("{}", dir_name);
+    } else {
+        // Create file with mkstemp-like behavior
+        let file_name = mkstemp(template)?;
+        if uflag {
+            std::fs::remove_file(&file_name).map_err(|e| e.to_string())?;
+        }
+        println!("{}", file_name);
+    }
+    Ok(())
+}
+
+fn mkdtemp(template: &str) -> Result<String, String> {
+    // Find the XXXXXXXX suffix
+    let bytes = template.as_bytes();
+    let suffix_start = bytes
+        .windows(10)
+        .position(|w| w == b"XXXXXXXXXX")
+        .ok_or_else(|| "template must contain XXXXXXXX".to_string())?;
+
+    let prefix = &template[..suffix_start];
+    let suffix = &template[suffix_start + 10..];
+
+    let mut attempts = 0;
+    loop {
+        if attempts >= 100 {
+            return Err("too many retries".to_string());
+        }
+        attempts += 1;
+
+        let rand_part = generate_random_string(10);
+        let name = format!("{}{}{}", prefix, rand_part, suffix);
+
+        match std::fs::create_dir(&name) {
+            Ok(()) => return Ok(name),
+            Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(e) => return Err(e.to_string()),
+        }
+    }
+}
+
+fn mkstemp(template: &str) -> Result<String, String> {
+    let bytes = template.as_bytes();
+    let suffix_start = bytes
+        .windows(10)
+        .position(|w| w == b"XXXXXXXXXX")
+        .ok_or_else(|| "template must contain XXXXXXXX".to_string())?;
+
+    let prefix = &template[..suffix_start];
+    let suffix = &template[suffix_start + 10..];
+
+    let mut attempts = 0;
+    loop {
+        if attempts >= 100 {
+            return Err("too many retries".to_string());
+        }
+        attempts += 1;
+
+        let rand_part = generate_random_string(10);
+        let name = format!("{}{}{}", prefix, rand_part, suffix);
+
+        match std::fs::OpenOptions::new()
+            .create_new(true)
+            .write(true)
+            .truncate(true)
+            .mode(0o600)
+            .open(&name)
+        {
+            Ok(_) => return Ok(name),
+            Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(e) => return Err(e.to_string()),
+        }
+    }
+}
+
+fn generate_random_string(len: usize) -> String {
+    const CHARS: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let mut result = String::with_capacity(len);
+    let mut buf = [0u8; 32];
+
+    for chunk in (0..len).steps_by(32) {
+        let remaining = std::cmp::min(32, len - chunk);
+        match getrandom(&mut buf[..remaining]) {
+            Ok(()) => {
+                for &b in &buf[..remaining] {
+                    result.push(CHARS[(b % CHARS.len() as u8) as usize] as char);
+                }
+            }
+            Err(_) => {
+                // Fallback to simple counter-based randomness
+                for i in 0..remaining {
+                    let idx = ((chunk + i) * 31 + 17) % CHARS.len();
+                    result.push(CHARS[idx as usize] as char);
+                }
+            }
+        }
+    }
+    result
+}
+
+fn getrandom(buf: &mut [u8]) -> Result<(), std::io::Error> {
+    // Use /dev/urandom for randomness
+    let mut f = std::fs::File::open("/dev/urandom")?;
+    std::io::Read::read_exact(&mut f, buf)?;
+    Ok(())
+}

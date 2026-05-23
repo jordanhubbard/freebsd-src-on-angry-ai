@@ -1,0 +1,9 @@
+=== STEP 39 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'usr.bin/mktemp'
+
+--- RESPONSE ---
+
+
+ACTION: GREP mktemp

@@ -116,12 +116,8 @@
     "last_attempt": "2026-05-22T16:48:20.861620"
   },
   "contrib/llvm-project/llvm/lib/Frontend/OpenACC": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T20:24:06.260461"
-  },
-  "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T20:24:45.364976"
+    "last_attempt": "2026-05-22T20:02:27.485796"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,
@@ -155,6 +151,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-21T23:26:14.041313"
   },
+  "usr.bin/col": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:45:36.867469"
+  },
   "usr.bin/colrm": {
     "attempts": 1,
     "last_attempt": "2026-05-22T07:03:11.300903"
@@ -168,32 +168,44 @@
     "last_attempt": "2026-05-22T10:22:16.739825"
   },
   "usr.bin/env": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T00:06:33.829160"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T20:59:32.388226"
   },
   "usr.bin/false": {
     "attempts": 3,
     "last_attempt": "2026-05-21T20:49:38.897585"
   },
   "usr.bin/head": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T01:11:10.571575"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T21:00:58.436350"
   },
   "usr.bin/id": {
-    "attempts": 1,
-    "last_attempt": "2026-05-21T23:15:10.423865"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T20:48:02.583318"
   },
   "usr.bin/jot": {
     "attempts": 1,
     "last_attempt": "2026-05-22T18:13:07.386524"
   },
+  "usr.bin/limits": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:44:51.721153"
+  },
   "usr.bin/locate/locate": {
     "attempts": 1,
     "last_attempt": "2026-05-22T00:58:28.171024"
   },
-  "usr.bin/look": {
+  "usr.bin/lock": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T20:06:09.177657"
+    "last_attempt": "2026-05-22T20:58:51.504851"
+  },
+  "usr.bin/lockf": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T20:58:32.406139"
+  },
+  "usr.bin/look": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T20:48:16.361435"
   },
   "usr.bin/mesg": {
     "attempts": 1,
@@ -204,8 +216,8 @@
     "last_attempt": "2026-05-22T02:36:41.175781"
   },
   "usr.bin/mktemp": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T20:07:22.281552"
+    "attempts": 3,
+    "last_attempt": "2026-05-22T20:10:15.732158"
   },
   "usr.bin/nice": {
     "attempts": 3,
@@ -214,6 +226,18 @@
   "usr.bin/nohup": {
     "attempts": 2,
     "last_attempt": "2026-05-22T06:46:40.217264"
+  },
+  "usr.bin/paste": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T21:00:17.682121"
+  },
+  "usr.bin/patch": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:52:37.876664"
+  },
+  "usr.bin/pr": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:52:48.563756"
   },
   "usr.bin/printf": {
     "attempts": 2,
@@ -232,20 +256,44 @@
     "last_attempt": "2026-05-22T12:55:31.529110"
   },
   "usr.bin/seq": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:06:27.390497"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T20:59:52.378328"
   },
   "usr.bin/tail": {
     "attempts": 1,
     "last_attempt": "2026-05-22T01:11:28.327863"
   },
-  "usr.bin/ul": {
+  "usr.bin/tr": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T20:02:57.536651"
+    "last_attempt": "2026-05-22T20:59:47.573336"
+  },
+  "usr.bin/ul": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T20:57:44.438301"
   },
   "usr.bin/uname": {
     "attempts": 2,
     "last_attempt": "2026-05-22T00:11:03.402137"
+  },
+  "usr.bin/uniq": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T21:00:37.814897"
+  },
+  "usr.bin/w": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:46:57.394846"
+  },
+  "usr.bin/wall": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:46:44.134669"
+  },
+  "usr.bin/who": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T20:53:29.410015"
+  },
+  "usr.bin/write": {
+    "attempts": 1,
+    "last_attempt": "2026-05-22T20:47:03.407883"
   },
   "usr.bin/yes": {
     "attempts": 3,

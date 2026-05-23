@@ -1,0 +1,30 @@
+=== STEP 49 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mktemp/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/mktemp
+   Files: 1/3
+📄 File: usr.bin/mktemp/Makefile
+✏️  Edits: 3 files modified
+
+```
+.include <src.opts.mk>
+
+PACKAGE=	runtime
+
+PROG=	mktemp
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+=	tests
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+Let me check what build infrastructure exists for Rust in FreeBSD.
+
+ACTION: FIND_FILE bsd.rust.mk
