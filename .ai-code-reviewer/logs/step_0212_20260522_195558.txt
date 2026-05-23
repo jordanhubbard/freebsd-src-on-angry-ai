@@ -1,0 +1,35 @@
+=== STEP 212 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/apply/src/main.rs
+Scope: usr.bin/apply
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/apply/Cargo.toml
+OLD:
+<<<
+[package]
+name = "apply"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "apply"
+path = "src/main.rs"
+>>>
+NEW:
+<<<
+[package]
+name = "apply"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "apply"
+path = "src/main.rs"
+
+[dependencies]
+>>>
