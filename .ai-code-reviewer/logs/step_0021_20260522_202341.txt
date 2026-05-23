@@ -1,0 +1,27 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mktemp/Cargo.toml:
+PROGRESS:
+📁 Directory: usr.bin/mktemp
+   Files: 0/3
+📄 File: usr.bin/mktemp/Cargo.toml
+✏️  Edits: 3 files modified
+
+```
+[package]
+name = "mktemp"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "mktemp"
+path = "src/main.rs"
+```
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level `Makefile.inc1` (libclang bootstrapping), not from my unit. Let me try building again - this may be a transient build system issue.
+
+ACTION: BUILD

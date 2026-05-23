@@ -116,8 +116,12 @@
     "last_attempt": "2026-05-22T16:48:20.861620"
   },
   "contrib/llvm-project/llvm/lib/Frontend/OpenACC": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T20:24:06.260461"
+  },
+  "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T20:02:27.485796"
+    "last_attempt": "2026-05-22T20:24:45.364976"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,

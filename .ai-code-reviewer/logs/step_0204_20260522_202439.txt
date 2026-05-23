@@ -1,0 +1,36 @@
+=== STEP 204 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Frontend/OpenACC/ACC.cpp:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Frontend/OpenACC
+   Files: 0/1
+📄 File: contrib/llvm-project/llvm/lib/Frontend/OpenACC/ACC.cpp
+
+```
+//===- ACC.cpp ------ Collection of helpers for OpenACC -------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#include "llvm/Frontend/OpenACC/ACC.h.inc"
+
+#include "llvm/ADT/StringSwitch.h"
+
+using namespace llvm;
+using namespace acc;
+
+#define GEN_DIRECTIVES_IMPL
+#include "llvm/Frontend/OpenACC/ACC.inc"
+
+```
+
+--- RESPONSE ---
+
+
+This is LLVM OpenACC frontend code, not FreeBSD userland. It's a tiny generated-code wrapper with no Makefile, deeply tied to LLVM's build system. Not relevant to the FreeBSD userland rewrite objective.
+
+ACTION: SET_SCOPE usr.bin/apply
