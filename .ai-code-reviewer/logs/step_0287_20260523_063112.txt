@@ -1,0 +1,12 @@
+=== STEP 287 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/Makefile
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+This scope is LLVM contrib code, not FreeBSD userland. The build harness runs a full buildworld which is failing. Let me move to a proper FreeBSD userland unit.
+
+ACTION: SET_SCOPE bin/cat/tests

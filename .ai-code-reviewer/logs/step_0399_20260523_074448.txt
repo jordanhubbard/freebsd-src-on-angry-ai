@@ -1,0 +1,11 @@
+=== STEP 399 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/Makefile*'
+
+--- RESPONSE ---
+
+
+The current scope `sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24` is a vendor/imported directory with no Makefile. The build errors come from the top-level Makefile.inc1 requiring TARGET/TARGET_ARCH. Let me check the parent build structure.
+
+ACTION: FIND_FILE sys/contrib/libsodium

@@ -1,0 +1,21 @@
+=== STEP 196 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/default:
+```
+Cargo.toml
+DirectoryWatcher-not-implemented.cpp
+```
+
+--- RESPONSE ---
+
+
+The Cargo.toml was created by a previous attempt. This is LLVM contrib code, not FreeBSD userland. Let me remove the spurious Cargo.toml and move on.
+
+ACTION: EDIT_FILE contrib/llvm-project/clang/lib/DirectoryWatcher/default/Cargo.toml
+OLD:
+<<<
+>>>
+NEW:
+<<<
+>>>

@@ -1,0 +1,17 @@
+=== STEP 262 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/default:
+```
+Cargo.toml
+DirectoryWatcher-not-implemented.cpp
+rust
+src
+```
+
+--- RESPONSE ---
+
+
+Let me understand what's already in this scope and what the build situation is.
+
+ACTION: READ_FILE contrib/llvm-project/clang/lib/DirectoryWatcher/default/Cargo.toml

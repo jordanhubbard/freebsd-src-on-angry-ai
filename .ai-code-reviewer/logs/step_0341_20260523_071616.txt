@@ -1,0 +1,12 @@
+=== STEP 341 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20/ref2:
+```
+core_hsalsa20_ref2.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20.h

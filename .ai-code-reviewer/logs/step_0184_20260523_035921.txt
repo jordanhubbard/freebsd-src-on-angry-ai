@@ -1,0 +1,36 @@
+=== STEP 184 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_hash/Makefile:
+PROGRESS:
+📁 Directory: sys/contrib/libsodium/src/libsodium/crypto_hash
+   Files: 0/1
+📄 File: sys/contrib/libsodium/src/libsodium/crypto_hash/Makefile
+
+```
+# Standalone Makefile for Rust crypto_hash replacement
+
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+all: libcrypto_hash.a
+
+libcrypto_hash.a:
+	@echo "Building Rust crypto_hash replacement..."
+	${CARGO} build --release --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+	cp ${CARGO_TARGET_DIR}/release/libcrypto_hash.a ${.CURDIR}/libcrypto_hash.a
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+	rm -f ${.CURDIR}/libcrypto_hash.a
+
+.PHONY: all clean
+```
+
+--- RESPONSE ---
+
+
+Let me check what the configured build command actually is for this unit.
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_hash/rust/Cargo.toml

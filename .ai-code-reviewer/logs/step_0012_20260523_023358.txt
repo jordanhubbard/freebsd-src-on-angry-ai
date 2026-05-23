@@ -1,0 +1,19 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/lldb/tools:
+```
+argdumper
+compact-unwind
+driver
+lldb-instr
+lldb-rpc
+lldb-server
+```
+
+--- RESPONSE ---
+
+
+Let me create a proper Rust replacement for this simple argdumper tool. First, I'll create the Cargo.toml and source.
+
+ACTION: WRITE_FILE contrib/llvm-project/lldb/tools/argdumper/Cargo.toml

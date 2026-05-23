@@ -1,0 +1,54 @@
+=== STEP 346 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20/lib.rs
+CONTENT:
+<<<
+//! Rust replacement for crypto_core_hsalsa20 constant-returning functions.
+//!
+//! Provides C ABI compatible entry points matching the original libsodium
+//! `core_hsalsa20.c` implementation. The actual cryptographic core function
+//! `crypto_core_hsalsa20` is implemented in the ref2 subdirectory and linked
+//! separately; this crate only replaces the constant-returning accessor
+//! functions.
+
+#![no_std]
+
+/// crypto_core_hsalsa20_OUTPUTBYTES = 32
+const OUTPUTBYTES: usize = 32;
+
+/// crypto_core_hsalsa20_INPUTBYTES = 16
+const INPUTBYTES: usize = 16;
+
+/// crypto_core_hsalsa20_KEYBYTES = 32
+const KEYBYTES: usize = 32;
+
+/// crypto_core_hsalsa20_CONSTBYTES = 16
+const CONSTBYTES: usize = 16;
+
+#[no_mangle]
+pub extern "C" fn crypto_core_hsalsa20_outputbytes() -> usize {
+    OUTPUTBYTES
+}
+
+#[no_mangle]
+pub extern "C" fn crypto_core_hsalsa20_inputbytes() -> usize {
+    INPUTBYTES
+}
+
+#[no_mangle]
+pub extern "C" fn crypto_core_hsalsa20_keybytes() -> usize {
+    KEYBYTES
+}
+
+#[no_mangle]
+pub extern "C" fn crypto_core_hsalsa20_constbytes() -> usize {
+    CONSTBYTES
+}
+>>>

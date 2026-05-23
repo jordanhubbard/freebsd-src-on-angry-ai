@@ -1,0 +1,27 @@
+=== STEP 307 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: OLD text not found in /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/default/Makefile
+Closest match found in file (copy this EXACT block for OLD):
+<<<
+rust-build:
+	@echo "Building Rust DirectoryWatcher stub..."
+	${CARGO} build --release --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+all: rust-build
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>
+
+HINT: The OLD block must be EXACTLY copied from the file.
+Re-read the file and copy the exact text you want to replace,
+including all whitespace and indentation. Do not paraphrase.
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE contrib/llvm-project/clang/lib/DirectoryWatcher/default/Makefile

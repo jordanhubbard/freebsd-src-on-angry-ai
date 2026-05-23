@@ -1,0 +1,33 @@
+=== STEP 323 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20/Makefile
+OLD:
+<<<
+RUST_TARGET_DIR?=	${.OBJDIR}/rust-target
+
+all:
+	cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR}
+>>>
+NEW:
+<<<
+CARGO?=		cargo
+RUST_TARGET_DIR?=	${.OBJDIR}/rust-target
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust crypto_core_hsalsa20..."
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR}
+
+clean:
+	rm -rf ${RUST_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>

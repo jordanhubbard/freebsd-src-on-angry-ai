@@ -116,12 +116,12 @@
     "last_attempt": "2026-05-22T16:48:20.861620"
   },
   "contrib/llvm-project/clang/lib/DirectoryWatcher/default": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T23:48:40.942336"
+    "attempts": 3,
+    "last_attempt": "2026-05-23T05:12:11.840100"
   },
   "contrib/llvm-project/lldb/tools/argdumper": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T22:47:34.874900"
+    "attempts": 3,
+    "last_attempt": "2026-05-23T02:28:48.009957"
   },
   "contrib/llvm-project/llvm/lib/Frontend/OpenACC": {
     "attempts": 2,
@@ -135,21 +135,29 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T19:37:35.699854"
   },
+  "crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd": {
+    "attempts": 1,
+    "last_attempt": "2026-05-23T07:28:50.262836"
+  },
   "crypto/openssl/crypto/kdf": {
     "attempts": 2,
     "last_attempt": "2026-05-22T21:46:57.529904"
+  },
+  "lib/libssp_nonshared": {
+    "attempts": 1,
+    "last_attempt": "2026-05-23T07:53:33.098028"
   },
   "sbin/md5": {
     "attempts": 1,
     "last_attempt": "2026-05-22T23:06:35.707184"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20": {
-    "attempts": 2,
-    "last_attempt": "2026-05-23T01:35:09.710831"
+    "attempts": 3,
+    "last_attempt": "2026-05-23T07:15:26.124832"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T23:09:06.271731"
+    "attempts": 3,
+    "last_attempt": "2026-05-23T02:56:35.143843"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha256": {
     "attempts": 3,
@@ -158,6 +166,14 @@
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha512": {
     "attempts": 3,
     "last_attempt": "2026-05-22T20:01:23.115564"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24": {
+    "attempts": 2,
+    "last_attempt": "2026-05-23T08:00:25.383996"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_stream/salsa2012": {
+    "attempts": 1,
+    "last_attempt": "2026-05-23T08:01:15.115914"
   },
   "tools/regression/tls/libxx": {
     "attempts": 1,
@@ -168,8 +184,8 @@
     "last_attempt": "2026-05-22T16:49:40.321088"
   },
   "tools/regression/tls/ttls1": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T23:56:03.031029"
+    "attempts": 2,
+    "last_attempt": "2026-05-23T07:22:13.884358"
   },
   "usr.bin/apply": {
     "attempts": 3,
@@ -188,8 +204,8 @@
     "last_attempt": "2026-05-21T23:26:14.041313"
   },
   "usr.bin/col": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:45:36.867469"
+    "attempts": 2,
+    "last_attempt": "2026-05-23T08:06:12.217183"
   },
   "usr.bin/colrm": {
     "attempts": 1,
@@ -210,6 +226,14 @@
   "usr.bin/false": {
     "attempts": 3,
     "last_attempt": "2026-05-21T20:49:38.897585"
+  },
+  "usr.bin/fmt": {
+    "attempts": 1,
+    "last_attempt": "2026-05-23T08:06:34.915047"
+  },
+  "usr.bin/fold": {
+    "attempts": 1,
+    "last_attempt": "2026-05-23T08:06:44.780660"
   },
   "usr.bin/head": {
     "attempts": 3,
@@ -318,6 +342,10 @@
   "usr.bin/uniq": {
     "attempts": 1,
     "last_attempt": "2026-05-22T21:00:37.814897"
+  },
+  "usr.bin/units": {
+    "attempts": 1,
+    "last_attempt": "2026-05-23T08:04:51.114103"
   },
   "usr.bin/w": {
     "attempts": 1,

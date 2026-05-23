@@ -1,0 +1,11 @@
+=== STEP 398 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/src/Makefile*'
+
+--- RESPONSE ---
+
+
+This is a `sys/contrib/` directory with no Makefile - it's a vendor/imported subtree. The build errors come from the top-level Makefile.inc1 requiring TARGET/TARGET_ARCH. This unit has no Makefile and is part of the kernel/crypto build infrastructure. Let me check if there's a parent Makefile that builds this.
+
+ACTION: FIND_FILE sys/contrib/libsodium/Makefile

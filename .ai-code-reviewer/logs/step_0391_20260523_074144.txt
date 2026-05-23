@@ -1,0 +1,14 @@
+=== STEP 391 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24/ref:
+```
+shorthash_siphash24_ref.c
+shorthash_siphash_ref.h
+shorthash_siphashx24_ref.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE sys/contrib/libsodium/src/libsodium/Makefile

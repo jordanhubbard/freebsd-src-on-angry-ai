@@ -1,0 +1,74 @@
+=== STEP 367 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/Makefile:
+PROGRESS:
+📁 Directory: lib/libssp_nonshared
+   Files: 0/2
+📄 File: usr.bin/basename/Makefile
+✏️  Edits: 3 files modified
+
+```
+.include <src.opts.mk>
+
+PROG=	basename
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+MLINKS=	basename.1 dirname.1
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+```
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level Makefile.inc1, not from my unit changes. The previously completed units like `usr.bin/basename` use a Makefile that includes `<src.opts.mk>` and has explicit cargo build rules. Let me update my Makefile to follow the same pattern.
+
+ACTION: WRITE_FILE lib/libssp_nonshared/Makefile
+CONTENT:
+<<<
+.include <src.opts.mk>
+
+LIB=		ssp_nonshared
+NO_PIC=
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${LIB}.a: ${.CURDIR}/Cargo.toml ${.CURDIR}/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/libssp_nonshared.a ${.TARGET}
+
+all: ${LIB}.a
+
+install: ${LIB}.a
+	${INSTALL} -o root -g wheel -m 444 ${LIB}.a ${DESTDIR}/usr/lib/${LIB}.a
+
+clean:
+	${RM} ${LIB}.a
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${LIB}.a ${CARGO_TARGET_DIR}
+>>>

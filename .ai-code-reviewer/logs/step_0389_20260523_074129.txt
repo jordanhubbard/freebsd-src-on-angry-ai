@@ -1,0 +1,12 @@
+=== STEP 389 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*crypto_shorthash_siphash24.h*':
+```
+./sys/contrib/libsodium/src/libsodium/include/sodium/crypto_shorthash_siphash24.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/include/sodium/crypto_shorthash_siphash24.h

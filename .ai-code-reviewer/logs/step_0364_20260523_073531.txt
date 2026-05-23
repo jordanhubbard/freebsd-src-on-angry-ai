@@ -1,0 +1,26 @@
+=== STEP 364 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libssp_nonshared/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE lib/libssp_nonshared/Makefile
+CONTENT:
+<<<
+CARGO?=		cargo
+RUST_TARGET_DIR?=	${.OBJDIR}/rust-target
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust libssp_nonshared..."
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR}
+
+clean:
+	rm -rf ${RUST_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>

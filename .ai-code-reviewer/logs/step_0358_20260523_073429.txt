@@ -1,0 +1,16 @@
+=== STEP 358 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24:
+```
+ref
+shorthash_siphash24.c
+shorthash_siphashx24.c
+```
+
+--- RESPONSE ---
+
+
+This unit has no Makefile and is a subdirectory of libsodium. The build errors from Makefile.inc1 are a systemic issue. Let me try a simpler, self-contained unit.
+
+ACTION: SET_SCOPE bin/cat/tests

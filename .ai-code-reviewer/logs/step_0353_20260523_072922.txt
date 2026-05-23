@@ -1,0 +1,26 @@
+=== STEP 353 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/genpass.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/Makefile
+CONTENT:
+<<<
+CARGO?=		cargo
+RUST_TARGET_DIR?=	${.OBJDIR}/rust-target
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust genpass..."
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR}
+
+clean:
+	rm -rf ${RUST_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>

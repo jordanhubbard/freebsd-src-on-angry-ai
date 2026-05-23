@@ -1,0 +1,14 @@
+=== STEP 385 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24:
+```
+ref
+shorthash_siphash24.c
+shorthash_siphashx24.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24/shorthash_siphash24.c

@@ -1,0 +1,9 @@
+=== STEP 253 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/modules/libsodium*'
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_hash/Makefile

@@ -1,0 +1,12 @@
+=== STEP 483 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/chmod is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_shorthash/siphash24
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE bin/*/Makefile

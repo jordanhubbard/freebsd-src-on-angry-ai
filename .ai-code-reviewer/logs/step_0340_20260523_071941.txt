@@ -1,0 +1,69 @@
+=== STEP 340 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: tools/regression/tls/ttls1
+Pending source/build changes: 3 files modified
+Files: tools/regression/tls/ttls1/Cargo.toml, tools/regression/tls/ttls1/main.rs, tools/regression/tls/ttls1/tls_helpers.c
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in tools/regression/tls/ttls1
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+The build errors stem from `bsd.prog.mk` pulling in the top-level build infrastructure. I need to make the Makefile self-contained without including `bsd.prog.mk`.
+
+ACTION: EDIT_FILE tools/regression/tls/ttls1/Makefile
+OLD:
+<<<
+CARGO?=		cargo
+RUST_TARGET_DIR?=	${.OBJDIR}/rust-target
+
+PROG=	ttls1
+LDFLAGS+= -L../libxx -lxx -Wl,--rpath=${.OBJDIR}/../libxx
+LDFLAGS+= -L../libyy -lyy -Wl,--rpath=${.OBJDIR}/../libyy
+MAN=
+DEBUG_FLAGS= -g
+
+SRCS=	tls_helpers.c
+
+.include <bsd.prog.mk>
+
+# Build Rust binary
+rust-build:
+	@echo "Building Rust ttls1..."
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR}
+
+all: rust-build
+
+clean:
+	rm -rf ${RUST_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>
+NEW:
+<<<
+CARGO?=		cargo
+RUST_TARGET_DIR?=	${.OBJDIR}/rust-target
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust ttls1..."
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR}
+
+clean:
+	rm -rf ${RUST_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>

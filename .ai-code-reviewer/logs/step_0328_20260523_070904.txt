@@ -1,0 +1,45 @@
+=== STEP 328 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: contrib/llvm-project/clang/lib/DirectoryWatcher/default
+Pending source/build changes: 3 files modified
+Files: contrib/llvm-project/clang/lib/DirectoryWatcher/default/rust/Cargo.toml, contrib/llvm-project/clang/lib/DirectoryWatcher/default/rust/lib.rs, contrib/llvm-project/clang/lib/DirectoryWatcher/default/Makefile
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in contrib/llvm-project/clang/lib/DirectoryWatcher/default
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/llvm-project/clang/lib/DirectoryWatcher/default/Makefile
+CONTENT:
+<<<
+# Makefile for Rust DirectoryWatcher stub replacement
+# This Makefile integrates the Rust crate into the FreeBSD build path.
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Rust build target
+rust-build:
+	@echo "Building Rust DirectoryWatcher stub..."
+	${CARGO} build --release --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+all: rust-build
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>

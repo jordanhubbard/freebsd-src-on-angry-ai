@@ -1,0 +1,33 @@
+=== STEP 286 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/default/rust/lib.rs:
+PROGRESS:
+📁 Directory: contrib/llvm-project/clang/lib/DirectoryWatcher/default
+   Files: 0/1
+📄 File: contrib/llvm-project/clang/lib/DirectoryWatcher/default/rust/lib.rs
+✏️  Edits: 2 files modified
+
+```
+//! Rust replacement for DirectoryWatcher-not-implemented.cpp
+//! Provides a stub DirectoryWatcher that returns an error, matching the
+//! original C++ behavior for platforms where DirectoryWatcher is not implemented.
+
+#![no_std]
+
+/// Returns an error code indicating DirectoryWatcher is not implemented.
+/// This matches the original C++ behavior which returns
+/// llvm::make_error<llvm::StringError>("DirectoryWatcher is not implemented for this platform!", ...).
+#[no_mangle]
+pub extern "C" fn clang_directory_watcher_create_stub() -> i32 {
+    // Return -1 to indicate error (not implemented)
+    -1
+}
+```
+
+--- RESPONSE ---
+
+
+Let me check the parent Makefile to understand the build integration.
+
+ACTION: READ_FILE contrib/llvm-project/clang/lib/DirectoryWatcher/Makefile

@@ -1,0 +1,11 @@
+=== STEP 397 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/src/libsodium/crypto_shorthash/Makefile*'
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level Makefile.inc1 requiring TARGET/TARGET_ARCH. This is a `sys/contrib/` directory that's part of the kernel/crypto build. Let me understand the parent build structure.
+
+ACTION: FIND_FILE sys/contrib/libsodium/src/Makefile

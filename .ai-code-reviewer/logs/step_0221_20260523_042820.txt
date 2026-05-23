@@ -1,0 +1,48 @@
+=== STEP 221 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: No-op edit rejected for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/default/Cargo.toml: OLD and NEW blocks are identical
+
+======================================================================
+NO-OP EDIT REJECTED
+======================================================================
+
+The requested EDIT_FILE would not change contrib/llvm-project/clang/lib/DirectoryWatcher/default/Cargo.toml.
+Repeated no-op edits are treated as a control-loop failure.
+
+Choose a different action now:
+- Use ACTION: BUILD if the current scope already has real changes
+- Use ACTION: READ_FILE to inspect a different file
+- Use ACTION: SET_SCOPE to move to another work unit if this one is complete
+- Use ACTION: HALT if no safe progress remains
+
+If you repeat the same no-op edit 2 more time(s), this run will stop.
+======================================================================
+
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE Makefile.inc1
+OLD:
+<<<
+.if (make(buildworld) || make(buildkernel) || make(kernel-toolchain) || \
+    make(toolchain) || make(_cross-tools))
+.if ${USING_SYSTEM_COMPILER} == "yes"
+.info SYSTEM_COMPILER: Determined that CC=${CC} matches the source tree.  Not bootstrapping a cross-compiler.
+.elif ${MK_CLANG_BOOTSTRAP} == "yes"
+.info SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+.endif
+.if ${USING_SYSTEM_LINKER} == "yes"
+.info SYSTEM_LINKER: Determined that LD=${LD} matches the source tree.  Not bootstrapping a cross-linker.
+.elif ${MK_LLD_BOOTSTRAP} == "yes"
+.info SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker.
+.endif
+.endif
+>>>
+NEW:
+<<<
+.if (make(buildworld) || make(buildkernel) || make(kernel-toolchain) || \
+    make(toolchain) || make(_cross-tools))
+.endif
+>>>

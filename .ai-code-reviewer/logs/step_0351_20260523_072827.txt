@@ -1,0 +1,52 @@
+=== STEP 351 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/genpass.c:
+PROGRESS:
+📁 Directory: crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd
+   Files: 0/1
+📄 File: crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/genpass.c
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+void
+main(int argc, char **argv)
+{
+	int i,j,n;
+	char *pass[8], r;
+
+	n = atoi(argv[1]);
+
+	srandom(101173);
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < 8; j++) {
+			r = random() % 122;
+			while (r < 48)
+				r += random() % (122 - r);
+			printf("%c", r);
+		}
+		printf("\n");
+	}
+}
+
+```
+
+--- RESPONSE ---
+
+
+This is a simple password generator. I need to replicate the exact `srandom`/`random` behavior from libc. Let me create a Rust replacement that uses FFI to call the same libc functions.
+
+ACTION: WRITE_FILE crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "genpass"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "genpass"
+path = "genpass.rs"
+>>>

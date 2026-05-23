@@ -1,0 +1,10 @@
+=== STEP 339 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20/Cargo.toml
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20/lib.rs

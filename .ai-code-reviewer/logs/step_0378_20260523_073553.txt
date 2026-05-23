@@ -1,0 +1,11 @@
+=== STEP 378 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'test-system-'
+
+--- RESPONSE ---
+
+
+The build errors come from the top-level Makefile.inc1 requiring TARGET/TARGET_ARCH. Let me check the parent Makefiles to understand how this unit is built.
+
+ACTION: FIND_FILE crypto/krb5/src/plugins/kdb/db2/libdb2/test/Makefile

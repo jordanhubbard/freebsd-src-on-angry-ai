@@ -1,0 +1,20 @@
+=== STEP 25 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/lldb:
+```
+LICENSE.TXT
+bindings
+docs
+include
+source
+tools
+utils
+```
+
+--- RESPONSE ---
+
+
+This is a vendor LLVM directory without its own Makefile. The build errors are system-level. Let me check the parent build structure.
+
+ACTION: LIST_DIR contrib

@@ -1,0 +1,73 @@
+=== STEP 315 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/default/rust/Cargo.toml:
+PROGRESS:
+📁 Directory: contrib/llvm-project/clang/lib/DirectoryWatcher/default
+   Files: 0/1
+📄 File: contrib/llvm-project/clang/lib/DirectoryWatcher/default/rust/Cargo.toml
+✏️  Edits: 3 files modified
+
+```
+[package]
+name = "directory_watcher_stub"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "directory_watcher_stub"
+crate-type = ["staticlib"]
+path = "lib.rs"
+
+[profile.release]
+opt-level = 2
+```
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE contrib/llvm-project/clang/lib/DirectoryWatcher/default/Makefile
+OLD:
+<<<
+# Makefile for Rust DirectoryWatcher stub replacement
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust DirectoryWatcher stub..."
+	${CARGO} build --release --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>
+NEW:
+<<<
+# Makefile for Rust DirectoryWatcher stub replacement
+# This Makefile integrates the Rust crate into the FreeBSD build path.
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+PROG=	directory_watcher_stub
+
+.include <bsd.prog.mk>
+
+# Rust build target
+rust-build:
+	@echo "Building Rust DirectoryWatcher stub..."
+	${CARGO} build --release --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+all: rust-build
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean rust-build
+>>>

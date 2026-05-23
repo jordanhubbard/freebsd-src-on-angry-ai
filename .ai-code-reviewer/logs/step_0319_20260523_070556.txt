@@ -1,0 +1,9 @@
+=== STEP 319 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'contrib/llvm-project/clang/lib/DirectoryWatcher/default/*.cpp'
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/cat/tests

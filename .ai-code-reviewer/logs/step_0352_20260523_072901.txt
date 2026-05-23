@@ -1,0 +1,47 @@
+=== STEP 352 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd/genpass.rs
+CONTENT:
+<<<
+//! Rust replacement for genpass.c
+//! Generates random passwords using the same BSD random() algorithm.
+
+use std::env;
+use std::os::raw::{c_int, c_long};
+
+extern "C" {
+    fn srandom(seed: c_long);
+    fn random() -> c_long;
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        eprintln!("Usage: genpass <count>");
+        std::process::exit(1);
+    }
+
+    let n: usize = args[1].parse().unwrap_or(0);
+
+    unsafe {
+        srandom(101173);
+        for _ in 0..n {
+            for _ in 0..8 {
+                let mut r: c_int = (random() % 122) as c_int;
+                while r < 48 {
+                    r += (random() % (122 - r as c_long)) as c_int;
+                }
+                print!("{}", r as u8 as char);
+            }
+            println!();
+        }
+    }
+}
+>>>

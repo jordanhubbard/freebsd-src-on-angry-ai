@@ -1,0 +1,17 @@
+=== STEP 273 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher:
+```
+DirectoryScanner.cpp
+DirectoryScanner.h
+default
+linux
+mac
+windows
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE contrib/llvm-project/clang/lib/DirectoryWatcher/Makefile

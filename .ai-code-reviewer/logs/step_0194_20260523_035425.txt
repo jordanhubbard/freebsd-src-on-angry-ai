@@ -1,0 +1,19 @@
+=== STEP 194 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher:
+```
+DirectoryScanner.cpp
+DirectoryScanner.h
+default
+linux
+mac
+windows
+```
+
+--- RESPONSE ---
+
+
+This is LLVM contrib code, not FreeBSD userland. Per the constraints, units with no source relevant to the configured objective should be skipped. Let me move to the next unit.
+
+ACTION: SET_SCOPE bin/cat/tests

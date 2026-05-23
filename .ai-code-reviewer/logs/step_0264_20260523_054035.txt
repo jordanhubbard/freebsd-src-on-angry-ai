@@ -1,0 +1,12 @@
+=== STEP 264 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/DirectoryWatcher/default/src:
+```
+lib.rs
+```
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

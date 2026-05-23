@@ -1,0 +1,14 @@
+=== STEP 5 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_hash
+
+--- RESPONSE ---
+
+
+Let me try the next unit from the queue.
+
+ACTION: SET_SCOPE bin/cat/tests

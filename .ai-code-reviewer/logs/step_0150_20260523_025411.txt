@@ -1,0 +1,11 @@
+=== STEP 150 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/src/libsodium/crypto_hash/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me try building again to see the actual output.
+
+ACTION: BUILD

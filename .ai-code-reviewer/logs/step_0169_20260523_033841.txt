@@ -1,0 +1,13 @@
+=== STEP 169 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1
+Scope: sys/contrib/libsodium/src/libsodium/crypto_hash
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Let me understand the scope better and check what files exist in the crypto_hash directory.
+
+ACTION: LIST_DIR sys/contrib/libsodium/src/libsodium/crypto_hash
