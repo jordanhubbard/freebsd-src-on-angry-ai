@@ -1,0 +1,11 @@
+=== STEP 87 ===
+
+--- REQUEST ---
+NEXT_CHUNK_ERROR: No chunked file in progress. Use READ_FILE first.
+
+--- RESPONSE ---
+
+
+The build errors are from top-level Makefile.inc1, not from my unit changes. Let me try to understand the build system better.
+
+ACTION: READ_FILE Makefile

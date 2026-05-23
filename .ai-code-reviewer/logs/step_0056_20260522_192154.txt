@@ -1,0 +1,9 @@
+=== STEP 56 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_hash/sha512/hash_sha512.c

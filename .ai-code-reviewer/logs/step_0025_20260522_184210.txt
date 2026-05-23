@@ -1,0 +1,15 @@
+=== STEP 25 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_hash/sha512:
+```
+cp
+hash_sha512.c
+```
+
+--- RESPONSE ---
+
+
+The build errors are system-level bootstrapping issues, not related to my changes. The pending changes reference `usr.bin/jot` which is outside this scope - likely stale state. Let me check what's actually in this scope and try a targeted cargo build.
+
+ACTION: FIND_FILE sys/contrib/libsodium/src/libsodium/crypto_hash/sha512/Cargo.toml

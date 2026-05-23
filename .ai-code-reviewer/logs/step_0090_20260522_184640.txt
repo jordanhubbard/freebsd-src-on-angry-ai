@@ -1,0 +1,12 @@
+=== STEP 90 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*bsd.compiler.mk*':
+```
+./share/mk/bsd.compiler.mk
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE share/mk/bsd.compiler.mk

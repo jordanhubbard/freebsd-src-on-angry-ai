@@ -1,0 +1,11 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/src/libsodium/crypto_hash/sha512/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit is in `sys/contrib/libsodium` which is kernel-adjacent third-party code with no local Makefile. Per the strategy, I should prefer small userland commands in `bin/` or `usr.bin/`. Let me find a better unit.
+
+ACTION: LIST_DIR bin

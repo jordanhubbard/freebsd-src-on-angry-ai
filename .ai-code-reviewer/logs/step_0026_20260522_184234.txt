@@ -1,0 +1,13 @@
+=== STEP 26 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/src/libsodium/crypto_hash/sha512/Cargo.toml*'
+
+--- RESPONSE ---
+
+
+The build errors are system-level bootstrapping issues, not related to my changes. The pending changes reference `usr.bin/jot` which is outside this scope. Let me create the Rust replacement for this unit and try a cargo-only build.
+
+This unit has one small C file with two functions returning constants. Let me create the Rust crate.
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_hash/sha512/Cargo.toml

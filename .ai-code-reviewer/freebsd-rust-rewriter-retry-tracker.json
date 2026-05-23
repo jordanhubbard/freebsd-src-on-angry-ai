@@ -124,8 +124,8 @@
     "last_attempt": "2026-05-22T18:11:33.552450"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_hash/sha512": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T17:51:37.271797"
+    "attempts": 2,
+    "last_attempt": "2026-05-22T18:39:06.757198"
   },
   "tools/regression/tls/libyy": {
     "attempts": 3,
