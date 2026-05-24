@@ -1,0 +1,23 @@
+=== STEP 34 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/at
+   Files: 0/11
+📄 File: usr.bin/at/at.c
+   Chunks: 2/18
+
+```
+=== CHUNK 2/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/at/at.c === [function: sigc]
+=== Lines 111-111 (1 lines) ===
+
+static void sigc(int signo);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

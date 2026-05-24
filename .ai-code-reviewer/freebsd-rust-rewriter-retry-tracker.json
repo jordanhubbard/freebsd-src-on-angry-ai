@@ -140,8 +140,8 @@
     "last_attempt": "2026-05-23T02:28:48.009957"
   },
   "contrib/llvm-project/llvm/lib/Frontend/Directive": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T00:24:27.623828"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T00:35:37.449118"
   },
   "contrib/llvm-project/llvm/lib/Frontend/OpenACC": {
     "attempts": 2,
@@ -154,6 +154,10 @@
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
     "last_attempt": "2026-05-22T22:17:17.637990"
+  },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T00:38:14.131089"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,
@@ -246,6 +250,10 @@
   "usr.bin/apply": {
     "attempts": 3,
     "last_attempt": "2026-05-22T19:54:44.158526"
+  },
+  "usr.bin/at": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T00:42:04.654306"
   },
   "usr.bin/banner": {
     "attempts": 3,
@@ -408,32 +416,48 @@
     "last_attempt": "2026-05-22T00:11:03.402137"
   },
   "usr.bin/uniq": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T21:00:37.814897"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T00:48:21.968999"
   },
   "usr.bin/units": {
     "attempts": 3,
     "last_attempt": "2026-05-24T00:08:25.881821"
   },
-  "usr.bin/w": {
+  "usr.bin/vgrind": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T20:46:57.394846"
+    "last_attempt": "2026-05-24T00:44:29.651877"
+  },
+  "usr.bin/vmstat": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T00:44:56.261034"
+  },
+  "usr.bin/vtfontcvt": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T00:44:39.172633"
+  },
+  "usr.bin/w": {
+    "attempts": 2,
+    "last_attempt": "2026-05-24T00:43:29.707765"
   },
   "usr.bin/wall": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:46:44.134669"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T00:45:11.579423"
   },
   "usr.bin/wc": {
     "attempts": 2,
     "last_attempt": "2026-05-22T21:02:33.048865"
+  },
+  "usr.bin/whereis": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T00:43:38.707886"
   },
   "usr.bin/who": {
     "attempts": 2,
     "last_attempt": "2026-05-22T20:53:29.410015"
   },
   "usr.bin/write": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:47:03.407883"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T00:45:42.622528"
   },
   "usr.bin/yes": {
     "attempts": 3,
@@ -442,5 +466,9 @@
   "usr.bin/ypmatch": {
     "attempts": 3,
     "last_attempt": "2026-05-22T04:31:46.528600"
+  },
+  "usr.bin/ypwhich": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T00:44:08.809386"
   }
 }

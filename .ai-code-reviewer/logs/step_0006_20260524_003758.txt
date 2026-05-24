@@ -1,0 +1,13 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat/tests has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/csu/dso
+
+--- RESPONSE ---
+
+
+The test directory has no C/C++ source files to rewrite. Moving to the next suggested unit.
+
+ACTION: SET_SCOPE contrib/netbsd-tests/lib/csu/dso
