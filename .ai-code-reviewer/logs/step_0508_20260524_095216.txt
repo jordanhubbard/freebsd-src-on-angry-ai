@@ -1,0 +1,80 @@
+=== STEP 508 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libwrap/rust/src/lib.rs:
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: lib/libwrap/rust/src/lib.rs
+
+```
+use std::sync::atomic::{AtomicI32, Ordering};
+
+static ALLOW_SEVERITY: AtomicI32 = AtomicI32::new(0);
+static DENY_SEVERITY: AtomicI32 = AtomicI32::new(0);
+
+#[no_mangle]
+pub extern "C" fn allow_severity() -> i32 {
+    ALLOW_SEVERITY.load(Ordering::SeqCst)
+}
+
+#[no_mangle]
+pub extern "C" fn set_allow_severity(val: i32) {
+    ALLOW_SEVERITY.store(val, Ordering::SeqCst)
+}
+
+#[no_mangle]
+pub extern "C" fn deny_severity() -> i32 {
+    DENY_SEVERITY.load(Ordering::SeqCst)
+}
+
+#[no_mangle]
+pub extern "C" fn set_deny_severity(val: i32) {
+    DENY_SEVERITY.store(val, Ordering::SeqCst)
+}
+```
+
+--- RESPONSE ---
+
+
+The lib/libwrap unit already has a Rust crate but it's incomplete - the Rust code exports functions instead of C-compatible global variables, and the Makefile doesn't integrate the Rust build. Let me fix both.
+
+ACTION: EDIT_FILE lib/libwrap/rust/src/lib.rs
+OLD:
+<<<
+use std::sync::atomic::{AtomicI32, Ordering};
+
+static ALLOW_SEVERITY: AtomicI32 = AtomicI32::new(0);
+static DENY_SEVERITY: AtomicI32 = AtomicI32::new(0);
+
+#[no_mangle]
+pub extern "C" fn allow_severity() -> i32 {
+    ALLOW_SEVERITY.load(Ordering::SeqCst)
+}
+
+#[no_mangle]
+pub extern "C" fn set_allow_severity(val: i32) {
+    ALLOW_SEVERITY.store(val, Ordering::SeqCst)
+}
+
+#[no_mangle]
+pub extern "C" fn deny_severity() -> i32 {
+    DENY_SEVERITY.load(Ordering::SeqCst)
+}
+
+#[no_mangle]
+pub extern "C" fn set_deny_severity(val: i32) {
+    DENY_SEVERITY.store(val, Ordering::SeqCst)
+}
+>>>
+NEW:
+<<<
+// C ABI compatible global variables matching libvars.c
+// These must be mutable to match the C `int` declarations that consumers may write to.
+
+#[no_mangle]
+pub static mut allow_severity: i32 = 0;
+
+#[no_mangle]
+pub static mut deny_severity: i32 = 0;
+>>>

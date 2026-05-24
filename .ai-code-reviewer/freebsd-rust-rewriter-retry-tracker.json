@@ -155,6 +155,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T08:08:33.309056"
   },
+  "contrib/llvm-project/llvm/lib/Target/AVR/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T08:48:20.354923"
+  },
   "contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-24T06:36:22.530138"
@@ -198,6 +202,14 @@
   "lib/libssp_nonshared": {
     "attempts": 3,
     "last_attempt": "2026-05-23T13:51:49.358239"
+  },
+  "lib/libutil": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T10:00:12.751053"
+  },
+  "lib/libwrap": {
+    "attempts": 2,
+    "last_attempt": "2026-05-24T11:11:39.492199"
   },
   "lib/liby": {
     "attempts": 1,
@@ -307,9 +319,13 @@
     "attempts": 1,
     "last_attempt": "2026-05-21T23:26:14.041313"
   },
+  "usr.bin/clang/llvm-dwp": {
+    "attempts": 2,
+    "last_attempt": "2026-05-24T11:12:28.554134"
+  },
   "usr.bin/cmp": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T06:45:58.503462"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T08:35:47.614133"
   },
   "usr.bin/col": {
     "attempts": 3,

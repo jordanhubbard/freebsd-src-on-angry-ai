@@ -1,0 +1,11 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Writing Cargo.toml for cmp crate.
+
+ACTION: WRITE_FILE usr.bin/cmp/Cargo.toml

@@ -1,0 +1,50 @@
+=== STEP 559 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+✏️  Edits: 1 files modified
+
+```
+=== CHUNK 3/3: /usr/home/jkh/Src/freebsd-src-on-angry-AI/share/mk/bsd.lib.mk === [line_chunk: chunk_3]
+=== Lines 501-529 (29 lines) ===
+
+.include <bsd.man.mk>
+.endif
+
+.if defined(LIB) && !empty(LIB)
+OBJS_DEPEND_GUESS+= ${SRCS:M*.h}
+.endif
+.if defined(SHLIB_NAME) || \
+    defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+.for _S in ${SRCS:N*.[hly]}
+OBJS_DEPEND_GUESS.${_S:${OBJS_SRCS_FILTER:ts:}}.pico+=	${_S}
+.endfor
+.endif
+.if defined(BUILD_NOSSP_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+.for _S in ${SRCS:N*.[hly]}
+OBJS_DEPEND_GUESS.${_S:${OBJS_SRCS_FILTER:ts:}}.nossppico+=	${_S}
+.endfor
+.endif
+
+.if defined(HAS_TESTS)
+MAKE+=			MK_MAKE_CHECK_USE_SANDBOX=yes
+SUBDIR_TARGETS+=	check
+TESTS_LD_LIBRARY_PATH+=	${.OBJDIR}
+.endif
+
+.include <bsd.debug.mk>
+.include <bsd.dep.mk>
+.include <bsd.clang-analyze.mk>
+.include <bsd.obj.mk>
+.include <bsd.sys.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE Makefile.inc1

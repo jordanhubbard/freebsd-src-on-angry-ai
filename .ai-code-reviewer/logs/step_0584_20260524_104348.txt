@@ -1,0 +1,274 @@
+=== STEP 584 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: usr.bin/basename/Cargo.toml
+✏️  Edits: 1 files modified
+
+```
+=== CHUNK 8/17: /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1 === [line_chunk: chunk_8]
+=== Lines 1751-2000 (250 lines) ===
+
+.endif
+.else
+.if make(buildkernel)
+.error Missing KERNCONF ${KERNCONFDIR}/${_kernel}
+.endif
+.endif
+.endfor
+
+_cleankernobj_fast_depend_hack: .PHONY
+# 20191009  r353340  removal of opensolaris_atomic.S (also r353381)
+.if ${MACHINE} != i386
+.for f in opensolaris_atomic
+.for m in opensolaris zfs
+	@if [ -e "${KRNLOBJDIR}/${KERNCONF}/modules${SRCTOP}/sys/modules/${m}/.depend.${f}.o" ] && \
+	    grep -q ${f}.S "${KRNLOBJDIR}/${KERNCONF}/modules${SRCTOP}/sys/modules/${m}/.depend.${f}.o"; then \
+		echo "Removing stale dependencies for opensolaris_atomic"; \
+		rm -f ${KRNLOBJDIR}/${KERNCONF}/modules${SRCTOP}/sys/modules/${m}/.depend.${f}.*; \
+	fi
+.endfor
+.endfor
+.endif
+
+${WMAKE_TGTS:N_cleanworldtmp:N_worldtmp:${libcompats:@v@Nbuild${v}@:ts:}}: .MAKE .PHONY
+${.ALLTARGETS:M_*:N_cleanworldtmp:N_worldtmp}: .MAKE .PHONY
+
+# record kernel(s) build time in seconds
+.if make(buildkernel)
+_BUILDKERNEL_START!= date '+%s'
+.endif
+
+#
+# buildkernel
+#
+# Builds all kernels defined by BUILDKERNELS.
+#
+buildkernel: .MAKE .PHONY
+.if empty(BUILDKERNELS)
+	@echo "ERROR: Missing kernel configuration file(s) (${KERNCONF})."; \
+	false
+.endif
+	@echo
+.for _kernel in ${BUILDKERNELS}
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Kernel build for ${_kernel} started on `LC_ALL=C date`"
+	@echo "--------------------------------------------------------------"
+	@echo "===> ${_kernel}"
+	mkdir -p ${KRNLOBJDIR}
+.if !defined(NO_KERNELCONFIG)
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 1: configuring the kernel"
+	@echo "--------------------------------------------------------------"
+	cd ${KRNLCONFDIR}; \
+		PATH=${TMPPATH:Q} \
+		    config ${CONFIGARGS} -d ${KRNLOBJDIR}/${_kernel} \
+			-I '${KERNCONFDIR}' -I '${KRNLCONFDIR}' \
+			'${KERNCONFDIR}/${_kernel}'
+.endif
+.if ${MK_CLEAN} == "yes" && !defined(NO_KERNELCLEAN)
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 2.1: cleaning up the object tree"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${KRNLOBJDIR}/${_kernel}; ${KMAKE} ${CLEANDIR}
+.else
+	${_+_}cd ${.CURDIR}; ${WMAKE} _cleankernobj_fast_depend_hack
+.endif
+.if !defined(NO_KERNELOBJ)
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 2.2: rebuilding the object tree"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${KRNLOBJDIR}/${_kernel}; ${KMAKE} obj
+.endif
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 2.3: build tools"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${KTMAKE} kernel-tools
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 3.1: building everything"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${KRNLOBJDIR}/${_kernel}; ${KMAKE} all -DNO_MODULES_OBJ
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Kernel build for ${_kernel} completed on `LC_ALL=C date`"
+	@echo "--------------------------------------------------------------"
+
+.endfor
+	@seconds=$$(($$(date '+%s') - ${_BUILDKERNEL_START})); \
+	  echo ">>> Kernel(s) ${BUILDKERNELS} built in $$seconds seconds, ncpu: $$(${_ncpu_cmd})${.MAKE.JOBS:S/^/, make -j/}"
+	@echo "--------------------------------------------------------------"
+
+.if !make(packages) && !make(update-packages)
+NO_INSTALLEXTRAKERNELS?=	yes
+.else
+# packages/update-packages installs kernels to a staging directory then builds
+# packages from the result to be installed, typically to other systems.  It is
+# less surprising for these targets to honor KERNCONF if multiple kernels are
+# specified.
+NO_INSTALLEXTRAKERNELS?=	no
+.endif
+
+.if ${NO_INSTALLEXTRAKERNELS} != "yes"
+.if defined(NO_INSTALLKERNEL)
+INSTALLEXTRAKERNELS=	${BUILDKERNELS}
+.elif ${BUILDKERNELS:[#]} > 1
+# First kernel is installed separately by INSTALLKERNEL, typically to
+# /boot/kernel, rather than to a config-suffixed directory.
+INSTALLEXTRAKERNELS=	${BUILDKERNELS:[2..-1]}
+.else
+INSTALLEXTRAKERNELS=
+.endif
+.endif
+
+#
+# Don't allow installworld or installkernel on a pkgbase system.  This avoids
+# accidentally updating a pkgbase system with install{world,kernel}, causing
+# the installed system to become out of date with the package database.
+#
+# Skip the check if DESTDIR is defined on the assumption the user knows what
+# they're doing.  This means the check can be disabled for the running system
+# using DESTDIR=/.
+#
+# People who want to disable this check permanently may set two variables in
+# /etc/make.conf, ALLOW_PKGBASE_INSTALLKERNEL and ALLOW_PKGBASE_INSTALLWORLD,
+# to disable these checks.  That doesn't stop this from breaking your system,
+# it just stops make from warning about it.
+#
+.if !make(distributeworld) && !defined(DESTDIR)
+
+. if !defined(ALLOW_PKGBASE_INSTALLKERNEL) && exists(${LOCALBASE}/sbin/pkg-static)
+# For installkernel, we check if this specific kernel was installed by pkg.
+# This means people can continue to use installkernel for non-packaged
+# kernels, which is useful for development.
+
+_installcheck_kernel: __installcheck_kernel_pkgbase
+__installcheck_kernel_pkgbase: .PHONY
+.  for _kernel in ${NO_INSTALLKERNEL:D:U${INSTKERNNAME}} \
+		${INSTALLEXTRAKERNELS:S/^/${INSTKERNNAME}./}
+	@if ${LOCALBASE}/sbin/pkg-static which /boot/${_kernel}/kernel \
+	    >/dev/null 2>&1; then \
+		echo >&2 "ERROR: The kernel at /boot/${_kernel} was installed from packages." ; \
+		echo >&2 "       A packaged kernel should never be updated using installkernel;" ; \
+		echo >&2 "       this will cause the package database to become out of sync with" ; \
+		echo >&2 "       the live system state.  Either uninstall the packaged kernel," ; \
+		echo >&2 "       or install this kernel to a different path using INSTKERNNAME." ; \
+		echo >&2 "" ; \
+		echo >&2 "       If you understand the risks and wish to proceed anyway, you may" ; \
+		echo >&2 "       set ALLOW_PKGBASE_INSTALLKERNEL=yes to override this safety check." ; \
+		echo >&2 "       After doing so, you should not use the pkg(8) utility until you" ; \
+		echo >&2 "       have resolved the inconsistency between the installed system and" ; \
+		echo >&2 "       the package database." ; \
+		false; \
+	fi
+.  endfor
+. endif	# !defined(ALLOW_PKGBASE_INSTALLKERNEL) && exists(pkg-static)
+
+. if !defined(ALLOW_PKGBASE_INSTALLWORLD) && exists(${LOCALBASE}/sbin/pkg-static)
+_installcheck_world: __installcheck_world_pkgbase
+__installcheck_world_pkgbase: .PHONY
+	@if ${LOCALBASE}/sbin/pkg-static info -e ${PKG_NAME_PREFIX}-runtime; then \
+		echo >&2 "ERROR: This target should never be used on a system installed from packages;" ; \
+		echo >&2 "       doing so will cause the package database to become out of sync with" ; \
+		echo >&2 "       the live system state." ; \
+		echo >&2 "" ; \
+		echo >&2 "       If you understand the risks and wish to proceed anyway, you may" ; \
+		echo >&2 "       set ALLOW_PKGBASE_INSTALLWORLD=yes to override this safety check." ; \
+		echo >&2 "       After doing so, you should not use the pkg(8) utility until you" ; \
+		echo >&2 "       have resolved the inconsistency between the installed system and" ; \
+		echo >&2 "       the package database." ; \
+		false; \
+	fi
+. endif	# !defined(ALLOW_PKGBASE_INSTALLWORLD) && exists(pkg-static)
+.endif	# !make(distributeworld) && !defined(DESTDIR)
+
+#
+# installkernel, etc.
+#
+# Install the kernel defined by INSTALLKERNEL
+#
+installkernel installkernel.debug \
+reinstallkernel reinstallkernel.debug: _installcheck_kernel .PHONY
+.if !defined(NO_INSTALLKERNEL)
+.if empty(INSTALLKERNEL)
+	@echo "ERROR: No kernel \"${KERNCONF}\" to install."; \
+	false
+.endif
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Installing kernel ${INSTALLKERNEL} on $$(LC_ALL=C date)"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${KRNLOBJDIR}/${INSTALLKERNEL}; \
+	    ${CROSSENV} PATH=${TMPPATH:Q} \
+	    ${MAKE} ${IMAKE_INSTALL} KERNEL=${INSTKERNNAME} METALOG=${METALOG} \
+	    ${.TARGET:S/kernel//}
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Installing kernel ${INSTALLKERNEL} completed on $$(LC_ALL=C date)"
+	@echo "--------------------------------------------------------------"
+	@seconds=$$(($$(date '+%s') - ${_INSTALLKERNEL_START})); \
+	  echo ">>> Install kernel(s) ${INSTALLKERNEL} completed in $$seconds seconds, ncpu: $$(${_ncpu_cmd})${.MAKE.JOBS:S/^/, make -j/}"
+	@echo "--------------------------------------------------------------"
+.endif
+.if !empty(INSTALLEXTRAKERNELS)
+.for _kernel in ${INSTALLEXTRAKERNELS}
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Installing kernel ${_kernel} $$(LC_ALL=C date)"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${KRNLOBJDIR}/${_kernel}; \
+	    ${CROSSENV} PATH=${TMPPATH:Q} \
+	    ${MAKE} ${IMAKE_INSTALL} KERNEL=${INSTKERNNAME}.${_kernel} METALOG=${METALOG} \
+	    ${.TARGET:S/kernel//}
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Installing kernel ${_kernel} completed on $$(LC_ALL=C date)"
+	@echo "--------------------------------------------------------------"
+.endfor
+	@seconds=$$(($$(date '+%s') - ${_INSTALLKERNEL_START})); \
+	  echo ">>> Install kernel(s) ${BUILDKERNELS} completed in $$seconds seconds, ncpu: $$(${_ncpu_cmd})${.MAKE.JOBS:S/^/, make -j/}"
+	@echo "--------------------------------------------------------------"
+.endif
+
+distributekernel distributekernel.debug: .PHONY
+.if !defined(NO_INSTALLKERNEL)
+.if empty(INSTALLKERNEL)
+	@echo "ERROR: No kernel \"${KERNCONF}\" to install."; \
+	false
+.endif
+	mkdir -p ${DESTDIR}/${DISTDIR}
+	rm -f ${DESTDIR}/${DISTDIR}/kernel.premeta
+	${_+_}cd ${KRNLOBJDIR}/${INSTALLKERNEL}; \
+	    ${IMAKEENV} ${IMAKE_INSTALL:S/METALOG/kernel.premeta/} \
+	    ${IMAKE_MTREE} PATH=${TMPPATH:Q} ${MAKE} KERNEL=${INSTKERNNAME} \
+	    DISTBASE=/kernel DESTDIR=${INSTALL_DDIR}/kernel \
+	    METALOG=${METALOG:S/METALOG/kernel.premeta/} \
+	    ${.TARGET:S/distributekernel/install/}
+.if defined(NO_ROOT)
+	echo "#${MTREE_MAGIC}" > ${DESTDIR}/${DISTDIR}/kernel.meta
+	sed -e 's|^./kernel|.|' ${DESTDIR}/${DISTDIR}/kernel.premeta | \
+	    ${METALOG_SORT_CMD} >> ${DESTDIR}/${DISTDIR}/kernel.meta
+.endif
+.endif
+.if !empty(INSTALLEXTRAKERNELS)
+.for _kernel in ${INSTALLEXTRAKERNELS}
+	rm -f ${DESTDIR}/${DISTDIR}/kernel.${_kernel}.premeta
+	${_+_}cd ${KRNLOBJDIR}/${_kernel}; \
+	    ${IMAKEENV} ${IMAKE_INSTALL:S/METALOG/kernel.${_kernel}.premeta/} \
+	    ${IMAKE_MTREE} PATH=${TMPPATH:Q} ${MAKE} \
+	    KERNEL=${INSTKERNNAME}.${_kernel} \
+	    DISTBASE=/kernel.${_kernel} DESTDIR=${INSTALL_DDIR}/kernel.${_kernel} \
+	    METALOG=${METALOG:S/METALOG/kernel.${_kernel}.premeta/} \
+	    ${.TARGET:S/distributekernel/install/}
+
+```
+
+--- RESPONSE ---
+
+
+I'm reading through Makefile.inc1 which is not relevant to the current rewrite task. Let me skip this and focus on the actual work unit.
+
+ACTION: SKIP_FILE

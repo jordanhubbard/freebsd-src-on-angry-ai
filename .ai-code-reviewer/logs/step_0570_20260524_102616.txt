@@ -1,0 +1,33 @@
+=== STEP 570 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*build*':
+```
+./release/tools/rc.amibuilder
+./release/tools/ec2-builder.conf
+./sys/compat/linuxkpi/common/include/linux/build_bug.h
+./sys/dev/random/build.sh
+./sys/contrib/vchiq/interface/vchiq_arm/vchiq_build_info.h
+./sys/contrib/libsodium/dist-build/android-build.sh
+./sys/contrib/libsodium/packaging/dotnet-core/recipes/build
+./sys/contrib/libsodium/builds/msvc/build/buildall.bat
+./sys/contrib/libsodium/builds/msvc/build/buildbase.bat
+./sys/contrib/device-tree/scripts/Kbuild.include
+./sys/contrib/openzfs/include/sys/vdev_rebuild.h
+./sys/contrib/openzfs/.github/workflows/scripts/qemu-4-build-vm.sh
+./sys/contrib/openzfs/.github/workflows/scripts/qemu-prepare-for-build.sh
+./sys/contrib/openzfs/.github/workflows/scripts/qemu-4-build.sh
+./sys/contrib/openzfs/tests/zfs-tests/tests/functional/cli_root/zpool_wait/scan/zpool_wait_rebuild.ksh
+./sys/contrib/openzfs/tests/zfs-tests/tests/functional/replacement/rebuild_multiple.ksh
+./sys/contrib/openzfs/tests/zfs-tests/tests/functional/replacement/replace_rebuild.ksh
+./sys/contrib/openzfs/tests/zfs-tests/tests/functional/replacement/rebuild_disabled_feature.ksh
+./sys/contrib/openzfs/tests/zfs-tests/tests/functional/replacement/rebuild_raidz.ksh
+./sys/contrib/openzfs/tests/zfs-tests/tests/functional/replacement/attach_rebuild.ksh
+```
+
+--- RESPONSE ---
+
+
+The build is failing silently. Let me check if there's a build configuration file that defines how builds are run.
+
+ACTION: FIND_FILE .build

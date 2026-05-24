@@ -1,0 +1,11 @@
+=== STEP 569 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*.buildrc*'
+
+--- RESPONSE ---
+
+
+The build is failing silently with 0 errors and 0 warnings. Let me check the build configuration to understand how builds are run.
+
+ACTION: FIND_FILE build

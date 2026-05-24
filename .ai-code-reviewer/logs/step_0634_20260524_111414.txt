@@ -1,0 +1,30 @@
+=== STEP 634 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/clang/llvm-dwp/Makefile
+OLD:
+<<<
+PROG_CXX=	llvm-dwp
+MAN=
+
+SRCDIR=		llvm/tools/llvm-dwp
+SRCS+=		llvm-dwp-driver.cpp
+SRCS+=		llvm-dwp.cpp
+
+.include "${SRCTOP}/lib/clang/llvm.pre.mk"
+>>>
+NEW:
+<<<
+PROG_CXX=	llvm-dwp
+MAN=
+
+SRCDIR=		llvm/tools/llvm-dwp
+SRCS+=		llvm-dwp-driver.cpp
+SRCS+=		llvm-dwp.cpp
+
+.include "${SRCTOP}/lib/clang/llvm.pre.mk"

@@ -1,0 +1,22 @@
+=== STEP 307 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I see the issue - I need to provide the CONTENT block on a separate line after the ACTION line.
+
+ACTION: WRITE_FILE lib/libwrap/rust/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "libwrap"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+>>>

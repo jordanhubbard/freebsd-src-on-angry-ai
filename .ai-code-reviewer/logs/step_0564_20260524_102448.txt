@@ -1,0 +1,15 @@
+=== STEP 564 ===
+
+--- REQUEST ---
+GREP_RESULT for '"\.info"':
+```
+./crypto/krb5/src/util/ss/help.c:59:        (void) strncat(buffer, ".info", sizeof(buffer) - 1 - strlen(buffer));
+./cddl/contrib/opensolaris/lib/libdtrace/common/dt_module.c:1235:		} else if (strcmp(s, ".info") == 0 &&
+```
+
+--- RESPONSE ---
+
+
+The build is failing silently. Let me check if there's a build configuration file that defines how builds are run.
+
+ACTION: FIND_FILE build.sh

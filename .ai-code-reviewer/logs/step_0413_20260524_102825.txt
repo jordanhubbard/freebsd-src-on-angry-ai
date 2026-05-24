@@ -1,0 +1,193 @@
+=== STEP 413 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libutil/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE lib/libutil/rust/src/lib.rs
+CONTENT:
+use std::ffi::c_char;
+use std::os::raw::{c_int, c_longlong, c_ulonglong};
+
+extern "C" {
+    fn errno() -> *mut c_int;
+}
+
+fn set_errno(code: c_int) {
+    unsafe {
+        *errno() = code;
+    }
+}
+
+const EINVAL: c_int = 22;
+const ERANGE: c_int = 34;
+const INT64_MAX: c_longlong = 9223372036854775807;
+
+fn expand_impl(buf: *const c_char, num: *mut c_ulonglong, neg: *mut bool) -> c_int {
+    let mut p = buf;
+    let mut negative = false;
+
+    // Skip whitespace
+    loop {
+        let ch = unsafe { *p as u8 };
+        if ch == b' ' || ch == b'\t' || ch == b'\n' || ch == b'\r' || ch == b'\x0c' || ch == b'\x0b' {
+            p = p.add(1);
+        } else {
+            break;
+        }
+    }
+
+    // Handle optional sign
+    let ch = unsafe { *p as u8 };
+    if ch == b'-' {
+        negative = true;
+        p = p.add(1);
+    } else {
+        negative = false;
+        if ch == b'+' {
+            p = p.add(1);
+        }
+    }
+
+    // Next character should be a digit
+    let ch = unsafe { *p as u8 };
+    if !(ch.is_ascii_digit()) {
+        set_errno(EINVAL);
+        return -1;
+    }
+
+    // Parse the number
+    let mut number: u64 = 0;
+    let mut base: u32 = 0;
+    let mut q = p;
+
+    // Detect base from prefix
+    let first = unsafe { *q as u8 };
+    if first == b'0' {
+        let next = unsafe { *q.add(1) as u8 };
+        if next == b'x' || next == b'X' {
+            base = 16;
+            q = q.add(2);
+        } else if next == b'o' || next == b'O' {
+            base = 8;
+            q = q.add(2);
+        } else {
+            base = 8;
+        }
+    } else {
+        base = 10;
+    }
+
+    let mut end = q;
+    loop {
+        let c = unsafe { *end as u8 };
+        let digit = if c.is_ascii_digit() {
+            (c - b'0') as u64
+        } else if (b'a'..=b'z').contains(&c) {
+            (c - b'a' + 10) as u64
+        } else if (b'A'..=b'Z').contains(&c) {
+            (c - b'A' + 10) as u64
+        } else {
+            break;
+        };
+        if digit >= base as u64 {
+            break;
+        }
+        number = number * base as u64 + digit;
+        end = end.add(1);
+    }
+
+    // Check for overflow during parsing
+    if end == q {
+        set_errno(EINVAL);
+        return -1;
+    }
+
+    // Determine shift from suffix
+    let mut shift: u32 = 0;
+    let mut suffix_end = end;
+    let c = unsafe { *suffix_end as u8 };
+    match c {
+        b'e' | b'E' => { shift = 60; suffix_end = suffix_end.add(1); }
+        b'p' | b'P' => { shift = 50; suffix_end = suffix_end.add(1); }
+        b't' | b'T' => { shift = 40; suffix_end = suffix_end.add(1); }
+        b'g' | b'G' => { shift = 30; suffix_end = suffix_end.add(1); }
+        b'm' | b'M' => { shift = 20; suffix_end = suffix_end.add(1); }
+        b'k' | b'K' => { shift = 10; suffix_end = suffix_end.add(1); }
+        _ => {}
+    }
+
+    // Treat 'b' as ignored suffix
+    let c = unsafe { *suffix_end as u8 };
+    if c == b'b' || c == b'B' {
+        suffix_end = suffix_end.add(1);
+    }
+
+    // No remaining characters allowed
+    if unsafe { *suffix_end } != 0 {
+        set_errno(EINVAL);
+        return -1;
+    }
+
+    // Apply shift and check overflow
+    if shift > 0 {
+        if (number << shift) >> shift != number {
+            set_errno(ERANGE);
+            return -1;
+        }
+        number <<= shift;
+    }
+
+    unsafe {
+        *num = number;
+        *neg = negative;
+    }
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn expand_number(buf: *const c_char, num: *mut c_longlong) -> c_int {
+    let mut number: u64 = 0;
+    let mut neg = false;
+
+    if expand_impl(buf, &mut number, &mut neg) != 0 {
+        return -1;
+    }
+
+    if neg {
+        if number > 0x8000000000000000u64 {
+            set_errno(ERANGE);
+            return -1;
+        }
+        *num = -(number as i64);
+    } else {
+        if number > INT64_MAX as u64 {
+            set_errno(ERANGE);
+            return -1;
+        }
+        *num = number as i64;
+    }
+
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn expand_unsigned(buf: *const c_char, num: *mut c_ulonglong) -> c_int {
+    let mut number: u64 = 0;
+    let mut neg = false;
+
+    if expand_impl(buf, &mut number, &mut neg) != 0 {
+        return -1;
+    }
+
+    if neg && number > 0 {
+        set_errno(ERANGE);
+        return -1;
+    }
+
+    *num = number;
+    0
+}

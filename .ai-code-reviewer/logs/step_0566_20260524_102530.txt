@@ -1,0 +1,11 @@
+=== STEP 566 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*.buildrc*'
+
+--- RESPONSE ---
+
+
+Let me check how previously completed units integrated Rust to understand the expected pattern.
+
+ACTION: LIST_DIR usr.bin/basename

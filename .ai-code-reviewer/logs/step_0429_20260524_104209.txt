@@ -1,0 +1,14 @@
+=== STEP 429 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/realpath is already marked complete.
+
+Completed work units are closed after a successful build and commit; do not reopen the same unit for incremental polish.
+NEXT: Use SET_SCOPE lib/libwrap
+
+--- RESPONSE ---
+
+
+Let me try to find a unit that isn't skipped or complete.
+
+ACTION: SET_SCOPE bin/uuidgen

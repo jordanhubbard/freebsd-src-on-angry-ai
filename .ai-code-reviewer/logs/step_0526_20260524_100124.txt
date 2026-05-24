@@ -1,0 +1,28 @@
+=== STEP 526 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libwrap:
+```
+Makefile
+Makefile.depend
+hosts.allow
+libvars.c
+```
+
+--- RESPONSE ---
+
+
+The rust directory was removed when the scope was abandoned. Let me recreate everything from scratch.
+
+ACTION: WRITE_FILE lib/libwrap/rust/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "libwrap"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+>>>

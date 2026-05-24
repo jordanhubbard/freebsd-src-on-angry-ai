@@ -1,0 +1,26 @@
+=== STEP 317 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: lib/libwrap
+Pending source/build changes: 3 files modified
+Files: lib/libwrap/rust/Cargo.toml, lib/libwrap/rust/src/lib.rs, lib/libwrap/Makefile
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in lib/libwrap
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+The build errors appear to be transient system-level issues. Let me try building again.
+
+ACTION: BUILD

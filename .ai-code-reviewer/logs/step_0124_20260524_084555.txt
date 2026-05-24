@@ -1,0 +1,11 @@
+=== STEP 124 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Writing Cargo.toml for cmp.
+
+ACTION: WRITE_FILE usr.bin/cmp/Cargo.toml

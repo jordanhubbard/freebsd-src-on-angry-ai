@@ -1,0 +1,273 @@
+=== STEP 558 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+✏️  Edits: 1 files modified
+
+```
+=== CHUNK 2/3: /usr/home/jkh/Src/freebsd-src-on-angry-AI/share/mk/bsd.lib.mk === [line_chunk: chunk_2]
+=== Lines 251-500 (250 lines) ===
+
+SOBJS+=		${OBJS:.o=.pico}
+DEPENDOBJS+=	${SOBJS}
+CLEANFILES+=	${SOBJS}
+.endif
+
+.if defined(SHLIB_NAME)
+_LIBS+=		${SHLIB_NAME}
+
+SOLINKOPTS+=	-shared -Wl,-x
+.if defined(LD_FATAL_WARNINGS) && ${LD_FATAL_WARNINGS} == "no"
+SOLINKOPTS+=	-Wl,--no-fatal-warnings
+.else
+SOLINKOPTS+=	-Wl,--fatal-warnings
+.endif
+SOLINKOPTS+=	-Wl,--warn-shared-textrel
+
+.if target(beforelinking)
+beforelinking: ${SOBJS}
+${SHLIB_NAME_FULL}: beforelinking
+.endif
+
+.if defined(SHLIB_LINK)
+.if defined(SHLIB_LDSCRIPT) && !empty(SHLIB_LDSCRIPT) && exists(${.CURDIR}/${SHLIB_LDSCRIPT})
+${SHLIB_LINK:R}.ld: ${.CURDIR}/${SHLIB_LDSCRIPT}
+	sed -e 's,@@SHLIB@@,${_SHLIBDIR}/${SHLIB_NAME},g' \
+	    -e 's,@@LIBDIR@@,${_LIBDIR},g' \
+	    ${.ALLSRC} > ${.TARGET}
+
+${SHLIB_NAME_FULL}: ${SHLIB_LINK:R}.ld
+CLEANFILES+=	${SHLIB_LINK:R}.ld
+.endif
+CLEANFILES+=	${SHLIB_LINK}
+.endif
+
+${SHLIB_NAME_FULL}: ${SOBJS}
+	@${ECHO} Building shared library ${SHLIB_NAME}
+	@rm -f ${SHLIB_NAME} ${SHLIB_LINK}
+.if defined(SHLIB_LINK) && !commands(${SHLIB_LINK:R}.ld) && ${MK_DEBUG_FILES} == "no"
+	# Note: This uses ln instead of ${INSTALL_LIBSYMLINK} since we are in OBJDIR
+	@${LN:Uln} -fs ${SHLIB_NAME} ${SHLIB_LINK}
+.endif
+	${_LD:N${CCACHE_BIN}} ${LDFLAGS} ${SSP_CFLAGS} ${SOLINKOPTS} \
+	    -o ${.TARGET} -Wl,-soname,${SONAME} ${SOBJS} ${LDADD}
+.if ${MK_CTF} != "no"
+	${CTFMERGE} ${CTFFLAGS} -o ${.TARGET} ${SOBJS}
+.endif
+
+.if ${MK_DEBUG_FILES} != "no"
+CLEANFILES+=	${SHLIB_NAME_FULL} ${DEBUGFILE}
+${SHLIB_NAME}: ${SHLIB_NAME_FULL} ${DEBUGFILE}
+	${OBJCOPY} --strip-debug --add-gnu-debuglink=${DEBUGFILE} \
+	    ${SHLIB_NAME_FULL} ${.TARGET}
+.if defined(SHLIB_LINK) && !commands(${SHLIB_LINK:R}.ld)
+	# Note: This uses ln instead of ${INSTALL_LIBSYMLINK} since we are in OBJDIR
+	@${LN:Uln} -fs ${SHLIB_NAME} ${SHLIB_LINK}
+.endif
+
+${DEBUGFILE}: ${SHLIB_NAME_FULL}
+	${OBJCOPY} --only-keep-debug ${SHLIB_NAME_FULL} ${.TARGET}
+.endif
+.endif #defined(SHLIB_NAME)
+
+.if defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+_LIBS+=		lib${LIB_PRIVATE}${LIB}_pic.a
+
+lib${LIB_PRIVATE}${LIB}_pic.a: ${SOBJS}
+	@${ECHO} Building special pic ${LIB} library
+	@rm -f ${.TARGET}
+	${AR} ${ARFLAGS} ${.TARGET} ${SOBJS} ${ARADD}
+.endif
+
+.if defined(BUILD_NOSSP_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+NOSSPSOBJS+=	${OBJS:.o=.nossppico}
+DEPENDOBJS+=	${NOSSPSOBJS}
+CLEANFILES+=	${NOSSPSOBJS}
+_LIBS+=		lib${LIB_PRIVATE}${LIB}_nossp_pic.a
+
+lib${LIB_PRIVATE}${LIB}_nossp_pic.a: ${NOSSPSOBJS}
+	@${ECHO} Building special nossp pic ${LIB} library
+	@rm -f ${.TARGET}
+	${AR} ${ARFLAGS} ${.TARGET} ${NOSSPSOBJS} ${ARADD}
+.endif
+
+.endif # !defined(INTERNALLIB)
+
+.if defined(INTERNALLIB) && ${MK_PIE} != "no" && defined(LIB) && !empty(LIB)
+PIEOBJS+=	${OBJS:.o=.pieo}
+DEPENDOBJS+=	${PIEOBJS}
+CLEANFILES+=	${PIEOBJS}
+
+_LIBS+=		lib${LIB_PRIVATE}${LIB}_pie.a
+
+lib${LIB_PRIVATE}${LIB}_pie.a: ${PIEOBJS}
+	@${ECHO} Building pie ${LIB} library
+	@rm -f ${.TARGET}
+	${AR} ${ARFLAGS} ${.TARGET} ${PIEOBJS} ${ARADD}
+.endif
+
+.if defined(_SKIP_BUILD)
+all:
+.else
+.if defined(_LIBS) && !empty(_LIBS)
+all: ${_LIBS}
+.endif
+
+.if ${MK_MAN} != "no" && !defined(LIBRARIES_ONLY)
+all: all-man
+.endif
+.endif
+
+CLEANFILES+=	${_LIBS}
+
+_EXTRADEPEND:
+.if !defined(NO_EXTRADEPEND) && defined(SHLIB_NAME)
+.if defined(DPADD) && !empty(DPADD)
+	echo ${SHLIB_NAME_FULL}: ${DPADD} >> ${DEPENDFILE}
+.endif
+.endif
+
+.if !target(install)
+
+INSTALLFLAGS+= -C
+.if defined(PRECIOUSLIB)
+.if !defined(NO_FSCHG)
+SHLINSTALLFLAGS+= -fschg
+.endif
+.endif
+# Install libraries with -S to avoid risk of modifying in-use libraries when
+# installing to a running system.  It is safe to avoid this for NO_ROOT builds
+# that are only creating an image.
+#
+# XXX: Since Makefile.inc1 ends up building lib/libc both as part of
+# _startup_libs and as part of _generic_libs it ends up getting installed a
+# second time during the parallel build, and although the .WAIT in lib/Makefile
+# stops that mattering for lib, other directories like secure/lib are built in
+# parallel at the top level and are unaffected by that, so can sometimes race
+# with the libc.so.7 reinstall and see a missing or corrupt file. Ideally the
+# build system would be fixed to not build/install libc to WORLDTMP the second
+# time round, but for now using -S ensures the install is atomic and thus we
+# never see a broken intermediate state, so use it even for NO_ROOT builds.
+.if !defined(NO_SAFE_LIBINSTALL) #&& !defined(NO_ROOT)
+SHLINSTALLFLAGS+= -S
+SHLINSTALLSYMLINKFLAGS+= -S
+.endif
+
+_INSTALLFLAGS:=	${INSTALLFLAGS}
+.for ie in ${INSTALLFLAGS_EDIT}
+_INSTALLFLAGS:=	${_INSTALLFLAGS${ie}}
+.endfor
+_SHLINSTALLFLAGS:=	${SHLINSTALLFLAGS}
+_SHLINSTALLSYMLINKFLAGS:= ${SHLINSTALLSYMLINKFLAGS}
+.for ie in ${INSTALLFLAGS_EDIT}
+_SHLINSTALLFLAGS:=	${_SHLINSTALLFLAGS${ie}}
+.endfor
+
+.if defined(PCFILES)
+.for pcfile in ${PCFILES}
+installpcfiles: installpcfiles-${pcfile}
+
+installpcfiles-${pcfile}: ${pcfile}
+	${INSTALL} ${DEV_TAG_ARGS} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
+	    ${_INSTALLFLAGS} \
+	    ${.ALLSRC} ${DESTDIR}${LIBDATADIR}/pkgconfig/
+.endfor
+.endif
+installpcfiles: .PHONY
+
+.if !defined(INTERNALLIB)
+realinstall: _libinstall installpcfiles _debuginstall
+.ORDER: beforeinstall _libinstall _debuginstall
+_libinstall:
+.if defined(LIB) && !empty(LIB) && ${MK_INSTALLLIB} != "no"
+	${INSTALL} ${DEV_TAG_ARGS} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
+	    ${_INSTALLFLAGS} lib${LIB_PRIVATE}${LIB}${_STATICLIB_SUFFIX}.a ${DESTDIR}${_LIBDIR}/
+.endif
+.if defined(SHLIB_NAME)
+	${INSTALL} ${LIB_TAG_ARGS} ${STRIP} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
+	    ${_INSTALLFLAGS} ${_SHLINSTALLFLAGS} \
+	    ${SHLIB_NAME} ${DESTDIR}${_SHLIBDIR}/
+.if defined(SHLIB_LINK)
+.if commands(${SHLIB_LINK:R}.ld)
+	${INSTALL} ${DEV_TAG_ARGS} -S -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
+	    ${_INSTALLFLAGS} ${SHLIB_LINK:R}.ld \
+	    ${DESTDIR}${_LIBDIR}/${SHLIB_LINK}
+.for _SHLIB_LINK_LINK in ${SHLIB_LDSCRIPT_LINKS}
+	${INSTALL_LIBSYMLINK} ${_SHLINSTALLSYMLINKFLAGS} ${LIB_TAG_ARGS} \
+	    ${SHLIB_LINK} ${DESTDIR}${_LIBDIR}/${_SHLIB_LINK_LINK}
+.endfor
+.else
+.if ${_SHLIBDIR} == ${_LIBDIR}
+.if ${SHLIB_LINK:Mlib*}
+	${INSTALL_RSYMLINK} ${_SHLINSTALLSYMLINKFLAGS} ${DEV_TAG_ARGS} \
+	    ${SHLIB_NAME} ${DESTDIR}${_LIBDIR}/${SHLIB_LINK}
+.else
+	${INSTALL_RSYMLINK} ${_SHLINSTALLSYMLINKFLAGS} ${LIB_TAG_ARGS} \
+	    ${DESTDIR}${_SHLIBDIR}/${SHLIB_NAME} \
+	    ${DESTDIR}${_LIBDIR}/${SHLIB_LINK}
+.endif
+.else
+.if ${SHLIB_LINK:Mlib*}
+	${INSTALL_RSYMLINK} ${_SHLINSTALLSYMLINKFLAGS} ${DEV_TAG_ARGS} \
+	    ${DESTDIR}${_SHLIBDIR}/${SHLIB_NAME} ${DESTDIR}${_LIBDIR}/${SHLIB_LINK}
+.else
+	${INSTALL_RSYMLINK} ${_SHLINSTALLSYMLINKFLAGS} ${LIB_TAG_ARGS} \
+	    ${DESTDIR}${_SHLIBDIR}/${SHLIB_NAME} ${DESTDIR}${_LIBDIR}/${SHLIB_LINK}
+.endif
+.if exists(${DESTDIR}${_LIBDIR}/${SHLIB_NAME})
+	-chflags noschg ${DESTDIR}${_LIBDIR}/${SHLIB_NAME}
+	rm -f ${DESTDIR}${_LIBDIR}/${SHLIB_NAME}
+.endif
+.endif # _SHLIBDIR == _LIBDIR
+.endif # SHLIB_LDSCRIPT
+.endif # SHLIB_LINK
+.endif # SHIB_NAME
+.if defined(INSTALL_PIC_ARCHIVE) && defined(LIB) && !empty(LIB)
+	${INSTALL} ${DEV_TAG_ARGS} -o ${LIBOWN} -g ${LIBGRP} -m ${LIBMODE} \
+	    ${_INSTALLFLAGS} lib${LIB}_pic.a ${DESTDIR}${_LIBDIR}/
+.endif
+.endif # !defined(INTERNALLIB)
+
+.if !defined(LIBRARIES_ONLY)
+.include <bsd.nls.mk>
+.include <bsd.confs.mk>
+.include <bsd.files.mk>
+#No need to install header for INTERNALLIB
+.if !defined(INTERNALLIB)
+.include <bsd.incs.mk>
+.endif
+.endif
+
+LINKOWN?=	${LIBOWN}
+LINKGRP?=	${LIBGRP}
+LINKMODE?=	${LIBMODE}
+SYMLINKOWN?=	${LIBOWN}
+SYMLINKGRP?=	${LIBGRP}
+.if !defined(NO_DEV_PACKAGE)
+LINKTAGS=	dev${_COMPAT_TAG}
+.else
+LINKTAGS=	${_COMPAT_TAG}
+.endif
+.include <bsd.links.mk>
+
+.if ${MK_MAN} != "no" && !defined(LIBRARIES_ONLY)
+realinstall: maninstall
+.ORDER: beforeinstall maninstall
+.endif
+
+.endif
+
+.if ${MK_MAN} != "no" && !defined(LIBRARIES_ONLY)
+
+```
+
+--- RESPONSE ---
+
+
+The build is failing silently with 0 errors. Let me check if there are more `.info` directives in Makefile.inc1 that need fixing.
+
+ACTION: NEXT_CHUNK

@@ -1,0 +1,77 @@
+=== STEP 573 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/Cargo.toml:
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: usr.bin/basename/Cargo.toml
+✏️  Edits: 1 files modified
+
+```
+[package]
+name = "basename"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "basename"
+path = "src/main.rs"
+```
+
+--- RESPONSE ---
+
+
+The build is failing silently. Let me try a different approach - looking at how the basename command integrates Rust, I should follow a similar pattern but adapted for a library. Let me simplify the Makefile integration.
+
+ACTION: EDIT_FILE lib/libwrap/Makefile
+OLD:
+<<<
+# libvars.c is replaced by the Rust crate; do not include it in SRCS
+SRCS=	clean_exit.c diag.c eval.c fix_options.c fromhost.c \
+	hosts_access.c hosts_ctl.c misc.c myvsyslog.c options.c \
+	percent_m.c percent_x.c refuse.c rfc931.c shell_cmd.c \
+	socket.c tli.c update.c workarounds.c
+
+# Rust replacement for libvars.c - build alongside C sources
+RUST_CARGO?=	cargo
+RUST_CRATE=	${SRCDIR}/rust
+RUST_TARGET_DIR=	${OBJDIR}/rust-target
+RUST_LIB=	${RUST_TARGET_DIR}/release/liblibwrap.a
+
+# Add the Rust staticlib to STATICOBJS so it gets archived into libwrap.a
+STATICOBJS+=	${RUST_LIB}
+
+# Build Rust crate before library linking
+${RUST_LIB}: ${RUST_CRATE}/Cargo.toml ${RUST_CRATE}/src/lib.rs
+	@${RUST_CARGO} build --release --manifest-path ${RUST_CRATE}/Cargo.toml \
+	    --target-dir ${RUST_TARGET_DIR}
+
+.include <bsd.lib.mk>
+>>>
+NEW:
+<<<
+# libvars.c is replaced by the Rust crate; do not include it in SRCS
+SRCS=	clean_exit.c diag.c eval.c fix_options.c fromhost.c \
+	hosts_access.c hosts_ctl.c misc.c myvsyslog.c options.c \
+	percent_m.c percent_x.c refuse.c rfc931.c shell_cmd.c \
+	socket.c tli.c update.c workarounds.c
+
+# Rust replacement for libvars.c - build alongside C sources
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${OBJDIR}/cargo-target
+
+# Build Rust crate and merge its symbols into the library
+RUST_LIB=	${CARGO_TARGET_DIR}/debug/liblibwrap.a
+
+all: ${RUST_LIB}
+
+${RUST_LIB}: ${SRCDIR}/rust/Cargo.toml ${SRCDIR}/rust/src/lib.rs
+	${CARGO} build --manifest-path ${SRCDIR}/rust/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+# Merge Rust symbols into the static library after bsd.lib.mk builds it
+libwrap.a: ${RUST_LIB}
+	${AR} ${ARFLAGS} ${.TARGET} ${RUST_LIB}
+
+.include <bsd.lib.mk>
+>>>

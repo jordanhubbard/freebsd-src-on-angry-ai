@@ -1,0 +1,272 @@
+=== STEP 581 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: usr.bin/basename/Cargo.toml
+✏️  Edits: 1 files modified
+
+```
+=== CHUNK 5/17: /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1 === [line_chunk: chunk_5]
+=== Lines 1001-1250 (250 lines) ===
+
+.endif
+.if defined(DB_FROM_SRC) || defined(NO_ROOT)
+IMAKE_INSTALL=	INSTALL="${INSTALL_CMD} ${INSTALLFLAGS}"
+IMAKE_MTREE=	MTREE_CMD="${MTREE_CMD} ${MTREEFLAGS}"
+.endif
+
+.if make(distributeworld) || make(packageworld) || make(distributekernel) || \
+    make(packagekernel)
+.if ${DISTDIR:U/} == /
+.error DISTDIR must be set for make distribute* and make package*, and may not be the root directory.
+.endif
+.if !defined(NO_ROOT) || !defined(METALOG)
+.error NO_ROOT and METALOG must be set for make distribute* and make package*.
+.endif
+.endif
+
+.if make(distributeworld)
+CERTCTLDESTDIR=	${DESTDIR}/${DISTDIR}
+CERTCTLFLAGS+=	-d /base
+.else
+CERTCTLDESTDIR=	${DESTDIR}
+.endif
+CERTCTLFLAGS+=	-D "${CERTCTLDESTDIR}"
+
+DESTDIR_MTREEFLAGS=	-deU
+# When creating worldtmp we don't need to set the directories as owned by root
+# so we also pass -W
+WORLDTMP_MTREEFLAGS=	-deUW
+.if defined(NO_ROOT)
+# When building with -DNO_ROOT we shouldn't be changing the directories
+# that are created by mtree to be owned by root/wheel.
+DESTDIR_MTREEFLAGS+=	-W
+.endif
+.if defined(DB_FROM_SRC)
+DISTR_MTREEFLAGS=	-N ${.CURDIR}/etc
+.endif
+DISTR_MTREECMD=	${MTREE_CMD}
+.if ${BUILD_WITH_STRICT_TMPPATH} != 0
+DISTR_MTREECMD=	${WORLDTMP}/legacy/usr/sbin/mtree
+.endif
+DISTR_MTREE=	${DISTR_MTREECMD} ${DISTR_MTREEFLAGS}
+WORLDTMP_MTREE=	${DISTR_MTREECMD} ${WORLDTMP_MTREEFLAGS}
+DESTDIR_MTREE=	${DISTR_MTREECMD} ${DESTDIR_MTREEFLAGS}
+
+METALOG_SORT_CMD=	env -i LC_COLLATE=C sort
+
+# kernel stage
+KMAKEENV=	${WMAKEENV}
+KMAKE=		${TIME_ENV} ${KMAKEENV} ${MAKE} ${.MAKEFLAGS} ${KERNEL_FLAGS} KERNEL=${INSTKERNNAME}
+
+#
+# buildworld
+#
+# Attempt to rebuild the entire system, with reasonable chance of
+# success, regardless of how old your existing system is.
+#
+_sanity_check: .PHONY .MAKE
+.if ${.CURDIR:C/[^,]//g} != ""
+#	The m4 build of sendmail files doesn't like it if ',' is used
+#	anywhere in the path of it's files.
+	@echo
+	@echo "*** Error: path to source tree contains a comma ','"
+	@echo
+	@false
+.elif ${.CURDIR:M*\:*} != ""
+#	Using ':' leaks into PATH and breaks finding cross-tools.
+	@echo
+	@echo "*** Error: path to source tree contains a colon ':'"
+	@echo
+	@false
+.endif
+
+# Our current approach to dependency tracking cannot cope with certain source
+# tree changes, particularly with respect to removing source files and
+# replacing generated files.  Handle these cases here in an ad-hoc fashion.
+_cleanobj_fast_depend_hack: .PHONY
+.if ${MK_DEPEND_CLEANUP} != "no"
+	@echo ">>> Deleting stale dependencies...";
+	MACHINE=${MACHINE} MACHINE_ARCH=${MACHINE_ARCH} \
+	    ALL_libcompats=${_ALL_libcompats:Q} MAKE=${MAKE} \
+	    sh ${.CURDIR}/tools/build/depend-cleanup.sh ${OBJTOP} ${SRCTOP}
+.endif
+
+_cleanworldtmp: .PHONY
+.if ${MK_CLEAN} == "yes"
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Cleaning up the temporary build tree"
+	@echo "--------------------------------------------------------------"
+	rm -rf ${WORLDTMP}
+.else
+# Note: for delete-old we need to set $PATH to also include the host $PATH
+# since otherwise a partial build with missing symlinks in ${WORLDTMP}/legacy/
+# will fail to run due to missing binaries. $WMAKE sets PATH to only ${TMPPATH}
+# so we remove that assignment from $WMAKE and prepend the new $PATH
+	${_+_}@if [ -e "${WORLDTMP}" ]; then \
+		echo ">>> Deleting stale files in build tree..."; \
+		cd ${.CURDIR}; env PATH=${TMPPATH:Q}:${PATH:Q} ${WMAKE:NPATH=*} \
+		    _NO_INCLUDE_COMPILERMK=t -DBATCH_DELETE_OLD_FILES delete-old \
+		    delete-old-libs >/dev/null; \
+	fi
+	rm -rf ${WORLDTMP}/legacy/usr/include
+.if ${USING_SYSTEM_COMPILER} == "yes"
+.for cc in cc c++
+	if [ -x ${WORLDTMP}/usr/bin/${cc} ]; then \
+		inum=$$(ls -i ${WORLDTMP}/usr/bin/${cc}); \
+		find ${WORLDTMP}/usr/bin -inum $${inum%% *} -delete; \
+	fi
+.endfor
+.endif	# ${USING_SYSTEM_COMPILER} == "yes"
+.if ${USING_SYSTEM_LINKER} == "yes"
+	@rm -f ${WORLDTMP}/usr/bin/ld ${WORLDTMP}/usr/bin/ld.lld
+.endif	# ${USING_SYSTEM_LINKER} == "yes"
+.endif	# ${MK_CLEAN} == "yes"
+_worldtmp: .PHONY
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Rebuilding the temporary build tree"
+	@echo "--------------------------------------------------------------"
+	@mkdir -p ${WORLDTMP}
+	@touch ${WORLDTMP}/${.TARGET}
+# We can't use mtree to create the worldtmp directories since it may not be
+# available on the target system (this happens e.g. when building on non-FreeBSD)
+	${_+_}cd ${.CURDIR}/tools/build; \
+	    ${MAKE} DIRPRFX=tools/build/ DESTDIR=${WORLDTMP}/legacy installdirs
+# In order to build without inheriting $PATH we need to add symlinks to the host
+# tools in $WORLDTMP for the tools that we don't build during bootstrap-tools
+	${_+_}cd ${.CURDIR}/tools/build; \
+	    ${MAKE} DIRPRFX=tools/build/ DESTDIR=${WORLDTMP}/legacy host-symlinks
+
+_legacy:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 1.1: legacy release compatibility shims"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${BMAKE} legacy
+_bootstrap-tools:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 1.2: bootstrap tools"
+	@echo "--------------------------------------------------------------"
+.if ${MK_CLEAN} != "yes"
+	${_+_}cd ${.CURDIR}; ${BMAKE} _NO_INCLUDE_COMPILERMK=t _cleanobj_fast_depend_hack
+.endif
+	${_+_}cd ${.CURDIR}; ${BMAKE} bootstrap-tools
+	mkdir -p ${WORLDTMP}/usr ${WORLDTMP}/lib/geom ${WORLDTMP}/bin
+	${WORLDTMP_MTREE} -f ${.CURDIR}/etc/mtree/BSD.usr.dist \
+	    -p ${WORLDTMP}/usr >/dev/null
+	${WORLDTMP_MTREE} -f ${.CURDIR}/etc/mtree/BSD.include.dist \
+	    -p ${WORLDTMP}/usr/include >/dev/null
+.for d in ${LIBCOMPAT_INCLUDE_DIRS}
+	mkdir -p ${WORLDTMP}/usr/include/${d}
+.endfor
+	ln -sf ${.CURDIR}/sys ${WORLDTMP}
+.if ${MK_DEBUG_FILES} != "no"
+	${WORLDTMP_MTREE} -f ${.CURDIR}/etc/mtree/BSD.debug.dist \
+	    -p ${WORLDTMP}/usr/lib >/dev/null
+.endif
+.for _mtree in ${LOCAL_MTREE}
+	${WORLDTMP_MTREE} -f ${.CURDIR}/${_mtree} -p ${WORLDTMP} > /dev/null
+.endfor
+_cleanobj:
+.if ${MK_CLEAN} == "yes"
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 2.1: cleaning up the object tree"
+	@echo "--------------------------------------------------------------"
+	# Avoid including bsd.compiler.mk in clean and obj with _NO_INCLUDE_COMPILERMK
+	# since the restricted $PATH might not contain a valid cc binary
+	${_+_}cd ${.CURDIR}; ${WMAKE} _NO_INCLUDE_COMPILERMK=t ${CLEANDIR}
+.for LIBCOMPAT in ${_LIBCOMPATS}
+	${_+_}cd ${.CURDIR}; ${LIB${LIBCOMPAT}WMAKE} _NO_INCLUDE_COMPILERMK=t -f Makefile.inc1 ${CLEANDIR}
+.endfor
+.else
+	${_+_}cd ${.CURDIR}; env CLEANMK="_NO_INCLUDE_COMPILERMK=t ${CLEANDIR}" \
+	    ${WMAKE} _cleanobj_fast_depend_hack
+.endif	# ${MK_CLEAN} == "yes"
+_obj:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 2.2: rebuilding the object tree"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${WMAKE} _NO_INCLUDE_COMPILERMK=t obj
+_build-tools:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 2.3: build tools"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${TMAKE} build-tools
+_cross-tools:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 3: cross tools"
+	@echo "--------------------------------------------------------------"
+	@rm -f ${OBJTOP}/toolchain-metadata.mk
+	${_+_}cd ${.CURDIR}; ${XMAKE} cross-tools
+	${_+_}cd ${.CURDIR}; ${XMAKE} kernel-tools
+_build-metadata:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 3.1: recording build metadata"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${WMAKE} toolchain-metadata.mk
+	${_+_}cd ${.CURDIR}; ${WMAKE} host-osreldate.h
+_includes:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 4.1: building includes"
+	@echo "--------------------------------------------------------------"
+# Special handling for SUBDIR_OVERRIDE in buildworld as they most likely need
+# headers from default SUBDIR.  Do SUBDIR_OVERRIDE includes last.
+	${_+_}cd ${.CURDIR}; ${WMAKE} SUBDIR_OVERRIDE= SHARED=symlinks \
+	    MK_INCLUDES=yes includes
+.if !empty(SUBDIR_OVERRIDE) && make(buildworld)
+	${_+_}cd ${.CURDIR}; ${WMAKE} MK_INCLUDES=yes SHARED=symlinks includes
+.endif
+	${_+_}cd ${.CURDIR}; ${WMAKE} test-includes
+_libraries:
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 4.2: building libraries"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; \
+	    ${WMAKE} -DNO_FSCHG MK_HTML=no MK_MAN=no \
+	    MK_TESTS=no MK_TESTS_SUPPORT=${MK_TESTS_SUPPORT} \
+	    libraries
+everything: .PHONY
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> stage 4.4: building everything"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; _PARALLEL_SUBDIR_OK=1 ${WMAKE} all
+
+WMAKE_TGTS=
+.if !defined(WORLDFAST)
+WMAKE_TGTS+=	_sanity_check _cleanworldtmp _worldtmp _legacy
+.if empty(SUBDIR_OVERRIDE)
+WMAKE_TGTS+=	_bootstrap-tools
+.endif
+WMAKE_TGTS+=	_cleanobj
+.if !defined(NO_OBJWALK)
+WMAKE_TGTS+=	_obj
+.endif
+WMAKE_TGTS+=	_build-tools _cross-tools
+WMAKE_TGTS+=	_build-metadata
+WMAKE_TGTS+=	_includes
+.endif
+.if !defined(NO_LIBS)
+WMAKE_TGTS+=	_libraries
+.endif
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

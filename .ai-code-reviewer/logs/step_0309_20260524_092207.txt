@@ -1,0 +1,37 @@
+=== STEP 309 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libwrap/rust/src/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to update the Makefile to integrate the Rust build. Let me edit the Makefile to add the Rust build integration.
+
+ACTION: EDIT_FILE lib/libwrap/Makefile
+OLD:
+<<<
+SRCS=	clean_exit.c diag.c eval.c fix_options.c fromhost.c \
+	hosts_access.c hosts_ctl.c misc.c myvsyslog.c options.c \
+	percent_m.c percent_x.c refuse.c rfc931.c shell_cmd.c \
+	socket.c tli.c update.c workarounds.c libvars.c
+
+.include <bsd.lib.mk>
+>>>
+NEW:
+<<<
+SRCS=	clean_exit.c diag.c eval.c fix_options.c fromhost.c \
+	hosts_access.c hosts_ctl.c misc.c myvsyslog.c options.c \
+	percent_m.c percent_x.c refuse.c rfc931.c shell_cmd.c \
+	socket.c tli.c update.c workarounds.c libvars.c
+
+RUST_SRCS=	rust/src/lib.rs
+RUST_CARGO=	rust/Cargo.toml
+
+rustlib:
+	@echo "Building Rust libwrap replacement..."
+	@cd ${.CURDIR}/rust && cargo build --release --target-dir ${.OBJDIR}/rust-target
+
+.include <bsd.lib.mk>
+>>>

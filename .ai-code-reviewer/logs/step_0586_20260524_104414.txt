@@ -1,0 +1,12 @@
+=== STEP 586 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: sys/contrib/libsodium/src/libsodium/crypto_auth is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE usr.bin/clang/llvm-dwp
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/clang/llvm-dwp

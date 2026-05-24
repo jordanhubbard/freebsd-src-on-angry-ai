@@ -1,0 +1,17 @@
+=== STEP 403 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1.
+Remaining files in lib/libutil:
+  - lib/libutil/Makefile
+  - lib/libutil/_secure_path.3
+  - lib/libutil/_secure_path.c
+  - lib/libutil/cpuset.3
+  - lib/libutil/cpuset.c
+  ... plus 62 more
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

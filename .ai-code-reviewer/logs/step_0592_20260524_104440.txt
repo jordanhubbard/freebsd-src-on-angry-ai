@@ -1,0 +1,25 @@
+=== STEP 592 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libwrap/rust/src/lib.rs:
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: lib/libwrap/rust/src/lib.rs
+✏️  Edits: 1 files modified
+
+```
+// C ABI compatible global variables matching libvars.c
+// These must be mutable to match the C `int` declarations that consumers may write to.
+
+#[no_mangle]
+pub static mut allow_severity: i32 = 0;
+
+#[no_mangle]
+pub static mut deny_severity: i32 = 0;
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE lib/libwrap/libvars.c

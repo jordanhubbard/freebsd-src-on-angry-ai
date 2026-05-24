@@ -1,0 +1,375 @@
+=== STEP 434 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/column/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/column/rust/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Rust replacement for FreeBSD usr.bin/column
+//
+// Copyright (c) 1989, 1993, 1994
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Write, stdout};
+use std::process;
+
+const TAB: usize = 8;
+const DEFNUM: usize = 1000;
+const DEFCOLS: usize = 25;
+
+fn usage() -> ! {
+    eprintln!(
+        "usage: column [-tx] [-c columns] [-l tblcols] [-s sep] [file ...]"
+    );
+    process::exit(1);
+}
+
+fn roundup(v: usize, align: usize) -> usize {
+    (v + align - 1) / align * align
+}
+
+fn width(s: &str) -> usize {
+    s.chars().filter(|c| !c.is_control()).map(|c| c.width().unwrap_or(0)).sum()
+}
+
+fn get_termwidth() -> usize {
+    // Try ioctl TIOCGWINSZ
+    let mut win = [0u32; 4];
+    let ret = unsafe {
+        libc::ioctl(
+            1,
+            libc::TIOCGWINSZ as libc::c_ulong,
+            &mut win as *mut [u32; 4] as *mut libc::winsize,
+        )
+    };
+    if ret == -1 || win[0] == 0 {
+        // Fall back to COLUMNS env var
+        env::var("COLUMNS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(80)
+    } else {
+        win[1] as usize
+    }
+}
+
+fn input_file(fp: &mut dyn BufRead, list: &mut Vec<String>, eval: &mut i32) {
+    let mut maxentry = DEFNUM;
+    let mut maxlength = 0usize;
+    let mut entries = list.len();
+
+    let mut buf = String::new();
+    while fp.read_line(&mut buf).unwrap_or(0) > 0 {
+        let trimmed: String = buf.chars().skip_while(|c| c.is_whitespace()).collect();
+        if trimmed.is_empty() {
+            buf.clear();
+            continue;
+        }
+        // Remove trailing newline
+        let line = trimmed.trim_end_matches('\n').trim_end_matches('\r');
+        let len = width(line);
+        if len > maxlength {
+            maxlength = len;
+        }
+        if entries >= maxentry {
+            maxentry += DEFNUM;
+        }
+        list.push(line.to_string());
+        entries += 1;
+        buf.clear();
+    }
+}
+
+fn c_columnate(list: &[String], termwidth: usize, maxlength: usize) {
+    let numcols = termwidth / maxlength;
+    let mut col = 0;
+    let mut chcnt = 0;
+    let mut endcol = maxlength;
+    let mut entries = list.len();
+
+    for item in list {
+        print!("{}", item);
+        chcnt += width(item);
+        entries -= 1;
+        if entries == 0 {
+            break;
+        }
+        col += 1;
+        if col == numcols {
+            chcnt = 0;
+            col = 0;
+            endcol = maxlength;
+            println!();
+        } else {
+            let mut cnt = roundup(chcnt + 1, TAB);
+            while cnt <= endcol {
+                print!("\t");
+                chcnt = cnt;
+                cnt = roundup(chcnt + 1, TAB);
+            }
+            endcol += maxlength;
+        }
+    }
+    if chcnt > 0 {
+        println!();
+    }
+}
+
+fn r_columnate(list: &[String], termwidth: usize, maxlength: usize) {
+    let numcols = termwidth / maxlength;
+    let entries = list.len();
+    let numrows = if entries % numcols == 0 {
+        entries / numcols
+    } else {
+        entries / numcols + 1
+    };
+
+    for row in 0..numrows {
+        let mut endcol = maxlength;
+        let mut chcnt = 0;
+        let mut col = 0;
+        let mut base = row;
+        while col < numcols {
+            if base >= entries {
+                break;
+            }
+            print!("{}", list[base]);
+            chcnt += width(list[base]);
+            base += numrows;
+            if base >= entries {
+                break;
+            }
+            let mut cnt = roundup(chcnt + 1, TAB);
+            while cnt <= endcol {
+                print!("\t");
+                chcnt = cnt;
+                cnt = roundup(chcnt + 1, TAB);
+            }
+            endcol += maxlength;
+            col += 1;
+        }
+        println!();
+    }
+}
+
+fn print_list(list: &[String]) {
+    for item in list {
+        println!("{}", item);
+    }
+}
+
+struct TblEntry {
+    cols: Vec<String>,
+    len: Vec<usize>,
+}
+
+fn maketbl(list: &[String], separator: &str, tblcols: Option<usize>) {
+    let entries = list.len();
+    let mut tbl: Vec<TblEntry> = Vec::with_capacity(entries);
+    let mut lens: Vec<usize> = Vec::new();
+    let mut maxcols = DEFCOLS;
+
+    for line in list {
+        let mut cols: Vec<String> = Vec::new();
+        let mut coloff = 0;
+        let mut chars = line.chars().peekable();
+
+        // Skip leading separators
+        while let Some(c) = chars.peek() {
+            if separator.contains(*c) {
+                chars.next();
+            } else {
+                break;
+            }
+        }
+
+        while chars.peek().is_some() {
+            if coloff >= maxcols {
+                maxcols += DEFCOLS;
+                while lens.len() < maxcols {
+                    lens.push(0);
+                }
+            }
+
+            let mut field = String::new();
+            while let Some(c) = chars.next() {
+                if tblcols.is_none() || coloff < tblcols.unwrap() {
+                    if separator.contains(c) {
+                        break;
+                    }
+                }
+                field.push(c);
+            }
+            cols.push(field);
+            coloff += 1;
+
+            // Skip separators between fields
+            while let Some(c) = chars.peek() {
+                if separator.contains(*c) {
+                    chars.next();
+                } else {
+                    break;
+                }
+            }
+        }
+
+        let lens_copy: Vec<usize> = cols.iter().map(|s| width(s)).collect();
+        for i in 0..cols.len() {
+            if i >= lens.len() {
+                lens.push(0);
+            }
+            if lens_copy[i] > lens[i] {
+                lens[i] = lens_copy[i];
+            }
+        }
+        tbl.push(TblEntry { cols, len: lens_copy });
+    }
+
+    for entry in &tbl {
+        for i in 0..entry.cols.len().saturating_sub(1) {
+            let pad = lens[i] - entry.len[i] + 2;
+            print!("{}{}", entry.cols[i], " ".repeat(pad));
+        }
+        if !entry.cols.is_empty() {
+            let last = entry.cols.len() - 1;
+            println!("{}", entry.cols[last]);
+        } else {
+            println!();
+        }
+    }
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let mut termwidth = get_termwidth();
+    let mut tblcols: Option<usize> = None;
+    let mut separator = "\t ";
+    let mut tflag = false;
+    let mut xflag = false;
+    let mut files: Vec<String> = Vec::new();
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-c" => {
+                i += 1;
+                if i >= args.len() {
+                    usage();
+                }
+                termwidth = args[i].parse().unwrap_or_else(|_| usage());
+            }
+            "-l" => {
+                i += 1;
+                if i >= args.len() {
+                    usage();
+                }
+                tblcols = Some(args[i].parse().unwrap_or_else(|_| usage()));
+            }
+            "-s" => {
+                i += 1;
+                if i >= args.len() {
+                    usage();
+                }
+                separator = &args[i];
+            }
+            "-t" => {
+                tflag = true;
+            }
+            "-x" => {
+                xflag = true;
+            }
+            "--" => {
+                i += 1;
+                break;
+            }
+            s if s.starts_with('-') => {
+                usage();
+            }
+            _ => {
+                files.push(args[i].clone());
+            }
+        }
+        i += 1;
+    }
+
+    if tblcols.is_some() && !tflag {
+        eprintln!("the -l flag cannot be used without the -t flag");
+        process::exit(1);
+    }
+
+    let mut list: Vec<String> = Vec::new();
+    let mut eval = 0i32;
+
+    if files.is_empty() {
+        let stdin = io::stdin();
+        let mut reader = BufReader::new(stdin.lock());
+        input_file(&mut reader, &mut list, &mut eval);
+    } else {
+        for f in &files {
+            match File::open(f) {
+                Ok(file) => {
+                    let mut reader = BufReader::new(file);
+                    input_file(&mut reader, &mut list, &mut eval);
+                }
+                Err(e) => {
+                    eprintln!("column: {}: {}", f, e);
+                    eval = 1;
+                }
+            }
+        }
+    }
+
+    if list.is_empty() {
+        process::exit(eval);
+    }
+
+    let maxlength = list.iter().map(|s| width(s)).max().unwrap_or(0);
+    let maxlength = roundup(maxlength + 1, TAB);
+
+    if tflag {
+        maketbl(&list, separator, tblcols);
+    } else if maxlength >= termwidth {
+        print_list(&list);
+    } else if xflag {
+        c_columnate(&list, termwidth, maxlength);
+    } else {
+        r_columnate(&list, termwidth, maxlength);
+    }
+
+    process::exit(eval);
+}
+>>>

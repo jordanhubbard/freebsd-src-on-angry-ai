@@ -1,0 +1,17 @@
+=== STEP 153 ===
+
+--- REQUEST ---
+TIMEOUT: You have spent too many iterations on usr.bin/cmp. This directory is being skipped.
+
+SCOPE_ABANDONED: usr.bin/cmp was marked skipped.
+
+Reason: Exceeded 120 iterations without completing the scope
+Any tracked edits were reverted and untracked files created under the scope were removed.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/AVR/TargetInfo
+
+--- RESPONSE ---
+
+
+Moving to next unit.
+
+ACTION: SET_SCOPE contrib/llvm-project/llvm/lib/Target/AVR/TargetInfo

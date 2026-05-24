@@ -1,0 +1,241 @@
+=== STEP 399 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch/rust/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The Rust source uses `libc` crate which isn't allowed. Let me fix it to use only std.
+
+ACTION: WRITE_FILE usr.bin/touch/rust/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Rust replacement for FreeBSD usr.bin/touch
+//
+// Copyright (c) 1993 The Regents of the University of California.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::env;
+use std::fs;
+use std::os::unix::fs::MetadataExt;
+use std::path::Path;
+use std::process;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
+
+fn usage() -> ! {
+    eprintln!("Usage: touch [-acfm] [-r reference] [-t [[CC]YY]MMDDhhmm[.SS]] file ...");
+    process::exit(1);
+}
+
+fn parse_time_arg(arg: &str) -> Result<(i64, i64), String> {
+    let s = arg.trim_start_matches('-');
+    let parts: Vec<&str> = s.splitn(2, '.').collect();
+    let main = parts[0];
+    let sec = if parts.len() > 1 {
+        parts[1].parse::<i64>().map_err(|_| format!("Invalid seconds: {}", parts[1]))?
+    } else {
+        0
+    };
+
+    let len = main.len();
+    if len < 12 {
+        return Err(format!("Time string too short: {}", main));
+    }
+
+    let (year_str, month_str, day_str, hour_str, min_str) = if len >= 14 {
+        (&main[0..2], &main[2..4], &main[4..6], &main[6..8], &main[8..10])
+    } else {
+        return Err(format!("Time string too short: {}", main));
+    };
+
+    let year: i64 = year_str.parse().map_err(|_| format!("Invalid year: {}", year_str))?;
+    let month: i64 = month_str.parse().map_err(|_| format!("Invalid month: {}", month_str))?;
+    let day: i64 = day_str.parse().map_err(|_| format!("Invalid day: {}", day_str))?;
+    let hour: i64 = hour_str.parse().map_err(|_| format!("Invalid hour: {}", hour_str))?;
+    let min: i64 = min_str.parse().map_err(|_| format!("Invalid minute: {}", min_str))?;
+
+    let mut y = year;
+    if y < 69 {
+        y += 100;
+    } else {
+        y += 1900;
+    }
+
+    let days = days_from_civil(y, month, day);
+    let epoch_secs = days * 86400 + hour * 3600 + min * 60;
+
+    Ok((epoch_secs, sec))
+}
+
+fn days_from_civil(y: i64, m: i64, d: i64) -> i64 {
+    let era = if m >= 2 { y - 1900 } else { y - 1901 };
+    let yoe = m - 14 / 4;
+    let doy = d + (153 * yoe + 2) / 5;
+    let doe = yoe * 365 + yoe / 4 - 1 + doy;
+    era * 365 + era / 4 - era / 100 + era / 400 + doe - 719468
+}
+
+fn touch_file(path: &Path, atime: Option<(i64, i64)>, mtime: Option<(i64, i64)>,
+              create: bool, no_dereference: bool) -> Result<(), String> {
+    let meta = if no_dereference {
+        fs::symlink_metadata(path)
+    } else {
+        fs::metadata(path)
+    };
+
+    match meta {
+        Ok(_) => {
+            let times = match (atime, mtime) {
+                (Some(a), Some(m)) => fs::FileTimes::new()
+                    .set_access_time(SystemTime::UNIX_EPOCH + Duration::new(a.0 as u64, 0))
+                    .set_modified_time(SystemTime::UNIX_EPOCH + Duration::new(m.0 as u64, 0)),
+                (Some(a), None) => fs::FileTimes::new()
+                    .set_access_time(SystemTime::UNIX_EPOCH + Duration::new(a.0 as u64, 0)),
+                (None, Some(m)) => fs::FileTimes::new()
+                    .set_modified_time(SystemTime::UNIX_EPOCH + Duration::new(m.0 as u64, 0)),
+                (None, None) => fs::FileTimes::new(),
+            };
+            fs::set_file_times(path, times).map_err(|e| format!("{}: {}", path.display(), e))?;
+            Ok(())
+        }
+        Err(_) if create => {
+            fs::File::create(path).map_err(|e| format!("{}: {}", path.display(), e))?;
+            Ok(())
+        }
+        Err(e) => Err(format!("{}: {}", path.display(), e)),
+    }
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        usage();
+    }
+
+    let mut change_atime = false;
+    let mut change_mtime = true;
+    let mut reference: Option<String> = None;
+    let mut time_arg: Option<String> = None;
+    let mut no_create = false;
+    let mut no_dereference = false;
+    let mut files: Vec<String> = Vec::new();
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-a" => change_atime = true,
+            "-c" => no_create = true,
+            "-f" => {}
+            "-m" => change_mtime = true,
+            "-r" => {
+                i += 1;
+                if i >= args.len() {
+                    eprintln!("touch: -r requires an argument");
+                    process::exit(1);
+                }
+                reference = Some(args[i].clone());
+            }
+            "-t" => {
+                i += 1;
+                if i >= args.len() {
+                    eprintln!("touch: -t requires an argument");
+                    process::exit(1);
+                }
+                time_arg = Some(args[i].clone());
+            }
+            "-h" => no_dereference = true,
+            "-L" => no_dereference = false,
+            "-P" => no_dereference = true,
+            "--" => {
+                i += 1;
+                break;
+            }
+            s if s.starts_with('-') => {
+                eprintln!("touch: illegal option -- {}", &s[1..]);
+                usage();
+            }
+            _ => {
+                files.push(args[i].clone());
+            }
+        }
+        i += 1;
+    }
+
+    if files.is_empty() {
+        usage();
+    }
+
+    let (atime, mtime) = match (reference, time_arg) {
+        (Some(ref_path), None) => {
+            let meta = fs::metadata(&ref_path).unwrap_or_else(|e| {
+                eprintln!("touch: cannot stat {}: {}", ref_path, e);
+                process::exit(1);
+            });
+            let at = (meta.atime() as i64, meta.atime_nsec() as i64);
+            let mt = (meta.mtime() as i64, meta.mtime_nsec() as i64);
+            (
+                if change_atime { Some(at) } else { None },
+                if change_mtime { Some(mt) } else { None },
+            )
+        }
+        (None, Some(t)) => {
+            let (secs, nsecs) = match parse_time_arg(&t) {
+                Ok(v) => v,
+                Err(e) => {
+                    eprintln!("touch: invalid time format: {}", e);
+                    process::exit(1);
+                }
+            };
+            let t = (secs, nsecs);
+            (
+                if change_atime { Some(t) } else { None },
+                if change_mtime { Some(t) } else { None },
+            )
+        }
+        (Some(_), Some(_)) => {
+            eprintln!("touch: -r and -t are mutually exclusive");
+            process::exit(1);
+        }
+        (None, None) => (None, None),
+    };
+
+    let mut exit_code = 0;
+    for file in &files {
+        let path = Path::new(file);
+        if let Err(e) = touch_file(path, atime, mtime, !no_create, no_dereference) {
+            eprintln!("touch: {}", e);
+            exit_code = 1;
+        }
+    }
+
+    process::exit(exit_code);
+}
+>>>

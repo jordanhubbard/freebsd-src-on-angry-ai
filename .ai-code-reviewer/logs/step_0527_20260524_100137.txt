@@ -1,0 +1,21 @@
+=== STEP 527 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libwrap/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE lib/libwrap/rust/src/lib.rs
+CONTENT:
+<<<
+// C ABI compatible global variables matching libvars.c
+// These must be mutable to match the C `int` declarations that consumers may write to.
+
+#[no_mangle]
+pub static mut allow_severity: i32 = 0;
+
+#[no_mangle]
+pub static mut deny_severity: i32 = 0;
+>>>

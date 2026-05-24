@@ -1,0 +1,21 @@
+=== STEP 278 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libwrap/libvars.c:
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: lib/libwrap/libvars.c
+
+```
+int allow_severity;
+int deny_severity;
+
+```
+
+--- RESPONSE ---
+
+
+This is a small library unit. The `libvars.c` file is trivially simple - just two global int variables. Let me create a Rust replacement for this and integrate it into the build.
+
+ACTION: WRITE_FILE lib/libwrap/rust/Cargo.toml

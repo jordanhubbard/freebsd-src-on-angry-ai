@@ -1,0 +1,15 @@
+=== STEP 275 ===
+
+--- REQUEST ---
+TIMEOUT: You have spent too many iterations on contrib/llvm-project/llvm/lib/Target/AVR/TargetInfo. This directory is being skipped.
+
+SCOPE_ABANDONED: contrib/llvm-project/llvm/lib/Target/AVR/TargetInfo was marked skipped.
+
+Reason: Exceeded 120 iterations without completing the scope
+Any tracked edits were reverted and untracked files created under the scope were removed.
+NEXT: Use SET_SCOPE lib/libwrap
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE lib/libwrap

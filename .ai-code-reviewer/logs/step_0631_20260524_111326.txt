@@ -1,0 +1,31 @@
+=== STEP 631 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/clang/llvm-dwp/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+This unit is deeply tied to LLVM infrastructure with complex build dependencies. The driver is just a thin wrapper calling `llvm_dwp_main` from LLVM libraries. Let me update the Makefile to integrate the Rust build alongside the existing LLVM build.
+
+ACTION: EDIT_FILE usr.bin/clang/llvm-dwp/Makefile
+OLD:
+PROG_CXX=	llvm-dwp
+MAN=
+
+SRCDIR=		llvm/tools/llvm-dwp
+SRCS+=		llvm-dwp-driver.cpp
+SRCS+=		llvm-dwp.cpp
+
+.include "${SRCTOP}/lib/clang/llvm.pre.mk"
+>>>
+NEW:
+PROG_CXX=	llvm-dwp
+MAN=
+
+SRCDIR=		llvm/tools/llvm-dwp
+SRCS+=		llvm-dwp-driver.cpp
+SRCS+=		llvm-dwp.cpp
+
+.include "${SRCTOP}/lib/clang/llvm.pre.mk"

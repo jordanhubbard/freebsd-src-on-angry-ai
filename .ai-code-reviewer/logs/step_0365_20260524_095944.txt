@@ -1,0 +1,43 @@
+=== STEP 365 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/clang/llvm-dwp/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/clang/llvm-dwp
+   Files: 0/2
+📄 File: usr.bin/clang/llvm-dwp/Makefile
+
+```
+PROG_CXX=	llvm-dwp
+MAN=
+
+SRCDIR=		llvm/tools/llvm-dwp
+SRCS+=		llvm-dwp-driver.cpp
+SRCS+=		llvm-dwp.cpp
+
+.include "${SRCTOP}/lib/clang/llvm.pre.mk"
+
+CFLAGS+=	-I${.OBJDIR}
+
+INCFILE=	Opts.inc
+TDFILE=		${LLVM_BASE}/${SRCDIR}/Opts.td
+GENOPT=		-gen-opt-parser-defs
+${INCFILE}: ${TDFILE}
+	${LLVM_TBLGEN} ${GENOPT} -I ${LLVM_SRCS}/include -d ${.TARGET:C/$/.d/} \
+	    -o ${.TARGET} ${TDFILE}
+TGHDRS+=	${INCFILE}
+
+DEPENDFILES+=	${TGHDRS:C/$/.d/}
+DPSRCS+=	${TGHDRS}
+CLEANFILES+=	${TGHDRS} ${TGHDRS:C/$/.d/}
+
+.include "../llvm.prog.mk"
+
+```
+
+--- RESPONSE ---
+
+
+This is a thin C++ driver that delegates to LLVM's `llvm_dwp_main`. It's deeply integrated with LLVM infrastructure and not suitable for a standalone Rust rewrite. Let me move to a simpler unit.
+
+ACTION: SET_SCOPE bin/cat/tests

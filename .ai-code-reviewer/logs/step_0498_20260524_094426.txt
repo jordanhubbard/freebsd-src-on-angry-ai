@@ -1,0 +1,15 @@
+=== STEP 498 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/AVR/TargetInfo:
+```
+AVRTargetInfo.cpp
+AVRTargetInfo.h
+```
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors/0 warnings. This scope is LLVM compiler infrastructure, not FreeBSD userland. Let me try building again.
+
+ACTION: BUILD

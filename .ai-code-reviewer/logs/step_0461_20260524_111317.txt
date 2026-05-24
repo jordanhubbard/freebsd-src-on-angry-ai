@@ -1,0 +1,24 @@
+=== STEP 461 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: usr.bin/clang/llvm-dwp
+Pending source/build changes: 2 files modified
+Files: usr.bin/clang/llvm-dwp/Cargo.toml, usr.bin/clang/llvm-dwp/src/main.rs
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in usr.bin/clang/llvm-dwp
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: lib/libwrap
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/clang/llvm-dwp

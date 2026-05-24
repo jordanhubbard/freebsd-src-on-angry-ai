@@ -1,0 +1,22 @@
+=== STEP 593 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libwrap/libvars.c:
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: lib/libwrap/libvars.c
+✏️  Edits: 1 files modified
+
+```
+int allow_severity;
+int deny_severity;
+
+```
+
+--- RESPONSE ---
+
+
+The `lib/libwrap` unit already has a Rust replacement for `libvars.c` with Makefile integration. The changes are already staged. Let me build to validate and commit.
+
+ACTION: BUILD

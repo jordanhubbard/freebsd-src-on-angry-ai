@@ -1,0 +1,124 @@
+=== STEP 615 ===
+
+--- REQUEST ---
+BUILD_FAILED: Build errors detected
+
+No changes were committed. Rewrite units are atomic: source changes, build glue, and configured contract checks must pass together before the unit can be marked complete.
+
+BUILD ERROR REPORT:
+BUILD FAILED: 0 errors, 0 warnings
+Duration: 30.3 seconds
+
+============================================================
+ERRORS (fix these first):
+============================================================
+
+
+NEXT STEPS:
+1. Keep the active scope.
+2. Fix the source/build integration that caused this failure.
+3. BUILD again when the complete rewrite unit is ready.
+
+
+--- RESPONSE ---
+
+
+Let me try a completely different approach - restore the original Makefile and make minimal changes.
+
+ACTION: EDIT_FILE lib/libwrap/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PACKAGE=	tcpd
+
+CONFS=	hosts.allow
+LIB=	wrap
+SHLIB_MAJOR= 6
+INCS=	tcpd.h
+
+MAN=		hosts_access.3
+MLINKS=		hosts_access.3 hosts_ctl.3 \
+		hosts_access.3 request_init.3 \
+		hosts_access.3 request_set.3
+
+MANNODEV=	hosts_access.5 hosts_options.5
+MANNODEVLINKS=	hosts_options.5 hosts.allow.5
+
+.PATH:	${SRCTOP}/contrib/tcp_wrappers
+
+CFLAGS+=-DFACILITY=LOG_AUTH -DHOSTS_ACCESS -DNETGROUP -DDAEMON_UMASK=022 \
+	-DREAL_DAEMON_DIR=\"${LIBEXECDIR}\" -DPROCESS_OPTIONS \
+	-DSEVERITY=LOG_INFO -DRFC931_TIMEOUT=10 \
+	-DHOSTS_DENY=\"/etc/hosts.deny\" -DHOSTS_ALLOW=\"/etc/hosts.allow\" \
+	-DSYS_ERRLIST_DEFINED -DALWAYS_HOSTNAME -DUSE_STRSEP -DPROCESS_OPTIONS
+.if ${MK_NIS} == "no"
+CFLAGS+= -DUSE_GETDOMAIN
+.endif
+.if ${MK_INET6_SUPPORT} != "no"
+CFLAGS+=-DINET6
+.endif
+
+WARNS?=	0
+
+SRCS=	clean_exit.c diag.c eval.c fix_options.c fromhost.c \
+	hosts_access.c hosts_ctl.c libvars.c misc.c myvsyslog.c options.c \
+	percent_m.c percent_x.c refuse.c rfc931.c shell_cmd.c \
+	socket.c tli.c update.c workarounds.c
+
+.include <bsd.lib.mk>
+
+# Rust replacement for libvars.c - build alongside C sources (side-by-side)
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${OBJDIR}/cargo-target
+
+# Build Rust crate as part of the normal unit build
+.PHONY: rust-lib
+all: rust-lib
+
+rust-lib:
+	@echo "Building Rust libwrap crate..."
+	${CARGO} build --manifest-path ${SRCDIR}/rust/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PACKAGE=	tcpd
+
+CONFS=	hosts.allow
+LIB=	wrap
+SHLIB_MAJOR= 6
+INCS=	tcpd.h
+
+MAN=		hosts_access.3
+MLINKS=		hosts_access.3 hosts_ctl.3 \
+		hosts_access.3 request_init.3 \
+		hosts_access.3 request_set.3
+
+MANNODEV=	hosts_access.5 hosts_options.5
+MANNODEVLINKS=	hosts_options.5 hosts.allow.5
+
+.PATH:	${SRCTOP}/contrib/tcp_wrappers
+
+CFLAGS+=-DFACILITY=LOG_AUTH -DHOSTS_ACCESS -DNETGROUP -DDAEMON_UMASK=022 \
+	-DREAL_DAEMON_DIR=\"${LIBEXECDIR}\" -DPROCESS_OPTIONS \
+	-DSEVERITY=LOG_INFO -DRFC931_TIMEOUT=10 \
+	-DHOSTS_DENY=\"/etc/hosts.deny\" -DHOSTS_ALLOW=\"/etc/hosts.allow\" \
+	-DSYS_ERRLIST_DEFINED -DALWAYS_HOSTNAME -DUSE_STRSEP -DPROCESS_OPTIONS
+.if ${MK_NIS} == "no"
+CFLAGS+= -DUSE_GETDOMAIN
+.endif
+.if ${MK_INET6_SUPPORT} != "no"
+CFLAGS+=-DINET6
+.endif
+
+WARNS?=	0
+
+SRCS=	clean_exit.c diag.c eval.c fix_options.c fromhost.c \
+	hosts_access.c hosts_ctl.c libvars.c misc.c myvsyslog.c options.c \
+	percent_m.c percent_x.c refuse.c rfc931.c shell_cmd.c \
+	socket.c tli.c update.c workarounds.c
+
+.include <bsd.lib.mk>
+>>>

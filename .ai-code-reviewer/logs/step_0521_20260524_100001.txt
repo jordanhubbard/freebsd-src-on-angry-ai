@@ -1,0 +1,47 @@
+=== STEP 521 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1.
+Remaining files in lib/libwrap:
+  (All tracked files rewritten or skipped in this directory)
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+Let me revert the Makefile.inc1 changes that may be causing the build failure.
+
+ACTION: EDIT_FILE Makefile.inc1
+OLD:
+<<<
+# System compiler/linker status messages suppressed to avoid build noise
+# .if (make(buildworld) || make(buildkernel) || make(kernel-toolchain) || \
+#     make(toolchain) || make(_cross-tools))
+# .if ${USING_SYSTEM_COMPILER} == "yes"
+# .info SYSTEM_COMPILER: Determined that CC=${CC} matches the source tree.  Not bootstrapping a cross-compiler.
+# .elif ${MK_CLANG_BOOTSTRAP} == "yes"
+# .info SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+# .endif
+# .if ${USING_SYSTEM_LINKER} == "yes"
+# .info SYSTEM_LINKER: Determined that LD=${LD} matches the source tree.  Not bootstrapping a cross-linker.
+# .elif ${MK_LLD_BOOTSTRAP} == "yes"
+# .info SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker.
+# .endif
+# .endif
+>>>
+NEW:
+<<<
+.if (make(buildworld) || make(buildkernel) || make(kernel-toolchain) || \
+    make(toolchain) || make(_cross-tools))
+.if ${USING_SYSTEM_COMPILER} == "yes"
+.info SYSTEM_COMPILER: Determined that CC=${CC} matches the source tree.  Not bootstrapping a cross-compiler.
+.elif ${MK_CLANG_BOOTSTRAP} == "yes"
+.info SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+.endif
+.if ${USING_SYSTEM_LINKER} == "yes"
+.info SYSTEM_LINKER: Determined that LD=${LD} matches the source tree.  Not bootstrapping a cross-linker.
+.elif ${MK_LLD_BOOTSTRAP} == "yes"
+.info SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker.
+.endif
+.endif
+>>>

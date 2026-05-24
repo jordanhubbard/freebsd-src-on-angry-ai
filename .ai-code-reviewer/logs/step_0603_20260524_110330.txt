@@ -1,0 +1,13 @@
+=== STEP 603 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*bsd.lib.mk*':
+```
+./tools/build/mk/bsd.lib.mk
+./share/mk/bsd.lib.mk
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE share/mk/bsd.lib.mk

@@ -1,0 +1,85 @@
+=== STEP 599 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/Makefile:
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: usr.bin/basename/Makefile
+✏️  Edits: 1 files modified
+
+```
+.include <src.opts.mk>
+
+PROG=	basename
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+MLINKS=	basename.1 dirname.1
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+```
+
+--- RESPONSE ---
+
+
+The issue is likely that my `libwrap.a` rule conflicts with `bsd.lib.mk`'s own rules for building the library. Let me use a different approach that hooks into the build after the normal library is created.
+
+ACTION: EDIT_FILE lib/libwrap/Makefile
+OLD:
+<<<
+# Rust replacement for libvars.c - build alongside C sources
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${OBJDIR}/cargo-target
+RUST_LIB=	${CARGO_TARGET_DIR}/debug/liblibwrap.a
+RUST_OBJS=	${OBJDIR}/cargo-objs
+
+# Build Rust crate and extract objects before the static library is archived
+libwrap.a: ${RUST_OBJS}
+	${AR} ${ARFLAGS} ${.TARGET} ${RUST_OBJS}/*.o
+
+${RUST_OBJS}: ${RUST_LIB}
+	${MKDIR} ${RUST_OBJS}
+	cd ${RUST_OBJS} && ${AR} x ${RUST_LIB}
+
+${RUST_LIB}: ${SRCDIR}/rust/Cargo.toml ${SRCDIR}/rust/src/lib.rs
+	${CARGO} build --manifest-path ${SRCDIR}/rust/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+# Rust replacement for libvars.c - build alongside C sources
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${OBJDIR}/cargo-target
+RUST_LIB=	${CARGO_TARGET_DIR}/debug/liblibwrap.a
+RUST_OBJS=	${OBJDIR}/cargo-objs
+
+# Build Rust crate and merge its objects into the library after normal build
+all: ${RUST_LIB}
+	${MKDIR} ${RUST_OBJS}
+	cd ${RUST_OBJS} && ${AR} x ${RUST_LIB}
+	${AR} ${ARFLAGS} ${.CURDIR}/lib${LIB}.a ${RUST_OBJS}/*.o
+
+${RUST_LIB}: ${SRCDIR}/rust/Cargo.toml ${SRCDIR}/rust/src/lib.rs
+	${CARGO} build --manifest-path ${SRCDIR}/rust/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+>>>

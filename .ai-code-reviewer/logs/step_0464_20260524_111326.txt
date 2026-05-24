@@ -1,0 +1,37 @@
+=== STEP 464 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/clang/llvm-dwp/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/clang/llvm-dwp
+   Files: 0/2
+📄 File: usr.bin/clang/llvm-dwp/src/main.rs
+
+```
+// Rust replacement for llvm-dwp-driver.cpp
+// This is a thin wrapper that calls into the LLVM C++ library via FFI.
+
+extern "C" {
+    fn llvm_dwp_main(argc: i32, argv: *const *const i8, tool_name: *const i8) -> i32;
+}
+
+fn main() {
+    let args: Vec<std::ffi::CString> = std::env::args()
+        .map(|arg| std::ffi::CString::new(arg).expect("Invalid argument encoding"))
+        .collect();
+
+    let argv: Vec<*const i8> = args.iter().map(|s| s.as_ptr()).collect();
+    let tool_name = std::ffi::CString::new("llvm-dwp").expect("Invalid tool name");
+
+    let ret = unsafe {
+        llvm_dwp_main(args.len() as i32, argv.as_ptr(), tool_name.as_ptr())
+    };
+
+    std::process::exit(ret);
+}
+```
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

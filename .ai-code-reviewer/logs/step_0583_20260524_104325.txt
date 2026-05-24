@@ -1,0 +1,272 @@
+=== STEP 583 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: usr.bin/basename/Cargo.toml
+✏️  Edits: 1 files modified
+
+```
+=== CHUNK 7/17: /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1 === [line_chunk: chunk_7]
+=== Lines 1501-1750 (250 lines) ===
+
+.endfor
+.if ${MK_DEBUG_FILES} != "no"
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.debug.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist}/usr/lib >/dev/null
+.endif
+.for libcompat in ${libcompats}
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.lib${libcompat}.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist}/usr >/dev/null
+.if ${MK_DEBUG_FILES} != "no"
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.lib${libcompat}.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist}/usr/lib/debug/usr >/dev/null
+.endif
+.endfor
+.if ${MK_TESTS} != "no" && ${dist} == "tests"
+	-mkdir -p ${DESTDIR}/${DISTDIR}/${dist}${TESTSBASE}
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.tests.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist}${TESTSBASE} >/dev/null
+.if ${MK_DEBUG_FILES} != "no"
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.tests.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist}/usr/lib/debug${TESTSBASE} >/dev/null
+.endif
+.endif
+	${IMAKEENV} ${DISTR_MTREE} -C -f ${.CURDIR}/etc/mtree/BSD.root.dist | \
+	    sed -e 's#^\./#./${dist}/#' >> ${METALOG}
+	${IMAKEENV} ${DISTR_MTREE} -C -f ${.CURDIR}/etc/mtree/BSD.usr.dist | \
+	    sed -e 's#^\./#./${dist}/usr/#' >> ${METALOG}
+	${IMAKEENV} ${DISTR_MTREE} -C -f ${.CURDIR}/etc/mtree/BSD.include.dist | \
+	    sed -e 's#^\./#./${dist}/usr/include/#' >> ${METALOG}
+.for d in ${LIBCOMPAT_INCLUDE_DIRS}
+	echo "./${dist}/usr/include/${d} type=dir uname=root gname=wheel mode=0755" >> ${METALOG}
+.endfor
+.for libcompat in ${libcompats}
+	${IMAKEENV} ${DISTR_MTREE} -C -f ${.CURDIR}/etc/mtree/BSD.lib${libcompat}.dist | \
+	    sed -e 's#^\./#./${dist}/usr/#' >> ${METALOG}
+.endfor
+.endfor
+	-mkdir ${DESTDIR}/${DISTDIR}/base
+	${_+_}cd ${.CURDIR}/etc; ${CROSSENV} PATH=${TMPPATH:Q} ${MAKE} \
+	    METALOG=${METALOG} ${IMAKE_INSTALL} ${IMAKE_MTREE} \
+	    DISTBASE=/base DESTDIR=${INSTALL_DDIR}/base \
+	    LOCAL_MTREE=${LOCAL_MTREE:Q} distrib-dirs
+	${INSTALL_SYMLINK} ${INSTALLFLAGS} usr/src/sys ${INSTALL_DDIR}/base/sys
+.endif # make(distributeworld)
+	${_+_}cd ${.CURDIR}; ${IMAKE} re${.TARGET:S/world$//}; \
+	    ${IMAKEENV} rm -rf ${INSTALLTMP}
+.if !make(packageworld) && ${MK_CAROOT} != "no" && ${MK_OPENSSL} != "no"
+	PATH=${TMPPATH:Q}:${PATH:Q} \
+	LOCALBASE=${LOCALBASE:Q} \
+	    certctl ${CERTCTLFLAGS} rehash
+.endif
+.if make(distributeworld)
+.for dist in ${EXTRA_DISTRIBUTIONS}
+	find ${DESTDIR}/${DISTDIR}/${dist} -mindepth 1 -type d -empty -delete
+.endfor
+.for dist in base ${EXTRA_DISTRIBUTIONS}
+.for path suffix in "" .meta /usr/lib/debug .debug.meta
+	@# For each file that exists in this dist, print the corresponding
+	@# line from the METALOG.  This relies on the fact that
+	@# a line containing only the filename will sort immediately before
+	@# the relevant mtree line.
+	cd ${DESTDIR}/${DISTDIR}; \
+	    find ./${dist}${path} | ${METALOG_SORT_CMD} -u ${METALOG} - | \
+	    awk 'BEGIN { print "#${MTREE_MAGIC}" } !/ type=/ { file = $$1 } / type=/ { if ($$1 == file) { sub(/^\.\/${dist}/, "."); print } }' > \
+	    ${DESTDIR}/${DISTDIR}/${dist}${suffix}
+.endfor
+.endfor
+.endif # make(distributeworld)
+
+packageworld: .PHONY
+.for dist in base ${EXTRA_DISTRIBUTIONS}
+	${_+_}cd ${DESTDIR}/${DISTDIR}/${dist}; \
+	    ${TAR_CMD} cvf - --exclude usr/lib/debug \
+	    @${DESTDIR}/${DISTDIR}/${dist}.meta | \
+	    ${XZ_CMD} > ${PACKAGEDIR}/${dist}.txz
+.endfor
+
+.for dist in ${DEBUG_DISTRIBUTIONS}
+	${_+_}cd ${DESTDIR}/${DISTDIR}/${dist}; \
+	    ${TAR_CMD} cvf - @${DESTDIR}/${DISTDIR}/${dist}.debug.meta | \
+	    ${XZ_CMD} > ${PACKAGEDIR}/${dist}-dbg.txz
+.endfor
+
+# We can't assume here that ${TMPPATH} will include ${PATH} or /usr/libexec
+# because we may be building with a STRICTTMPPATH, so we explicitly include
+# /usr/libexec here for flua.  ${TMPPATH} still usefully includes anything else
+# we may need to function.
+_flua_PATH=	${TMPPATH}:/usr/libexec
+
+makeman: .PHONY
+	${_+_}@cd ${.CURDIR}/tools/build/options; \
+	    PATH=${_flua_PATH:Q} flua makeman.lua > \
+	    ${.CURDIR}/share/man/man5/src.conf.5
+
+# Ensure no regressions in self-includeability of sys/*.h and net*/*.h
+test-includes: .PHONY
+	${_+_}cd ${.CURDIR}/tools/build/test-includes; \
+	    ${WMAKEENV} ${MAKE} ${WORLD_FLAGS} obj; \
+	    ${WMAKEENV} ${MAKE} ${WORLD_FLAGS} DESTDIR=${WORLDTMP} test-includes
+
+_sysent_dirs=	sys/kern
+_sysent_dirs+=	sys/compat/freebsd32
+_sysent_dirs+=	sys/amd64/linux		\
+		sys/amd64/linux32	\
+		sys/arm64/linux		\
+		sys/i386/linux		\
+		sys/tools/syscalls/examples/cpp
+
+sysent: .PHONY
+.for _dir in ${_sysent_dirs}
+sysent-${_dir}: .PHONY
+	@echo "${MAKE} -C ${.CURDIR}/${_dir} sysent"
+	${_+_}@env PATH=${_flua_PATH:Q} ${MAKE} -C ${.CURDIR}/${_dir} sysent
+
+sysent: sysent-${_dir}
+.endfor
+
+#
+# reinstall
+#
+# If you have a build server, you can NFS mount the source and obj directories
+# and do a 'make reinstall' on the *client* to install new binaries from the
+# most recent server build.
+#
+restage reinstall: .MAKE .PHONY
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Making hierarchy"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 \
+	    LOCAL_MTREE=${LOCAL_MTREE:Q} hierarchy
+.if make(restage)
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Making distribution"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 \
+	    LOCAL_MTREE=${LOCAL_MTREE:Q} distribution
+.endif
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Installing everything started on `LC_ALL=C date`"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 install
+.for libcompat in ${libcompats}
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 install${libcompat}
+.endfor
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Installing everything completed on `LC_ALL=C date`"
+	@seconds=$$(($$(date '+%s') - ${_INSTALLWORLD_START})); \
+	  echo ">>> Install world completed in $$seconds seconds, ncpu: $$(${_ncpu_cmd})${.MAKE.JOBS:S/^/, make -j/}"
+	@echo "--------------------------------------------------------------"
+
+redistribute: .MAKE .PHONY
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Distributing everything"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 distribute
+.for libcompat in ${libcompats}
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 distribute${libcompat} \
+	    DISTRIBUTION=lib${libcompat}
+.endfor
+
+distrib-dirs distribution: .MAKE .PHONY
+	${_+_}cd ${.CURDIR}/etc; ${CROSSENV} PATH=${TMPPATH:Q} ${MAKE} \
+	    ${IMAKE_INSTALL} ${IMAKE_MTREE} METALOG=${METALOG} ${.TARGET}
+.if make(distribution)
+	${_+_}cd ${.CURDIR}; ${CROSSENV} PATH=${TMPPATH:Q} \
+		${MAKE} -f Makefile.inc1 ${IMAKE_INSTALL} \
+		METALOG=${METALOG} MK_TESTS=no \
+		MK_TESTS_SUPPORT=${MK_TESTS_SUPPORT} installconfig
+.endif
+
+#
+# buildetc and installetc
+#
+buildetc: .MAKE .PHONY
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 _worldtmp
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 _legacy
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 _bootstrap-tools \
+	    MK_CROSS_COMPILER=no MK_TOOLCHAIN=no
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 _obj
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 buildconfig
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 everything \
+	    SUBDIR_OVERRIDE=etc
+
+installetc: .MAKE .PHONY
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Making hierarchy"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 distrib-dirs
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Making distribution"
+	@echo "--------------------------------------------------------------"
+	${_+_}cd ${.CURDIR}; ${MAKE} -f Makefile.inc1 distribution
+
+#
+# buildkernel and installkernel
+#
+# Which kernels to build and/or install is specified by setting
+# KERNCONF. If not defined a GENERIC kernel is built/installed.
+# Only the existing (depending TARGET) config files are used
+# for building kernels and only the first of these is designated
+# as the one being installed.
+#
+# Note that we have to use TARGET instead of TARGET_ARCH when
+# we're in kernel-land. Since only TARGET_ARCH is (expected) to
+# be set to cross-build, we have to make sure TARGET is set
+# properly.
+
+.if defined(KERNFAST)
+NO_KERNELCLEAN=	t
+NO_KERNELCONFIG=	t
+NO_KERNELOBJ=		t
+# Shortcut for KERNCONF=Blah -DKERNFAST is now KERNFAST=Blah
+.if !defined(KERNCONF) && ${KERNFAST} != "1"
+KERNCONF=${KERNFAST}
+.endif
+.endif
+GENERIC_KERNCONF_SUFX_powerpc64=	64
+GENERIC_KERNCONF_SUFX_powerpc64le=	64LE
+GENERIC_KERNCONF?=	${GENERIC_KERNCONF_${TARGET_ARCH}:UGENERIC${GENERIC_KERNCONF_SUFX_${TARGET_ARCH}}}
+INSTKERNNAME?=	kernel
+
+KERNSRCDIR?=	${.CURDIR}/sys
+KRNLCONFDIR=	${KERNSRCDIR}/${TARGET}/conf
+KRNLOBJDIR=	${OBJTOP}${KERNSRCDIR:C,^${.CURDIR},,}
+KERNCONFDIR?=	${KRNLCONFDIR}
+
+.for _k in ${GENERIC_KERNCONF} MINIMAL${GENERIC_KERNCONF_SUFX_${TARGET_ARCH}} ${GENERIC_KERNCONF}-MMCCAM
+.if exists(${KERNCONFDIR}/${_k})
+PKG_KERNCONF+=	${_k}
+.for _dbg in NODEBUG DEBUG
+.if exists(${KERNCONFDIR}/${_k}-${_dbg})
+PKG_KERNCONF+= ${_k}-${_dbg}
+.endif
+.endfor
+.endif
+.endfor
+
+.if defined(PACKAGE_BUILDING)
+KERNCONF?=	${PKG_KERNCONF}
+.else
+KERNCONF?=	${GENERIC_KERNCONF}
+.endif
+
+BUILDKERNELS=
+INSTALLKERNEL=
+.for _kernel in ${KERNCONF}
+.if !defined(_MKSHOWCONFIG) && exists(${KERNCONFDIR}/${_kernel})
+BUILDKERNELS+=	${_kernel}
+.if empty(INSTALLKERNEL) && !defined(NO_INSTALLKERNEL)
+INSTALLKERNEL= ${_kernel}
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

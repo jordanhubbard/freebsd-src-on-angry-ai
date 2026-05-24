@@ -1,0 +1,11 @@
+=== STEP 290 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block with proper delimiters.
+
+ACTION: WRITE_FILE lib/libwrap/rust/Cargo.toml

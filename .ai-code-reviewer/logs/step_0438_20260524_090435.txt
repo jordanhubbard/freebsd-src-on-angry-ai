@@ -1,0 +1,62 @@
+=== STEP 438 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/column/Makefile
+Scope: usr.bin/column
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The Makefile integration needs to be more robust. Let me fix it so cargo is invoked during the normal build.
+
+ACTION: EDIT_FILE usr.bin/column/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	column
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}= tests
+
+# Rust build integration
+RUSTC?=	rustc
+CARGO?=	cargo
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${RUST_TARGET_DIR} --release
+	${INSTALL} -s ${RUST_TARGET_DIR}/release/column ${DESTDIR}${BINDIR}/${PROG}
+
+.if defined(BUILDING_WITH_CARGO) || 0
+all: rust-build
+.endif
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	column
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}= tests
+
+# Rust build integration
+CARGO?=	cargo
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+# Build Rust replacement as part of normal build
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/rust/Cargo.toml \
+	    --target-dir ${RUST_TARGET_DIR} --release
+
+all: rust-build
+
+.include <bsd.prog.mk>
+>>>

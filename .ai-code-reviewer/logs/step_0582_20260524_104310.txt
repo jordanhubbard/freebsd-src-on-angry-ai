@@ -1,0 +1,272 @@
+=== STEP 582 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libwrap
+   Files: 0/2
+📄 File: usr.bin/basename/Cargo.toml
+✏️  Edits: 1 files modified
+
+```
+=== CHUNK 6/17: /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1 === [line_chunk: chunk_6]
+=== Lines 1251-1500 (250 lines) ===
+
+.if empty(SUBDIR_OVERRIDE)
+.for libcompat in ${libcompats}
+WMAKE_TGTS+=	build${libcompat}
+.endfor
+.endif
+WMAKE_TGTS+=	everything
+
+# record buildworld / install time in seconds
+.if make(buildworld)
+_BUILDWORLD_START!= date '+%s'
+.export _BUILDWORLD_START
+.endif
+.if make(reinstall) || make(restage)
+_INSTALLWORLD_START!= date '+%s'
+.export _INSTALLWORLD_START
+.endif
+.if make(*installkernel*)
+_INSTALLKERNEL_START!= date '+%s'
+.export _INSTALLKERNEL_START
+.endif
+
+buildworld: buildworld_prologue ${WMAKE_TGTS} buildworld_epilogue .PHONY
+.ORDER: buildworld_prologue ${WMAKE_TGTS} buildworld_epilogue
+
+_ncpu_cmd=sysctl -n hw.ncpu 2>/dev/null || nproc 2>/dev/null || echo unknown
+
+buildworld_prologue: .PHONY
+	@echo "--------------------------------------------------------------"
+	@echo ">>> World build started on `LC_ALL=C date`"
+	@echo "--------------------------------------------------------------"
+
+buildworld_epilogue: .PHONY
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> World build completed on `LC_ALL=C date`"
+	@seconds=$$(($$(date '+%s') - ${_BUILDWORLD_START})); \
+	  echo ">>> World built in $$seconds seconds, ncpu: $$(${_ncpu_cmd})${.MAKE.JOBS:S/^/, make -j/}"
+	@echo "--------------------------------------------------------------"
+
+#
+# We need to have this as a target because the indirection between Makefile
+# and Makefile.inc1 causes the correct PATH to be used, rather than a
+# modification of the current environment's PATH.  In addition, we need
+# to quote multiword values.
+#
+buildenvvars: .PHONY
+	@echo ${WMAKEENV:Q} ${.MAKE.EXPORTED:@v@$v=\"${$v}\"@}
+
+.if ${.TARGETS:Mbuildenv}
+.if ${.MAKEFLAGS:M-j}
+.error The buildenv target is incompatible with -j
+.endif
+.endif
+BUILDENV_DIR?=	${.CURDIR}
+#
+# Note: make will report any errors the shell reports. This can
+# be odd if the last command in an interactive shell generates an
+# error or is terminated by SIGINT. These reported errors look bad,
+# but are harmless. Allowing them also allows BUILDENV_SHELL to
+# be a complex command whose status will be returned to the caller.
+# Some scripts in tools rely on this behavior to report build errors.
+#
+buildenv: .PHONY
+	@echo Entering world for ${TARGET_ARCH}:${TARGET}
+.if ${BUILDENV_SHELL:M*zsh*}
+	@echo For ZSH you must run: export CPUTYPE=${TARGET_CPUTYPE}
+.endif
+	@cd ${BUILDENV_DIR} && env ${WMAKEENV} \
+	INSTALL="${INSTALL_CMD} ${INSTALLFLAGS}" \
+	MTREE_CMD="${MTREE_CMD} ${MTREEFLAGS}" BUILDENV=1 ${BUILDENV_SHELL}
+
+TOOLCHAIN_TGTS=	${WMAKE_TGTS:Neverything:${libcompats:@v@Nbuild${v}@:ts:}}
+toolchain: ${TOOLCHAIN_TGTS} .PHONY
+KERNEL_TOOLCHAIN_TGTS=	${TOOLCHAIN_TGTS:N_obj:N_cleanobj:N_includes:N_libraries}
+.if make(kernel-toolchain)
+.ORDER: ${KERNEL_TOOLCHAIN_TGTS}
+.endif
+kernel-toolchain: ${KERNEL_TOOLCHAIN_TGTS} .PHONY
+
+#
+# installcheck
+#
+# Checks to be sure system is ready for installworld/installkernel.
+#
+installcheck: _installcheck_world _installcheck_kernel .PHONY
+_installcheck_world: .PHONY
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Install check world started on `LC_ALL=C date`"
+	@echo "--------------------------------------------------------------"
+_installcheck_kernel: .PHONY
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Install check kernel started on `LC_ALL=C date`"
+	@echo "--------------------------------------------------------------"
+
+#
+# Require DESTDIR to be set if installing for a different architecture or
+# using the user/group database in the source tree.
+#
+.if ${TARGET_ARCH} != ${MACHINE_ARCH} || ${TARGET} != ${MACHINE} || \
+    defined(DB_FROM_SRC)
+.if !make(distributeworld)
+_installcheck_world: __installcheck_DESTDIR
+_installcheck_kernel: __installcheck_DESTDIR
+__installcheck_DESTDIR: .PHONY
+.if !defined(DESTDIR) || empty(DESTDIR)
+	@echo "ERROR: Please set DESTDIR!"; \
+	false
+.endif
+.endif
+.endif
+
+.if !defined(DB_FROM_SRC)
+#
+# Check for missing UIDs/GIDs.
+#
+CHECK_UIDS=	auditdistd
+CHECK_GIDS=	audit
+CHECK_UIDS+=	ntpd
+CHECK_GIDS+=	ntpd
+CHECK_UIDS+=	proxy
+CHECK_GIDS+=	proxy authpf
+CHECK_UIDS+=	smmsp
+CHECK_GIDS+=	smmsp
+CHECK_UIDS+=	unbound
+CHECK_GIDS+=	unbound
+_installcheck_world: __installcheck_UGID
+__installcheck_UGID: .PHONY
+.for uid in ${CHECK_UIDS}
+	@if ! `id -u ${uid} >/dev/null 2>&1`; then \
+		echo "ERROR: Required ${uid} user is missing, see /usr/src/UPDATING."; \
+		false; \
+	fi
+.endfor
+.for gid in ${CHECK_GIDS}
+	@if ! `find / -prune -group ${gid} >/dev/null 2>&1`; then \
+		echo "ERROR: Required ${gid} group is missing, see /usr/src/UPDATING."; \
+		false; \
+	fi
+.endfor
+.endif
+#
+# If installing over the running system (DESTDIR is / or unset) and the install
+# includes rescue, try running rescue from the objdir as a sanity check.  If
+# rescue is not functional (e.g., because it depends on a system call not
+# supported by the currently running kernel), abort the installation.
+#
+.if !make(distributeworld) && ${MK_RESCUE} != "no" && \
+    (empty(DESTDIR) || ${DESTDIR} == "/") && empty(BYPASS_INSTALLCHECK_SH)
+_installcheck_world: __installcheck_sh_check
+__installcheck_sh_check: .PHONY
+	@if [ "`${OBJTOP}/rescue/rescue/rescue sh -c 'echo OK'`" != \
+	    OK ]; then \
+		echo "rescue/sh check failed, installation aborted" >&2; \
+		false; \
+	fi
+.endif
+
+#
+# Required install tools to be saved in a scratch dir for safety.
+#
+.if !defined(CROSSBUILD_HOST)
+_sysctl=sysctl
+.endif
+
+ITOOLS=	[ awk cap_mkdb cat chflags chmod chown cmp cp \
+	date echo egrep find grep id install \
+	ln make mkdir mtree mv pwd_mkdb \
+	rm sed services_mkdb sh sort strip ${_sysctl} test time true uname wc
+
+.if ${MK_ZONEINFO} != "no"
+ITOOLS+=tzsetup
+.endif
+
+# Needed for share/man
+.if ${MK_MAN_UTILS} != "no"
+ITOOLS+=makewhatis
+.endif
+
+ITOOLS+=${LOCAL_ITOOLS}
+
+#
+# distributeworld
+#
+# Distributes everything compiled by a `buildworld'.
+#
+# installworld
+#
+# Installs everything compiled by a 'buildworld'.
+#
+
+# Non-base distributions produced by the base system
+EXTRA_DISTRIBUTIONS=
+.for libcompat in ${libcompats}
+EXTRA_DISTRIBUTIONS+=	lib${libcompat}
+.endfor
+.if ${MK_TESTS} != "no"
+EXTRA_DISTRIBUTIONS+=	tests
+.endif
+
+DEBUG_DISTRIBUTIONS=
+.if ${MK_DEBUG_FILES} != "no"
+DEBUG_DISTRIBUTIONS+=	base ${EXTRA_DISTRIBUTIONS:S,tests,,}
+.endif
+
+MTREE_MAGIC?=	mtree 2.0
+
+distributeworld installworld stageworld: _installcheck_world .PHONY
+	mkdir -p ${INSTALLTMP}
+	progs=$$(for prog in ${ITOOLS}; do \
+		if progpath=`env PATH=${TMPPATH:Q} which $$prog`; then \
+			echo $$progpath; \
+		else \
+			echo "Required tool $$prog not found in PATH ("${TMPPATH:Q}")." >&2; \
+			exit 1; \
+		fi; \
+	    done); \
+	if [ -z "${CROSSBUILD_HOST}" ] ; then \
+		libs=$$(ldd -f "%o %p\n" -f "%o %p\n" $$progs 2>/dev/null | sort -u | grep -Ev '\[.*]' | \
+		    while read line; do \
+			set -- $$line; \
+			if [ "$$2 $$3" != "not found" ]; then \
+				echo $$2; \
+			else \
+				echo "Required library $$1 not found." >&2; \
+				exit 1; \
+			fi; \
+		    done); \
+	fi; \
+	${INSTALLTMP_COPY_HOST_TOOL} $$libs $$progs ${INSTALLTMP}
+	# On non-FreeBSD systems, there's no point copying locales here
+	# since we aren't going to overwrite them anyway.  This avoids
+	# failing if /usr/share/locale has odd modes (e.g., openSUSE).
+.if ${.MAKE.OS} == "FreeBSD"
+	cp -R $${PATH_LOCALE:-"/usr/share/locale"} ${INSTALLTMP}/locale
+.endif
+.if defined(NO_ROOT)
+	-mkdir -p ${METALOG:H}
+	echo "#${MTREE_MAGIC}" > ${METALOG}
+.endif
+.if make(distributeworld)
+.for dist in ${EXTRA_DISTRIBUTIONS}
+	-mkdir ${DESTDIR}/${DISTDIR}/${dist}
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.root.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist} >/dev/null
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.usr.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist}/usr >/dev/null
+	${DESTDIR_MTREE} -f ${.CURDIR}/etc/mtree/BSD.include.dist \
+	    -p ${DESTDIR}/${DISTDIR}/${dist}/usr/include >/dev/null
+.for d in ${LIBCOMPAT_INCLUDE_DIRS}
+	-mkdir ${DESTDIR}/${DISTDIR}/${dist}/usr/include/${d}
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

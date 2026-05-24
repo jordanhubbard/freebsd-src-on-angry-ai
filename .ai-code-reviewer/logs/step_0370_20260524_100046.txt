@@ -1,0 +1,21 @@
+=== STEP 370 ===
+
+--- REQUEST ---
+READ_FILE_SKIPPED: /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libutil/expand_number.3 is documentation (suffix .3).
+No code changes required. Marked as rewritten.
+Remaining files in lib/libutil you can work on:
+  - lib/libutil/Makefile
+  - lib/libutil/_secure_path.3
+  - lib/libutil/_secure_path.c
+  - lib/libutil/cpuset.3
+  - lib/libutil/cpuset.c
+  ... plus 62 more
+
+Please choose another source file or SET_SCOPE to a new directory.
+
+--- RESPONSE ---
+
+
+Let me try a simpler unit.
+
+ACTION: SET_SCOPE bin/chflags
