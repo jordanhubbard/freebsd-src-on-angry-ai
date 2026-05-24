@@ -1,0 +1,11 @@
+=== STEP 350 ===
+
+--- REQUEST ---
+LIST_DIR_ERROR: Path escapes source root: /
+
+--- RESPONSE ---
+
+
+I need to find a proper userland unit. Let me try the suggested next scope:
+
+ACTION: SET_SCOPE sys/cddl/contrib/opensolaris/uts/riscv/dtrace

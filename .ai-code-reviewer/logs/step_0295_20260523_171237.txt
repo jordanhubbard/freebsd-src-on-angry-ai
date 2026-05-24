@@ -1,0 +1,12 @@
+=== STEP 295 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/chflags is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/cddl/contrib/opensolaris/uts/aarch64/dtrace
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/basename

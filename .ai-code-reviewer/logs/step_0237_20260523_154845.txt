@@ -1,0 +1,34 @@
+=== STEP 237 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+No Rust make fragment exists. I need to add explicit Makefile rules. Let me update the Makefile:
+
+ACTION: EDIT_FILE usr.bin/banner/Makefile
+OLD:
+PROG=	banner
+MAN=	banner.6
+
+.include <bsd.prog.mk>
+NEW:
+PROG=	banner
+MAN=	banner.6
+SRCS=	banner.c
+
+RUSTC?=	rustc
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+banner-rust:
+	${CARGO} build --manifest-path src/Cargo.toml --target-dir ${CARGO_TARGET_DIR} --release
+
+all:	banner-rust
+
+clean:
+	${CARGO} clean --manifest-path src/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>

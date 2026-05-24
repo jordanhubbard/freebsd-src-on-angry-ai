@@ -1,0 +1,9 @@
+=== STEP 74 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/libxo*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE usr.bin/libxo

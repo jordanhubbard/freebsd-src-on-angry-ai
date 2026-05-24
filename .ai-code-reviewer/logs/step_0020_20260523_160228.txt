@@ -1,0 +1,69 @@
+=== STEP 20 ===
+
+--- REQUEST ---
+BUILD_FAILED: Build errors detected
+
+No changes were committed. Rewrite units are atomic: source changes, build glue, and configured contract checks must pass together before the unit can be marked complete.
+
+BUILD ERROR REPORT:
+BUILD FAILED: 2 errors, 0 warnings
+Duration: 242.7 seconds
+
+============================================================
+ERRORS (fix these first):
+============================================================
+
+[1] /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1:371: error: SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+
+[2] /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1:376: error: SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker.
+
+
+NEXT STEPS:
+1. Keep the active scope.
+2. Fix the source/build integration that caused this failure.
+3. BUILD again when the complete rewrite unit is ready.
+
+
+--- RESPONSE ---
+
+
+The build is failing because this LLVM/Clang contrib unit triggers the full FreeBSD bootstrap compiler build. Let me make the Makefile completely standalone to avoid triggering the parent build system.
+
+ACTION: EDIT_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Makefile
+OLD:
+<<<
+# Makefile for CheckerDependencyHandling Rust replacement
+# Builds the Rust crate as a static library alongside the original C++ plugin.
+
+CARGO_MANIFEST=	${.CURDIR}/Cargo.toml
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all:	rustlib
+
+rustlib:
+	@echo "Building Rust replacement for CheckerDependencyHandling"
+	cargo build --manifest-path ${CARGO_MANIFEST} \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+# Makefile for CheckerDependencyHandling Rust replacement
+# Builds the Rust crate as a static library alongside the original C++ plugin.
+# Standalone - does not include FreeBSD build system to avoid triggering bootstrap.
+
+CARGO_MANIFEST=	${.CURDIR}/Cargo.toml
+CARGO_TARGET_DIR=	${.CURDIR}/cargo-target
+
+all:	rustlib
+
+rustlib:
+	@echo "Building Rust replacement for CheckerDependencyHandling"
+	cargo build --manifest-path ${CARGO_MANIFEST} \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+>>>

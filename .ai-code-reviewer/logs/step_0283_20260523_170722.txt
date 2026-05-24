@@ -1,0 +1,34 @@
+=== STEP 283 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/CheckerDependencyHandlingAnalyzerPlugin.exports:
+PROGRESS:
+📁 Directory: contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling
+   Files: 0/1
+📄 File: contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/CheckerDependencyHandlingAnalyzerPlugin.exports
+
+```
+clang_registerCheckers
+clang_analyzerAPIVersionString
+
+```
+
+--- RESPONSE ---
+
+
+This is a small LLVM/Clang static analyzer plugin. The C++ code exports two symbols:
+1. `clang_registerCheckers` - registers checkers with the analyzer
+2. `clang_analyzerAPIVersionString` - version string
+
+Let me create a Rust replacement that exports the same C ABI symbols.
+
+ACTION: WRITE_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Cargo.toml
+CONTENT:
+[package]
+name = "checker-dependency-handling"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/lib.rs"

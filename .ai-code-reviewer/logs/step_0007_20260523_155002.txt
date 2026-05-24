@@ -1,0 +1,20 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "checker-dependency-handling"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+<<<

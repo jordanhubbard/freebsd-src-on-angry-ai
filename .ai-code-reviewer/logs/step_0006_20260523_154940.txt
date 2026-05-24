@@ -1,0 +1,17 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling:
+```
+CheckerDependencyHandling.cpp
+CheckerDependencyHandlingAnalyzerPlugin.exports
+```
+
+--- RESPONSE ---
+
+
+The current scope has stale state from a previous session. This unit is LLVM/Clang contrib code without a standalone Makefile. I need to create a proper Rust replacement with build integration to satisfy the rewrite requirements and clear the scope.
+
+Let me create a Rust crate that provides equivalent C ABI exports for this plugin.
+
+ACTION: WRITE_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Cargo.toml

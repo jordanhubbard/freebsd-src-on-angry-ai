@@ -1,0 +1,9 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/llvm-project/clang/lib/Analysis/plugins/CMakeLists.txt*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/llvm-project/clang/lib/Analysis/plugins

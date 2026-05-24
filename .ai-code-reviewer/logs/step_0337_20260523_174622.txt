@@ -1,0 +1,11 @@
+=== STEP 337 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bin/cat/cat.c*'
+
+--- RESPONSE ---
+
+
+I need to find a unit with actual userland C source. Let me search for simple commands:
+
+ACTION: FIND_FILE bin/cat/cat.c

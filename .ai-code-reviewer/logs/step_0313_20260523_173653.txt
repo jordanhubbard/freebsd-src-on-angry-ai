@@ -1,0 +1,87 @@
+=== STEP 313 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Makefile:
+PROGRESS:
+📁 Directory: contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling
+   Files: 0/1
+📄 File: contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Makefile
+✏️  Edits: 3 files modified
+
+```
+# $FreeBSD$
+#
+# Rust replacement for CheckerDependencyHandling clang plugin
+
+PROG=	CheckerDependencyHandlingAnalyzerPlugin
+SRCS=	lib.rs
+
+CARGO_DIR=	${.CURDIR}
+CARGO_TARGET_DIR?=	${OBJDIR}/cargo-target
+
+# Build the Rust cdylib
+all: ${PROG}.so
+
+${PROG}.so: ${CARGO_DIR}/Cargo.toml ${CARGO_DIR}/src/lib.rs
+	@echo "Building Rust CheckerDependencyHandling plugin..."
+	@mkdir -p ${CARGO_TARGET_DIR}
+	cargo build --manifest-path ${CARGO_DIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	@cp ${CARGO_TARGET_DIR}/release/libchecker_dependency_handling.so ${.OBJDIR}/${PROG}.so
+
+clean:
+	@rm -f ${.OBJDIR}/${PROG}.so
+
+.include <bsd.prog.mk>
+```
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Makefile
+OLD:
+# $FreeBSD$
+#
+# Rust replacement for CheckerDependencyHandling clang plugin
+
+PROG=	CheckerDependencyHandlingAnalyzerPlugin
+SRCS=	lib.rs
+
+CARGO_DIR=	${.CURDIR}
+CARGO_TARGET_DIR?=	${OBJDIR}/cargo-target
+
+# Build the Rust cdylib
+all: ${PROG}.so
+
+${PROG}.so: ${CARGO_DIR}/Cargo.toml ${CARGO_DIR}/src/lib.rs
+	@echo "Building Rust CheckerDependencyHandling plugin..."
+	@mkdir -p ${CARGO_TARGET_DIR}
+	cargo build --manifest-path ${CARGO_DIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	@cp ${CARGO_TARGET_DIR}/release/libchecker_dependency_handling.so ${.OBJDIR}/${PROG}.so
+
+clean:
+	@rm -f ${.OBJDIR}/${PROG}.so
+
+.include <bsd.prog.mk>
+NEW:
+# $FreeBSD$
+#
+# Rust replacement for CheckerDependencyHandling clang plugin
+# Self-contained Makefile - no bsd.* includes to avoid top-level build issues
+
+CARGO_DIR=	${.CURDIR}
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+# Build the Rust cdylib
+all: ${.CURDIR}/CheckerDependencyHandlingAnalyzerPlugin.so
+
+${.CURDIR}/CheckerDependencyHandlingAnalyzerPlugin.so: ${CARGO_DIR}/Cargo.toml ${CARGO_DIR}/src/lib.rs
+	@echo "Building Rust CheckerDependencyHandling plugin..."
+	@mkdir -p ${CARGO_TARGET_DIR}
+	cargo build --manifest-path ${CARGO_DIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	@cp ${CARGO_TARGET_DIR}/release/libchecker_dependency_handling.so ${.CURDIR}/CheckerDependencyHandlingAnalyzerPlugin.so
+
+clean:
+	@rm -f ${.CURDIR}/CheckerDependencyHandlingAnalyzerPlugin.so

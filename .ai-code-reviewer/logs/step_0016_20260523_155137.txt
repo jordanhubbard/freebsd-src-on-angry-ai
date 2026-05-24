@@ -1,0 +1,36 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/llvm-project/clang/lib/Analysis/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit has no Makefile. I need to add one that builds the Rust crate. Let me create a local Makefile.
+
+ACTION: WRITE_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Makefile
+CONTENT:
+```
+# Makefile for CheckerDependencyHandling Rust replacement
+# Builds the Rust crate as a static library alongside the original C++ plugin.
+
+PROG=	checker_dependency_handling
+SRCS=	# none - Rust replacement
+
+CARGO_MANIFEST=	${.CURDIR}/Cargo.toml
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.PATH:	${.CURDIR}
+
+all:	rustlib
+
+rustlib:
+	@echo "Building Rust replacement for CheckerDependencyHandling"
+	cargo build --manifest-path ${CARGO_MANIFEST} \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+```

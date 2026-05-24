@@ -1,0 +1,33 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*CMakeLists.txt*':
+```
+./contrib/tcpdump/CMakeLists.txt
+./contrib/ofed/librdmacm/man/CMakeLists.txt
+./contrib/libevent/CMakeLists.txt
+./contrib/googletest/googletest/CMakeLists.txt
+./contrib/googletest/googlemock/CMakeLists.txt
+./contrib/googletest/CMakeLists.txt
+./contrib/ntp/sntp/libevent/CMakeLists.txt
+./contrib/processor-trace/libipt/CMakeLists.txt
+./contrib/libder/CMakeLists.txt
+./contrib/libder/libder/CMakeLists.txt
+./contrib/libder/derdump/CMakeLists.txt
+./contrib/libder/tests/CMakeLists.txt
+./contrib/libpcap/testprogs/CMakeLists.txt
+./contrib/libpcap/CMakeLists.txt
+./contrib/libpcap/rpcapd/CMakeLists.txt
+./contrib/libcbor/test/CMakeLists.txt
+./contrib/libcbor/src/CMakeLists.txt
+./contrib/libcbor/examples/CMakeLists.txt
+./contrib/libcbor/CMakeLists.txt
+./contrib/libfido2/regress/CMakeLists.txt
+```
+
+--- RESPONSE ---
+
+
+Let me check for CMakeLists.txt in the parent directories of this unit.
+
+ACTION: FIND_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CMakeLists.txt

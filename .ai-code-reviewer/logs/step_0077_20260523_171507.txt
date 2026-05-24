@@ -1,0 +1,211 @@
+=== STEP 77 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/libxo/encoder/test/src/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/libxo/encoder/test/src/lib.rs
+CONTENT:
+```rust
+//! Rust replacement for enc_test.c - libxo encoder test handler.
+//!
+//! The original C implementation provided a test handler that printed
+//! encoder operations and registered itself via xo_encoder_library_init.
+//! This Rust crate provides the same C ABI entry points.
+
+use std::ffi::c_char;
+
+/// Encoder operation type (matches xo_encoder_op_t from xo_encoder.h).
+#[repr(C)]
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum XoEncoderOp {
+    BeginObject = 0,
+    EndObject,
+    BeginArray,
+    EndArray,
+    BeginMember,
+    EndMember,
+    BeginValue,
+    EndValue,
+    BeginString,
+    EndString,
+    BeginNumber,
+    EndNumber,
+    BeginBoolean,
+    EndBoolean,
+    BeginNull,
+    EndNull,
+    BeginEscape,
+    EndEscape,
+    BeginComment,
+    EndComment,
+    BeginWhitespace,
+    EndWhitespace,
+    BeginIndent,
+    EndIndent,
+    BeginNewline,
+    EndNewline,
+    BeginSeparator,
+    EndSeparator,
+    BeginColon,
+    EndColon,
+    BeginComma,
+    EndComma,
+    BeginBrace,
+    EndBrace,
+    BeginBracket,
+    EndBracket,
+    BeginQuote,
+    EndQuote,
+    BeginBackslash,
+    EndBackslash,
+    BeginSlash,
+    EndSlash,
+    BeginBackspace,
+    EndBackspace,
+    BeginTab,
+    EndTab,
+    BeginFormfeed,
+    EndFormfeed,
+    BeginCarriageReturn,
+    EndCarriageReturn,
+    BeginLinefeed,
+    EndLinefeed,
+    BeginUnicode,
+    EndUnicode,
+    BeginUtf8,
+    EndUtf8,
+    BeginUtf16,
+    EndUtf16,
+    BeginUtf32,
+    EndUtf32,
+    BeginLatin1,
+    EndLatin1,
+    BeginAscii,
+    EndAscii,
+    BeginEol,
+    EndEol,
+    BeginEos,
+    EndEos,
+    BeginEof,
+    EndEof,
+    BeginEot,
+    EndEot,
+    BeginEoc,
+    EndEoc,
+    BeginEob,
+    EndEob,
+    BeginEoa,
+    EndEoa,
+    BeginEon,
+    EndEon,
+    BeginEom,
+    EndEom,
+    BeginEol2,
+    EndEol2,
+    BeginEos2,
+    EndEos2,
+    BeginEof2,
+    EndEof2,
+    BeginEot2,
+    EndEot2,
+    BeginEoc2,
+    EndEoc2,
+    BeginEob2,
+    EndEob2,
+    BeginEoa2,
+    EndEoa2,
+    BeginEon2,
+    EndEon2,
+    BeginEom2,
+    EndEom2,
+}
+
+/// Encoder flags (matches xo_encoder_flags_t).
+pub type XoEncoderFlags = u64;
+
+/// Handler function type matching the C signature.
+/// int handler(XoEncoderOp op, const char *name, const char *value, XoEncoderFlags flags)
+pub type XoEncoderHandler = extern "C" fn(
+    XoEncoderOp,
+    *const c_char,
+    *const c_char,
+    XoEncoderFlags,
+) -> i32;
+
+/// Test handler that prints encoder operations.
+/// Matches the original test_handler from enc_test.c.
+#[no_mangle]
+pub unsafe extern "C" fn test_handler(
+    op: XoEncoderOp,
+    name: *const c_char,
+    value: *const c_char,
+    flags: XoEncoderFlags,
+) -> i32 {
+    let op_name = match op {
+        XoEncoderOp::BeginObject => "BeginObject",
+        XoEncoderOp::EndObject => "EndObject",
+        XoEncoderOp::BeginArray => "BeginArray",
+        XoEncoderOp::EndArray => "EndArray",
+        XoEncoderOp::BeginMember => "BeginMember",
+        XoEncoderOp::EndMember => "EndMember",
+        XoEncoderOp::BeginValue => "BeginValue",
+        XoEncoderOp::EndValue => "EndValue",
+        XoEncoderOp::BeginString => "BeginString",
+        XoEncoderOp::EndString => "EndString",
+        XoEncoderOp::BeginNumber => "BeginNumber",
+        XoEncoderOp::EndNumber => "EndNumber",
+        XoEncoderOp::BeginBoolean => "BeginBoolean",
+        XoEncoderOp::EndBoolean => "EndBoolean",
+        XoEncoderOp::BeginNull => "BeginNull",
+        XoEncoderOp::EndNull => "EndNull",
+        _ => "Unknown",
+    };
+
+    let name_str = if name.is_null() {
+        ""
+    } else {
+        std::ffi::CStr::from_ptr(name).to_string_lossy()
+    };
+
+    let value_str = if value.is_null() {
+        ""
+    } else {
+        std::ffi::CStr::from_ptr(value).to_string_lossy()
+    };
+
+    println!(
+        "op {}: [{}] [{}] [{:#x}]",
+        op_name, name_str, value_str, flags
+    );
+
+    0
+}
+
+/// Encoder version (matches XO_ENCODER_VERSION).
+pub const XO_ENCODER_VERSION: u32 = 1;
+
+/// Encoder init argument structure.
+#[repr(C)]
+pub struct XoEncoderInitArg {
+    pub xei_version: u32,
+    pub xei_handler: Option<XoEncoderHandler>,
+}
+
+/// Initialize the encoder library.
+/// Matches the original xo_encoder_library_init from enc_test.c.
+#[no_mangle]
+pub unsafe extern "C" fn xo_encoder_library_init(arg: *mut XoEncoderInitArg) -> i32 {
+    if arg.is_null() {
+        return -1;
+    }
+
+    (*arg).xei_version = XO_ENCODER_VERSION;
+    (*arg).xei_handler = Some(test_handler);
+
+    0
+}
+```

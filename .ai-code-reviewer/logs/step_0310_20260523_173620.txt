@@ -1,0 +1,14 @@
+=== STEP 310 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/cddl/contrib/opensolaris/uts/aarch64/dtrace
+
+--- RESPONSE ---
+
+
+The build errors are from top-level infrastructure (`Makefile.inc1`), not from my unit changes. Let me try a different unit that might have a working build path.
+
+ACTION: SET_SCOPE sys/cddl/contrib/opensolaris/uts/aarch64/dtrace

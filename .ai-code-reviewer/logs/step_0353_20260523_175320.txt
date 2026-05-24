@@ -1,0 +1,14 @@
+=== STEP 353 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Marked current file as skipped.
+Remaining files in sys/cddl/contrib/opensolaris/uts/riscv/dtrace:
+  (All tracked files rewritten or skipped in this directory)
+Please READ_FILE another source file or SET_SCOPE to continue progress.
+
+--- RESPONSE ---
+
+
+This unit is also a placeholder with no real code. Let me find a proper userland unit with actual C source:
+
+ACTION: FIND_FILE usr.bin

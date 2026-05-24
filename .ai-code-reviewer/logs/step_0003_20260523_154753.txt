@@ -1,0 +1,55 @@
+=== STEP 3 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/CheckerDependencyHandling.cpp:
+PROGRESS:
+📁 Directory: contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling
+   Files: 0/1
+📄 File: contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/CheckerDependencyHandling.cpp
+
+```
+#include "clang/StaticAnalyzer/Core/Checker.h"
+#include "clang/StaticAnalyzer/Core/PathSensitive/CheckerContext.h"
+#include "clang/StaticAnalyzer/Frontend/CheckerRegistry.h"
+
+using namespace clang;
+using namespace ento;
+
+namespace {
+struct Dependency : public Checker<check::BeginFunction> {
+  void checkBeginFunction(CheckerContext &Ctx) const {}
+};
+struct DependendentChecker : public Checker<check::BeginFunction> {
+  void checkBeginFunction(CheckerContext &Ctx) const {}
+};
+} // end anonymous namespace
+
+// Register plugin!
+extern "C" void clang_registerCheckers(CheckerRegistry &registry) {
+  registry.addChecker<Dependency>("example.Dependency", "", "");
+  registry.addChecker<DependendentChecker>("example.DependendentChecker", "",
+                                           "");
+
+  registry.addDependency("example.DependendentChecker", "example.Dependency");
+}
+
+extern "C" const char clang_analyzerAPIVersionString[] =
+    CLANG_ANALYZER_API_VERSION_STRING;
+
+```
+
+--- RESPONSE ---
+
+
+This unit is a Clang static analyzer plugin inside `contrib/llvm-project/`. It's:
+
+1. **Third-party LLVM/Clang code**, not FreeBSD userland
+2. A **static analyzer checker plugin** using Clang internal APIs (`Checker`, `CheckerContext`, `CheckerRegistry`)
+3. Has **no independent Makefile** — built as part of the LLVM build system
+4. Depends on Clang's C++ internal APIs that cannot be meaningfully replaced by Rust without the entire Clang infrastructure
+
+This is outside the rewrite objective of "FreeBSD userland C/C++ libraries and commands." The strategy explicitly says to start with `bin/usr.bin/lib/libexec` units.
+
+I'll skip this unit and move to the next pending unit from the queue.
+
+ACTION: SET_SCOPE bin/cat/tests

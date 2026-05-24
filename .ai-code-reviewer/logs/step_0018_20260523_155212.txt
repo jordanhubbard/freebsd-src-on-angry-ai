@@ -1,0 +1,13 @@
+=== STEP 18 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Makefile
+Scope: contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The Makefile shouldn't include bsd.prog.mk since we removed PROG. Let me try building now.
+
+ACTION: BUILD

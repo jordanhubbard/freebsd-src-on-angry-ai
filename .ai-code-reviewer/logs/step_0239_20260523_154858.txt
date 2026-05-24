@@ -1,0 +1,45 @@
+=== STEP 239 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/banner/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/banner
+   Files: 0/3
+📄 File: usr.bin/banner/Makefile
+✏️  Edits: 3 files modified
+
+```
+PROG=	banner
+MAN=	banner.6
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/banner/Makefile
+OLD:
+PROG=	banner
+MAN=	banner.6
+
+.include <bsd.prog.mk>
+NEW:
+PROG=	banner
+MAN=	banner.6
+SRCS=	banner.c
+
+RUSTC?=	rustc
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+banner-rust:
+	${CARGO} build --manifest-path src/Cargo.toml --target-dir ${CARGO_TARGET_DIR} --release
+
+all:	banner-rust
+
+clean:
+	${CARGO} clean --manifest-path src/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>

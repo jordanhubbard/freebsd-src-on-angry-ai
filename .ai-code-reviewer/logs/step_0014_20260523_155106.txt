@@ -1,0 +1,16 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/Analysis/plugins:
+```
+CheckerDependencyHandling
+CheckerOptionHandling
+SampleAnalyzer
+```
+
+--- RESPONSE ---
+
+
+Let me check how this plugin is built by looking at parent CMakeLists.txt files.
+
+ACTION: FIND_FILE contrib/llvm-project/clang/lib/Analysis/CMakeLists.txt

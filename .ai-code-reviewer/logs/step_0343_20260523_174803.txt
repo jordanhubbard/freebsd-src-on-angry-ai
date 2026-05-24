@@ -1,0 +1,11 @@
+=== STEP 343 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/*/'
+
+--- RESPONSE ---
+
+
+I need to find a proper userland unit with actual C source code. Let me search for simple commands:
+
+ACTION: FIND_FILE usr.bin/

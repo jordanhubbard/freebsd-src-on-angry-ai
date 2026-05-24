@@ -1,0 +1,9 @@
+=== STEP 66 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/libxo/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE usr.bin/libxo

@@ -1,0 +1,11 @@
+=== STEP 349 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin*'
+
+--- RESPONSE ---
+
+
+The search seems to be scoped. Let me try listing the root:
+
+ACTION: LIST_DIR /

@@ -1,0 +1,11 @@
+=== STEP 354 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin*'
+
+--- RESPONSE ---
+
+
+The search is scoped to the current directory. Let me try a known userland path:
+
+ACTION: FIND_FILE usr.bin

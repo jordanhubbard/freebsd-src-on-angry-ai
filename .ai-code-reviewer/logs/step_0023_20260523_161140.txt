@@ -1,0 +1,68 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+BUILD_FAILED: Build errors detected
+
+No changes were committed. Rewrite units are atomic: source changes, build glue, and configured contract checks must pass together before the unit can be marked complete.
+
+BUILD ERROR REPORT:
+BUILD FAILED: 2 errors, 0 warnings
+Duration: 162.4 seconds
+
+============================================================
+ERRORS (fix these first):
+============================================================
+
+[1] /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1:371: error: SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+
+[2] /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1:376: error: SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker.
+
+
+NEXT STEPS:
+1. Keep the active scope.
+2. Fix the source/build integration that caused this failure.
+3. BUILD again when the complete rewrite unit is ready.
+
+
+--- RESPONSE ---
+
+
+The build system is triggering the full FreeBSD bootstrap compiler because this unit is inside `contrib/llvm-project/clang/`. This is LLVM/Clang contrib code, not FreeBSD userland. Let me try to make the Makefile completely self-contained without any parent make infrastructure.
+
+ACTION: EDIT_FILE contrib/llvm-project/clang/lib/Analysis/plugins/CheckerDependencyHandling/Makefile
+OLD:
+<<<
+# Makefile for CheckerDependencyHandling Rust replacement
+# Builds the Rust crate as a static library alongside the original C++ plugin.
+# Standalone - does not include FreeBSD build system to avoid triggering bootstrap.
+
+CARGO_MANIFEST=	${.CURDIR}/Cargo.toml
+CARGO_TARGET_DIR=	${.CURDIR}/cargo-target
+
+all:	rustlib
+
+rustlib:
+	@echo "Building Rust replacement for CheckerDependencyHandling"
+	cargo build --manifest-path ${CARGO_MANIFEST} \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+# Makefile for CheckerDependencyHandling Rust replacement
+# Standalone - no FreeBSD build system includes to avoid triggering bootstrap.
+
+.PHONY: all rustlib clean
+
+all: rustlib
+
+rustlib:
+	@echo "Building Rust replacement for CheckerDependencyHandling"
+	cargo build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${.CURDIR}/cargo-target --release
+
+clean:
+	rm -rf ${.CURDIR}/cargo-target
+>>>

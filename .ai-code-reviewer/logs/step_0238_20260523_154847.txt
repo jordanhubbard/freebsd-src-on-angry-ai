@@ -1,0 +1,9 @@
+=== STEP 238 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/banner/Makefile
