@@ -1,0 +1,57 @@
+=== STEP 104 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/src/main.rs
+Scope: usr.bin/csplit
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to update the Makefile to integrate the Rust build. Let me add the Rust build rules.
+
+ACTION: EDIT_FILE usr.bin/csplit/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	csplit
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	csplit
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+SRCS=	csplit.c
+
+.if defined(WITH_RUST)
+PROG_RUST=	csplit
+RUST_SRCDIR=	${.CURDIR}
+RUST_TARGET=	csplit
+.endif
+
+.include <bsd.prog.mk>
+
+.if defined(WITH_RUST)
+RUSTC?=	rustc
+CARGO?=	cargo
+
+.cargo-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${.OBJDIR}/cargo-target --release
+
+${PROG}.cargo: .cargo-build
+	@cp ${.OBJDIR}/cargo-target/release/${RUST_TARGET} ${.OBJDIR}/${PROG}.cargo
+
+all: ${PROG}.cargo
+.endif
+>>>

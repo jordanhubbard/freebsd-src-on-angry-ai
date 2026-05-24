@@ -1,0 +1,62 @@
+=== STEP 165 ===
+
+--- REQUEST ---
+GREP_RESULT for 'usr.bin':
+```
+./tests/sys/net/routing/rtsock_print.h:404:	snprintf(cmdbuf, sizeof(cmdbuf), "/usr/bin/netstat -%srnW", key);
+./tests/sys/net/routing/rtsock_print.h:407:	snprintf(cmdbuf, sizeof(cmdbuf), "/usr/bin/netstat -%sonW", key);
+./tests/sys/file/path_test.c:183:		if (open("/usr/bin/true", O_PATH | O_EXEC) >= 0)
+./tests/sys/file/path_test.c:195:		truefd = open("/usr/bin/true", O_PATH | O_EXEC);
+./tests/sys/file/path_test.c:202:		    (char * const[]){__DECONST(char *, "/usr/bin/true"), NULL},
+./tests/sys/kern/ptrace_test.c:1391:	execl("/usr/bin/true", "true", NULL);
+./tests/sys/kern/ktrace_test.c:563:		execve("/usr/bin/su", (char *[]){ "su", "whoami", NULL }, NULL);
+./krb5/include/osconf.h:119:#define KRB5_PATH_RLOGIN "/usr/bin/rlogin"
+./sys/sys/imgact_binmisc.h:113: * strlcpy(xbe.xbe_interpreter, "/usr/bin/lli --fake-arg0=#a",
+./sys/security/mac_do/mac_do.c:2013:	error = strcmp(path, "/usr/bin/mdo") == 0 ? 0 : EPERM;
+./sys/netinet/tcp_usrreq.c:221:tcp_usr_bind(struct socket *so, struct sockaddr *nam, struct thread *td)
+./sys/netinet/tcp_usrreq.c:272:tcp6_usr_bind(struct socket *so, struct sockaddr *nam, struct thread *td)
+./sys/netinet/tcp_usrreq.c:1355:	.pr_bind =		tcp_usr_bind,
+./sys/contrib/openzfs/lib/libzfs/libzfs_util.c:2312:	env[0] = strdup("PATH=/bin:/sbin:/usr/bin:/usr/sbin");
+./sys/contrib/openzfs/lib/libzfs/libzfs_share.h:129:#define	SMB_NET_CMD_PATH	"/usr/bin/net"
+./sys/contrib/openzfs/module/os/linux/spl/spl-generic.c:364: * The behavior of /usr/bin/hostid on Linux systems with the
+./sys/contrib/openzfs/module/os/linux/zfs/zfs_ctldir.c:1120:	char *argv[] = { "/usr/bin/env", "umount", "-t", "zfs", "-n", NULL,
+./sys/contrib/openzfs/module/os/linux/zfs/zfs_ctldir.c:1184:	char *argv[] = { "/usr/bin/env", "mount", "-i", "-t", "zfs", "-n",
+./include/paths.h:40:#define	_PATH_DEFPATH	"/sbin:/bin:/usr/sbin:/usr/bin:" \
+./include/paths.h:43:#define	_PATH_STDPATH	"/usr/bin:/bin:/usr/sbin:/sbin"
+./include/paths.h:75:#define	_PATH_LOGIN	"/usr/bin/login"
+./sbin/dhclient/dhclient.c:89:#define	CLIENT_PATH "PATH=/usr/bin:/usr/sbin:/bin:/sbin"
+./libexec/getty/pathnames.h:35:#define	_PATH_LOGIN	"/usr/bin/login"
+./libexec/rpc.rwalld/rwalld.c:51:#define WALL_CMD "/usr/bin/wall -n"
+./libexec/fingerd/pathnames.h:32:#define	_PATH_FINGER	"/usr/bin/finger"
+./crypto/heimdal/appl/login/login_locl.h:143:#define _PATH_DEFPATH "/usr/bin:/bin"
+./crypto/heimdal/appl/login/shadow.c:41:#define _PATH_CHPASS "/usr/bin/passwd"
+./crypto/heimdal/appl/rsh/rsh_locl.h:124:#define _PATH_DEFPATH	"/usr/bin:/bin"
+./crypto/heimdal/appl/su/supaths.h:40:#define _PATH_DEFPATH "/usr/bin:/bin"
+./crypto/openssh/config.h:2091:#define _PATH_PASSWD_PROG "/usr/bin/passwd"
+./crypto/openssh/defines.h:450:# define _PATH_STDPATH "/usr/bin:/bin:/usr/sbin:/sbin"
+./crypto/openssh/regress/unittests/sshkey/test_sshkey.c:477:	put_opt(k1->cert->critical, "force-command", "/usr/bin/true");
+./crypto/openssh/regress/netcat.c:1342:/* *** src/usr.bin/nc/socks.c *** */
+./crypto/openssh/pathnames.h:45:#define _PATH_SSH_PROGRAM		"/usr/bin/ssh"
+./crypto/openssh/pathnames.h:183:#define _PATH_PASSWD_PROG		"/usr/bin/passwd"
+./tools/tools/syscall_timing/syscall_timing.c:208:#define	USR_BIN_TRUE	"/usr/bin/true"
+./contrib/llvm-project/clang/include/clang/Frontend/Utils.h:230:/// Args[0] should be the driver name, such as "clang" or "/usr/bin/g++".
+./contrib/tcp_wrappers/safe_finger.c:34:char    path[] = "PATH=/bin:/usr/bin:/usr/ucb:/usr/bsd:/etc:/usr/etc:/usr/sbin";
+./contrib/sendmail/smrsh/smrsh.c:40:**	"/usr/bin/vacation" will continue to work.
+./contrib/sendmail/smrsh/smrsh.c:92:#  define PATH		"/bin:/usr/bin:/usr/ucb"
+./contrib/sendmail/src/conf.c:3167:	"/usr/bin/sh",
+./contrib/sendmail/src/conf.c:3169:	"/usr/bin/csh",
+./contrib/sendmail/src/conf.c:3173:	"/usr/bin/rsh",		/* restricted Bourne shell */
+./contrib/sendmail/include/sm/conf.h:1014:#    define SMRSH_PATH		"/bin:/usr/bin"
+./contrib/sendmail/include/sm/conf.h:1045:#      define SMRSH_PATH	"/bin:/usr/bin"
+./contrib/openbsm/libbsm/bsm_wrappers.c:224:	/* for /usr/bin/login, try fstat() first */
+./contrib/openbsm/bsm/libbsm.h:1014: * used in audit session initialization by processes like /usr/bin/login.
+./contrib/libarchive/libarchive/test/test_archive_cmdline.c:60:	    "/usr/bin/gzip "));
+./contrib/libarchive/libarchive/test/test_archive_cmdline.c:63:	assertEqualString("/usr/bin/gzip", cl->path);
+./contrib/libpcap/pcap-dlpi.c:1730:echo 'lanc_outbound_promisc_flag/W1' | /usr/bin/adb -w /stand/vmunix /dev/kmem
+... [52 more matches]
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE usr.bin/*/Makefile

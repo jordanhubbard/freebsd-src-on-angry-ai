@@ -1,0 +1,45 @@
+=== STEP 298 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 12/15
+
+```
+=== CHUNK 12/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: get_line]
+=== Lines 271-293 (23 lines) ===
+
+static char *
+get_line(void)
+{
+	static char lbuf[LINE_MAX];
+	FILE *src;
+
+	src = overfile != NULL ? overfile : infile;
+
+again: if (fgets(lbuf, sizeof(lbuf), src) == NULL) {
+		if (src == overfile) {
+			src = infile;
+			goto again;
+		}
+		return (NULL);
+	}
+	if (ferror(src))
+		err(1, "%s", infn);
+	lineno++;
+
+	return (lbuf);
+}
+
+/* Conceptually rewind the input (as obtained by get_line()) back `n' lines. */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

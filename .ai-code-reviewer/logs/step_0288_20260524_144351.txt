@@ -1,0 +1,23 @@
+=== STEP 288 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 2/15
+
+```
+=== CHUNK 2/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: cleanup]
+=== Lines 62-62 (1 lines) ===
+
+static void	 cleanup(void);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

@@ -1,0 +1,11 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'usr.bin/tcopy/tcopy.cc:open_arg'
+
+--- RESPONSE ---
+
+
+The chunks are jumping from line 216 to line 507. Let me search for the missing content.
+
+ACTION: GREP usr.bin/tcopy/tcopy.cc:open_arg

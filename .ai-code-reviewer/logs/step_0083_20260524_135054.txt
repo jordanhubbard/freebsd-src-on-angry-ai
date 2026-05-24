@@ -1,0 +1,20 @@
+=== STEP 83 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/csplit/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "csplit"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "csplit"
+path = "src/main.rs"
+<<<

@@ -1,0 +1,106 @@
+=== STEP 300 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 14/15
+
+```
+=== CHUNK 14/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: do_rexp]
+=== Lines 353-436 (84 lines) ===
+
+static void
+do_rexp(const char *expr)
+{
+	regex_t cre;
+	intmax_t nwritten;
+	long ofs;
+	int first;
+	char *ecopy, *ep, *p, *pofs, *re;
+	FILE *ofp;
+
+	if ((ecopy = strdup(expr)) == NULL)
+		err(1, "strdup");
+
+	re = ecopy + 1;
+	if ((pofs = strrchr(ecopy, *expr)) == NULL || pofs[-1] == '\\')
+		errx(1, "%s: missing trailing %c", expr, *expr);
+	*pofs++ = '\0';
+
+	if (*pofs != '\0') {
+		errno = 0;
+		ofs = strtol(pofs, &ep, 10);
+		if (*ep != '\0' || errno != 0)
+			errx(1, "%s: bad offset", pofs);
+	} else
+		ofs = 0;
+
+	if (regcomp(&cre, re, REG_BASIC|REG_NOSUB) != 0)
+		errx(1, "%s: bad regular expression", re);
+
+	if (*expr == '/')
+		/* /regexp/: Save results to a file. */
+		ofp = newfile();
+	else {
+		/* %regexp%: Make a temporary file for overflow. */
+		if ((ofp = tmpfile()) == NULL)
+			err(1, "tmpfile");
+	}
+
+	/* Read and output lines until we get a match. */
+	first = 1;
+	while ((p = get_line()) != NULL) {
+		if (fputs(p, ofp) == EOF)
+			break;
+		if (!first && regexec(&cre, p, 0, NULL, 0) == 0)
+			break;
+		first = 0;
+	}
+
+	if (p == NULL) {
+		toomuch(NULL, 0);
+		errx(1, "%s: no match", re);
+	}
+
+	if (ofs <= 0) {
+		/*
+		 * Negative (or zero) offset: throw back any lines we should
+		 * not have read yet.
+		  */
+		if (p != NULL) {
+			toomuch(ofp, -ofs + 1);
+			nwritten = (intmax_t)truncofs;
+		} else
+			nwritten = (intmax_t)ftello(ofp);
+	} else {
+		/*
+		 * Positive offset: copy the requested number of lines
+		 * after the match.
+		 */
+		while (--ofs > 0 && (p = get_line()) != NULL)
+			fputs(p, ofp);
+		toomuch(NULL, 0);
+		nwritten = (intmax_t)ftello(ofp);
+		if (fclose(ofp) != 0)
+			err(1, "%s", currfile);
+	}
+
+	if (!sflag && *expr == '/')
+		printf("%jd\n", nwritten);
+
+	regfree(&cre);
+	free(ecopy);
+}
+
+/* Handle splits based on line number. */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

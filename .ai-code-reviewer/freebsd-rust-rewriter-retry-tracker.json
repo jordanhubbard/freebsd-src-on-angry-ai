@@ -128,8 +128,8 @@
     "last_attempt": "2026-05-23T15:47:09.012808"
   },
   "contrib/llvm-project/clang/lib/Analysis/plugins/CheckerOptionHandling": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T13:28:46.834888"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T14:40:57.306091"
   },
   "contrib/llvm-project/clang/lib/DirectoryWatcher/default": {
     "attempts": 3,
@@ -168,8 +168,8 @@
     "last_attempt": "2026-05-24T06:36:22.530138"
   },
   "contrib/llvm-project/llvm/lib/Telemetry": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T13:29:52.560045"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T14:44:44.923042"
   },
   "contrib/netbsd-tests/lib/csu/dso": {
     "attempts": 3,
@@ -355,6 +355,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T16:58:09.899107"
   },
+  "usr.bin/csplit": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T13:48:03.469535"
+  },
   "usr.bin/cut": {
     "attempts": 3,
     "last_attempt": "2026-05-24T12:48:33.015005"
@@ -524,8 +528,8 @@
     "last_attempt": "2026-05-24T04:11:01.671319"
   },
   "usr.bin/tcopy": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T13:33:32.419653"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T13:35:42.089125"
   },
   "usr.bin/touch": {
     "attempts": 2,

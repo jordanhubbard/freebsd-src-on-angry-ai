@@ -1,0 +1,13 @@
+=== STEP 140 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat/tests has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Telemetry
+
+--- RESPONSE ---
+
+
+The current scope is a Clang plugin, not FreeBSD userland. The next suggested units are also irrelevant (test directories, LLVM libraries). I need to find a small FreeBSD userland unit.
+
+ACTION: SET_SCOPE usr.bin/tcopy

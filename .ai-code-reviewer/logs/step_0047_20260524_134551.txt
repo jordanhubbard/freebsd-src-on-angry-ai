@@ -1,0 +1,12 @@
+=== STEP 47 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Directory not found: usr.bin/limit
+TIP: Use LIST_DIR to see available directories
+
+--- RESPONSE ---
+
+
+Let me try another small command.
+
+ACTION: SET_SCOPE usr.bin/limits

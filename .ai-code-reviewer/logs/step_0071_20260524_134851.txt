@@ -1,0 +1,23 @@
+=== STEP 71 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 6/15
+
+```
+=== CHUNK 6/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: toomuch]
+=== Lines 68-68 (1 lines) ===
+
+static void	 toomuch(FILE *, long);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

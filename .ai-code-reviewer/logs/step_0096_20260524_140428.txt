@@ -1,0 +1,469 @@
+=== STEP 96 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The csplit implementation uses the `regex` crate which isn't available offline. I need to rewrite it to use libc FFI for regex instead, matching the original C behavior.
+
+ACTION: WRITE_FILE usr.bin/csplit/src/main.rs
+CONTENT:
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2002 Tim J. Robbins.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+use std::ffi::CString;
+use std::fs::{File, OpenOptions};
+use std::io::{self, BufRead, BufReader, Read, Seek, SeekFrom, Write};
+use std::os::unix::fs::OpenOptionsExt;
+use std::process;
+
+const PATH_MAX: usize = 1024;
+
+extern "C" {
+    fn regcomp(preg: *mut regex_t, pattern: *const libc::c_char, cflags: libc::c_int) -> libc::c_int;
+    fn regexec(preg: *const regex_t, string: *const libc::c_char, nmatch: libc::c_size_t, pmatch: *mut libc::regmatch_t, eflags: libc::c_int) -> libc::c_int;
+    fn regfree(preg: *mut regex_t);
+}
+
+#[repr(C)]
+struct regex_t {
+    _private: [u8; 0],
+}
+
+#[repr(C)]
+struct regmatch_t {
+    rm_so: libc::ssize_t,
+    rm_eo: libc::ssize_t,
+}
+
+const REG_BASIC: libc::c_int = 0;
+const REG_NOSUB: libc::c_int = 0x80;
+const REG_OK: libc::c_int = 0;
+
+struct State {
+    prefix: String,
+    sufflen: usize,
+    sflag: bool,
+    kflag: bool,
+    lineno: i64,
+    reps: i64,
+    nfiles: i64,
+    maxfiles: i64,
+    currfile: String,
+    infn: String,
+    infile: Option<BufReader<File>>,
+    overfile: Option<File>,
+    truncofs: i64,
+    doclean: bool,
+    created_files: Vec<String>,
+}
+
+impl State {
+    fn new() -> Self {
+        State {
+            prefix: "xx".to_string(),
+            sufflen: 2,
+            sflag: false,
+            kflag: false,
+            lineno: 0,
+            reps: 0,
+            nfiles: 0,
+            maxfiles: 1,
+            currfile: String::new(),
+            infn: String::new(),
+            infile: None,
+            overfile: None,
+            truncofs: 0,
+            doclean: false,
+            created_files: Vec::new(),
+        }
+    }
+
+    fn cleanup(&mut self) {
+        if !self.doclean {
+            return;
+        }
+        for fnbuf in &self.created_files {
+            let _ = std::fs::remove_file(fnbuf);
+        }
+    }
+
+    fn newfile(&mut self) -> io::Result<File> {
+        self.currfile = format!("{}{:0>width$}", self.prefix, self.nfiles, width = self.sufflen);
+        if self.currfile.len() >= PATH_MAX {
+            return Err(io::Error::new(io::ErrorKind::Other, "name too long"));
+        }
+        let fp = OpenOptions::new().read(true).write(true).create(true).truncate(true).open(&self.currfile)?;
+        self.nfiles += 1;
+        self.created_files.push(self.currfile.clone());
+        Ok(fp)
+    }
+
+    fn get_line(&mut self) -> io::Result<Option<String>> {
+        let mut lbuf = String::new();
+        if let Some(ref mut of) = self.overfile {
+            match of.read_line(&mut lbuf) {
+                Ok(0) => {
+                    self.overfile = None;
+                    if let Some(ref mut inf) = self.infile {
+                        match inf.read_line(&mut lbuf) {
+                            Ok(0) => return Ok(None),
+                            Ok(_) => {
+                                self.lineno += 1;
+                                return Ok(Some(lbuf));
+                            }
+                            Err(e) => return Err(e),
+                        }
+                    } else {
+                        return Ok(None);
+                    }
+                }
+                Ok(_) => {
+                    self.lineno += 1;
+                    return Ok(Some(lbuf));
+                }
+                Err(e) => return Err(e),
+            }
+        }
+        if let Some(ref mut inf) = self.infile {
+            match inf.read_line(&mut lbuf) {
+                Ok(0) => return Ok(None),
+                Ok(_) => {
+                    self.lineno += 1;
+                    return Ok(Some(lbuf));
+                }
+                Err(e) => return Err(e),
+            }
+        }
+        Ok(None)
+    }
+
+    fn toomuch(&mut self, ofp: Option<&mut File>, n: i64) -> io::Result<()> {
+        if let Some(ref mut ovf) = self.overfile {
+            ovf.seek(SeekFrom::Start(self.truncofs as u64))?;
+            ovf.set_len(self.truncofs as u64)?;
+        }
+        self.overfile = None;
+
+        if n == 0 {
+            return Ok(());
+        }
+
+        self.lineno -= n;
+
+        if let Some(ref mut ofp) = ofp {
+            let mut buf = vec![0u8; 8192];
+            let mut remaining = n;
+            loop {
+                let pos = ofp.stream_position()?;
+                if pos < buf.len() as u64 {
+                    ofp.seek(SeekFrom::Start(0))?;
+                } else {
+                    ofp.seek(SeekFrom::Current(-(buf.len() as i64)))?;
+                }
+                let nread = ofp.read(&mut buf)?;
+                if nread == 0 {
+                    return Err(io::Error::new(io::ErrorKind::Other, "can't read overflowed output"));
+                }
+                ofp.seek(SeekFrom::Current(-(nread as i64)))?;
+                let mut found = false;
+                for i in (0..nread).rev() {
+                    if buf[i] == b'\n' {
+                        remaining -= 1;
+                        if remaining == 0 {
+                            ofp.seek(SeekFrom::Current((i as i64) + 1))?;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if found {
+                    break;
+                }
+                let pos = ofp.stream_position()?;
+                if pos == 0 {
+                    break;
+                }
+            }
+            self.overfile = Some(ofp.try_clone()?);
+            self.truncofs = self.overfile.as_ref().unwrap().stream_position()? as i64;
+        }
+
+        Ok(())
+    }
+
+    fn do_rexp(&mut self, expr: &str) -> io::Result<()> {
+        let delim = expr.as_bytes()[0] as char;
+        let end_delim = expr.rfind(delim);
+        let Some(end_delim) = end_delim else {
+            eprintln!("{}: missing trailing {}", expr, delim);
+            process::exit(1);
+        };
+        let re_str = &expr[1..end_delim];
+        let offset_str = &expr[end_delim + 1..];
+
+        let ofs: i64 = if offset_str.is_empty() {
+            0
+        } else {
+            match offset_str.parse::<i64>() {
+                Ok(v) => v,
+                Err(_) => {
+                    eprintln!("{}: bad offset", offset_str);
+                    process::exit(1);
+                }
+            }
+        };
+
+        let re_cstr = CString::new(re_str).unwrap_or_else(|_| {
+            eprintln!("{}: bad regular expression", re_str);
+            process::exit(1);
+        });
+
+        let mut cre: regex_t = unsafe { std::mem::zeroed() };
+        if unsafe { regcomp(&mut cre, re_cstr.as_ptr(), REG_BASIC | REG_NOSUB) } != REG_OK {
+            eprintln!("{}: bad regular expression", re_str);
+            process::exit(1);
+        }
+
+        let mut ofp: File;
+        if delim == '/' {
+            ofp = self.newfile().unwrap_or_else(|e| {
+                unsafe { regfree(&mut cre) };
+                eprintln!("{}: {}", self.currfile, e);
+                process::exit(1);
+            });
+        } else {
+            ofp = File::create("/dev/null").unwrap_or_else(|e| {
+                unsafe { regfree(&mut cre) };
+                eprintln!("tmpfile: {}", e);
+                process::exit(1);
+            });
+        }
+
+        let mut first = true;
+        let mut matched = false;
+        loop {
+            match self.get_line() {
+                Ok(Some(line)) => {
+                    if let Err(e) = ofp.write_all(line.as_bytes()) {
+                        unsafe { regfree(&mut cre) };
+                        eprintln!("write error: {}", e);
+                        process::exit(1);
+                    }
+                    let line_cstr = CString::new(line.as_bytes()).unwrap_or_else(|_| {
+                        unsafe { regfree(&mut cre) };
+                        process::exit(1);
+                    });
+                    if !first && unsafe { regexec(&cre, line_cstr.as_ptr(), 0, std::ptr::null_mut(), 0) } == REG_OK {
+                        matched = true;
+                        break;
+                    }
+                    first = false;
+                }
+                Ok(None) => break,
+                Err(e) => {
+                    unsafe { regfree(&mut cre) };
+                    eprintln!("{}: {}", self.infn, e);
+                    process::exit(1);
+                }
+            }
+        }
+
+        if !matched {
+            self.toomuch(None, 0).ok();
+            unsafe { regfree(&mut cre) };
+            eprintln!("{}: no match", re_str);
+            process::exit(1);
+        }
+
+        if ofs <= 0 {
+            if let Err(e) = self.toomuch(Some(&mut ofp), -ofs + 1) {
+                unsafe { regfree(&mut cre) };
+                eprintln!("toomuch: {}", e);
+                process::exit(1);
+            }
+            let nwritten = self.truncofs;
+            if !self.sflag && delim == '/' {
+                println!("{}", nwritten);
+            }
+        } else {
+            let mut remaining = ofs - 1;
+            while remaining > 0 {
+                match self.get_line() {
+                    Ok(Some(line)) => {
+                        if let Err(e) = ofp.write_all(line.as_bytes()) {
+                            unsafe { regfree(&mut cre) };
+                            eprintln!("write error: {}", e);
+                            process::exit(1);
+                        }
+                        remaining -= 1;
+                    }
+                    Ok(None) => break,
+                    Err(e) => {
+                        unsafe { regfree(&mut cre) };
+                        eprintln!("{}: {}", self.infn, e);
+                        process::exit(1);
+                    }
+                }
+            }
+            self.toomuch(None, 0).ok();
+            let nwritten = ofp.stream_position().unwrap_or(0) as i64;
+            if !self.sflag && delim == '/' {
+                println!("{}", nwritten);
+            }
+        }
+
+        unsafe { regfree(&mut cre) };
+        Ok(())
+    }
+
+    fn do_lineno(&mut self, expr: &str) -> io::Result<()> {
+        let target: i64 = match expr.parse() {
+            Ok(v) => v,
+            Err(_) => {
+                eprintln!("{}: bad line number", expr);
+                process::exit(1);
+            }
+        };
+
+        let mut ofp = self.newfile().unwrap_or_else(|e| {
+            eprintln!("{}: {}", self.currfile, e);
+            process::exit(1);
+        });
+
+        while self.lineno < target {
+            match self.get_line() {
+                Ok(Some(line)) => {
+                    if let Err(e) = ofp.write_all(line.as_bytes()) {
+                        eprintln!("write error: {}", e);
+                        process::exit(1);
+                    }
+                }
+                Ok(None) => break,
+                Err(e) => {
+                    eprintln!("{}: {}", self.infn, e);
+                    process::exit(1);
+                }
+            }
+        }
+
+        let nwritten = ofp.stream_position().unwrap_or(0) as i64;
+        if !self.sflag {
+            println!("{}", nwritten);
+        }
+
+        Ok(())
+    }
+}
+
+fn usage() {
+    eprintln!("usage: csplit [-ks] [-f prefix] [-n number] file args ...");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut state = State::new();
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-f" => {
+                i += 1;
+                if i >= args.len() { usage(); }
+                state.prefix = args[i].clone();
+            }
+            "-k" => {
+                state.kflag = true;
+            }
+            "-n" => {
+                i += 1;
+                if i >= args.len() { usage(); }
+                match args[i].parse::<usize>() {
+                    Ok(v) if v > 0 => state.sufflen = v,
+                    _ => {
+                        eprintln!("{}: bad suffix length", args[i]);
+                        process::exit(1);
+                    }
+                }
+            }
+            "-s" => {
+                state.sflag = true;
+            }
+            _ => break,
+        }
+        i += 1;
+    }
+
+    if state.sufflen + state.prefix.len() >= PATH_MAX {
+        eprintln!("name too long");
+        process::exit(1);
+    }
+
+    if i >= args.len() {
+        usage();
+    }
+    state.infn = args[i].clone();
+    i += 1;
+
+    let infile = if state.infn == "-" {
+        BufReader::new(io::stdin())
+    } else {
+        match File::open(&state.infn) {
+            Ok(f) => BufReader::new(f),
+            Err(e) => {
+                eprintln!("{}: {}", state.infn, e);
+                process::exit(1);
+            }
+        }
+    };
+    state.infile = Some(infile);
+
+    if !state.kflag {
+        state.doclean = true;
+    }
+
+    state.lineno = 0;
+    state.nfiles = 0;
+    state.truncofs = 0;
+
+    state.maxfiles = 10i64.pow(state.sufflen as u32);
+
+    while state.nfiles < state.maxfiles - 1 && i < args.len() {
+        let expr = &args[i];
+        i += 1;
+
+        if i < args.len() && args[i].starts_with('{') && args[i].ends_with('}') {
+            let inner = &args[i][1..args[i].len() - 1];
+            match inner.parse::<i64>() {
+                Ok(v) if v >= 0 => {
+                    state.reps = v;
+                    i += 

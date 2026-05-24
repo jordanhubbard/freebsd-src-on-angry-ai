@@ -1,0 +1,46 @@
+=== STEP 293 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 7/15
+
+```
+=== CHUNK 7/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: usage]
+=== Lines 69-92 (24 lines) ===
+
+static void	 usage(void);
+
+/*
+ * Command line options
+ */
+static const char *prefix;	/* File name prefix */
+static long	 sufflen;	/* Number of decimal digits for suffix */
+static int	 sflag;		/* Suppress output of file names */
+static int	 kflag;		/* Keep output if error occurs */
+
+/*
+ * Other miscellaneous globals (XXX too many)
+ */
+static long	 lineno;	/* Current line number in input file */
+static long	 reps;		/* Number of repetitions for this pattern */
+static long	 nfiles;	/* Number of files output so far */
+static long	 maxfiles;	/* Maximum number of files we can create */
+static char	 currfile[PATH_MAX]; /* Current output file */
+static const char *infn;	/* Name of the input file */
+static FILE	*infile;	/* Input file handle */
+static FILE	*overfile;	/* Overflow file for toomuch() */
+static off_t	 truncofs;	/* Offset this file should be truncated at */
+static int	 doclean;	/* Should cleanup() remove output? */
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

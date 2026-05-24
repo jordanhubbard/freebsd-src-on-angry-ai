@@ -1,0 +1,147 @@
+=== STEP 112 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c:
+
+📋 CHUNKED FILE REWRITE MODE
+   File: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c
+   Total chunks: 15
+   Strategy: Function-by-function rewrite
+   Use ACTION: NEXT_CHUNK to continue
+   Use ACTION: SKIP_FILE to move to next file
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 1/15
+✏️  Edits: 3 files modified
+
+```
+=== CHUNK 1/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [header: file_header]
+=== Lines 1-61 (61 lines) ===
+
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2002 Tim J. Robbins.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * csplit -- split files based on context
+ *
+ * This utility splits its input into numbered output files by line number
+ * or by a regular expression. Regular expression matches have an optional
+ * offset with them, allowing the split to occur a specified number of
+ * lines before or after the match.
+ *
+ * To handle negative offsets, we stop reading when the match occurs and
+ * store the offset that the file should have been split at, then use
+ * this output file as input until all the "overflowed" lines have been read.
+ * The file is then closed and truncated to the correct length.
+ *
+ * We assume that the output files can be seeked upon (ie. they cannot be
+ * symlinks to named pipes or character devices), but make no such
+ * assumption about the input.
+ */
+
+#include <sys/types.h>
+
+#include <ctype.h>
+#include <err.h>
+#include <errno.h>
+#include <limits.h>
+#include <locale.h>
+#include <regex.h>
+#include <signal.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/csplit/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	csplit
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+SRCS=	csplit.c
+
+.if defined(WITH_RUST)
+PROG_RUST=	csplit
+RUST_SRCDIR=	${.CURDIR}
+RUST_TARGET=	csplit
+.endif
+
+.include <bsd.prog.mk>
+
+.if defined(WITH_RUST)
+RUSTC?=	rustc
+CARGO?=	cargo
+
+.cargo-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${.OBJDIR}/cargo-target --release
+
+${PROG}.cargo: .cargo-build
+	@cp ${.OBJDIR}/cargo-target/release/${RUST_TARGET} ${.OBJDIR}/${PROG}.cargo
+
+all: ${PROG}.cargo
+.endif
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	csplit
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+
+# Rust side-by-side build
+.if exists(${.CURDIR}/Cargo.toml)
+CARGO?=	cargo
+RUST_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.cargo-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${RUST_TARGET_DIR} --release
+
+all: .cargo-build
+.endif
+>>>

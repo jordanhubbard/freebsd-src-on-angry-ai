@@ -1,0 +1,49 @@
+=== STEP 75 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 10/15
+
+```
+=== CHUNK 10/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: handlesig]
+=== Lines 220-246 (27 lines) ===
+
+static void
+handlesig(int sig __unused)
+{
+	const char msg[] = "csplit: caught signal, cleaning up\n";
+
+	write(STDERR_FILENO, msg, sizeof(msg) - 1);
+	cleanup();
+	_exit(2);
+}
+
+/* Create a new output file. */
+static FILE *
+newfile(void)
+{
+	FILE *fp;
+
+	if ((size_t)snprintf(currfile, sizeof(currfile), "%s%0*ld", prefix,
+	    (int)sufflen, nfiles) >= sizeof(currfile))
+		errc(1, ENAMETOOLONG, NULL);
+	if ((fp = fopen(currfile, "w+")) == NULL)
+		err(1, "%s", currfile);
+	nfiles++;
+
+	return (fp);
+}
+
+/* Remove partial output, called before exiting. */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

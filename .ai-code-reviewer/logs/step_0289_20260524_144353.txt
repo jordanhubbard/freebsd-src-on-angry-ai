@@ -1,0 +1,23 @@
+=== STEP 289 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 3/15
+
+```
+=== CHUNK 3/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: do_lineno]
+=== Lines 63-63 (1 lines) ===
+
+static void	 do_lineno(const char *);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

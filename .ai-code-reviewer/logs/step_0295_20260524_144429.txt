@@ -1,0 +1,31 @@
+=== STEP 295 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 9/15
+
+```
+=== CHUNK 9/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: usage]
+=== Lines 211-219 (9 lines) ===
+
+static void
+usage(void)
+{
+
+	fprintf(stderr,
+"usage: csplit [-ks] [-f prefix] [-n number] file args ...\n");
+	exit(1);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

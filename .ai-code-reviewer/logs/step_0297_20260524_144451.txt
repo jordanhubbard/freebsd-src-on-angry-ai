@@ -1,0 +1,46 @@
+=== STEP 297 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/csplit
+   Files: 0/3
+📄 File: usr.bin/csplit/csplit.c
+   Chunks: 11/15
+
+```
+=== CHUNK 11/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/csplit.c === [function: cleanup]
+=== Lines 247-270 (24 lines) ===
+
+static void
+cleanup(void)
+{
+	char fnbuf[PATH_MAX];
+	long i;
+
+	if (!doclean)
+		return;
+
+	/*
+	 * NOTE: One cannot portably assume to be able to call snprintf()
+	 * from inside a signal handler. It does, however, appear to be safe
+	 * to do on FreeBSD. The solution to this problem is worse than the
+	 * problem itself.
+	 */
+
+	for (i = 0; i < nfiles; i++) {
+		snprintf(fnbuf, sizeof(fnbuf), "%s%0*ld", prefix,
+		    (int)sufflen, i);
+		unlink(fnbuf);
+	}
+}
+
+/* Read a line from the input into a static buffer. */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

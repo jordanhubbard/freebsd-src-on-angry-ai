@@ -1,0 +1,11 @@
+=== STEP 157 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/*'
+
+--- RESPONSE ---
+
+
+Let me find a small, simple unit to work on.
+
+ACTION: FIND_FILE usr.bin
