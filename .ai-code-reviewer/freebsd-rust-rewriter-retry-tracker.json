@@ -128,8 +128,8 @@
     "last_attempt": "2026-05-23T05:12:11.840100"
   },
   "contrib/llvm-project/libcxx/src/pstl": {
-    "attempts": 2,
-    "last_attempt": "2026-05-23T18:33:44.647907"
+    "attempts": 3,
+    "last_attempt": "2026-05-23T20:13:55.015565"
   },
   "contrib/llvm-project/lldb/tools/argdumper": {
     "attempts": 3,

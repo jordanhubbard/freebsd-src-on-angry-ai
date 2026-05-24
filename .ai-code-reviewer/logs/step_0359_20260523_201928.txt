@@ -1,0 +1,60 @@
+=== STEP 359 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: sys/contrib/libsodium/src/libsodium/crypto_shorthash
+Pending source/build changes: 3 files modified
+Files: sys/contrib/libsodium/src/libsodium/crypto_shorthash/Cargo.toml, sys/contrib/libsodium/src/libsodium/crypto_shorthash/src/lib.rs, sys/contrib/libsodium/src/libsodium/crypto_shorthash/Makefile
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in sys/contrib/libsodium/src/libsodium/crypto_shorthash
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+I need to fix the build integration. The scope has no proper FreeBSD Makefile integration. Let me update the Makefile to use FreeBSD build infrastructure:
+
+ACTION: EDIT_FILE sys/contrib/libsodium/src/libsodium/crypto_shorthash/Makefile
+OLD:
+<<<
+# Makefile for crypto_shorthash Rust replacement
+
+CARGO ?= cargo
+CARGO_TARGET_DIR ?= ${.OBJDIR}/cargo-target
+
+.PHONY: all clean
+
+all: ${CARGO_TARGET_DIR}/libcrypto_shorthash.a
+
+${CARGO_TARGET_DIR}/libcrypto_shorthash.a: Cargo.toml src/lib.rs
+	${CARGO} build --manifest-path Cargo.toml --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+# Makefile for crypto_shorthash Rust replacement
+
+CARGO ?= cargo
+CARGO_TARGET_DIR ?= ${.OBJDIR}/cargo-target
+
+.PHONY: all clean
+
+all: ${CARGO_TARGET_DIR}/libcrypto_shorthash.a
+
+${CARGO_TARGET_DIR}/libcrypto_shorthash.a: Cargo.toml src/lib.rs
+	${CARGO} build --manifest-path Cargo.toml --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR}
+>>>

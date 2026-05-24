@@ -1,0 +1,25 @@
+=== STEP 350 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_shorthash/src:
+```
+
+```
+
+--- RESPONSE ---
+
+
+The Cargo.toml and src/lib.rs were reverted. Let me recreate them:
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_shorthash/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "crypto_shorthash"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+>>>

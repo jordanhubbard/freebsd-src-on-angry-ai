@@ -1,0 +1,12 @@
+=== STEP 349 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_shorthash/Cargo.toml
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+The Cargo.toml was reverted. Let me check what exists and recreate the files:
+
+ACTION: LIST_DIR sys/contrib/libsodium/src/libsodium/crypto_shorthash/src
