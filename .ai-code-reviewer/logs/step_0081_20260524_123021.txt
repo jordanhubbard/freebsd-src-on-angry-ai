@@ -1,0 +1,86 @@
+=== STEP 81 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/cut
+   Files: 0/3
+📄 File: usr.bin/cut/cut.c
+   Chunks: 14/18
+
+```
+=== CHUNK 14/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/cut/cut.c === [function: b_n_cut]
+=== Lines 268-331 (64 lines) ===
+
+static int
+b_n_cut(FILE *fp, const char *fname)
+{
+	size_t col, i, bufsize = 0;
+	ssize_t lbuflen;
+	char *lbuf = NULL;
+	int canwrite, clen, warned;
+	mbstate_t mbs;
+
+	memset(&mbs, 0, sizeof(mbs));
+	warned = 0;
+	while ((lbuflen = getline(&lbuf, &bufsize, fp)) >= 0) {
+		for (col = 0; lbuflen > 0; col += clen) {
+			if ((clen = mbrlen(lbuf, lbuflen, &mbs)) < 0) {
+				if (!warned) {
+					warn("%s", fname);
+					warned = 1;
+				}
+				memset(&mbs, 0, sizeof(mbs));
+				clen = 1;
+			}
+			if (clen == 0 || *lbuf == '\n')
+				break;
+			if (col < maxval && !positions[1 + col]) {
+				/*
+				 * Print the character if (1) after an initial
+				 * segment of un-selected bytes, the rest of
+				 * it is selected, and (2) the last byte is
+				 * selected.
+				 */
+				i = col;
+				while (i < col + clen && i < maxval &&
+				    !positions[1 + i])
+					i++;
+				canwrite = i < col + clen;
+				for (; i < col + clen && i < maxval; i++)
+					canwrite &= positions[1 + i];
+				if (canwrite)
+					fwrite(lbuf, 1, clen, stdout);
+			} else {
+				/*
+				 * Print the character if all of it has
+				 * been selected.
+				 */
+				canwrite = 1;
+				for (i = col; i < col + clen; i++)
+					if ((i >= maxval && !autostop) ||
+					    (i < maxval && !positions[1 + i])) {
+						canwrite = 0;
+						break;
+					}
+				if (canwrite)
+					fwrite(lbuf, 1, clen, stdout);
+			}
+			lbuf += clen;
+			lbuflen -= clen;
+		}
+		if (lbuflen > 0)
+			putchar('\n');
+	}
+	free(lbuf);
+	return (warned);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libnv/nvlist_impl.h

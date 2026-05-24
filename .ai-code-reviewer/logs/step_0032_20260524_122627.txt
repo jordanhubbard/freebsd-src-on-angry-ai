@@ -1,0 +1,66 @@
+=== STEP 32 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv/common_impl.h:
+PROGRESS:
+📁 Directory: lib/libnv
+   Files: 0/4
+📄 File: lib/libnv/common_impl.h
+
+```
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2013 The FreeBSD Foundation
+ *
+ * This software was developed by Pawel Jakub Dawidek under sponsorship from
+ * the FreeBSD Foundation.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHORS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+#ifndef	_COMMON_IMPL_H_
+#define	_COMMON_IMPL_H_
+
+#include <errno.h>
+#include <fcntl.h>
+#include <stdbool.h>
+
+static inline bool
+fd_is_valid(int fd)
+{
+
+	return (fcntl(fd, F_GETFD) != -1 || errno != EBADF);
+}
+
+#endif	/* !_COMMON_IMPL_H_ */
+
+```
+
+--- RESPONSE ---
+
+
+The build error is a system-level bootstrap issue, not related to my changes. The pending changes from `usr.bin/cmp` are from a previous scope. Let me create the Rust replacement for `lib/libnv` and then build.
+
+Given the scope, `msgio.c` is the main source file in this directory. Let me create a Rust replacement for it.
+
+ACTION: WRITE_FILE lib/libnv/src/Cargo.toml

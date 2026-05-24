@@ -1,0 +1,41 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv/Makefile:
+PROGRESS:
+📁 Directory: lib/libnv
+   Files: 0/4
+📄 File: lib/libnv/Makefile
+
+```
+SHLIBDIR?= /lib
+
+.include <src.opts.mk>
+
+PACKAGE=	runtime
+LIB=	nv
+SHLIB_MAJOR= 1
+
+VERSION_DEF=	${SRCTOP}/lib/libc/Versions.def
+VERSION_MAP=	${.CURDIR}/Version.map
+
+.PATH: ${SRCTOP}/sys/contrib/libnv ${SRCTOP}/sys/sys
+CFLAGS+=-I${.CURDIR}
+
+SRCS=	cnvlist.c
+SRCS+=	dnvlist.c
+SRCS+=	msgio.c
+SRCS+=	nvlist.c
+SRCS+=	bsd_nvpair.c
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.lib.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR lib/libnv

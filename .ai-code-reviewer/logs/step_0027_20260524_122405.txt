@@ -1,0 +1,37 @@
+=== STEP 27 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libnv
+   Files: 0/4
+📄 File: lib/libnv/msgio.c
+   Chunks: 3/13
+
+```
+=== CHUNK 3/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv/msgio.c === [function: fd_wait]
+=== Lines 86-98 (13 lines) ===
+
+static void
+fd_wait(int fd, bool doread)
+{
+	struct pollfd pfd;
+
+	PJDLOG_ASSERT(fd >= 0);
+
+	pfd.fd = fd;
+	pfd.events = doread ? POLLIN : POLLOUT;
+	pfd.revents = 0;
+	(void)poll(&pfd, 1, -1);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+This library is quite large and complex with many source files in `sys/contrib/libnv`. Given the `small_first` strategy, this is not an ideal candidate. Let me skip this and find a smaller unit.
+
+ACTION: SKIP_FILE

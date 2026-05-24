@@ -1,0 +1,20 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv:
+```
+Makefile
+Makefile.depend
+Version.map
+common_impl.h
+msgio.c
+msgio.h
+tests
+```
+
+--- RESPONSE ---
+
+
+The source files are in `sys/contrib/libnv`. Let me find and read them.
+
+ACTION: LIST_DIR sys/contrib/libnv

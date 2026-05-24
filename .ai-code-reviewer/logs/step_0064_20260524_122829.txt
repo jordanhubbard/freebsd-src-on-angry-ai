@@ -1,0 +1,23 @@
+=== STEP 64 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/cut
+   Files: 0/3
+📄 File: usr.bin/cut/cut.c
+   Chunks: 6/18
+
+```
+=== CHUNK 6/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/cut/cut.c === [function: get_list]
+=== Lines 63-63 (1 lines) ===
+
+static void	get_list(char *);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

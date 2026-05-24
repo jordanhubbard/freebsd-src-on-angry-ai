@@ -1,0 +1,56 @@
+=== STEP 83 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/cut
+   Files: 0/3
+📄 File: sys/contrib/libnv/nvlist_impl.h
+
+```
+=== CHUNK 15/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/cut/cut.c === [function: c_cut]
+=== Lines 332-366 (35 lines) ===
+
+static int
+c_cut(FILE *fp, const char *fname)
+{
+	wint_t ch;
+	int col;
+	char *pos;
+
+	ch = 0;
+	for (;;) {
+		pos = positions + 1;
+		for (col = maxval; col; --col) {
+			if ((ch = getwc(fp)) == WEOF)
+				goto out;
+			if (ch == '\n')
+				break;
+			if (*pos++)
+				(void)putwchar(ch);
+		}
+		if (ch != '\n') {
+			if (autostop)
+				while ((ch = getwc(fp)) != WEOF && ch != '\n')
+					(void)putwchar(ch);
+			else
+				while ((ch = getwc(fp)) != WEOF && ch != '\n');
+		}
+		(void)putwchar('\n');
+	}
+out:
+	if (ferror(fp)) {
+		warn("%s", fname);
+		return (1);
+	}
+	return (0);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

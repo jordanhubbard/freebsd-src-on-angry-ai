@@ -1,0 +1,56 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/cut
+   Files: 0/3
+📄 File: usr.bin/cut/cut.c
+   Chunks: 13/18
+
+```
+=== CHUNK 13/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/cut/cut.c === [function: b_cut]
+=== Lines 234-267 (34 lines) ===
+
+static int
+b_cut(FILE *fp, const char *fname __unused)
+{
+	int ch, col;
+	char *pos;
+
+	ch = 0;
+	for (;;) {
+		pos = positions + 1;
+		for (col = maxval; col; --col) {
+			if ((ch = getc(fp)) == EOF)
+				return (0);
+			if (ch == '\n')
+				break;
+			if (*pos++)
+				(void)putchar(ch);
+		}
+		if (ch != '\n') {
+			if (autostop)
+				while ((ch = getc(fp)) != EOF && ch != '\n')
+					(void)putchar(ch);
+			else
+				while ((ch = getc(fp)) != EOF && ch != '\n');
+		}
+		(void)putchar('\n');
+	}
+	return (0);
+}
+
+/*
+ * Cut based on byte positions, taking care not to split multibyte characters.
+ * Although this function also handles the case where -n is not specified,
+ * b_cut() ought to be much faster.
+ */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

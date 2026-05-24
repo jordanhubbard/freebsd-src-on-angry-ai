@@ -1,0 +1,14 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+GREP_RESULT for 'make -C':
+```
+./sys/dev/sfxge/common/efx_regs_mcdi_strs.h:31: * rebuild this file with "make -C doc mcdiheaders".
+```
+
+--- RESPONSE ---
+
+
+The build errors are from `Makefile.inc1` being pulled in by the build harness. Let me check how the build system runs:
+
+ACTION: GREP make

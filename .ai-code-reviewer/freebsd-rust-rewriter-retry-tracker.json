@@ -199,6 +199,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-22T21:46:57.529904"
   },
+  "lib/libnv": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T12:23:01.284030"
+  },
   "lib/libssp_nonshared": {
     "attempts": 3,
     "last_attempt": "2026-05-23T13:51:49.358239"
@@ -296,8 +300,8 @@
     "last_attempt": "2026-05-24T07:40:50.616914"
   },
   "usr.bin/at": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T00:42:04.654306"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T12:38:33.705229"
   },
   "usr.bin/banner": {
     "attempts": 3,
@@ -324,8 +328,8 @@
     "last_attempt": "2026-05-24T11:12:28.554134"
   },
   "usr.bin/cmp": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T08:35:47.614133"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T12:46:24.811933"
   },
   "usr.bin/col": {
     "attempts": 3,
@@ -343,6 +347,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T16:58:09.899107"
   },
+  "usr.bin/cut": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T12:48:33.015005"
+  },
   "usr.bin/du": {
     "attempts": 1,
     "last_attempt": "2026-05-24T06:54:48.607766"
@@ -354,6 +362,10 @@
   "usr.bin/env": {
     "attempts": 3,
     "last_attempt": "2026-05-22T22:22:19.823290"
+  },
+  "usr.bin/factor": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T12:40:12.526147"
   },
   "usr.bin/false": {
     "attempts": 3,
@@ -444,8 +456,8 @@
     "last_attempt": "2026-05-22T03:45:59.312336"
   },
   "usr.bin/nl": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T07:17:35.125081"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T12:45:42.537617"
   },
   "usr.bin/nohup": {
     "attempts": 2,
@@ -556,8 +568,12 @@
     "last_attempt": "2026-05-22T20:53:29.410015"
   },
   "usr.bin/write": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T00:45:42.622528"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T12:50:50.889681"
+  },
+  "usr.bin/xargs": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T12:51:15.364348"
   },
   "usr.bin/yes": {
     "attempts": 3,

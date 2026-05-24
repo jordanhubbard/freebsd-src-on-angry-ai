@@ -1,0 +1,41 @@
+=== STEP 79 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/cut
+   Files: 0/3
+📄 File: usr.bin/cut/cut.c
+   Chunks: 12/18
+
+```
+=== CHUNK 12/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/cut/cut.c === [function: needpos]
+=== Lines 215-233 (19 lines) ===
+
+static void
+needpos(size_t n)
+{
+	static size_t npos;
+	size_t oldnpos;
+
+	/* Grow the positions array to at least the specified size. */
+	if (n > npos) {
+		oldnpos = npos;
+		if (npos == 0)
+			npos = n;
+		while (n > npos)
+			npos *= 2;
+		if ((positions = realloc(positions, npos)) == NULL)
+			err(1, "realloc");
+		memset((char *)positions + oldnpos, 0, npos - oldnpos);
+	}
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

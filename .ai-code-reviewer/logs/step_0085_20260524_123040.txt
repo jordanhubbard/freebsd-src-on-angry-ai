@@ -1,0 +1,114 @@
+=== STEP 85 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/cut
+   Files: 0/3
+📄 File: sys/contrib/libnv/nvlist_impl.h
+
+```
+=== CHUNK 17/18: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/cut/cut.c === [function: f_cut]
+=== Lines 380-472 (93 lines) ===
+
+static int
+f_cut(FILE *fp, const char *fname)
+{
+	wchar_t ch;
+	int field, i, isdelim;
+	char *pos, *p;
+	int output;
+	char *lbuf = NULL;
+	size_t clen, bufsize = 0, reallen;
+	ssize_t lbuflen;
+
+	while ((lbuflen = getline(&lbuf, &bufsize, fp)) >= 0) {
+		reallen = lbuflen;
+		/* Assert EOL has a newline. */
+		if (lbuflen > 0 && *(lbuf + lbuflen - 1) != '\n') {
+			/* Can't have > 1 line with no trailing newline. */
+			if ((ssize_t)bufsize < (lbuflen + 1)) {
+				bufsize = lbuflen + 1;
+				lbuf = realloc(lbuf, bufsize);
+			}
+			if (lbuf == NULL)
+				err(1, "realloc");
+			lbuf[lbuflen] = '\n';
+			reallen++;
+		}
+		output = 0;
+		for (isdelim = 0, p = lbuf;; p += clen) {
+			clen = mbrtowc(&ch, p, lbuf + reallen - p, NULL);
+			if (clen == (size_t)-1 || clen == (size_t)-2) {
+				warnc(EILSEQ, "%s", fname);
+				free(lbuf);
+				return (1);
+			}
+			if (clen == 0)
+				clen = 1;
+			/* this should work if newline is delimiter */
+			if (is_delim(ch))
+				isdelim = 1;
+			if (ch == '\n') {
+				if (!isdelim && !sflag)
+					(void)fwrite(lbuf, lbuflen, 1, stdout);
+				break;
+			}
+		}
+		if (!isdelim)
+			continue;
+
+		pos = positions + 1;
+		for (field = maxval, p = lbuf; field; --field, ++pos) {
+			if (*pos && output++)
+				for (i = 0; dcharmb[i] != '\0'; i++)
+					putchar(dcharmb[i]);
+			for (;;) {
+				clen = mbrtowc(&ch, p, lbuf + reallen - p,
+				    NULL);
+				if (clen == (size_t)-1 || clen == (size_t)-2) {
+					warnc(EILSEQ, "%s", fname);
+					free(lbuf);
+					return (1);
+				}
+				if (clen == 0)
+					clen = 1;
+				p += clen;
+				if (ch == '\n' || is_delim(ch)) {
+					/* compress whitespace */
+					if (wflag && ch != '\n')
+						while (is_delim(*p))
+							p++;
+					break;
+				}
+				if (*pos)
+					(void)fwrite(p - clen, 1, clen,
+					    stdout);
+			}
+			if (ch == '\n')
+				break;
+		}
+		if (ch != '\n') {
+			if (autostop) {
+				if (output)
+					for (i = 0; dcharmb[i] != '\0'; i++)
+						putchar(dcharmb[i]);
+				for (; (ch = *p) != '\n'; ++p)
+					(void)putchar(ch);
+			} else
+				for (; (ch = *p) != '\n'; ++p);
+		}
+		(void)putchar('\n');
+	}
+	free(lbuf);
+	return (0);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK
