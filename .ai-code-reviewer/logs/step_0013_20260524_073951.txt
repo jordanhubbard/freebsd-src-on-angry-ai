@@ -1,0 +1,15 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+This unit is `sys/contrib/libsodium/src/libsodium/crypto_auth` — a subdirectory of a third-party autotools-based library. There is no FreeBSD Makefile here, no `bsd.rust.mk` infrastructure exists in the tree, and the build is controlled by autotools at a higher level. This doesn't meet the criteria for a buildable FreeBSD work unit.
+
+Per the constraints: "If the selected unit has no source relevant to the configured objective, choose another unit instead of fabricating placeholder Rust" and "Do not invent FreeBSD make fragments such as `bsd.rust.mk`."
+
+Let me move to the next pending unit from the queue.
+
+ACTION: SET_SCOPE bin/cat/tests

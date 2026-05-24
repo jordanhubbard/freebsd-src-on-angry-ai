@@ -1,0 +1,11 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/crypto/libsodium/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check how FreeBSD actually builds libsodium.
+
+ACTION: FIND_FILE sys/crypto/Makefile

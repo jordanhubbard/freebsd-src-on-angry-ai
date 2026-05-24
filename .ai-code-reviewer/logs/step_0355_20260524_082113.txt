@@ -1,0 +1,48 @@
+=== STEP 355 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+Analysis: No bsd.rust.mk exists in the tree. I need to add explicit Makefile rules to compile the Rust code using rustc directly.
+
+ACTION: EDIT_FILE usr.bin/touch/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	touch
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	touch
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+SRCS=	touch.c
+
+RUSTSRC=	rust/src/main.rs
+RUSTBIN=	touch-rust
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+${RUSTBIN}: ${RUSTSRC}
+	@mkdir -p ${RUST_TARGET_DIR}
+	rustc --edition 2021 -o ${.TARGET} ${RUSTSRC} \
+		-C target-dir=${RUST_TARGET_DIR} \
+		-L ${RUST_TARGET_DIR}/debug/deps \
+		-lc
+
+all: ${RUSTBIN}
+
+cleanfiles+=	${RUSTBIN}
+
+.include <bsd.prog.mk>
+>>>

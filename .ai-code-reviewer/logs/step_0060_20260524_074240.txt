@@ -1,0 +1,46 @@
+=== STEP 60 ===
+
+--- REQUEST ---
+GREP_RESULT for 'DEFFILEMODE':
+```
+./sys/sys/stat.h:300:#define	DEFFILEMODE	(S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
+./sbin/recoverdisk/recoverdisk.c:817:		write_fd = open(argv[1], O_WRONLY | O_CREAT, DEFFILEMODE);
+./tools/test/stress2/tools/bench.c:76:			    DEFFILEMODE)) == -1)
+./tools/test/stress2/tools/bench.c:107:			    DEFFILEMODE)) == -1)
+./tools/test/stress2/tools/bench.c:136:			    DEFFILEMODE)) == -1)
+./tools/build/cross-build/include/linux/sys/stat.h:61:#ifndef DEFFILEMODE
+./tools/build/cross-build/include/linux/sys/stat.h:62:#define DEFFILEMODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
+./lib/libdpv/dpv.c:588:				    O_CREAT|O_WRONLY, DEFFILEMODE & ~mask))
+./lib/libc/tests/gen/dlopen_empty_test.c:67:        fd = open(soname, O_WRONLY | O_CREAT | O_TRUNC, DEFFILEMODE);
+./lib/libc/stdio/freopen.c:153:	f = _open(file, oflags, DEFFILEMODE);
+./lib/libc/stdio/freopen.c:160:		f = _open(file, oflags, DEFFILEMODE);
+./lib/libc/stdio/fopen.c:58:	if ((f = _open(file, oflags, DEFFILEMODE)) < 0) {
+./bin/dd/dd.c:186:		out.fd = open(out.name, O_RDWR | oflags, DEFFILEMODE);
+./bin/dd/dd.c:195:			out.fd = open(out.name, O_WRONLY | oflags, DEFFILEMODE);
+./usr.bin/sed/process.c:242:				    DEFFILEMODE)) == -1)
+./usr.bin/sed/process.c:477:		    O_WRONLY|O_APPEND|O_CREAT|O_TRUNC, DEFFILEMODE)) == -1)
+./usr.bin/sed/compile.c:286:			    DEFFILEMODE)) == -1)
+./usr.bin/sed/compile.c:747:			    DEFFILEMODE)) == -1)
+./usr.bin/tee/tee.c:163:	if ((fd = open(path, oflags, DEFFILEMODE)) >= 0)
+./usr.bin/touch/touch.c:165:				    O_WRONLY | O_CREAT, DEFFILEMODE);
+./usr.bin/split/split.c:434:	if ((ofd = open(fname, flags, DEFFILEMODE)) < 0) {
+./usr.bin/gcore/gcore.c:81:	fd = open(corefile, O_RDWR | O_CREAT | O_TRUNC, DEFFILEMODE);
+./usr.bin/ktrace/ktrace.c:137:		    DEFFILEMODE)) < 0)
+./usr.bin/ktrace/ktrace.c:148:		    DEFFILEMODE)) < 0)
+./usr.bin/gzip/gzip.c:1074:		(void)fchmod(fd, DEFFILEMODE & ~mask);
+./usr.bin/cap_mkdb/cap_mkdb.c:110:	    DEFFILEMODE, DB_HASH, &openinfo)) == NULL)
+./usr.sbin/syslogd/syslogd.c:573:				mode = DEFFILEMODE;
+./usr.sbin/syslogd/syslogd.c:575:				mode = DEFFILEMODE;
+./usr.sbin/syslogd/syslogd.c:689:		addsock(_PATH_LOG, NULL, DEFFILEMODE);
+./usr.sbin/newsyslog/newsyslog.c:1290:		if ((working->permissions & ~DEFFILEMODE) != 0) {
+./usr.sbin/newsyslog/newsyslog.c:1293:			    working->permissions & DEFFILEMODE, errline);
+./usr.sbin/newsyslog/newsyslog.c:1294:			working->permissions &= DEFFILEMODE;
+./usr.sbin/jail/command.c:704:		    open(conslog, O_WRONLY | O_CREAT | O_APPEND, DEFFILEMODE);
+```
+
+--- RESPONSE ---
+
+
+Let me check for any existing Rust build infrastructure in FreeBSD.
+
+ACTION: FIND_FILE bsd.rust

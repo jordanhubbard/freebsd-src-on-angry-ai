@@ -1,0 +1,35 @@
+=== STEP 75 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/touch/Makefile
+CONTENT:
+<<<
+.include <src.opts.mk>
+
+PROG=	touch
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+RUST_TARGET=	${.OBJDIR}/rust-target
+RUST_BIN=	${RUST_TARGET}/release/touch
+
+SRCS=	touch.c
+
+.include <bsd.prog.mk>
+
+# Rust build integration
+${RUST_BIN}: ${.CURDIR}/rust/Cargo.toml ${.CURDIR}/rust/src/main.rs
+	@mkdir -p ${RUST_TARGET}
+	cargo build --release --manifest-path ${.CURDIR}/rust/Cargo.toml --target-dir ${RUST_TARGET}
+
+rust-build: ${RUST_BIN}
+
+clean:
+	@rm -rf ${RUST_TARGET}
+>>>

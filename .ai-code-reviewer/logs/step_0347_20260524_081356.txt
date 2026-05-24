@@ -1,0 +1,445 @@
+=== STEP 347 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/touch/rust/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+// Rust replacement for FreeBSD usr.bin/touch
+
+use std::ffi::CString;
+use std::os::unix::fs::OpenOptionsExt;
+use std::path::Path;
+use std::process;
+
+const UTIME_NOW: i64 = -1;
+const UTIME_OMIT: i64 = -2;
+
+fn usage(myname: &str) -> ! {
+    eprintln!(
+        "usage: {} [-A [-][[hh]mm]SS] [-achm] [-r file] \
+         [-t [[CC]YY]MMDDhhmm[.SS]]\n\
+         \t[-d YYYY-MM-DDThh:mm:SS[.frac][tz]] \
+         file ...",
+        myname
+    );
+    process::exit(1);
+}
+
+fn err_exit(code: i32, msg: &str) -> ! {
+    eprintln!("{}: {}", myname(), msg);
+    process::exit(code);
+}
+
+fn myname() -> String {
+    std::env::args()
+        .next()
+        .unwrap_or_default()
+        .rsplit('/')
+        .next()
+        .unwrap_or("touch")
+        .to_string()
+}
+
+fn atoi2(arg: &str) -> (i32, &str) {
+    let bytes = arg.as_bytes();
+    let val = (bytes[0] - b'0') as i32 * 10 + (bytes[1] - b'0') as i32;
+    (val, &arg[2..])
+}
+
+fn timeoffset(arg: &str) -> i64 {
+    let mut offset: i64 = 0;
+    let mut isneg = false;
+    let mut s = arg;
+    if s.starts_with('-') {
+        isneg = true;
+        s = &s[1..];
+    }
+    match s.len() {
+        6 => {
+            let (v, rest) = atoi2(s);
+            offset = v as i64;
+            s = rest;
+        }
+        _ => {}
+    }
+    if s.len() >= 4 {
+        let (v, rest) = atoi2(s);
+        offset = offset * 60 + v as i64;
+        s = rest;
+    }
+    if s.len() >= 2 {
+        let (v, _) = atoi2(s);
+        offset = offset * 60 + v as i64;
+    }
+    if isneg {
+        -offset
+    } else {
+        offset
+    }
+}
+
+fn stime_arg1(arg: &str, tvp: &mut [libc::timespec; 2]) {
+    let now = unsafe { libc::time(std::ptr::null_mut()) };
+    let mut t = unsafe {
+        let mut t = std::mem::zeroed::<libc::tm>();
+        let ptr = &mut t as *mut libc::tm;
+        if unsafe { libc::localtime_r(&now, ptr) }.is_null() {
+            err_exit(1, "localtime");
+        }
+        t
+    };
+
+    let dot_pos = arg.find('.');
+    let (main_part, sec_part) = match dot_pos {
+        Some(pos) => {
+            let rest = &arg[pos + 1..];
+            if rest.len() != 2 {
+                err_exit(1, "out of range or illegal time specification: [[CC]YY]MMDDhhmm[.SS]");
+            }
+            (&arg[..pos], Some(rest))
+        }
+        None => (arg, None),
+    };
+
+    t.tm_sec = match sec_part {
+        Some(s) => atoi2(s).0,
+        None => 0,
+    };
+
+    let len = main_part.len();
+    let mut p = main_part;
+    let mut yearset = false;
+
+    match len {
+        12 => {
+            let (v, rest) = atoi2(p);
+            t.tm_year = v * 100;
+            p = rest;
+            yearset = true;
+        }
+        _ => {}
+    }
+
+    if p.len() >= 10 {
+        let (v, rest) = atoi2(p);
+        if yearset {
+            t.tm_year += v;
+        } else {
+            if v < 69 {
+                t.tm_year = v + 2000;
+            } else {
+                t.tm_year = v + 1900;
+            }
+        }
+        t.tm_year -= 1900;
+        p = rest;
+    }
+
+    if p.len() >= 8 {
+        let (v, rest) = atoi2(p);
+        t.tm_mon = v - 1;
+        p = rest;
+        let (v, rest) = atoi2(p);
+        t.tm_mday = v;
+        p = rest;
+        let (v, rest) = atoi2(p);
+        t.tm_hour = v;
+        p = rest;
+        let (v, _) = atoi2(p);
+        t.tm_min = v;
+    } else {
+        err_exit(1, "out of range or illegal time specification: [[CC]YY]MMDDhhmm[.SS]");
+    }
+
+    t.tm_isdst = -1;
+    t.tm_yday = -1;
+
+    let sec = unsafe { libc::mktime(&mut t) };
+    if t.tm_yday == -1 {
+        err_exit(1, "out of range or illegal time specification: [[CC]YY]MMDDhhmm[.SS]");
+    }
+
+    tvp[0].tv_sec = sec;
+    tvp[1].tv_sec = sec;
+    tvp[0].tv_nsec = 0;
+    tvp[1].tv_nsec = 0;
+}
+
+fn stime_arg2(arg: &str, year: bool, tvp: &mut [libc::timespec; 2]) {
+    let now = unsafe { libc::time(std::ptr::null_mut()) };
+    let mut t = unsafe {
+        let mut t = std::mem::zeroed::<libc::tm>();
+        let ptr = &mut t as *mut libc::tm;
+        if unsafe { libc::localtime_r(&now, ptr) }.is_null() {
+            err_exit(1, "localtime");
+        }
+        t
+    };
+
+    let mut p = arg;
+    let (v, rest) = atoi2(p);
+    t.tm_mon = v - 1;
+    p = rest;
+    let (v, rest) = atoi2(p);
+    t.tm_mday = v;
+    p = rest;
+    let (v, rest) = atoi2(p);
+    t.tm_hour = v;
+    p = rest;
+    let (v, rest) = atoi2(p);
+    t.tm_min = v;
+    p = rest;
+
+    if year && p.len() >= 2 {
+        let (v, _) = atoi2(p);
+        t.tm_year = v;
+        if t.tm_year < 39 {
+            t.tm_year += 100;
+        }
+    }
+
+    t.tm_isdst = -1;
+    t.tm_yday = -1;
+
+    let sec = unsafe { libc::mktime(&mut t) };
+    if t.tm_yday == -1 {
+        err_exit(1, "out of range or illegal time specification: MMDDhhmm[yy]");
+    }
+
+    tvp[0].tv_sec = sec;
+    tvp[1].tv_sec = sec;
+    tvp[0].tv_nsec = 0;
+    tvp[1].tv_nsec = 0;
+}
+
+fn stime_darg(arg: &str, tvp: &mut [libc::timespec; 2]) {
+    // Check for at least two colons
+    let colon_count = arg.matches(':').count();
+    if colon_count < 2 {
+        err_exit(1, "out of range or illegal time specification: YYYY-MM-DDThh:mm:SS[.frac][tz]");
+    }
+
+    let has_t = arg.contains('T');
+    let fmt = if has_t {
+        "%Y-%m-%dT%H:%M:%S"
+    } else {
+        "%Y-%m-%d %H:%M:%S"
+    };
+
+    let mut t = unsafe { std::mem::zeroed::<libc::tm>() };
+    t.tm_sec = 0;
+    t.tm_isdst = -1;
+
+    let c_arg = match CString::new(arg) {
+        Ok(s) => s,
+        Err(_) => err_exit(1, "out of range or illegal time specification: YYYY-MM-DDThh:mm:SS[.frac][tz]"),
+    };
+    let c_fmt = match CString::new(fmt) {
+        Ok(s) => s,
+        Err(_) => err_exit(1, "out of range or illegal time specification: YYYY-MM-DDThh:mm:SS[.frac][tz]"),
+    };
+
+    let result = unsafe { libc::strptime(c_arg.as_ptr(), c_fmt.as_ptr(), &mut t) };
+    if result.is_null() {
+        err_exit(1, "out of range or illegal time specification: YYYY-MM-DDThh:mm:SS[.frac][tz]");
+    }
+
+    let remaining = unsafe { std::ffi::CStr::from_ptr(result).to_string_lossy() };
+
+    let mut frac_pos = 0;
+    let mut is_utc = false;
+
+    let bytes = remaining.as_bytes();
+    if !bytes.is_empty() && (bytes[0] == b'.' || bytes[0] == b',') {
+        if bytes.len() > 1 && bytes[1].is_ascii_digit() {
+            let mut val: i64 = 100000000;
+            let mut i = 1;
+            while i < bytes.len() && bytes[i].is_ascii_digit() {
+                tvp[0].tv_nsec += val * (bytes[i] - b'0') as i64;
+                i += 1;
+                val /= 10;
+            }
+            frac_pos = i;
+        }
+    }
+
+    if frac_pos < remaining.len() && remaining.as_bytes()[frac_pos] == b'Z' {
+        is_utc = true;
+        frac_pos += 1;
+    }
+
+    if frac_pos < remaining.len() {
+        err_exit(1, "out of range or illegal time specification: YYYY-MM-DDThh:mm:SS[.frac][tz]");
+    }
+
+    t.tm_yday = -1;
+    let sec = if is_utc {
+        unsafe { libc::timegm(&mut t) }
+    } else {
+        unsafe { libc::mktime(&mut t) }
+    };
+    if t.tm_yday == -1 {
+        err_exit(1, "out of range or illegal time specification: YYYY-MM-DDThh:mm:SS[.frac][tz]");
+    }
+
+    tvp[0].tv_sec = sec;
+    tvp[1] = tvp[0];
+}
+
+fn stime_file(fname: &str, tvp: &mut [libc::timespec; 2]) {
+    let c_name = match CString::new(fname) {
+        Ok(s) => s,
+        Err(_) => err_exit(1, fname),
+    };
+    let mut sb: libc::stat = unsafe { std::mem::zeroed() };
+    if unsafe { libc::stat(c_name.as_ptr(), &mut sb) } != 0 {
+        err_exit(1, fname);
+    }
+    tvp[0] = sb.st_atim;
+    tvp[1] = sb.st_mtim;
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let myname = args[0].rsplit('/').next().unwrap_or("touch").to_string();
+
+    let mut aflag = false;
+    let mut mflag = false;
+    let mut cflag = false;
+    let mut atflag = 0;
+    let mut timeset = false;
+    let mut aoffset: i64 = 0;
+    let mut aoffset_set = false;
+    let mut ts: [libc::timespec; 2] = [
+        libc::timespec { tv_sec: 0, tv_nsec: UTIME_NOW },
+        libc::timespec { tv_sec: 0, tv_nsec: UTIME_NOW },
+    ];
+
+    let mut optind = 1;
+    while optind < args.len() {
+        let arg = &args[optind];
+        if !arg.starts_with('-') {
+            break;
+        }
+        if arg == "--" {
+            optind += 1;
+            break;
+        }
+
+        match arg.as_str() {
+            "-A" => {
+                optind += 1;
+                if optind >= args.len() {
+                    usage(&myname);
+                }
+                aoffset = timeoffset(&args[optind]);
+                aoffset_set = true;
+            }
+            "-a" => { aflag = true; }
+            "-c" => { cflag = true; }
+            "-d" => {
+                optind += 1;
+                if optind >= args.len() {
+                    usage(&myname);
+                }
+                timeset = true;
+                stime_darg(&args[optind], &mut ts);
+            }
+            "-f" => { /* no-op */ }
+            "-h" => {
+                cflag = true;
+                atflag = libc::AT_SYMLINK_NOFOLLOW;
+            }
+            "-m" => { mflag = true; }
+            "-r" => {
+                optind += 1;
+                if optind >= args.len() {
+                    usage(&myname);
+                }
+                timeset = true;
+                stime_file(&args[optind], &mut ts);
+            }
+            "-t" => {
+                optind += 1;
+                if optind >= args.len() {
+                    usage(&myname);
+                }
+                timeset = true;
+                stime_arg1(&args[optind], &mut ts);
+            }
+            _ => usage(&myname),
+        }
+        optind += 1;
+    }
+
+    if !aflag && !mflag {
+        aflag = true;
+        mflag = true;
+    }
+
+    if timeset && aoffset_set {
+        if aflag {
+            ts[0].tv_sec += aoffset;
+        }
+        if mflag {
+            ts[1].tv_sec += aoffset;
+        }
+        aoffset_set = false;
+    } else if !timeset {
+        // Check for obsolete time format
+        let remaining: Vec<&String> = args[optind..].iter().collect();
+        if remaining.len() > 1 {
+            let first = remaining[0];
+            if first.chars().all(|c| c.is_ascii_digit()) {
+                let len = first.len();
+                if len == 8 || len == 10 {
+                    timeset = true;
+                    stime_arg2(first, len == 10, &mut ts);
+                    optind += 1;
+                }
+            }
+        }
+        if !timeset {
+            ts[1] = ts[0];
+        }
+    }
+
+    if !aflag {
+        ts[0].tv_nsec = UTIME_OMIT;
+    }
+    if !mflag {
+        ts[1].tv_nsec = UTIME_OMIT;
+    }
+
+    if optind >= args.len() {
+        usage(&myname);
+    }
+
+    if aoffset_set {
+        cflag = true;
+    }
+
+    let mut rval = 0;
+    for fname in &args[optind..] {
+        let c_name = match CString::new(fname.as_bytes()) {
+            Ok(s) => s,
+            Err(_) => {
+                rval = 1;
+                eprintln!("{}: {}", myname, fname);
+                continue;
+            }
+        };
+
+        let mut sb: libc::stat = unsafe { std::mem::zeroed() };
+        if unsafe { libc::fstatat(libc::AT_FDCWD, c_name.as_ptr(), &mut sb, atflag) } != 0 {
+            let err = std::io::Error::last_os_error();
+            if err.raw_os_error() != Some(libc::ENOENT) {
+                rval = 1;
+                eprintln!("{}:

@@ -152,8 +152,8 @@
     "last_attempt": "2026-05-22T21:07:43.325248"
   },
   "contrib/llvm-project/llvm/lib/Target/ARC/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T07:11:36.881480"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T08:08:33.309056"
   },
   "contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo": {
     "attempts": 3,
@@ -220,8 +220,8 @@
     "last_attempt": "2026-05-23T16:20:47.305794"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_auth": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T07:04:44.026861"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T08:05:09.423005"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20": {
     "attempts": 3,
@@ -278,6 +278,10 @@
   "usr.bin/apply": {
     "attempts": 3,
     "last_attempt": "2026-05-22T19:54:44.158526"
+  },
+  "usr.bin/ar": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T07:40:50.616914"
   },
   "usr.bin/at": {
     "attempts": 1,
@@ -472,8 +476,8 @@
     "last_attempt": "2026-05-24T04:11:01.671319"
   },
   "usr.bin/touch": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T06:47:07.638419"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T07:41:39.695022"
   },
   "usr.bin/tr": {
     "attempts": 3,

@@ -1,0 +1,11 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/crypto/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check if FreeBSD has any Rust build infrastructure.
+
+ACTION: FIND_FILE bsd.rust.mk

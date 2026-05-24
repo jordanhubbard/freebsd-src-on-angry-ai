@@ -1,0 +1,14 @@
+=== STEP 42 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/uname is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_auth
+
+--- RESPONSE ---
+
+
+Let me try some other units that might be available.
+
+ACTION: SET_SCOPE usr.bin/ul

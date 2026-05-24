@@ -1,0 +1,40 @@
+=== STEP 159 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/ARC/TargetInfo/ARCTargetInfo.cpp:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/ARC/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/ARC/TargetInfo/ARCTargetInfo.cpp
+
+```
+//===- ARCTargetInfo.cpp - ARC Target Implementation ----------- *- C++ -*-===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#include "TargetInfo/ARCTargetInfo.h"
+#include "llvm/MC/TargetRegistry.h"
+
+using namespace llvm;
+
+Target &llvm::getTheARCTarget() {
+  static Target TheARCTarget;
+  return TheARCTarget;
+}
+
+extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeARCTargetInfo() {
+  RegisterTarget<Triple::arc> X(getTheARCTarget(), "arc", "ARC", "ARC");
+}
+
+```
+
+--- RESPONSE ---
+
+
+This is LLVM third-party contrib code, not FreeBSD userland. The scope is invalid for the objective. Let me try to move to a valid unit.
+
+ACTION: SET_SCOPE usr.bin/limit

@@ -1,0 +1,50 @@
+=== STEP 367 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/touch
+   Files: 0/3
+📄 File: usr.bin/touch/Makefile
+✏️  Edits: 3 files modified
+
+```
+.include <src.opts.mk>
+
+PROG=	touch
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+The Makefile was reverted. Let me try a minimal approach that won't trigger the top-level build infrastructure issues.
+
+ACTION: WRITE_FILE usr.bin/touch/Makefile
+CONTENT:
+<<<
+.include <src.opts.mk>
+
+PROG=	touch
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+RUSTSRC=	rust/src/main.rs
+RUSTBIN=	touch-rust
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+${RUSTBIN}: ${RUSTSRC}
+	@mkdir -p ${RUST_TARGET_DIR}
+	rustc --edition 2021 -o ${.TARGET} ${RUSTSRC} \
+		-C target-dir=${RUST_TARGET_DIR} \
+		-L ${RUST_TARGET_DIR}/debug/deps \
+		-lc
+
+CLEANFILES+=	${RUSTBIN}
+
+.include <bsd.prog.mk>
+>>>

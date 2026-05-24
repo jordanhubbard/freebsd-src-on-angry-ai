@@ -1,0 +1,20 @@
+=== STEP 63 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/touch/rust/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "touch"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "touch"
+path = "src/main.rs"
+<<<
