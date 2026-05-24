@@ -1,0 +1,61 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/crypto/openssl/Makefile.in:
+PROGRESS:
+📁 Directory: crypto/krb5/src/lib/crypto/openssl/des
+   Files: 0/1
+📄 File: crypto/krb5/src/lib/crypto/openssl/Makefile.in
+
+```
+mydir=lib$(S)crypto$(S)openssl
+BUILDTOP=$(REL)..$(S)..$(S)..
+SUBDIRS=des enc_provider hash_provider
+LOCALINCLUDES=-I$(srcdir)/../krb $(CRYPTO_IMPL_CFLAGS)
+
+STLIBOBJS=\
+	cmac.o	\
+	hmac.o	\
+	kdf.o	\
+	pbkdf2.o \
+	sha256.o
+
+OBJS=\
+	$(OUTPRE)cmac.$(OBJEXT)	\
+	$(OUTPRE)hmac.$(OBJEXT)	\
+	$(OUTPRE)kdf.$(OBJEXT)	\
+	$(OUTPRE)pbkdf2.$(OBJEXT) \
+	$(OUTPRE)sha256.$(OBJEXT)
+
+SRCS=\
+	$(srcdir)/cmac.c	\
+	$(srcdir)/hmac.c	\
+	$(srcdir)/kdf.c		\
+	$(srcdir)/pbkdf2.c	\
+	$(srcdir)/sha256.c
+
+SUBDIROBJLISTS= des/OBJS.ST md4/OBJS.ST 	\
+		md5/OBJS.ST sha1/OBJS.ST sha2/OBJS.ST 	\
+		enc_provider/OBJS.ST 		\
+		hash_provider/OBJS.ST 		\
+		aes/OBJS.ST 
+
+STOBJLISTS= $(SUBDIROBJLISTS) OBJS.ST
+
+all-unix: all-libobjs
+includes: depend
+
+depend: $(SRCS)
+
+clean-unix:: clean-libobjs
+
+@lib_frag@
+@libobj_frag@
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR crypto/krb5/src/lib/crypto/openssl/des

@@ -1,0 +1,26 @@
+=== STEP 66 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/libcbor/examples:
+```
+CMakeLists.txt
+bazel
+cbor2cjson.c
+cbor_sequence.c
+cjson2cbor.c
+crash_course.c
+create_items.c
+data
+hello.c
+readfile.c
+sort.c
+streaming_array.c
+streaming_parser.c
+```
+
+--- RESPONSE ---
+
+
+This is a Bazel example directory with no FreeBSD Makefile integration. The build system can't reach it. Let me check the parent structure.
+
+ACTION: LIST_DIR contrib/libcbor

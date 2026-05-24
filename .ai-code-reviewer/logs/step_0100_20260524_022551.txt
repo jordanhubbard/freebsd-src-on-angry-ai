@@ -1,0 +1,14 @@
+=== STEP 100 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/heimdal/lib/heimdal:
+```
+NTMakefile
+dllmain.c
+heimdal-version.rc
+```
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

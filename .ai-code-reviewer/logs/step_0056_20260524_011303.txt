@@ -1,0 +1,41 @@
+=== STEP 56 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0/Makefile:
+PROGRESS:
+📁 Directory: contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0
+   Files: 0/1
+📄 File: contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0/Makefile
+✏️  Edits: 3 files modified
+
+```
+# $FreeBSD$
+
+PROG=	h_helper_symver_dso0
+SRCS=	h_helper_symver_dso0.c
+
+RUST_LIB=	helper_symver_dso0
+RUST_CRATE_DIR=	${.CURDIR}
+
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	${CARGO} build --manifest-path ${RUST_CRATE_DIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	${CARGO} clean --manifest-path ${RUST_CRATE_DIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0/Cargo.toml

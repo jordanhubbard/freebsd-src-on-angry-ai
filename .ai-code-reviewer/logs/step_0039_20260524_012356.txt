@@ -1,0 +1,11 @@
+=== STEP 39 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1*'
+
+--- RESPONSE ---
+
+
+Let me investigate the FreeBSD build integration for this test helper.
+
+ACTION: FIND_FILE tests/libexec/ld.elf_so

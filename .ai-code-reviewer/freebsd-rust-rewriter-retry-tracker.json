@@ -111,6 +111,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-21T19:44:21.180208"
   },
+  "contrib/libcbor/examples/bazel/src": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T01:30:21.219272"
+  },
   "contrib/libpcap/cmake": {
     "attempts": 3,
     "last_attempt": "2026-05-22T16:48:20.861620"
@@ -156,12 +160,20 @@
     "last_attempt": "2026-05-22T22:17:17.637990"
   },
   "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T00:55:02.415321"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T01:21:40.006142"
+  },
+  "crypto/heimdal/lib/heimdal": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T01:58:38.884101"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,
     "last_attempt": "2026-05-22T19:37:35.699854"
+  },
+  "crypto/krb5/src/lib/crypto/openssl/des": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T01:14:23.058938"
   },
   "crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd": {
     "attempts": 3,

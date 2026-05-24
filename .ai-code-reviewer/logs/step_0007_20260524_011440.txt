@@ -1,0 +1,21 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/crypto/openssl:
+```
+Makefile.in
+cmac.c
+deps
+des
+enc_provider
+hash_provider
+hmac.c
+kdf.c
+pbkdf2.c
+sha256.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE crypto/krb5/src/lib/crypto/openssl/Makefile.in

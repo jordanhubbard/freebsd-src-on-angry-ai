@@ -1,0 +1,17 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+GREP_RESULT for 'k5_des_fixup_key_parity':
+```
+./crypto/krb5/src/lib/crypto/builtin/des/des_keys.c:33:k5_des_fixup_key_parity(unsigned char *keybits)
+./crypto/krb5/src/lib/crypto/krb/random_to_key.c:98:        k5_des_fixup_key_parity(&keyblock->contents[i * 8]);
+./crypto/krb5/src/lib/crypto/krb/crypto_int.h:489:void k5_des_fixup_key_parity(unsigned char *keybits);
+./crypto/krb5/src/lib/crypto/openssl/des/des_keys.c:34:k5_des_fixup_key_parity(unsigned char *keybits)
+```
+
+--- RESPONSE ---
+
+
+Let me understand the broader build context for this krb5 component.
+
+ACTION: LIST_DIR crypto/krb5

@@ -1,0 +1,64 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+GREP_RESULT for 'krb5':
+```
+./krb5/include/osconf.h:44:#define DEFAULT_PROFILE_FILENAME "krb5.ini"
+./krb5/include/osconf.h:47:#define DEFAULT_SECURE_PROFILE_PATH "/Library/Preferences/edu.mit.Kerberos:/etc/krb5.conf:/usr/local/etc/krb5.conf"
+./krb5/include/osconf.h:53:#define DEFAULT_SECURE_PROFILE_PATH     "/etc/krb5.conf"
+./krb5/include/autoconf.h:28:#define DEFCCNAME "FILE:/tmp/krb5cc_%{uid}"
+./krb5/include/autoconf.h:31:#define DEFCKTNAME "FILE:/var/krb5/user/%{euid}/client.keytab"
+./krb5/include/autoconf.h:34:#define DEFKTNAME "FILE:/etc/krb5.keytab"
+./sys/rpc/rpcsec_gss/rpcsec_gss.c:85:#include <kgssapi/krb5/kcrypto.h>
+./sys/rpc/rpcsec_gss/svc_rpcsec_gss.c:807:	/* Decoded according to krb5/gssapi_krb5.c */
+./sys/rpc/rpcsec_gss/svc_rpcsec_gss.c:892:	static gss_OID_desc krb5_mech_oid =
+./sys/rpc/rpcsec_gss/svc_rpcsec_gss.c:897:	 * 'pseudo flavor'. Hardwire in krb5 support for now.
+./sys/kgssapi/gss_names.c:144: *   krb5(2) krb5_name(1)}.  The recommended symbolic name for this type
+./sys/kgssapi/gss_accept_sec_context.c:47: * does not use gss_krb5_export_lucid_sec_context().
+./sys/kgssapi/gss_accept_sec_context.c:153: * one that uses gss_krb5_export_lucid_sec_context().
+./sys/kgssapi/gss_accept_sec_context.c:160: * gssd daemon uses gss_krb5_export_lucid_sec_context().
+./sys/kgssapi/krb5/kcrypto.h:59:struct krb5_key_state;
+./sys/kgssapi/krb5/kcrypto.h:61:typedef void init_func(struct krb5_key_state *ks);
+./sys/kgssapi/krb5/kcrypto.h:62:typedef void destroy_func(struct krb5_key_state *ks);
+./sys/kgssapi/krb5/kcrypto_aes.c:50:aes_init(struct krb5_key_state *ks)
+./sys/kgssapi/krb5/kcrypto_aes.c:60:aes_destroy(struct krb5_key_state *ks)
+./sys/kgssapi/krb5/kcrypto_aes.c:73:aes_set_key(struct krb5_key_state *ks, const void *in)
+./sys/kgssapi/krb5/krb5_mech.c:51:static gss_OID_desc krb5_mech_oid =
+./sys/kgssapi/krb5/krb5_mech.c:54:struct krb5_data {
+./sys/kgssapi/krb5/krb5_mech.c:59:struct krb5_keyblock {
+./sys/kgssapi/krb5/kcrypto.c:41:static struct krb5_encryption_class *krb5_encryption_classes[] = {
+./sys/kgssapi/krb5/kcrypto.c:42:	&krb5_aes128_encryption_class,
+./sys/kgssapi/krb5/kcrypto.c:43:	&krb5_aes256_encryption_class,
+./sys/kgssapi/gssapi.h:265: *   krb5(2) krb5_name(1)}.  The recommended symbolic name for this type
+./sys/kgssapi/gss_init_sec_context.c:48: * does not use gss_krb5_export_lucid_sec_context().
+./sys/kgssapi/gss_init_sec_context.c:175: * one that uses gss_krb5_export_lucid_sec_context().
+./sys/kgssapi/gss_init_sec_context.c:182: * gssd daemon uses gss_krb5_export_lucid_sec_context().
+./sys/fs/nfsclient/nfs_clvnops.c:971:	 * For "syskrb5" mounts, nm_fhsize might still be zero and
+./sys/fs/nfsclient/nfs_clport.c:500:		 * generated via the "syskrb5" mount option and
+./sys/fs/nfsclient/nfs_clvfsops.c:598:	if (!strcmp(sec, "krb5"))
+./sys/fs/nfsclient/nfs_clvfsops.c:600:	else if (!strcmp(sec, "krb5i"))
+./sys/fs/nfsclient/nfs_clvfsops.c:602:	else if (!strcmp(sec, "krb5p"))
+./sys/fs/nfs/nfs_commonkrpc.c:63:#include <kgssapi/krb5/kcrypto.h>
+./sys/fs/nfs/nfs_commonkrpc.c:165: * RPCSEC_GSS, if the mount indicates that via sec=krb5[ip].
+./sys/fs/nfs/nfs_commonkrpc.c:168: * "syskrb5" mount option is specified, along with
+./sys/fs/nfsserver/nfs_nfsdsocket.c:981:		 * via krb5i or krb5p using the machine principal.
+./include/gssapi/gssapi.h:336: *   krb5(2) krb5_name(1)}.  The recommended symbolic name for this type
+./sbin/mount_nfs/mount_nfs.c:501:	if (!strcmp(sec, "krb5"))
+./sbin/mount_nfs/mount_nfs.c:503:	if (!strcmp(sec, "krb5i"))
+./sbin/mount_nfs/mount_nfs.c:505:	if (!strcmp(sec, "krb5p"))
+./crypto/heimdal/kpasswd/kpasswd-generator.c:66:nop_prompter (krb5_context context,
+./crypto/heimdal/kpasswd/kpasswd-generator.c:71:	      krb5_prompt prompts[])
+./crypto/heimdal/kpasswd/kpasswd-generator.c:79:    krb5_context context;
+./crypto/heimdal/kpasswd/kpasswd_locl.h:101:#include <krb5.h>
+./crypto/heimdal/kpasswd/kpasswdd.c:44:static krb5_context context;
+./crypto/heimdal/kpasswd/kpasswdd.c:45:static krb5_log_facility *log_facility;
+./crypto/heimdal/kpasswd/kpasswdd.c:48:krb5_addresses explicit_addresses;
+... [3761 more matches]
+```
+
+--- RESPONSE ---
+
+
+Let me check the FreeBSD-level build integration for krb5.
+
+ACTION: LIST_DIR crypto

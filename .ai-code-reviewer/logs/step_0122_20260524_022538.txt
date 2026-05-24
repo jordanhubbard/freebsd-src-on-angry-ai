@@ -1,0 +1,38 @@
+=== STEP 122 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/crypto/openssl/des/Makefile.in:
+PROGRESS:
+📁 Directory: crypto/krb5/src/lib/crypto/openssl/des
+   Files: 0/1
+📄 File: crypto/krb5/src/lib/crypto/openssl/des/Makefile.in
+✏️  Edits: 5 files modified
+
+```
+mydir=lib$(S)crypto$(S)openssl$(S)des
+BUILDTOP=$(REL)..$(S)..$(S)..$(S)..
+LOCALINCLUDES = -I$(srcdir)/../../krb $(CRYPTO_IMPL_CFLAGS)
+
+STLIBOBJS= des_keys.o
+
+OBJS= $(OUTPRE)des_keys.$(OBJEXT)
+
+SRCS= $(srcdir)/des_keys.c
+
+all-unix: all-libobjs
+
+includes: depend
+
+depend: $(SRCS)
+
+clean-unix:: clean-libobjs
+
+@libobj_frag@
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

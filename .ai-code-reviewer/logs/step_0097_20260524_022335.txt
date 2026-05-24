@@ -1,0 +1,24 @@
+=== STEP 97 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: crypto/heimdal/lib/heimdal
+Pending source/build changes: 4 files modified
+Files: Makefile.inc1, crypto/krb5/src/lib/crypto/openssl/des/Cargo.toml, crypto/krb5/src/lib/crypto/openssl/des/Makefile, crypto/krb5/src/lib/crypto/openssl/des/src/lib.rs
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in crypto/heimdal/lib/heimdal
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

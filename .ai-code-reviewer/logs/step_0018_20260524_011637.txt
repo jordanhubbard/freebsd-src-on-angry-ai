@@ -1,0 +1,31 @@
+=== STEP 18 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib:
+```
+Makefile.in
+apputils
+comerr32.def
+crypto
+deps
+gssapi
+gssapi32.def
+kadm5
+kdb
+krad
+krb5
+krb5.rc
+krb5_32.def
+rpc
+win_glue.c
+xpprof32.def
+```
+
+--- RESPONSE ---
+
+
+This unit is part of a configure/autoconf-based MIT Kerberos build system, not a standard FreeBSD Makefile unit. It has no FreeBSD-level Makefile, depends on OpenSSL FFI, and is deeply embedded in a third-party build system. This is not a good candidate for a small, buildable Rust rewrite increment.
+
+Let me skip this and find a better unit from the queue.
+
+ACTION: SET_SCOPE bin/chflags/tests

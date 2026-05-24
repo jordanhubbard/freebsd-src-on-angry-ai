@@ -1,0 +1,11 @@
+=== STEP 38 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1*'
+
+--- RESPONSE ---
+
+
+Let me understand how this test helper is actually built in the FreeBSD tree.
+
+ACTION: FIND_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1

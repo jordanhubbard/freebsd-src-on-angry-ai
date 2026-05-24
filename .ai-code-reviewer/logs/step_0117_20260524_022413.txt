@@ -1,0 +1,11 @@
+=== STEP 117 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'crypto/krb5'
+
+--- RESPONSE ---
+
+
+Let me check the deps file to understand the build dependencies.
+
+ACTION: READ_FILE crypto/krb5/src/lib/crypto/openssl/des/deps

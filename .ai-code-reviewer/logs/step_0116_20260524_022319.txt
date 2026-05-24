@@ -1,0 +1,11 @@
+=== STEP 116 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit uses autoconf-style `Makefile.in` files with no FreeBSD-level Makefile integration. The build harness can't reach it properly. Let me check for a FreeBSD-level integration point.
+
+ACTION: GREP crypto/krb5

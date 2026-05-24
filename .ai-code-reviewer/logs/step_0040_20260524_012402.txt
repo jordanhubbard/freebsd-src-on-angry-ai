@@ -1,0 +1,11 @@
+=== STEP 40 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*tests/libexec/ld.elf_so*'
+
+--- RESPONSE ---
+
+
+Let me investigate how this unit is actually built in the FreeBSD tree.
+
+ACTION: FIND_FILE tests/libexec

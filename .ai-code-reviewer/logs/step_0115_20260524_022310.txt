@@ -1,0 +1,11 @@
+=== STEP 115 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/krb5/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check if there's a FreeBSD-level Makefile that includes this krb5 subtree.
+
+ACTION: FIND_FILE crypto/Makefile

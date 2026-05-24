@@ -1,0 +1,11 @@
+=== STEP 37 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/libexec/ld.elf_so/Makefile*'
+
+--- RESPONSE ---
+
+
+The build reported 0 errors/0 warnings but still failed. This likely means the build system isn't actually reaching this unit. Let me investigate the parent build structure.
+
+ACTION: FIND_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1

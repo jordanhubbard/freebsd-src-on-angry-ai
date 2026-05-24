@@ -1,0 +1,11 @@
+=== STEP 62 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0/Makefile
+Scope: contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: BUILD
