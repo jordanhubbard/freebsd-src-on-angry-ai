@@ -479,6 +479,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-24T07:16:06.719728"
   },
+  "usr.bin/primes": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T13:21:27.544745"
+  },
   "usr.bin/printf": {
     "attempts": 3,
     "last_attempt": "2026-05-22T22:23:07.340580"
