@@ -1,0 +1,24 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/w
+   Files: 0/7
+📄 File: usr.bin/w/w.c
+   Chunks: 2/7
+
+```
+=== CHUNK 2/7: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/w/w.c === [function: pr_header]
+=== Lines 117-118 (2 lines) ===
+
+static void		 pr_header(time_t *, int);
+static struct stat	*ttystat(char *);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

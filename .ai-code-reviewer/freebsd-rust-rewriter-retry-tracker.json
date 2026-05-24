@@ -152,8 +152,8 @@
     "last_attempt": "2026-05-22T21:07:43.325248"
   },
   "contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T04:26:37.432596"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:36:22.530138"
   },
   "contrib/netbsd-tests/lib/csu/dso": {
     "attempts": 3,
@@ -172,8 +172,8 @@
     "last_attempt": "2026-05-24T04:06:57.818534"
   },
   "crypto/heimdal/lib/heimdal": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T06:28:40.043130"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:35:39.641040"
   },
   "crypto/krb5/src/ccapi/lib/unix": {
     "attempts": 3,
@@ -343,6 +343,14 @@
     "attempts": 1,
     "last_attempt": "2026-05-22T18:13:07.386524"
   },
+  "usr.bin/last": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:38:57.456593"
+  },
+  "usr.bin/lastcomm": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:39:07.084821"
+  },
   "usr.bin/limits": {
     "attempts": 3,
     "last_attempt": "2026-05-24T05:16:35.175684"
@@ -352,12 +360,20 @@
     "last_attempt": "2026-05-22T00:58:28.171024"
   },
   "usr.bin/lock": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:58:51.504851"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T06:39:11.168909"
   },
   "usr.bin/lockf": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T20:58:32.406139"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:38:33.426702"
+  },
+  "usr.bin/logger": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:39:41.669379"
+  },
+  "usr.bin/login": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:39:28.495393"
   },
   "usr.bin/look": {
     "attempts": 3,
@@ -374,6 +390,10 @@
   "usr.bin/mktemp": {
     "attempts": 3,
     "last_attempt": "2026-05-22T20:10:15.732158"
+  },
+  "usr.bin/morse": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:37:43.899912"
   },
   "usr.bin/nice": {
     "attempts": 3,
@@ -456,8 +476,8 @@
     "last_attempt": "2026-05-24T00:44:39.172633"
   },
   "usr.bin/w": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T00:43:29.707765"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:37:04.734047"
   },
   "usr.bin/wall": {
     "attempts": 2,

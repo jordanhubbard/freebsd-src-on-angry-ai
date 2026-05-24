@@ -1,0 +1,26 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/w
+   Files: 0/7
+📄 File: usr.bin/w/w.c
+   Chunks: 3/7
+
+```
+=== CHUNK 3/7: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/w/w.c === [function: usage]
+=== Lines 119-122 (4 lines) ===
+
+static void		 usage(int);
+
+char *fmt_argv(char **, char *, char *, size_t);	/* ../../bin/ps/fmt.c */
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

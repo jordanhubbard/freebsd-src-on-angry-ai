@@ -1,0 +1,10 @@
+=== STEP 56 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Directory not found: usr.bin/ls
+TIP: Use LIST_DIR to see available directories
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/ls
