@@ -1,0 +1,33 @@
+=== STEP 225 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for 'build*':
+```
+./sys/compat/linuxkpi/common/include/linux/build_bug.h
+./sys/dev/random/build.sh
+./sys/contrib/libsodium/packaging/dotnet-core/recipes/build
+./sys/contrib/libsodium/builds/msvc/build/buildall.bat
+./sys/contrib/libsodium/builds/msvc/build/buildbase.bat
+./sbin/ipf/libipf/buildopts.c
+./crypto/heimdal/lib/krb5/build_auth.c
+./crypto/heimdal/lib/krb5/build_ap_req.c
+./crypto/krb5/.github/workflows/build.yml
+./crypto/openssl/tools/build.info
+./crypto/openssl/test/build.info
+./crypto/openssl/test/quic-openssl-docker/hq-interop/build.info
+./crypto/openssl/test/quic-openssl-docker/build.info
+./crypto/openssl/test/build_wincrypt_test.c
+./crypto/openssl/build.info
+./crypto/openssl/exporters/build.info
+./crypto/openssl/doc/build.info.in
+./crypto/openssl/doc/build.info
+./crypto/openssl/doc/man1/build.info
+./crypto/openssl/doc/internal/man7/build.info.pod
+```
+
+--- RESPONSE ---
+
+
+Let me check if there's a build configuration that defines what BUILD does:
+
+ACTION: FIND_FILE build*

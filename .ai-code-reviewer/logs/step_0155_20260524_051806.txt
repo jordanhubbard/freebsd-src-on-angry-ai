@@ -1,0 +1,37 @@
+=== STEP 155 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/limits
+   Files: 0/3
+📄 File: usr.bin/limits/limits.c
+   Chunks: 10/15
+
+```
+=== CHUNK 10/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/limits/limits.c === [function: print_limit]
+=== Lines 564-578 (15 lines) ===
+
+static void
+print_limit(rlim_t limit, unsigned divisor, const char * inf, const char * pfx, const char * sfx, const char * which)
+{
+    char numbr[64];
+
+    if (limit == RLIM_INFINITY)
+	strlcpy(numbr, inf, sizeof(numbr));
+    else
+	sprintf(numbr, "%jd", (intmax_t)((limit + divisor/2) / divisor));
+    printf(pfx, which, numbr);
+    printf(sfx, which);
+
+}
+
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

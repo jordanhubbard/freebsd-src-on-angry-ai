@@ -1,0 +1,20 @@
+=== STEP 89 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/crypto:
+```
+Makefile.in
+builtin
+crypto_tests
+deps
+krb
+libk5crypto.exports
+openssl
+```
+
+--- RESPONSE ---
+
+
+Let me understand the build structure better by checking the parent Makefile.
+
+ACTION: READ_FILE crypto/krb5/src/lib/crypto/Makefile.in

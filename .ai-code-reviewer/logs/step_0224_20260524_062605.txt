@@ -1,0 +1,33 @@
+=== STEP 224 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*.mk':
+```
+./tests/sys/pjdfstest/tests/pjdfstest.test.mk
+./stand/loader.mk
+./stand/kshim/kshim.mk
+./stand/veriexec.mk
+./stand/fdt.mk
+./stand/lua.mk
+./stand/usb/usbcore.mk
+./stand/ficl.mk
+./stand/defs.mk
+./secure/ssh.mk
+./sys/sys/syscall.mk
+./sys/contrib/zstd/lib/libzstd.mk
+./sys/conf/kern.pre.mk
+./sys/conf/config.mk
+./sys/conf/dtb.build.mk
+./sys/conf/kern.opts.mk
+./sys/conf/kmod.mk
+./sys/conf/kmod.opts.mk
+./sys/conf/kern.post.mk
+./sys/conf/sysent.mk
+```
+
+--- RESPONSE ---
+
+
+Let me check if there's a build configuration that defines what BUILD does:
+
+ACTION: FIND_FILE build*

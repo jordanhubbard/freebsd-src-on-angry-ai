@@ -1,0 +1,141 @@
+=== STEP 165 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/limits/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The file was cut off. Let me write a complete, self-contained main.rs:
+
+ACTION: WRITE_FILE usr.bin/limits/src/main.rs
+CONTENT:
+use std::env;
+use std::ffi::CString;
+use std::io::{self, Write};
+use std::os::unix::process::CommandExt;
+use std::process;
+
+use libc::{
+    c_int, pid_t, size_t,
+    RLIM_INFINITY, RLIMIT_CPU, RLIMIT_CORE, RLIMIT_DATA, RLIMIT_FSIZE,
+    RLIMIT_MEMLOCK, RLIMIT_NPROC, RLIMIT_NOFILE, RLIMIT_RSS, RLIMIT_STACK,
+    RLIM_NLIMITS,
+};
+
+#[cfg(target_os = "freebsd")]
+use libc::{
+    RLIMIT_SBSIZE, RLIMIT_SWAP, RLIMIT_VMEM, RLIMIT_NPTS, RLIMIT_KQUEUES,
+    RLIMIT_UMTXP, RLIMIT_PIPEBUF, RLIMIT_VMM,
+};
+
+#[cfg(not(target_os = "freebsd"))]
+mod compat {
+    pub const RLIMIT_SBSIZE: c_int = 10;
+    pub const RLIMIT_SWAP: c_int = 12;
+    pub const RLIMIT_VMEM: c_int = 10;
+    pub const RLIMIT_NPTS: c_int = 11;
+    pub const RLIMIT_KQUEUES: c_int = 13;
+    pub const RLIMIT_UMTXP: c_int = 14;
+    pub const RLIMIT_PIPEBUF: c_int = 15;
+    pub const RLIMIT_VMM: c_int = 16;
+}
+
+#[cfg(not(target_os = "freebsd"))]
+use compat::*;
+
+const RCS_STRING: &str = "tfdscmlunbvpwkoyV";
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ShellType {
+    None = 0,
+    Sh,
+    Csh,
+    Bash,
+    Tcsh,
+    Ksh,
+    Zsh,
+    Rc,
+}
+
+struct LprmEntry {
+    pfx: &'static str,
+    sfx: &'static str,
+    divisor: u64,
+}
+
+struct ShellParam {
+    name: &'static str,
+    inf: &'static str,
+    cmd: &'static str,
+    hard: &'static str,
+    soft: &'static str,
+    both: Option<&'static str>,
+    lprm: &'static [LprmEntry],
+}
+
+static SHELLPARM: &[ShellParam] = &[
+    ShellParam {
+        name: "", inf: "infinity",
+        cmd: "Resource limits%s%s:\n",
+        hard: "-max", soft: "-cur", both: Some(""),
+        lprm: &[
+            LprmEntry { pfx: "  cputime%-4s          %8s", sfx: " secs\n", divisor: 1 },
+            LprmEntry { pfx: "  filesize%-4s         %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  datasize%-4s         %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  stacksize%-4s        %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  coredumpsize%-4s     %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  memoryuse%-4s        %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  memorylocked%-4s     %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  maxprocesses%-4s     %8s", sfx: "\n", divisor: 1 },
+            LprmEntry { pfx: "  openfiles%-4s        %8s", sfx: "\n", divisor: 1 },
+            LprmEntry { pfx: "  sbsize%-4s           %8s", sfx: " bytes\n", divisor: 1 },
+            LprmEntry { pfx: "  vmemoryuse%-4s       %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  pseudo-terminals%-4s %8s", sfx: "\n", divisor: 1 },
+            LprmEntry { pfx: "  swapuse%-4s          %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  kqueues%-4s          %8s", sfx: "\n", divisor: 1 },
+            LprmEntry { pfx: "  umtxp%-4s            %8s", sfx: "\n", divisor: 1 },
+            LprmEntry { pfx: "  pipebuf%-4s          %8s", sfx: " kB\n", divisor: 1024 },
+            LprmEntry { pfx: "  vms%-4s              %8s", sfx: "\n", divisor: 1 },
+        ],
+    },
+    ShellParam {
+        name: "sh", inf: "unlimited", cmd: "",
+        hard: " -H", soft: " -S", both: Some(""),
+        lprm: &[
+            LprmEntry { pfx: "ulimit%s -t %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "ulimit%s -f %s", sfx: ";\n", divisor: 512 },
+            LprmEntry { pfx: "ulimit%s -d %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "ulimit%s -s %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "ulimit%s -c %s", sfx: ";\n", divisor: 512 },
+            LprmEntry { pfx: "ulimit%s -m %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "ulimit%s -l %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "ulimit%s -u %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "ulimit%s -n %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "ulimit%s -b %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "ulimit%s -v %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "ulimit%s -p %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "ulimit%s -w %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "ulimit%s -k %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "ulimit%s -o %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "ulimit%s -y %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "ulimit%s -V %s", sfx: ";\n", divisor: 1 },
+        ],
+    },
+    ShellParam {
+        name: "csh", inf: "unlimited", cmd: "",
+        hard: " -h", soft: "", both: None,
+        lprm: &[
+            LprmEntry { pfx: "limit%s cputime %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "limit%s filesize %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "limit%s datasize %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "limit%s stacksize %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "limit%s coredumpsize %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "limit%s memoryuse %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "limit%s memorylocked %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "limit%s maxproc %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "limit%s openfiles %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "limit%s sbsize %s", sfx: ";\n", divisor: 1 },
+            LprmEntry { pfx: "limit%s vmemoryuse %s", sfx: ";\n", divisor: 1024 },
+            LprmEntry { pfx: "limit%s pseudoterm

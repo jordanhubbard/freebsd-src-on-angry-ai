@@ -1,0 +1,31 @@
+=== STEP 154 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/limits
+   Files: 0/3
+📄 File: usr.bin/limits/limits.c
+   Chunks: 9/15
+
+```
+=== CHUNK 9/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/limits/limits.c === [function: usage]
+=== Lines 555-563 (9 lines) ===
+
+static void
+usage(void)
+{
+    (void)fprintf(stderr,
+	"usage: limits [-C class|-P pid|-U user] [-eaSHBE] "
+	"[-bcdfklmnostuVvpwy [val]] [[name=val ...] cmd]\n");
+    exit(EXIT_FAILURE);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

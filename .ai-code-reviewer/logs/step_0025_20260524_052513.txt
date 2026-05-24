@@ -1,0 +1,20 @@
+=== STEP 25 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE crypto/krb5/src/lib/crypto/openssl/des/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "des_keys"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+<<<

@@ -1,0 +1,30 @@
+=== STEP 91 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/krb5/Makefile*'
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails. The Makefile I created might be conflicting with the autoconf build system. Let me restore the original Makefile and integrate Rust differently.
+
+ACTION: WRITE_FILE crypto/krb5/src/lib/crypto/openssl/des/Makefile
+CONTENT:
+<<<
+# Local Makefile for Rust des_keys replacement
+# Builds alongside the autoconf Makefile.in
+
+RUSTC ?= rustc
+CARGO ?= cargo
+CARGO_TARGET_DIR ?= ${.OBJDIR}/cargo-target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+>>>

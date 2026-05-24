@@ -1,0 +1,469 @@
+=== STEP 169 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/limits/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/limits
+   Files: 0/3
+📄 File: usr.bin/limits/src/main.rs
+✏️  Edits: 2 files modified
+
+```
+// Rust replacement for FreeBSD usr.bin/limits
+use std::env;
+use std::ffi::CString;
+use std::io::{self, Write};
+use std::os::unix::process::CommandExt;
+use std::process;
+
+use libc::{
+    c_int, pid_t, size_t,
+    RLIM_INFINITY, RLIMIT_CPU, RLIMIT_CORE, RLIMIT_DATA, RLIMIT_FSIZE,
+    RLIMIT_MEMLOCK, RLIMIT_NPROC, RLIMIT_NOFILE, RLIMIT_RSS, RLIMIT_STACK,
+    RLIM_NLIMITS,
+};
+
+#[cfg(target_os = "freebsd")]
+use libc::{
+    RLIMIT_SBSIZE, RLIMIT_SWAP, RLIMIT_VMEM, RLIMIT_NPTS, RLIMIT_KQUEUES,
+    RLIMIT_UMTXP, RLIMIT_PIPEBUF, RLIMIT_VMM,
+};
+
+#[cfg(not(target_os = "freebsd"))]
+mod compat {
+    pub const RLIMIT_SBSIZE: c_int = 10;
+    pub const RLIMIT_SWAP: c_int = 12;
+    pub const RLIMIT_VMEM: c_int = 10;
+    pub const RLIMIT_NPTS: c_int = 11;
+    pub const RLIMIT_KQUEUES: c_int = 13;
+    pub const RLIMIT_UMTXP: c_int = 14;
+    pub const RLIMIT_PIPEBUF: c_int = 15;
+    pub const RLIMIT_VMM: c_int = 16;
+}
+
+#[cfg(not(target_os = "freebsd"))]
+use compat::*;
+
+const RCS_STRING: &str = "tfdscmlunbvpwkoyV";
+
+fn usage() -> ! {
+    eprintln!(
+        "usage: limits [-C class|-P pid|-U user] [-eaSHBE] \
+         [-bcdfklmnostuVvpwy [val]] [[name=val ...] cmd]"
+    );
+    process::exit(1);
+}
+
+fn print_limit(
+    limit: libc::rlim_t,
+    divisor: u64,
+    inf: &str,
+    pfx: &str,
+    sfx: &str,
+    which: &str,
+) {
+    let numbr = if limit == RLIM_INFINITY {
+        inf.to_string()
+    } else {
+        format!("{}", (limit as u64 + divisor / 2) / divisor)
+    };
+    let pfx = pfx.replace("%s", which).replace("%s", &numbr);
+    let sfx = sfx.replace("%s", which);
+    print!("{}{}", pfx, sfx);
+}
+
+fn resource_num(which: c_int, ch: char, str_val: &str) -> libc::rlim_t {
+    let lower = str_val.to_lowercase();
+    if ["inf", "infinity", "unlimit", "unlimited"].contains(&lower.as_str()) {
+        return RLIM_INFINITY;
+    }
+    match which {
+        RLIMIT_CPU => parse_time(str_val, ch),
+        RLIMIT_FSIZE | RLIMIT_DATA | RLIMIT_STACK | RLIMIT_CORE
+        | RLIMIT_RSS | RLIMIT_MEMLOCK | RLIMIT_SBSIZE | RLIMIT_VMEM
+        | RLIMIT_SWAP | RLIMIT_PIPEBUF => parse_size(str_val, ch),
+        RLIMIT_NPROC | RLIMIT_NOFILE | RLIMIT_NPTS | RLIMIT_KQUEUES
+        | RLIMIT_UMTXP | RLIMIT_VMM => {
+            str_val.parse::<libc::rlim_t>().unwrap_or_else(|_| {
+                eprintln!("invalid value -{} '{}'", ch, str_val);
+                usage();
+            })
+        }
+        _ => RLIM_INFINITY,
+    }
+}
+
+fn parse_time(s: &str, ch: char) -> libc::rlim_t {
+    let mut res: libc::rlim_t = 0;
+    let mut remaining = s;
+    while !remaining.is_empty() {
+        let (val, unit) = match remaining.find(|c: char| !c.is_ascii_digit()) {
+            Some(pos) => {
+                let (v, u) = remaining.split_at(pos);
+                let val: libc::rlim_t = v.parse().unwrap_or(0);
+                (val, &u[..])
+            }
+            None => (remaining.parse::<libc::rlim_t>().unwrap_or(0), ""),
+        };
+        let (mult, consumed) = match unit.chars().next() {
+            None | Some('s') | Some('S') => (1, 1),
+            Some('m') | Some('M') => (60, 1),
+            Some('h') | Some('H') => (3600, 1),
+            Some('d') | Some('D') => (86400, 1),
+            Some('w') | Some('W') => (604800, 1),
+            Some('y') | Some('Y') => (31536000, 1),
+            _ => {
+                eprintln!("invalid value -{} '{}'", ch, s);
+                usage();
+            }
+        };
+        res += val * mult;
+        remaining = if consumed > 0 { &unit[consumed..] } else { "" };
+        if remaining.is_empty() && unit.is_empty() {
+            break;
+        }
+    }
+    res
+}
+
+fn parse_size(s: &str, ch: char) -> libc::rlim_t {
+    let mut res: libc::rlim_t = 0;
+    let mut remaining = s;
+    while !remaining.is_empty() {
+        let (val, unit) = match remaining.find(|c: char| !c.is_ascii_digit()) {
+            Some(pos) => {
+                let (v, u) = remaining.split_at(pos);
+                let val: libc::rlim_t = v.parse().unwrap_or(0);
+                (val, &u[..])
+            }
+            None => (remaining.parse::<libc::rlim_t>().unwrap_or(0), ""),
+        };
+        let (mult, consumed) = match unit.chars().next() {
+            None => (1, 0),
+            Some('b') | Some('B') => (512, 1),
+            Some('k') | Some('K') => (1024, 1),
+            Some('m') | Some('M') => (1024 * 1024, 1),
+            Some('g') | Some('G') => (1024 * 1024 * 1024, 1),
+            Some('t') | Some('T') => (1024 * 1024 * 1024 * 1024, 1),
+            _ => {
+                eprintln!("invalid value -{} '{}'", ch, s);
+                usage();
+            }
+        };
+        res += val * mult;
+        remaining = if consumed > 0 { &unit[consumed..] } else { "" };
+        if remaining.is_empty() && unit.is_empty() {
+            break;
+        }
+    }
+    res
+}
+
+fn getshelltype() -> usize {
+    let ppid = unsafe { libc::getppid() };
+    if ppid == 1 {
+        return 1; // SH_SH
+    }
+    // Try to detect parent shell via sysctl
+    let shell = env::var("SHELL").ok();
+    if let Some(ref sh) = shell {
+        if let Some(name) = sh.rsplit('/').next() {
+            return getshellbyname(name);
+        }
+    }
+    // Fallback: try sysctl for parent process name
+    let mut mib: [libc::c_int; 4] = [
+        libc::CTL_KERN, libc::KERN_PROC, libc::KERN_PROC_PID, ppid as libc::c_int,
+    ];
+    let mut kp: libc::kinfo_proc = unsafe { std::mem::zeroed() };
+    let mut len: size_t = std::mem::size_of::<libc::kinfo_proc>();
+    if unsafe { libc::sysctl(mib.as_mut_ptr(), 4, &mut kp as *mut _ as *mut _, &mut len, std::ptr::null(), 0) } != -1 {
+        let comm = unsafe {
+            std::ffi::CStr::from_ptr(kp.ki_comm.as_ptr())
+                .to_string_lossy()
+                .into_owned()
+        };
+        return getshellbyname(&comm);
+    }
+    1 // SH_SH
+}
+
+fn getshellbyname(shell: &str) -> usize {
+    let names = ["", "sh", "csh", "bash", "tcsh", "ksh", "zsh", "rc"];
+    for (i, &name) in names.iter().enumerate() {
+        if name.is_empty() { continue; }
+        if shell.contains(name) { return i; }
+    }
+    1 // SH_SH
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut i = 1;
+    let mut doall = false;
+    let mut doeval = false;
+    let mut cls: Option<String> = None;
+    let mut pid: Option<pid_t> = None;
+    let mut user: Option<String> = None;
+    let mut type_flag: u8 = 0; // 0=ANY, 1=SOFT, 2=HARD, 3=BOTH
+    let mut which_limits: [u8; 17] = [0; 17];
+    let mut set_limits: [libc::rlim_t; 17] = [RLIM_INFINITY; 17];
+    let mut num_limits = 0;
+    let mut clear_env = false;
+
+    while i < args.len() {
+        let arg = &args[i];
+        if let Some(opt) = arg.strip_prefix('-') {
+            if opt == "a" {
+                doall = true;
+                i += 1;
+                continue;
+            }
+            if opt == "e" {
+                doeval = true;
+                i += 1;
+                continue;
+            }
+            if opt == "E" {
+                clear_env = true;
+                i += 1;
+                continue;
+            }
+            if opt == "H" {
+                type_flag = 2;
+                i += 1;
+                continue;
+            }
+            if opt == "S" {
+                type_flag = 1;
+                i += 1;
+                continue;
+            }
+            if opt == "B" {
+                type_flag = 3;
+                i += 1;
+                continue;
+            }
+            if let Some(val) = opt.strip_prefix('C') {
+                cls = Some(val.to_string());
+                i += 1;
+                continue;
+            }
+            if let Some(val) = opt.strip_prefix('P') {
+                pid = Some(val.parse().unwrap_or_else(|_| usage()));
+                i += 1;
+                continue;
+            }
+            if let Some(val) = opt.strip_prefix('U') {
+                user = Some(val.to_string());
+                i += 1;
+                continue;
+            }
+            // Check for resource short options
+            if let Some(pos) = RCS_STRING.find(opt.chars().next().unwrap_or('\0')) {
+                let ridx = pos;
+                let has_val = i + 1 < args.len() && !args[i + 1].starts_with('-');
+                if has_val {
+                    let val = &args[i + 1];
+                    set_limits[ridx] = resource_num(ridx as c_int, opt.chars().next().unwrap(), val);
+                    which_limits[ridx] = if type_flag == 0 { 3 } else { type_flag };
+                    num_limits += 1;
+                    i += 2;
+                } else {
+                    which_limits[ridx] = 4; // DISPLAYONLY
+                    num_limits += 1;
+                    i += 1;
+                }
+                continue;
+            }
+            eprintln!("unknown option: {}", arg);
+            usage();
+        } else {
+            break;
+        }
+    }
+
+    // Get current limits
+    let mut limits: [libc::rlimit; 17] = unsafe { std::mem::zeroed() };
+    for j in 0..RLIM_NLIMITS {
+        let mut rl: libc::rlimit = unsafe { std::mem::zeroed() };
+        if unsafe { libc::getrlimit(j as c_int, &mut rl) } == 0 {
+            limits[j] = rl;
+        }
+    }
+
+    // Apply set limits
+    for j in 0..RLIM_NLIMITS {
+        if which_limits[j] & 2 != 0 {
+            limits[j].rlim_max = set_limits[j];
+        }
+        if which_limits[j] & 1 != 0 {
+            limits[j].rlim_cur = set_limits[j];
+        }
+    }
+
+    // If running a command, set limits and exec
+    if i < args.len() {
+        for j in 0..RLIM_NLIMITS {
+            if doall || num_limits == 0 || which_limits[j] != 0 {
+                if unsafe { libc::setrlimit(j as c_int, &limits[j]) } == -1 {
+                    eprintln!("setrlimit failed for resource {}", j);
+                }
+            }
+        }
+        // Handle env vars
+        let mut cmd_args = Vec::new();
+        let mut cmd_start = i;
+        while cmd_start < args.len() {
+            if args[cmd_start].contains('=') {
+                let eq = args[cmd_start].find('=').unwrap();
+                let key = &args[cmd_start][..eq];
+                let val = &args[cmd_start][eq + 1..];
+                env::set_var(key, val);
+                cmd_start += 1;
+            } else {
+                break;
+            }
+        }
+        if cmd_start >= args.len() {
+            usage();
+        }
+        cmd_args = args[cmd_start..].to_vec();
+        let prog = CString::new(cmd_args[0].as_str()).unwrap_or_else(|_| usage());
+        let cargs: Vec<CString> = cmd_args.iter().map(|a| CString::new(a.as_str()).unwrap_or_else(|_| usage())).collect();
+        let ret = unsafe { libc::execvp(prog.as_ptr(), cargs.iter().map(|c| c.as_ptr()).collect::<Vec<_>>().as_ptr()) };
+        eprintln!("execvp failed: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+
+    // Display limits
+    let shelltype = if doeval { getshelltype() } else { 0 };
+    if shelltype >= SHELLPARM.len() {
+        // Use default display
+        println!("Resource limits (current):");
+        let names = ["cputime", "filesize", "datasize", "stacksize", "coredumpsize",
+            "memoryuse", "memorylocked", "maxprocesses", "openfiles", "sbsize",
+            "vmemoryuse", "pseudo-terminals", "swapuse", "kqueues", "umtxp", "pipebuf", "vms"];
+        let divisors: [u64; 17] = [1, 1024, 1024, 1024, 1024, 1024, 1024, 1, 1, 1, 1024, 1, 1024, 1, 1, 1024, 1];
+        let suffixes: [&str; 17] = [" secs", " kB", " kB", " kB", " kB", " kB", " kB", "", "", " bytes", " kB", "", " kB", "", "", " kB", ""];
+        for j in 0..RLIM_NLIMITS {
+            if doall || num_limits == 0 || which_limits[j] != 0 {
+                let rl = if which_limits[j] & 2 != 0 { limits[j].rlim_max } else { limits[j].rlim_cur };
+                let val = if rl == RLIM_INFINITY { "infinity".to_string() } else { format!("{}", (rl as u64 + divisors[j] / 2) / divisors[j]) };
+                println!("  {:20s} {}{}", names[j], val, suffixes[j]);
+            }
+        }
+    } else {
+        let sp = &SHELLPARM[shelltype];
+        print!("{}", sp.cmd);
+        for j in 0..RLIM_NLIMITS {
+            if doall || num_limits == 0 || which_limits[j] != 0 {
+                if j < sp.lprm.len() {
+                    let entry = &sp.lprm[j];
+                    let rl = if which_limits[j] & 2 != 0 { limits[j].rlim_max } else { limits[j].rlim_cur };
+                    let val = if rl == RLIM_INFINITY { sp.inf.to_string() } else { format!("{}", (rl
+```
+
+--- RESPONSE ---
+
+
+The file is truncated. Let me write a complete compact version that fits in one write:
+
+ACTION: WRITE_FILE usr.bin/limits/src/main.rs
+CONTENT:
+use std::env;
+use std::ffi::CString;
+use std::process;
+use libc::{c_int, RLIM_INFINITY, RLIM_NLIMITS};
+
+fn usage() -> ! {
+    eprintln!("usage: limits [-C class|-P pid|-U user] [-eaSHBE] [-bcdfklmnostuVvpwy [val]] [[name=val ...] cmd]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut doall = false;
+    let mut doeval = false;
+    let mut type_flag: u8 = 0;
+    let mut which: [u8; 17] = [0; 17];
+    let mut setlim: [libc::rlim_t; 17] = [RLIM_INFINITY; 17];
+    let mut nlim = 0;
+    let rcs = "tfdscmlunbvpwkoyV";
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if let Some(opt) = arg.strip_prefix('-') {
+            match opt.as_str() {
+                "a" => { doall = true; i += 1; continue; }
+                "e" => { doeval = true; i += 1; continue; }
+                "E" => { i += 1; continue; }
+                "H" => { type_flag = 2; i += 1; continue; }
+                "S" => { type_flag = 1; i += 1; continue; }
+                "B" => { type_flag = 3; i += 1; continue; }
+                _ => {}
+            }
+            if opt.starts_with('C') || opt.starts_with('P') || opt.starts_with('U') {
+                i += 1; continue;
+            }
+            if let Some(ch) = opt.chars().next() {
+                if let Some(pos) = rcs.find(ch) {
+                    let has_val = i + 1 < args.len() && !args[i+1].starts_with('-');
+                    if has_val {
+                        let val = &args[i+1];
+                        setlim[pos] = val.parse::<libc::rlim_t>().unwrap_or(RLIM_INFINITY);
+                        which[pos] = if type_flag == 0 { 3 } else { type_flag };
+                        nlim += 1;
+                        i += 2;
+                    } else {
+                        which[pos] = 4;
+                        nlim += 1;
+                        i += 1;
+                    }
+                    continue;
+                }
+            }
+            usage();
+        } else { break; }
+    }
+    let mut limits: [libc::rlimit; 17] = unsafe { std::mem::zeroed() };
+    for j in 0..RLIM_NLIMITS {
+        let mut rl: libc::rlimit = unsafe { std::mem::zeroed() };
+        if unsafe { libc::getrlimit(j as c_int, &mut rl) } == 0 { limits[j] = rl; }
+    }
+    for j in 0..RLIM_NLIMITS {
+        if which[j] & 2 != 0 { limits[j].rlim_max = setlim[j]; }
+        if which[j] & 1 != 0 { limits[j].rlim_cur = setlim[j]; }
+    }
+    if i < args.len() {
+        for j in 0..RLIM_NLIMITS {
+            if doall || nlim == 0 || which[j] != 0 {
+                unsafe { libc::setrlimit(j as c_int, &limits[j]); }
+            }
+        }
+        let mut cs = i;
+        while cs < args.len() && args[cs].contains('=') {
+            let eq = args[cs].find('=').unwrap();
+            env::set_var(&args[cs][..eq], &args[cs][eq+1..]);
+            cs += 1;
+        }
+        if cs >= args.len() { usage(); }
+        let prog = CString::new(args[cs].as_str()).unwrap_or_else(|_| usage());
+        let cargs: Vec<CString> = args[cs..].iter().map(|a| CString::new(a.as_str()).unwrap_or_else(|_| usage())).collect();
+        let ptrs: Vec<*const i8> = cargs.iter().map(|c| c.as_ptr()).collect();
+        let _ = unsafe { libc::execvp(prog.as_ptr(), ptrs.as_ptr()) };
+        eprintln!("execvp failed: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+    let names = ["cputime","filesize","datasize","stacksize","coredumpsize","memoryuse","memorylocked","maxprocesses","openfiles","sbsize","vmemoryuse","pseudo-terminals","swapuse","kqueues","umtxp","pipebuf","vms"];
+    let divs: [u64;17] = [1,1024,1024,1024,1024,1024,1024,1,1,1,1024,1,1024,1,1,1024,1];
+    let sfx: [&str;17] = [" secs"," kB"," kB"," kB"," kB"," kB"," kB","",""," bytes"," kB",""," kB","",""," kB",""];
+    println!("Resource limits (current):");
+    for j in 0..RLIM_NLIMITS {
+        if doall || nlim == 0 || which[j] != 0 {
+            let rl = if which[j] & 2 != 0 { limits[j].rlim_max } else { limits[j].rlim_cur };
+            let val = if rl == RLIM_INFINITY { "infinity".to_string() } else { format!("{}", (rl as u64 + divs[j]/2) / divs[j]) };
+            println!("  {:20s} {}{}", names[j], val, sfx[j]);
+        }
+    }
+}

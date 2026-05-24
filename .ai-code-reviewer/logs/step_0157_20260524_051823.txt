@@ -1,0 +1,54 @@
+=== STEP 157 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/limits
+   Files: 0/3
+📄 File: usr.bin/limits/limits.c
+   Chunks: 12/15
+
+```
+=== CHUNK 12/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/limits/limits.c === [function: getshellbyname]
+=== Lines 686-717 (32 lines) ===
+
+static int
+getshellbyname(const char * shell)
+{
+    int i;
+    const char * q;
+    const char * p = strrchr(shell, '/');
+
+    p = p ? p+1 : shell;
+    for (i = 0; (q = shellparm[i].name) != NULL; i++) {
+	while (*q) {
+	    int j = strcspn(q, "|");
+
+	    if (j == 0)
+		break;
+	    if (strncmp(p, q, j) == 0)
+		return i;
+	    if (*(q += j))
+		++q;
+	}
+    }
+    return SH_SH;
+}
+
+
+/*
+ * Determine the type of shell our parent process is
+ * This is quite tricky, not 100% reliable and probably
+ * not nearly as thorough as it should be. Basically, this
+ * is a "best guess" only, but hopefully will work in
+ * most cases.
+ */
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

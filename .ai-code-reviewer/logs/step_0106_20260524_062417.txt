@@ -1,0 +1,31 @@
+=== STEP 106 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*crypto*':
+```
+./tests/sys/opencrypto/cryptotest.py
+./tests/sys/opencrypto/cryptodev.py
+./tests/sys/opencrypto/cryptodevh.py
+./tests/sys/cddl/zfs/bin/zfs_crypto.ksh
+./stand/libsa/geli/geliboot_crypto.c
+./secure/lib/libcrypto/tests/libcrypto_test.sh
+./secure/lib/libcrypto/man/man7/ossl-guide-libcrypto-introduction.7
+./secure/lib/libcrypto/man/man3/OPENSSL_init_crypto.3
+./secure/lib/libcrypto/man/man3/ERR_load_crypto_strings.3
+./secure/lib/libcrypto/libcrypto.pc.in
+./sys/crypto/blake2/blake2_cryptodev.c
+./sys/crypto/armv8/armv8_crypto.h
+./sys/crypto/armv8/armv8_crypto_wrap.c
+./sys/crypto/armv8/armv8_crypto.c
+./sys/geom/eli/g_eli_crypto.c
+./sys/opencrypto/cryptodev.h
+./sys/opencrypto/cryptodeflate.c
+./sys/opencrypto/crypto.c
+./sys/opencrypto/cryptosoft.c
+./sys/opencrypto/cryptodev.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR crypto

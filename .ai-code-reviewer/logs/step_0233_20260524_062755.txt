@@ -1,0 +1,64 @@
+=== STEP 233 ===
+
+--- REQUEST ---
+GREP_RESULT for 'BUILD':
+```
+./stand/liblua/luaconf.h:266:** LUA_BUILD_AS_DLL to get it).
+./stand/liblua/luaconf.h:268:#if defined(LUA_BUILD_AS_DLL)	/* { */
+./sys/compat/linuxkpi/common/include/linux/sort.h:37:	BUILD_BUG_ON(swap);				\
+./sys/compat/linuxkpi/common/include/linux/sort.h:42:	BUILD_BUG_ON(swap);				\
+./sys/compat/linuxkpi/common/include/linux/build_bug.h:33:#ifndef	_LINUXKPI_LINUX_BUILD_BUG_H_
+./sys/compat/linuxkpi/common/include/linux/build_bug.h:34:#define	_LINUXKPI_LINUX_BUILD_BUG_H_
+./sys/compat/linuxkpi/common/include/linux/build_bug.h:41: * BUILD_BUG_ON() can happen inside functions where _Static_assert() does not
+./sys/arm64/include/cmn600_reg.h:182:#define	POR_DN_BUILD_INFO			0x0900	/* ro */
+./sys/geom/geom_disk.c:211:		case G_STATE_REBUILD:
+./sys/geom/raid/tr_raid5.c:47:#define TR_RAID5_REBUILD 1
+./sys/geom/raid/g_raid.h:144:#define G_RAID_SUBDISK_S_REBUILD	0x03	/* Blank + rebuild. */
+./sys/geom/raid/md_ddf.c:1767:	     (DDF_PDE_FAILED | DDF_PDE_REBUILD)) != 0) {
+./sys/geom/raid/md_ddf.c:1770:		    G_RAID_SUBDISK_S_REBUILD);
+./sys/geom/raid/md_ddf.c:2871:			else if (sd->sd_state <= G_RAID_SUBDISK_S_REBUILD)
+./sys/geom/raid/g_raid.c:200:	case G_RAID_SUBDISK_S_REBUILD:
+./sys/geom/raid/g_raid.c:201:		return ("REBUILD");
+./sys/geom/raid/g_raid.c:548:		    state == G_RAID_SUBDISK_S_REBUILD)
+./sys/geom/raid/md_promise.c:800:		    G_RAID_SUBDISK_S_REBUILD);
+./sys/geom/raid/md_promise.c:1790:			} else if (sd->sd_state <= G_RAID_SUBDISK_S_REBUILD) {
+./sys/geom/raid/md_promise.c:1793:				if (sd->sd_state == G_RAID_SUBDISK_S_REBUILD) {
+./sys/geom/raid/md_sii.c:78:#define SII_S_REBUILD           0x02
+./sys/geom/raid/md_sii.c:89:#define SII_R_REBUILD           0x00
+./sys/geom/raid/md_sii.c:90:#define SII_R_NOREBUILD         0xff
+./sys/geom/raid/md_intel.c:113:#define INTEL_MT_REBUILD	1
+./sys/geom/raid/md_intel.c:426:	case INTEL_MT_REBUILD:
+./sys/geom/raid/md_intel.c:427:		return ("REBUILD");
+./sys/geom/raid/md_ddf.h:150:#define	DDF_PDE_REBUILD		(1 << 2)
+./sys/geom/raid/tr_raid1.c:47:#define RAID1_REBUILD_SLAB	(1 << 20) /* One transation in a rebuild */
+./sys/geom/raid/tr_raid1.c:48:static int g_raid1_rebuild_slab = RAID1_REBUILD_SLAB;
+./sys/geom/raid/tr_raid1.c:53:#define RAID1_REBUILD_FAIR_IO 20 /* use 1/x of the available I/O */
+./sys/geom/raid/md_nvidia.c:70:#define NVIDIA_S_REBUILD	3
+./sys/geom/raid/md_nvidia.c:291:	    meta->state != NVIDIA_S_REBUILD && meta->state != NVIDIA_S_SYNC) {
+./sys/geom/raid/md_nvidia.c:531:	    //pd->pd_meta->disk_status == NVIDIA_S_REBUILD)
+./sys/geom/raid/tr_raid1e.c:49:#define RAID1E_REBUILD_SLAB	(1 << 20) /* One transation in a rebuild */
+./sys/geom/raid/tr_raid1e.c:50:static int g_raid1e_rebuild_slab = RAID1E_REBUILD_SLAB;
+./sys/geom/raid/tr_raid1e.c:55:#define RAID1E_REBUILD_FAIR_IO 20 /* use 1/x of the available I/O */
+./sys/geom/geom.h:235:#define G_STATE_REBUILD		1
+./sys/sys/elf_common.h:872:#define	NT_GNU_BUILD_ID		3
+./sys/sys/ata.h:1034:#define AR_REBUILDING                   4
+./sys/sys/ata.h:1062:#define IOCATARAIDREBUILD       _IOW('a', 204, int)
+./sys/kern/kern_mib.c:593:#define	BUILD_ID_HEADER_LEN	0x10
+./sys/kern/kern_mib.c:594:#define	BUILD_ID_HASH_MAXLEN	0x14
+./sys/kern/kern_mib.c:601:	char buf[2*BUILD_ID_HASH_MAXLEN+1];
+./sys/netinet/in_fib_algo.c:161:		return (FLM_REBUILD);
+./sys/netinet/in_fib_algo.c:176:		return (FLM_REBUILD);
+./sys/netinet/in_fib_algo.c:204:		return (FLM_REBUILD);
+./sys/netinet/in_fib_dxr.c:1098:		return (FLM_REBUILD);
+./sys/netinet/in_fib_dxr.c:1190:		return (FLM_REBUILD);
+./sys/netinet/in_fib_dxr.c:1288:		return (FLM_REBUILD);
+./sys/dev/ice/ice_flow.h:320:	ICE_FLOW_ACT_BUILD_PROF_IDX,
+... [1756 more matches]
+```
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails due to pre-existing environment issues. Let me move to the next unit:
+
+ACTION: SET_SCOPE crypto/krb5/src/lib/crypto/openssl/des

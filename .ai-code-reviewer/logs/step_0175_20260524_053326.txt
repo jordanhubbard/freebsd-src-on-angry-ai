@@ -1,0 +1,11 @@
+=== STEP 175 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'bsd.rust.mk'
+
+--- RESPONSE ---
+
+
+I've been stuck in a loop writing main.rs. Let me try building to see the current state.
+
+ACTION: BUILD

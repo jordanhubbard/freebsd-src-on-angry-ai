@@ -1,0 +1,64 @@
+=== STEP 123 ===
+
+--- REQUEST ---
+GREP_RESULT for 'crypto':
+```
+./tests/sys/devrandom/uint128_test.c:37:#include <crypto/chacha20/chacha.h>
+./tests/sys/devrandom/uint128_test.c:38:#include <crypto/rijndael/rijndael-api-fst.h>
+./tests/sys/devrandom/uint128_test.c:39:#include <crypto/sha2/sha256.h>
+./tests/sys/kern/ktls_test.c:37:#include <crypto/cryptodev.h>
+./tests/sys/opencrypto/poly1305_test.c:36:#include "cryptodev.h"
+./tests/sys/opencrypto/poly1305_test.c:305:	fd = open("/dev/crypto", O_RDWR);
+./tests/sys/opencrypto/poly1305_test.c:339:do_cryptop(int fd, int ses, const void *inp, size_t inlen, void *out)
+./tests/sys/opencrypto/blake2_test.c:51:#include "cryptodev.h"
+./tests/sys/opencrypto/blake2_test.c:91:	fd = open("/dev/crypto", O_RDWR);
+./tests/sys/opencrypto/blake2_test.c:115:do_cryptop(int fd, int ses, size_t inlen, void *out)
+./tests/sys/geom/class/eli/unaligned_io.c:39:#include <crypto/cryptodev.h>
+./tests/sys/geom/class/eli/unaligned_io.c:101:	 * cases in the crypto layer's buffer handling.
+./stand/i386/common/bootargs.h:85:#include <crypto/intake.h>
+./stand/libsa/geli/geliboot.c:237:	g_eli_crypto_hmac_init(&ctx, NULL, 0);
+./stand/libsa/geli/geliboot.c:245:		g_eli_crypto_hmac_update(&ctx, gdev->md.md_salt,
+./stand/libsa/geli/geliboot.c:247:		g_eli_crypto_hmac_update(&ctx, (const uint8_t *)passphrase,
+./stand/libsa/geli/geliboot_crypto.c:50:			printf("Failed to setup crypto keys: %d\n", err);
+./stand/libsa/geli/geliboot_crypto.c:96:		printf("Unsupported crypto algorithm #%d\n", algo);
+./stand/libsa/geli/geliboot_crypto.c:104:g_eli_crypto_cipher(u_int algo, geli_op_t enc, u_char *data, size_t datasize,
+./stand/libsa/geli/geliboot.h:28:#include <crypto/intake.h>
+./stand/libsa/geli/geliboot_internal.h:43:#include <crypto/sha2/sha256.h>
+./stand/libsa/geli/geliboot_internal.h:44:#include <crypto/sha2/sha512.h>
+./stand/libsa/geli/geliboot_internal.h:47:#include <crypto/rijndael/rijndael-api-fst.h>
+./stand/libsa/zfs/libzfs.h:33:#include <crypto/intake.h>
+./krb5/include/autoconf.h:24:/* Define to use OpenSSL crypto library */
+./krb5/include/autoconf.h:259:/* Define to 1 if you have the `crypto' library (-lcrypto). */
+./sys/compat/linuxkpi/common/include/crypto/hash.h:33:struct crypto_shash {
+./sys/compat/linuxkpi/common/include/crypto/hash.h:37:	struct crypto_shash	*tfm;
+./sys/compat/linuxkpi/common/include/crypto/hash.h:40:static inline struct crypto_shash *
+./sys/compat/linuxkpi/common/include/net/cfg80211.h:541:struct cfg80211_crypto_settings {
+./sys/compat/linuxkpi/common/include/net/cfg80211.h:561:	struct cfg80211_crypto_settings		crypto;
+./sys/compat/linuxkpi/common/include/net/cfg80211.h:590:	struct cfg80211_crypto_settings		crypto;
+./sys/compat/linuxkpi/common/include/net/mac80211.h:2465:ieee80211_tkip_add_iv(u8 *crypto_hdr, struct ieee80211_key_conf *keyconf,
+./sys/compat/linuxkpi/common/src/linux_80211.c:113:static bool lkpi_hwcrypto = false;
+./sys/compat/linuxkpi/common/src/linux_80211.c:114:SYSCTL_BOOL(_compat_linuxkpi_80211, OID_AUTO, hw_crypto, CTLFLAG_RDTUN,
+./sys/compat/linuxkpi/common/src/linux_80211.c:115:    &lkpi_hwcrypto, 0, "Enable LinuxKPI 802.11 hardware crypto offload");
+./sys/crypto/chacha20_poly1305.c:32:#include <crypto/chacha20_poly1305.h>
+./sys/crypto/chacha20_poly1305.c:33:#include <opencrypto/xform_enc.h>
+./sys/crypto/via/padlock.c:43:#include <opencrypto/cryptodev.h>
+./sys/crypto/via/padlock.c:45:#include <crypto/via/padlock.h>
+./sys/crypto/via/padlock.c:49:#include "cryptodev_if.h"
+./sys/crypto/via/padlock_hash.c:44:#include <opencrypto/cryptodev.h>
+./sys/crypto/via/padlock_hash.c:45:#include <opencrypto/xform.h>
+./sys/crypto/via/padlock_hash.c:47:#include <crypto/via/padlock.h>
+./sys/crypto/via/padlock.h:30:#include <opencrypto/cryptodev.h>
+./sys/crypto/via/padlock.h:31:#include <crypto/rijndael/rijndael.h>
+./sys/crypto/via/padlock.h:72:	    const struct crypto_session_params *csp);
+./sys/crypto/via/padlock_cipher.c:57:#include <opencrypto/cryptodev.h>
+./sys/crypto/via/padlock_cipher.c:58:#include <crypto/rijndael/rijndael.h>
+./sys/crypto/via/padlock_cipher.c:60:#include <crypto/via/padlock.h>
+... [4811 more matches]
+```
+
+--- RESPONSE ---
+
+
+I need to revert the Makefile.inc1 changes since they're outside the scope. Let me find what was changed.
+
+ACTION: GREP crypto

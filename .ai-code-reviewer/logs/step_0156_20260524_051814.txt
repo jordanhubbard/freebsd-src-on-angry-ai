@@ -1,0 +1,129 @@
+=== STEP 156 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/limits
+   Files: 0/3
+📄 File: usr.bin/limits/limits.c
+   Chunks: 11/15
+
+```
+=== CHUNK 11/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/limits/limits.c === [function: resource_num]
+=== Lines 579-685 (107 lines) ===
+
+static rlim_t
+resource_num(int which, int ch, const char *str)
+{
+    rlim_t res = RLIM_INFINITY;
+
+    if (str != NULL &&
+	!(strcasecmp(str, "inf") == 0 ||
+	  strcasecmp(str, "infinity") == 0 ||
+	  strcasecmp(str, "unlimit") == 0 ||
+	  strcasecmp(str, "unlimited") == 0)) {
+	const char * s = str;
+	char *e;
+
+	switch (which) {
+	case RLIMIT_CPU:	/* time values */
+	    errno = 0;
+	    res = 0;
+	    while (*s) {
+		rlim_t tim = strtoq(s, &e, 0);
+		if (e == NULL || e == s || errno)
+		    break;
+		switch (*e++) {
+		case 0:		   	/* end of string */
+		    e--;
+		default:
+		case 's': case 'S':	/* seconds */
+		    break;
+		case 'm': case 'M':	/* minutes */
+		    tim *= 60L;
+		    break;
+		case 'h': case 'H':	/* hours */
+		    tim *= (60L * 60L);
+		    break;
+		case 'd': case 'D':	/* days */
+		    tim *= (60L * 60L * 24L);
+		    break;
+		case 'w': case 'W':	/* weeks */
+		    tim *= (60L * 60L * 24L * 7L);
+		    break;
+		case 'y': case 'Y':	/* Years */
+		    tim *= (60L * 60L * 24L * 365L);
+		}
+		s = e;
+		res += tim;
+	    }
+	    break;
+	case RLIMIT_FSIZE: /* Size values */
+	case RLIMIT_DATA:
+	case RLIMIT_STACK:
+	case RLIMIT_CORE:
+	case RLIMIT_RSS:
+	case RLIMIT_MEMLOCK:
+	case RLIMIT_SBSIZE:
+	case RLIMIT_VMEM:
+	case RLIMIT_SWAP:
+	case RLIMIT_PIPEBUF:
+	    errno = 0;
+	    res = 0;
+	    while (*s) {
+		rlim_t mult, tim = strtoq(s, &e, 0);
+		if (e == NULL || e == s || errno)
+		    break;
+		switch (*e++) {
+		case 0:	/* end of string */
+		    e--;
+		default:
+		    mult = 1;
+		    break;
+		case 'b': case 'B':	/* 512-byte blocks */
+		    mult = 512;
+		    break;
+		case 'k': case 'K':	/* 1024-byte Kilobytes */
+		    mult = 1024;
+		    break;
+		case 'm': case 'M':	/* 1024-k kbytes */
+		    mult = 1024 * 1024;
+		    break;
+		case 'g': case 'G':	/* 1Gbyte */
+		    mult = 1024 * 1024 * 1024;
+		    break;
+		case 't': case 'T':	/* 1TBte */
+		    mult = 1024LL * 1024LL * 1024LL * 1024LL;
+		    break;
+		}
+		s = e;
+		res += (tim * mult);
+	    }
+	    break;
+	case RLIMIT_NPROC:
+	case RLIMIT_NOFILE:
+	case RLIMIT_NPTS:
+	case RLIMIT_KQUEUES:
+	case RLIMIT_UMTXP:
+	case RLIMIT_VMM:
+	    res = strtoq(s, &e, 0);
+	    s = e;
+	    break;
+	}
+	if (*s) {
+	    warnx("invalid value -%c `%s'", ch, str);
+	    usage();
+	}
+    }
+    return res;
+}
+
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

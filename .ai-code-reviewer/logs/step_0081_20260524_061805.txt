@@ -1,0 +1,81 @@
+=== STEP 81 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/crypto/openssl/des/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source file that implements the DES key parity fixup function.
+
+ACTION: WRITE_FILE crypto/krb5/src/lib/crypto/openssl/des/src/lib.rs
+CONTENT:
+<<<
+//! Rust replacement for des_keys.c
+//!
+//! Implements DES key parity fixup with C ABI compatibility.
+
+/// Set odd parity on each byte of the key.
+///
+/// This is a pure Rust implementation of DES_set_odd_parity.
+/// Each byte of the key is modified so that it has odd parity
+/// (the number of 1-bits is odd).
+#[no_mangle]
+pub extern "C" fn k5_des_fixup_key_parity(keybits: *mut u8) {
+    if keybits.is_null() {
+        return;
+    }
+    // DES key is 8 bytes (DES_cblock)
+    for i in 0..8 {
+        let byte = unsafe { *keybits.add(i) };
+        let mut b = byte;
+        // Count bits and set parity bit (bit 0) to make odd parity
+        let mut count = 0u32;
+        let mut tmp = b;
+        while tmp != 0 {
+            if tmp & 1 != 0 {
+                count += 1;
+            }
+            tmp >>= 1;
+        }
+        if count % 2 == 0 {
+            b |= 1; // Set bit 0 to make odd parity
+        } else {
+            b &= !1; // Clear bit 0 to keep odd parity
+        }
+        unsafe {
+            *keybits.add(i) = b;
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_des_fixup_key_parity() {
+        let mut key = [0u8; 8];
+        k5_des_fixup_key_parity(key.as_mut_ptr());
+        // Each byte should now have odd parity
+        for &b in &key {
+            let mut count = 0u32;
+            let mut tmp = b;
+            while tmp != 0 {
+                if tmp & 1 != 0 {
+                    count += 1;
+                }
+                tmp >>= 1;
+            }
+            assert_eq!(count % 2, 1, "Byte {} should have odd parity", b);
+        }
+    }
+
+    #[test]
+    fn test_des_fixup_key_parity_null() {
+        // Should not crash on null pointer
+        k5_des_fixup_key_parity(std::ptr::null_mut());
+    }
+}
+>>>

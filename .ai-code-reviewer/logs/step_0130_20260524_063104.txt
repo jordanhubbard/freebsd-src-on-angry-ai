@@ -1,0 +1,20 @@
+=== STEP 130 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto:
+```
+.gitignore
+README
+heimdal
+krb5
+libecc
+openssh
+openssl
+```
+
+--- RESPONSE ---
+
+
+The build errors are from Makefile.inc1 which is outside this scope. Let me check the parent Makefile structure for this heimdal tree.
+
+ACTION: LIST_DIR crypto

@@ -1,0 +1,11 @@
+=== STEP 203 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+Let me check what build infrastructure exists for Rust in the tree:
+
+ACTION: GREP rust

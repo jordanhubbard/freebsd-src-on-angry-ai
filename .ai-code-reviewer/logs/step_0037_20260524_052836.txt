@@ -1,0 +1,18 @@
+=== STEP 37 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printf:
+```
+Makefile
+Makefile.depend
+printf.1
+printf.c
+tests
+```
+
+--- RESPONSE ---
+
+
+Let me try to set scope to usr.bin/printf which has a standard FreeBSD Makefile.
+
+ACTION: SET_SCOPE usr.bin/printf

@@ -1,0 +1,16 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/crypto/openssl/des:
+```
+Makefile.in
+deps
+des_keys.c
+```
+
+--- RESPONSE ---
+
+
+Let me read the source file to understand what needs to be rewritten.
+
+ACTION: READ_FILE crypto/krb5/src/lib/crypto/openssl/des/des_keys.c
