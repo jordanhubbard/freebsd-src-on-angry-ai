@@ -295,6 +295,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-21T23:26:14.041313"
   },
+  "usr.bin/cmp": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:45:58.503462"
+  },
   "usr.bin/col": {
     "attempts": 3,
     "last_attempt": "2026-05-24T00:27:23.271384"
@@ -311,6 +315,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T16:58:09.899107"
   },
+  "usr.bin/du": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:54:48.607766"
+  },
   "usr.bin/enigma": {
     "attempts": 3,
     "last_attempt": "2026-05-22T10:22:16.739825"
@@ -324,8 +332,8 @@
     "last_attempt": "2026-05-21T20:49:38.897585"
   },
   "usr.bin/fmt": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T04:13:06.745770"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:46:15.488546"
   },
   "usr.bin/fold": {
     "attempts": 3,
@@ -435,13 +443,25 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T22:24:06.261005"
   },
+  "usr.bin/sort": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:46:29.573429"
+  },
+  "usr.bin/split": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:46:34.315725"
+  },
   "usr.bin/tail": {
     "attempts": 3,
     "last_attempt": "2026-05-24T04:11:01.671319"
   },
+  "usr.bin/touch": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T06:47:07.638419"
+  },
   "usr.bin/tr": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T04:11:30.900052"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:46:43.426889"
   },
   "usr.bin/truncate": {
     "attempts": 1,
@@ -456,8 +476,8 @@
     "last_attempt": "2026-05-22T00:11:03.402137"
   },
   "usr.bin/uniq": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T00:48:21.968999"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:46:23.500765"
   },
   "usr.bin/units": {
     "attempts": 3,

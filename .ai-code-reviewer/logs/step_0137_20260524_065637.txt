@@ -1,0 +1,23 @@
+=== STEP 137 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/du
+   Files: 0/3
+📄 File: usr.bin/du/du.c
+   Chunks: 2/16
+
+```
+=== CHUNK 2/16: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/du/du.c === [function: ignoreadd]
+=== Lines 68-68 (1 lines) ===
+
+static void	ignoreadd(const char *);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/limits
