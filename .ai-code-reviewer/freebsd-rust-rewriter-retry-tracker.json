@@ -151,6 +151,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-22T21:07:43.325248"
   },
+  "contrib/llvm-project/llvm/lib/Target/ARC/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T07:11:36.881480"
+  },
   "contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-24T06:36:22.530138"
@@ -214,6 +218,10 @@
   "sys/cddl/contrib/opensolaris/uts/riscv/dtrace": {
     "attempts": 1,
     "last_attempt": "2026-05-23T16:20:47.305794"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_auth": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T07:04:44.026861"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20": {
     "attempts": 3,
@@ -395,6 +403,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-22T02:36:41.175781"
   },
+  "usr.bin/mkstr": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T07:20:25.182445"
+  },
   "usr.bin/mktemp": {
     "attempts": 3,
     "last_attempt": "2026-05-22T20:10:15.732158"
@@ -406,6 +418,10 @@
   "usr.bin/nice": {
     "attempts": 3,
     "last_attempt": "2026-05-22T03:45:59.312336"
+  },
+  "usr.bin/nl": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T07:17:35.125081"
   },
   "usr.bin/nohup": {
     "attempts": 2,
@@ -420,8 +436,8 @@
     "last_attempt": "2026-05-22T20:52:37.876664"
   },
   "usr.bin/pr": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:52:48.563756"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T07:16:06.719728"
   },
   "usr.bin/printf": {
     "attempts": 3,

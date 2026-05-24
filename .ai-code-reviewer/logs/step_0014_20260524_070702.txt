@@ -1,0 +1,37 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/crypto:
+```
+aesni
+armv8
+blake2
+camellia
+ccp
+chacha20
+chacha20_poly1305.c
+chacha20_poly1305.h
+curve25519.c
+curve25519.h
+des
+intake.h
+libsodium
+md4c.c
+md5c.c
+openssl
+rc4
+rijndael
+sha1.c
+sha1.h
+sha2
+siphash
+skein
+via
+```
+
+--- RESPONSE ---
+
+
+Let me check the parent Makefile.am to understand the build system.
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/Makefile.am

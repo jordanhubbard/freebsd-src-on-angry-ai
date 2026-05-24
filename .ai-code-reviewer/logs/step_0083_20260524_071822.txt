@@ -1,0 +1,113 @@
+=== STEP 83 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/nl
+   Files: 0/3
+📄 File: usr.bin/nl/nl.c
+   Chunks: 6/8
+
+```
+=== CHUNK 6/8: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/nl/nl.c === [function: filter]
+=== Lines 271-359 (89 lines) ===
+
+static void
+filter(void)
+{
+	char *buffer;
+	size_t buffersize;
+	ssize_t linelen;
+	int line;		/* logical line number */
+	int section;		/* logical page section */
+	unsigned int adjblank;	/* adjacent blank lines */
+	int consumed;		/* intbuffer measurement */
+	int donumber = 0, idx;
+
+	adjblank = 0;
+	line = startnum;
+	section = BODY;
+
+	buffer = NULL;
+	buffersize = 0;
+	while ((linelen = getline(&buffer, &buffersize, stdin)) > 0) {
+		for (idx = FOOTER; idx <= NP_LAST; idx++) {
+			/* Does it look like a delimiter? */
+			if (delimlen * (idx + 1) > linelen)
+				break;
+			if (memcmp(buffer + delimlen * idx, delim,
+			    delimlen) != 0)
+				break;
+			/* Was this the whole line? */
+			if (buffer[delimlen * (idx + 1)] == '\n') {
+				section = idx;
+				adjblank = 0;
+				if (restart)
+					line = startnum;
+				goto nextline;
+			}
+		}
+
+		switch (numbering_properties[section].type) {
+		case number_all:
+			/*
+			 * Doing this for number_all only is disputable, but
+			 * the standard expresses an explicit dependency on
+			 * `-b a' etc.
+			 */
+			if (buffer[0] == '\n' && ++adjblank < nblank)
+				donumber = 0;
+			else
+				donumber = 1, adjblank = 0;
+			break;
+		case number_nonempty:
+			donumber = (buffer[0] != '\n');
+			break;
+		case number_none:
+			donumber = 0;
+			break;
+		case number_regex:
+			donumber =
+			    (regexec(&numbering_properties[section].expr,
+			    buffer, 0, NULL, 0) == 0);
+			break;
+		}
+
+		if (donumber) {
+			/* Note: sprintf() is safe here. */
+			consumed = sprintf(intbuffer, format, width, line);
+			(void)printf("%s",
+			    intbuffer + max(0, consumed - width));
+			line += incr;
+		} else {
+			(void)printf("%*s", width, "");
+		}
+		(void)fputs(sep, stdout);
+		(void)fwrite(buffer, linelen, 1, stdout);
+
+		if (ferror(stdout))
+			err(EXIT_FAILURE, "output error");
+nextline:
+		;
+	}
+
+	if (ferror(stdin))
+		err(EXIT_FAILURE, "input error");
+
+	free(buffer);
+}
+
+/*
+ * Various support functions.
+ */
+
+
+```
+
+--- RESPONSE ---
+
+
+This is moderately complex with regex, capsicum, and multi-byte character handling. Let me try a simpler unit.
+
+ACTION: SET_SCOPE usr.bin/renice

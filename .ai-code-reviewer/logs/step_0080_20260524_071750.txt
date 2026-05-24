@@ -1,0 +1,23 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/nl
+   Files: 0/3
+📄 File: usr.bin/nl/nl.c
+   Chunks: 3/8
+
+```
+=== CHUNK 3/8: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/nl/nl.c === [function: parse_numbering]
+=== Lines 86-86 (1 lines) ===
+
+static void	parse_numbering(const char *, int);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

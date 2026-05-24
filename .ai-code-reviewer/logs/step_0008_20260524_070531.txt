@@ -1,0 +1,21 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+GREP_RESULT for 'libsodium':
+```
+./sys/crypto/libsodium/stdlib.h:4:	panic("libsodium error at %s:%d", __FILE__, __LINE__)
+./sys/contrib/libsodium/src/libsodium/include/sodium/crypto_secretbox_xsalsa20poly1305.h:27:/* Only for the libsodium API - The NaCl compatibility API would require BOXZEROBYTES extra bytes */
+./sys/contrib/libsodium/src/libsodium/include/sodium/utils.h:124: * sodium_malloc() can be used to allocate any libsodium data structure.
+./sys/contrib/libsodium/src/libsodium/include/sodium/crypto_box_curve25519xsalsa20poly1305.h:39:/* Only for the libsodium API - The NaCl compatibility API would require BOXZEROBYTES extra bytes */
+./sys/contrib/libsodium/src/libsodium/randombytes/sysrandom/randombytes_sysrandom.c:46: * based on Chromium) also depend on it, and that libsodium allows the RNG to be
+./sys/contrib/libsodium/src/libsodium/sodium/core.c:29:# warning Use releases available at https://download.libsodium.org/libsodium/releases/ instead.
+./contrib/unbound/dnscrypt/dnscrypt.c:851:				    fatal_exit("Certificate for XChacha20 but libsodium does not support it.");
+./contrib/unbound/dnscrypt/dnscrypt.c:871:		"dnscrypt: libsodium could not be initialized, this typically"
+./contrib/unbound/dnscrypt/dnscrypt.c:945:		fatal_exit("dnsc_create: could not initialize libsodium.");
+./lib/libunbound/config.h:973:/* Define to 1 if libsodium supports sodium_set_misuse_handler */
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR sys/crypto/libsodium

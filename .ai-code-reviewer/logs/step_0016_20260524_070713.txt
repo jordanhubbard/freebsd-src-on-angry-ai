@@ -1,0 +1,9 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/crypto/libsodium*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR sys/crypto/libsodium

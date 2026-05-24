@@ -1,0 +1,9 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/crypto/libsodium*'
+
+--- RESPONSE ---
+
+
+ACTION: GREP libsodium

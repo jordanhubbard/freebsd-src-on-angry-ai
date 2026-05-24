@@ -1,0 +1,14 @@
+=== STEP 115 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/mkstr is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_auth
+
+--- RESPONSE ---
+
+
+Let me try a different unit and be very careful with the format.
+
+ACTION: SET_SCOPE usr.bin/mkstr

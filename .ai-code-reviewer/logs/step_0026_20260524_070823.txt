@@ -1,0 +1,14 @@
+=== STEP 26 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/kenv is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_auth
+
+--- RESPONSE ---
+
+
+Let me try more bin commands to find a pending one.
+
+ACTION: SET_SCOPE bin/realpath

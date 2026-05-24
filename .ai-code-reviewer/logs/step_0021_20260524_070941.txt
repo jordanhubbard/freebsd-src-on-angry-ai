@@ -1,0 +1,11 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/contrib/libsodium/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check how FreeBSD builds libsodium by looking at the sys Makefile.
+
+ACTION: READ_FILE sys/Makefile

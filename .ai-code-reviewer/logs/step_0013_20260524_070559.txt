@@ -1,0 +1,64 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys:
+```
+Makefile
+README.md
+amd64
+arm
+arm64
+bsm
+cam
+cddl
+compat
+conf
+contrib
+crypto
+ddb
+dev
+dts
+fs
+gdb
+geom
+gnu
+i386
+isa
+kern
+kgssapi
+libkern
+modules
+net
+net80211
+netgraph
+netinet
+netinet6
+netipsec
+netlink
+netpfil
+netsmb
+nfs
+nfsclient
+nfsserver
+nlm
+ofed
+opencrypto
+powerpc
+riscv
+rpc
+security
+sys
+teken
+tests
+tools
+ufs
+vm
+x86
+xdr
+xen
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR sys/contrib

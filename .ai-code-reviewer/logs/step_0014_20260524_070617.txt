@@ -1,0 +1,35 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib:
+```
+alpine-hal
+ck
+dev
+device-tree
+dpdk_rte_lpm
+edk2
+ena-com
+libb2
+libfdt
+libnv
+libsodium
+ncsw
+openzfs
+pcg-c
+rdma
+v4l
+vchiq
+x86emu
+xen
+xz-embedded
+zlib
+zstd
+```
+
+--- RESPONSE ---
+
+
+Let me check how FreeBSD actually builds libsodium - there may be a separate build directory.
+
+ACTION: LIST_DIR lib

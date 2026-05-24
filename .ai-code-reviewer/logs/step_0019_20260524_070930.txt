@@ -1,0 +1,11 @@
+=== STEP 19 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'bsd.rust'
+
+--- RESPONSE ---
+
+
+Let me check how FreeBSD builds libsodium.
+
+ACTION: LIST_DIR lib/libsodium

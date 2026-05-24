@@ -1,0 +1,13 @@
+=== STEP 34 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/freebsd-version has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_auth
+
+--- RESPONSE ---
+
+
+Let me try usr.bin commands which are typically small userland utilities.
+
+ACTION: SET_SCOPE usr.bin/asa
