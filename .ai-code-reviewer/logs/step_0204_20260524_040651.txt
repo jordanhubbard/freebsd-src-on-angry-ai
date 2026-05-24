@@ -1,0 +1,39 @@
+=== STEP 204 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo/CSKYTargetInfo.cpp:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo/CSKYTargetInfo.cpp
+
+```
+//===-- CSKYTargetInfo.cpp - CSKY Target Implementation -------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#include "TargetInfo/CSKYTargetInfo.h"
+#include "llvm/MC/TargetRegistry.h"
+using namespace llvm;
+
+Target &llvm::getTheCSKYTarget() {
+  static Target TheCSKYTarget;
+  return TheCSKYTarget;
+}
+
+extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeCSKYTargetInfo() {
+  RegisterTarget<Triple::csky> X(getTheCSKYTarget(), "csky", "C-SKY", "CSKY");
+}
+
+```
+
+--- RESPONSE ---
+
+
+This is LLVM C++ target registration code, not FreeBSD userland. It's part of the LLVM contrib tree with its own CMake build system. Translating LLVM target infrastructure to Rust is outside the scope of FreeBSD userland translation.
+
+ACTION: SET_SCOPE bin/cat/tests

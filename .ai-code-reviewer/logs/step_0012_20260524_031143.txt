@@ -1,0 +1,64 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+GREP_RESULT for 'crypto_int.h':
+```
+./crypto/krb5/src/lib/crypto/builtin/aes/aeskey.c:24:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/aes/aescrypt.c:24:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/aes/aestab.c:26:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/pbkdf2.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/kdf.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/md5/md5.c:37:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/hmac.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/enc_provider/camellia.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/enc_provider/aes.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/enc_provider/rc4.c:10:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/enc_provider/des3.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/camellia/camellia.c:39:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/hash_provider/hash_sha2.c:33:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/hash_provider/hash_md5.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/hash_provider/hash_md4.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/hash_provider/hash_sha1.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/md4/md4.c:35:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/cmac.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/sha2/sha2.h:39:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/f_sched.c:32:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/d3_aead.c:25:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/key_sched.c:46:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/des_keys.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/f_tables.c:37:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/f_parity.c:12:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/d3_kysched.c:24:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/f_cksum.c:32:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/weak_key.c:36:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/des/f_aead.c:25:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/builtin/sha1/shs.h:4:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/encrypt_iov.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/encrypt_length.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/s2k_rc4.c:2:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/valid_cksumtype.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/string_to_cksumtype.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/checksum_length.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/checksum_dk_cmac.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/crypto_length.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/enc_rc4.c:10:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/prng.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/enc_raw.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/block_size.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/checksum_unkeyed.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/cksumtypes.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/cksumtype_to_string.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/aead.c:27:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/keyed_cksum.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/s2k_pbkdf2.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/old_api_glue.c:28:#include "crypto_int.h"
+./crypto/krb5/src/lib/crypto/krb/state.c:35:#include "crypto_int.h"
+... [57 more matches]
+```
+
+--- RESPONSE ---
+
+
+Let me check how FreeBSD integrates this krb5 build.
+
+ACTION: LIST_DIR crypto

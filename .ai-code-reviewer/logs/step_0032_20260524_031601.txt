@@ -1,0 +1,14 @@
+=== STEP 32 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/pwait is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/libcbor/examples/bazel/src
+
+--- RESPONSE ---
+
+
+I need to resolve the uncommitted changes state. Let me try building again to clear it.
+
+ACTION: BUILD

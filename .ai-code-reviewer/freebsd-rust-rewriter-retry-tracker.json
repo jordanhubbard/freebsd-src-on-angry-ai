@@ -151,6 +151,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-22T21:07:43.325248"
   },
+  "contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo": {
+    "attempts": 2,
+    "last_attempt": "2026-05-24T04:26:37.432596"
+  },
   "contrib/netbsd-tests/lib/csu/dso": {
     "attempts": 3,
     "last_attempt": "2026-05-24T00:24:56.720185"
@@ -162,6 +166,10 @@
   "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0": {
     "attempts": 3,
     "last_attempt": "2026-05-24T01:21:40.006142"
+  },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso1": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T04:06:57.818534"
   },
   "crypto/heimdal/lib/heimdal": {
     "attempts": 1,
@@ -316,12 +324,12 @@
     "last_attempt": "2026-05-21T20:49:38.897585"
   },
   "usr.bin/fmt": {
-    "attempts": 1,
-    "last_attempt": "2026-05-23T08:06:34.915047"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T04:13:06.745770"
   },
   "usr.bin/fold": {
-    "attempts": 1,
-    "last_attempt": "2026-05-23T08:06:44.780660"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T04:27:11.328042"
   },
   "usr.bin/head": {
     "attempts": 3,
@@ -336,8 +344,8 @@
     "last_attempt": "2026-05-22T18:13:07.386524"
   },
   "usr.bin/limits": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:44:51.721153"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T04:12:39.636484"
   },
   "usr.bin/locate/locate": {
     "attempts": 1,
@@ -408,12 +416,12 @@
     "last_attempt": "2026-05-22T22:24:06.261005"
   },
   "usr.bin/tail": {
-    "attempts": 2,
-    "last_attempt": "2026-05-22T22:24:40.708331"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T04:11:01.671319"
   },
   "usr.bin/tr": {
-    "attempts": 1,
-    "last_attempt": "2026-05-22T20:59:47.573336"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T04:11:30.900052"
   },
   "usr.bin/truncate": {
     "attempts": 1,

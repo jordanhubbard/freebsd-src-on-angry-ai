@@ -1,0 +1,38 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src:
+```
+Makefile.in
+aclocal.m4
+appl
+build-tools
+ccapi
+clients
+config
+config-files
+configure
+configure.ac
+deps
+doc
+include
+kadmin
+kdc
+kprop
+lib
+man
+patchlevel.h
+plugins
+po
+prototype
+util
+wconfig.c
+windows
+```
+
+--- RESPONSE ---
+
+
+Let me check if there's a FreeBSD-level Makefile for this krb5 tree.
+
+ACTION: FIND_FILE crypto/krb5/Makefile

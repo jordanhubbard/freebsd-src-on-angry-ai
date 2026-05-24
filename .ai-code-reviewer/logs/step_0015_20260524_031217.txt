@@ -1,0 +1,13 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/krb5/Makefile*'
+
+--- RESPONSE ---
+
+
+This is a vendored MIT Kerberos source tree using autoconf/automake, not a FreeBSD build unit. It has no FreeBSD Makefile integration and uses its own build system. This is not suitable for the FreeBSD Rust rewrite objective.
+
+Let me find a proper FreeBSD userland unit. Let me check the bin/ directory for small commands.
+
+ACTION: LIST_DIR bin

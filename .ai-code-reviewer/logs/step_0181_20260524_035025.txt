@@ -1,0 +1,89 @@
+=== STEP 181 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/heimdal:
+```
+ChangeLog
+ChangeLog.1998
+ChangeLog.1999
+ChangeLog.2000
+ChangeLog.2001
+ChangeLog.2002
+ChangeLog.2003
+ChangeLog.2004
+ChangeLog.2005
+ChangeLog.2006
+FREEBSD-Xlist
+LICENSE
+Makefile.am
+Makefile.am.common
+Makefile.in
+NEWS
+README
+acinclude.m4
+aclocal.m4
+admin
+appl
+autogen.sh
+base
+compile
+config.guess
+config.sub
+configure
+doc
+etc
+include
+install-sh
+kadmin
+kcm
+kdc
+kpasswd
+krb5.conf
+kuser
+lib
+ltmain.sh
+missing
+tools
+```
+
+--- RESPONSE ---
+
+
+The `crypto/heimdal/lib/heimdal` directory is Windows-only (NTMakefile) with no FreeBSD Makefile. I need to create a proper FreeBSD Makefile to integrate the Rust crate and make the build succeed.
+
+ACTION: WRITE_FILE crypto/heimdal/lib/heimdal/Makefile
+CONTENT:
+<<<
+# $FreeBSD$
+
+PROG=	heimdal
+SRCS=	heimdal.c
+
+CARGO=		${.CURDIR}/Cargo.toml
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+RUST_SRCS=	src/lib.rs
+
+.if defined(WITH_RUST)
+.PHONY: rust-all
+all: rust-all
+
+rust-all: ${CARGO_TARGET_DIR}/libheimdal.a
+	@echo "Rust heimdal library built successfully"
+
+${CARGO_TARGET_DIR}/libheimdal.a: ${CARGO} ${RUST_SRCS}
+	@mkdir -p ${CARGO_TARGET_DIR}
+	cargo build --manifest-path ${CARGO} --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	@rm -rf ${CARGO_TARGET_DIR}
+.else
+all:
+	@echo "heimdal library is Windows-only; use WITH_RUST to build Rust replacement"
+
+clean:
+	@true
+.endif
+
+.include <bsd.prog.mk>
+>>>

@@ -1,0 +1,12 @@
+=== STEP 133 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/heimdal/lib/heimdal/src:
+```
+lib.rs
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE crypto/heimdal/lib/heimdal/src/lib.rs

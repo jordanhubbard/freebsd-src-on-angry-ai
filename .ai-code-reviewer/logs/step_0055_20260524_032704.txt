@@ -1,0 +1,14 @@
+=== STEP 55 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/yes is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/libcbor/examples/bazel/src
+
+--- RESPONSE ---
+
+
+Let me try to find a unit that is actually pending and not skipped.
+
+ACTION: SET_SCOPE usr.bin/number

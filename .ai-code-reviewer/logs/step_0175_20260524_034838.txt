@@ -1,0 +1,16 @@
+=== STEP 175 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/heimdal/lib/heimdal:
+```
+Cargo.toml
+NTMakefile
+dllmain.c
+heimdal-version.rc
+src
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE crypto/heimdal/lib/heimdal/Makefile

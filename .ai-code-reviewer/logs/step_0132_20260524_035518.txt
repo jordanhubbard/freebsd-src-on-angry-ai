@@ -1,0 +1,24 @@
+=== STEP 132 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/heimdal/lib/heimdal/Cargo.toml:
+PROGRESS:
+📁 Directory: crypto/heimdal/lib/heimdal
+   Files: 0/2
+📄 File: crypto/heimdal/lib/heimdal/Cargo.toml
+
+```
+[package]
+name = "heimdal-lib"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+name = "heimdal"
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR crypto/heimdal/lib/heimdal/src

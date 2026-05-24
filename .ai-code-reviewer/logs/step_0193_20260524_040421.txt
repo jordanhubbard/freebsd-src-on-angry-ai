@@ -1,0 +1,54 @@
+=== STEP 193 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/heimdal:
+```
+ChangeLog
+ChangeLog.1998
+ChangeLog.1999
+ChangeLog.2000
+ChangeLog.2001
+ChangeLog.2002
+ChangeLog.2003
+ChangeLog.2004
+ChangeLog.2005
+ChangeLog.2006
+FREEBSD-Xlist
+LICENSE
+Makefile.am
+Makefile.am.common
+Makefile.in
+NEWS
+README
+acinclude.m4
+aclocal.m4
+admin
+appl
+autogen.sh
+base
+compile
+config.guess
+config.sub
+configure
+doc
+etc
+include
+install-sh
+kadmin
+kcm
+kdc
+kpasswd
+krb5.conf
+kuser
+lib
+ltmain.sh
+missing
+tools
+```
+
+--- RESPONSE ---
+
+
+The build is running a full buildworld taking 5 minutes. Let me check the build configuration.
+
+ACTION: FIND_FILE .build.conf

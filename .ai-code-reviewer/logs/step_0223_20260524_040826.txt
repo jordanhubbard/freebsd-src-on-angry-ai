@@ -1,0 +1,11 @@
+=== STEP 223 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/*/Makefile'
+
+--- RESPONSE ---
+
+
+I need to find a work unit with C source files that is pending and buildable. Let me search for available units.
+
+ACTION: FIND_FILE usr.bin/

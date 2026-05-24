@@ -1,0 +1,11 @@
+=== STEP 125 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block in my response. Let me write the Cargo.toml file:
+
+ACTION: WRITE_FILE contrib/libcbor/examples/bazel/src/Cargo.toml

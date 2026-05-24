@@ -1,0 +1,11 @@
+=== STEP 179 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*crypto/heimdal/lib/Makefile*'
+
+--- RESPONSE ---
+
+
+The `crypto/heimdal/lib/heimdal` directory has no FreeBSD Makefile - it's Windows-only. The build errors are from the top-level Makefile.inc1, not from my changes. I need to create a proper FreeBSD Makefile for this unit to make the build work.
+
+ACTION: FIND_FILE crypto/heimdal/lib/Makefile

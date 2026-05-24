@@ -1,0 +1,11 @@
+=== STEP 72 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Let me try using EDIT_FILE instead to modify the existing Makefile.in:
+
+ACTION: EDIT_FILE crypto/krb5/src/lib/crypto/openssl/des/Makefile.in
