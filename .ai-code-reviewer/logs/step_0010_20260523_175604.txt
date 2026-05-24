@@ -1,0 +1,9 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/libxo/encoder/test/Makefile.am*'
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE contrib/libxo/encoder/cbor

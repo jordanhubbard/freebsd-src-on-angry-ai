@@ -1,0 +1,11 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*lib/libxo*'
+
+--- RESPONSE ---
+
+
+Let me check how the recently completed units were structured to understand the pattern.
+
+ACTION: FIND_FILE usr.bin/basename

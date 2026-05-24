@@ -1,0 +1,26 @@
+=== STEP 28 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libxo/Makefile:
+PROGRESS:
+📁 Directory: contrib/libxo/encoder/test
+   Files: 0/1
+📄 File: lib/libxo/Makefile
+
+```
+.include <src.opts.mk>
+
+HAS_TESTS=
+
+SUBDIR.${MK_TESTS}+= tests
+
+SUBDIR = libxo .WAIT encoder
+
+.include <bsd.subdir.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR lib/libxo/encoder

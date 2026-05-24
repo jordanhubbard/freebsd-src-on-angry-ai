@@ -1,0 +1,11 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk/bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+Let me check if there's a FreeBSD-level Makefile that wraps this contrib area.
+
+ACTION: FIND_FILE contrib/libxo

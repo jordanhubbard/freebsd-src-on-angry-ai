@@ -1,0 +1,9 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/basename*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE share/mk/bsd.rust.mk

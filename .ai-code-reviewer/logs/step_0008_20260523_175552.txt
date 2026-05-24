@@ -1,0 +1,9 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/libxo/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE contrib/libxo/encoder/test/Makefile

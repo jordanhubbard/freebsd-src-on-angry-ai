@@ -1,0 +1,11 @@
+=== STEP 24 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/libxo*'
+
+--- RESPONSE ---
+
+
+This is a `contrib/` third-party autotools project without a FreeBSD Makefile. Let me check if there's a FreeBSD-level wrapper or if this is built differently.
+
+ACTION: FIND_FILE lib/libxo

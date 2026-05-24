@@ -1,0 +1,9 @@
+=== STEP 33 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/libxo/libxo/xo.h*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/libxo/libxo

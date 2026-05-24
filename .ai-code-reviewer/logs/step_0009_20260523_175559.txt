@@ -1,0 +1,11 @@
+=== STEP 9 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/libxo/encoder/test/Makefile*'
+
+--- RESPONSE ---
+
+
+This is an autotools-based contrib project without a FreeBSD Makefile. Let me check the headers and understand the encoder interface.
+
+ACTION: FIND_FILE contrib/libxo/encoder/test/Makefile.am
