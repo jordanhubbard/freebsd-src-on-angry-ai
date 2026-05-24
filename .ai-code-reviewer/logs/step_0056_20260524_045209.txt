@@ -1,0 +1,14 @@
+=== STEP 56 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory contrib/llvm-project/llvm/lib/Frontend/Directive skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/libcbor/examples/bazel/src
+
+--- RESPONSE ---
+
+
+Let me find a suitable small FreeBSD userland unit to work on.
+
+ACTION: FIND_FILE bin/*/Makefile

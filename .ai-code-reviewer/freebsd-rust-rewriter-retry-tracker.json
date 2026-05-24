@@ -112,8 +112,8 @@
     "last_attempt": "2026-05-21T19:44:21.180208"
   },
   "contrib/libcbor/examples/bazel/src": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T01:30:21.219272"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T04:52:38.054752"
   },
   "contrib/libpcap/cmake": {
     "attempts": 3,
@@ -180,8 +180,8 @@
     "last_attempt": "2026-05-22T19:37:35.699854"
   },
   "crypto/krb5/src/lib/crypto/openssl/des": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T01:14:23.058938"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T04:50:16.949746"
   },
   "crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd": {
     "attempts": 3,
@@ -344,8 +344,8 @@
     "last_attempt": "2026-05-22T18:13:07.386524"
   },
   "usr.bin/limits": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T04:12:39.636484"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T05:16:35.175684"
   },
   "usr.bin/locate/locate": {
     "attempts": 1,

@@ -1,0 +1,12 @@
+=== STEP 81 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/ul is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE crypto/krb5/src/lib/crypto/openssl/des
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/vis

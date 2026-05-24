@@ -1,0 +1,16 @@
+=== STEP 54 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/crypto/openssl/des:
+```
+Makefile.in
+deps
+des_keys.c
+```
+
+--- RESPONSE ---
+
+
+This unit is a small OpenSSL wrapper in the Kerberos tree - it depends on OpenSSL FFI and uses autoconf Makefile.in. This is complex for a first Rust rewrite. Let me try a simpler FreeBSD userland command.
+
+ACTION: SET_SCOPE bin/cat

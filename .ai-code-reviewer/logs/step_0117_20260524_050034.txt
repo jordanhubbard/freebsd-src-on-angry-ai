@@ -1,0 +1,22 @@
+=== STEP 117 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to properly format the WRITE_FILE action with the CONTENT block on a separate line:
+
+ACTION: WRITE_FILE contrib/libcbor/examples/bazel/src/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "cbor_bazel_example"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "cbor_bazel_example"
+path = "src/main.rs"
+>>>

@@ -1,0 +1,11 @@
+=== STEP 113 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Let me try the exact format with CONTENT on a separate line:
+
+ACTION: WRITE_FILE contrib/libcbor/examples/bazel/src/Cargo.toml

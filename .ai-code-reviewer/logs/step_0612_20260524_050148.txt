@@ -1,0 +1,45 @@
+=== STEP 612 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/truncate/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	truncate
+LIBADD=	util
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	truncate
+LIBADD=	util
+
+SRCS=	truncate.c
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+RUSTPROG=	truncate
+RUSTSRC=	src/main.rs
+
+.PHONY: rust-build
+
+rust-build:
+	@${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${.OBJDIR}/cargo-target
+
+all: rust-build
+
+.include <bsd.prog.mk>
+>>>

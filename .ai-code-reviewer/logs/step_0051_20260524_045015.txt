@@ -1,0 +1,12 @@
+=== STEP 51 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0 skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE crypto/krb5/src/lib/crypto/openssl/des
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE crypto/krb5/src/lib/crypto/openssl/des

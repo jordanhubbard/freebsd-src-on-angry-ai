@@ -1,0 +1,358 @@
+=== STEP 610 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/truncate/src/main.rs
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+The previous write was rejected. Let me write the Rust source file again.
+
+ACTION: WRITE_FILE usr.bin/truncate/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-2-Clause
+use std::ffi::CString;
+use std::fs::{self, File, OpenOptions};
+use std::io::{self, Write};
+use std::os::fd::{AsRawFd, RawFd};
+use std::os::unix::fs::OpenOptionsExt;
+use std::path::Path;
+use std::process;
+
+const EXIT_SUCCESS: i32 = 0;
+const EXIT_FAILURE: i32 = 1;
+
+#[repr(C)]
+struct SpacectlRange {
+    r_offset: libc::off_t,
+    r_len: libc::off_t,
+}
+
+extern "C" {
+    fn fspacectl(
+        fd: RawFd,
+        cmd: libc::c_uint,
+        data: *const SpacectlRange,
+        flags: libc::c_uint,
+        result: *mut SpacectlRange,
+    ) -> libc::c_int;
+}
+
+const SPACECTL_DEALLOC: libc::c_uint = 1;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum SizeMode {
+    Absolute,
+    Relative,
+    RoundUp,
+    RoundDown,
+}
+
+struct Options {
+    no_create: bool,
+    do_dealloc: bool,
+    do_refer: bool,
+    do_relative: bool,
+    do_round: bool,
+    rname: Option<String>,
+    sz: i64,
+    off: i64,
+    len: i64,
+}
+
+fn usage() -> ! {
+    let msg = format!(
+        "{}\n{}\n{}\n",
+        "usage: truncate [-c] -s [+|-|%|/]size[K|k|M|m|G|g|T|t] file ...",
+        "       truncate [-c] -r rfile file ...",
+        "       truncate [-c] -d [-o offset[K|k|M|m|G|g|T|t]] -l length[K|k|M|m|G|g|T|t] file ..."
+    );
+    io::stderr().write_all(msg.as_bytes()).ok();
+    process::exit(EXIT_FAILURE);
+}
+
+fn errx(code: i32, msg: &str) -> ! {
+    io::stderr().write_all(msg.as_bytes()).ok();
+    io::stderr().write_all(b"\n").ok();
+    process::exit(code);
+}
+
+fn warn(msg: &str) {
+    let err = io::stderr();
+    let mut err = err.lock();
+    write!(err, "truncate: ").ok();
+    write!(err, "{}: ", msg).ok();
+    if let Ok(e) = io::Error::last_os_error() {
+        writeln!(err, "{}", e).ok();
+    } else {
+        writeln!(err, "unknown error").ok();
+    }
+}
+
+fn expand_number(s: &str) -> Option<i64> {
+    let bytes = s.as_bytes();
+    if bytes.is_empty() {
+        return None;
+    }
+    let (num_str, suffix) = if bytes.len() > 1 {
+        (&bytes[..bytes.len() - 1], bytes[bytes.len() - 1])
+    } else {
+        (bytes, b'\0')
+    };
+    let num: i64 = match std::str::from_utf8(num_str) {
+        Ok(s) => match s.parse::<i64>() {
+            Ok(n) => n,
+            Err(_) => return None,
+        },
+        Err(_) => return None,
+    };
+    if num < 0 {
+        return None;
+    }
+    let multiplier: i64 = match suffix {
+        b'K' | b'k' => 1024,
+        b'M' | b'm' => 1024 * 1024,
+        b'G' | b'g' => 1024 * 1024 * 1024,
+        b'T' | b't' => 1024 * 1024 * 1024 * 1024,
+        b'\0' | b' ' => 1,
+        _ => return None,
+    };
+    if num > 0 && multiplier > i64::MAX / num {
+        return None;
+    }
+    Some(num * multiplier)
+}
+
+fn parse_size_arg(arg: &str) -> (SizeMode, i64) {
+    let first = arg.as_bytes()[0];
+    let rest = &arg[1..];
+    match first {
+        b'+' => (SizeMode::Relative, {
+            match expand_number(rest) {
+                Some(n) => n,
+                None => errx(EXIT_FAILURE, &format!("invalid size argument `{}`", arg)),
+            }
+        }),
+        b'-' => (SizeMode::Relative, {
+            match expand_number(rest) {
+                Some(n) => -n,
+                None => errx(EXIT_FAILURE, &format!("invalid size argument `{}`", arg)),
+            }
+        }),
+        b'%' => (SizeMode::RoundUp, {
+            match expand_number(rest) {
+                Some(n) => n,
+                None => errx(EXIT_FAILURE, &format!("invalid size argument `{}`", arg)),
+            }
+        }),
+        b'/' => (SizeMode::RoundDown, {
+            match expand_number(rest) {
+                Some(n) => -n,
+                None => errx(EXIT_FAILURE, &format!("invalid size argument `{}`", arg)),
+            }
+        }),
+        _ => (SizeMode::Absolute, {
+            match expand_number(arg) {
+                Some(n) => n,
+                None => errx(EXIT_FAILURE, &format!("invalid size argument `{}`", arg)),
+            }
+        }),
+    }
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut argc = args.len();
+    let mut argv: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+    let mut opts = Options {
+        no_create: false,
+        do_dealloc: false,
+        do_refer: false,
+        do_relative: false,
+        do_round: false,
+        rname: None,
+        sz: 0,
+        off: 0,
+        len: -1,
+    };
+    let mut optind = 1;
+    while optind < argc {
+        let arg = argv[optind];
+        if !arg.starts_with('-') {
+            break;
+        }
+        match arg {
+            "-c" => {
+                opts.no_create = true;
+                optind += 1;
+            }
+            "-d" => {
+                opts.do_dealloc = true;
+                optind += 1;
+            }
+            "-r" => {
+                opts.do_refer = true;
+                optind += 1;
+                if optind >= argc {
+                    errx(EXIT_FAILURE, "-r requires an argument");
+                }
+                opts.rname = Some(argv[optind].to_string());
+                optind += 1;
+            }
+            "-s" => {
+                optind += 1;
+                if optind >= argc {
+                    errx(EXIT_FAILURE, "-s requires an argument");
+                }
+                let (mode, sz) = parse_size_arg(argv[optind]);
+                opts.sz = sz;
+                match mode {
+                    SizeMode::Relative => opts.do_relative = true,
+                    SizeMode::RoundUp => opts.do_round = true,
+                    SizeMode::RoundDown => opts.do_round = true,
+                    SizeMode::Absolute => {}
+                }
+                optind += 1;
+            }
+            "-o" => {
+                optind += 1;
+                if optind >= argc {
+                    errx(EXIT_FAILURE, "-o requires an argument");
+                }
+                match expand_number(argv[optind]) {
+                    Some(n) if n >= 0 => opts.off = n,
+                    _ => errx(EXIT_FAILURE, &format!("invalid offset argument `{}`", argv[optind])),
+                }
+                optind += 1;
+            }
+            "-l" => {
+                optind += 1;
+                if optind >= argc {
+                    errx(EXIT_FAILURE, "-l requires an argument");
+                }
+                match expand_number(argv[optind]) {
+                    Some(n) if n > 0 => opts.len = n,
+                    _ => errx(EXIT_FAILURE, &format!("invalid length argument `{}`", argv[optind])),
+                }
+                optind += 1;
+            }
+            _ => usage(),
+        }
+    }
+    let file_args: Vec<&str> = argv[optind..].to_vec();
+    let got_size = !opts.do_dealloc && !opts.do_refer;
+    if file_args.is_empty() || opts.do_refer as u8 + got_size as u8 + opts.do_dealloc as u8 != 1
+        || (opts.do_dealloc && opts.len == -1)
+    {
+        usage();
+    }
+    let mut error = false;
+    let mut fd: Option<File> = None;
+    for fname in &file_args {
+        let path = Path::new(*fname);
+        fd = None;
+        let file = if opts.no_create {
+            OpenOptions::new().write(true).open(path)
+        } else {
+            OpenOptions::new().write(true).create(true).mode(0o644).open(path)
+        };
+        let file = match file {
+            Ok(f) => f,
+            Err(e) => {
+                if e.kind() != io::ErrorKind::NotFound {
+                    warn(fname);
+                    error = true;
+                }
+                continue;
+            }
+        };
+        let raw_fd = file.as_raw_fd();
+        let mut tsize: i64;
+        if opts.do_refer {
+            let rname = opts.rname.as_ref().unwrap();
+            match fs::metadata(rname) {
+                Ok(meta) => tsize = meta.len() as i64,
+                Err(_) => {
+                    warn(rname);
+                    error = true;
+                    continue;
+                }
+            }
+        } else if opts.do_relative {
+            match file.metadata() {
+                Ok(meta) => {
+                    let cur_size = meta.len() as i64;
+                    if opts.sz > 0 && cur_size > i64::MAX - opts.sz {
+                        warn(fname);
+                        error = true;
+                        continue;
+                    }
+                    tsize = cur_size + opts.sz;
+                }
+                Err(_) => {
+                    warn(fname);
+                    error = true;
+                    continue;
+                }
+            }
+        } else if opts.do_round {
+            let sz = if opts.sz < 0 { -opts.sz } else { opts.sz };
+            match file.metadata() {
+                Ok(meta) => {
+                    let cur_size = meta.len() as i64;
+                    if cur_size % sz != 0 {
+                        let mut round = cur_size / sz;
+                        if opts.sz < 0 {
+                            if round != sz {
+                                round -= 1;
+                            }
+                        } else {
+                            round += 1;
+                        }
+                        tsize = if round < 0 { 0 } else { round * sz };
+                    } else {
+                        tsize = cur_size;
+                    }
+                }
+                Err(_) => {
+                    warn(fname);
+                    error = true;
+                    continue;
+                }
+            }
+        } else {
+            tsize = opts.sz;
+        }
+        if tsize < 0 {
+            tsize = 0;
+        }
+        if opts.do_dealloc {
+            let sr = SpacectlRange {
+                r_offset: opts.off,
+                r_len: opts.len,
+            };
+            let mut result = sr;
+            let r = unsafe {
+                fspacectl(raw_fd, SPACECTL_DEALLOC, &sr, 0, &mut result)
+            };
+            if r == -1 {
+                warn(fname);
+                error = true;
+            }
+        } else {
+            let result = unsafe { libc::ftruncate(raw_fd, tsize) };
+            if result == -1 {
+                warn(fname);
+                error = true;
+            }
+        }
+        fd = Some(file);
+    }
+    if error {
+        process::exit(EXIT_FAILURE);
+    }
+    process::exit(EXIT_SUCCESS);
+}
+>>>
