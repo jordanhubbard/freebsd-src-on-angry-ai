@@ -184,8 +184,8 @@
     "last_attempt": "2026-05-24T21:00:04.532730"
   },
   "contrib/llvm-project/llvm/lib/Target/Xtensa/TargetInfo": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T21:40:05.924950"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T21:58:34.172825"
   },
   "contrib/llvm-project/llvm/lib/Telemetry": {
     "attempts": 3,
@@ -236,8 +236,8 @@
     "last_attempt": "2026-05-23T13:51:49.358239"
   },
   "lib/libutil": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T10:00:12.751053"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T21:58:00.601906"
   },
   "lib/libwrap": {
     "attempts": 3,
@@ -544,8 +544,8 @@
     "last_attempt": "2026-05-24T18:18:34.302035"
   },
   "usr.bin/msgs": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T19:46:27.275643"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T21:50:43.044942"
   },
   "usr.bin/mt": {
     "attempts": 1,

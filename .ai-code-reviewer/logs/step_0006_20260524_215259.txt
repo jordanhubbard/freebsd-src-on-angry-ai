@@ -1,0 +1,14 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Lanai/TargetInfo
+
+--- RESPONSE ---
+
+
+The LLVM target backend directories are not FreeBSD userland code. Let me try a real FreeBSD userland command from the queue.
+
+ACTION: SET_SCOPE bin/chflags

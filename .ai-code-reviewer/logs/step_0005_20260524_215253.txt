@@ -1,0 +1,41 @@
+=== STEP 5 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/Xtensa/TargetInfo/XtensaTargetInfo.h:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/Xtensa/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/Xtensa/TargetInfo/XtensaTargetInfo.h
+
+```
+//===-- XtensaTargetInfo.h - Xtensa Target Implementation -*- C++ -------*-===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIB_TARGET_XTENSA_TARGETINFO_XTENSATARGETINFO_H
+#define LLVM_LIB_TARGET_XTENSA_TARGETINFO_XTENSATARGETINFO_H
+
+namespace llvm {
+
+class Target;
+
+Target &getTheXtensaTarget();
+
+} // end namespace llvm
+
+#endif // LLVM_LIB_TARGET_XTENSA_TARGETINFO_XTENSATARGETINFO_H
+
+```
+
+--- RESPONSE ---
+
+
+This unit is LLVM target backend infrastructure code - it's part of the LLVM compiler project, not FreeBSD userland. It has no standalone Makefile, uses deep LLVM internal APIs, and is not a FreeBSD userland command or library. Per the constraint "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite", I should skip this.
+
+Let me try the next unit from the queue, but `bin/cat/tests` is a test directory. Let me look for the actual `bin/cat` command instead.
+
+ACTION: SET_SCOPE bin/cat
