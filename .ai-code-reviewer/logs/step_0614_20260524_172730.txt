@@ -1,0 +1,362 @@
+=== STEP 614 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/column/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/column/src/main.rs
+CONTENT:
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 1989, 1993, 1994
+// The Regents of the University of California.  All rights reserved.
+
+use std::env;
+use std::ffi::OsStr;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Write, stdout};
+use std::process;
+
+const TAB: usize = 8;
+
+fn main() {
+    let args: Vec<OsStr> = env::args_os().map(|s| s.as_ref()).collect();
+    let mut termwidth: usize = 80;
+    let mut tblcols: Option<usize> = None;
+    let mut tflag = false;
+    let mut xflag = false;
+    let mut separator: Vec<char> = vec!['\t', ' '];
+
+    if let Ok(w) = get_terminal_width() {
+        termwidth = w;
+    } else if let Ok(cols) = env::var("COLUMNS") {
+        if let Ok(v) = cols.parse::<usize>() {
+            termwidth = v;
+        }
+    }
+
+    let mut args_iter = args.iter().skip(1);
+    let mut files: Vec<&OsStr> = Vec::new();
+
+    while let Some(arg) = args_iter.next() {
+        let arg_str = arg.to_string_lossy();
+        if arg_str.starts_with('-') && arg_str.len() > 1 {
+            let mut chars = arg_str[1..].chars();
+            let mut current_char = chars.next();
+            while let Some(ch) = current_char {
+                match ch {
+                    'c' => {
+                        let val = if let Some(next) = args_iter.next() {
+                            next.to_string_lossy().as_ref()
+                        } else {
+                            eprintln!("column: option requires an argument -- 'c'");
+                            process::exit(1);
+                        };
+                        termwidth = parse_usize(val, "terminal width");
+                    }
+                    'l' => {
+                        let val = if let Some(next) = args_iter.next() {
+                            next.to_string_lossy().as_ref()
+                        } else {
+                            eprintln!("column: option requires an argument -- 'l'");
+                            process::exit(1);
+                        };
+                        tblcols = Some(parse_usize(val, "max width"));
+                    }
+                    's' => {
+                        let val = if let Some(next) = args_iter.next() {
+                            next.to_string_lossy()
+                        } else {
+                            eprintln!("column: option requires an argument -- 's'");
+                            process::exit(1);
+                        };
+                        separator = val.chars().collect();
+                    }
+                    't' => tflag = true,
+                    'x' => xflag = true,
+                    _ => {
+                        eprintln!("column: illegal option -- {:?}", ch);
+                        usage();
+                    }
+                }
+                current_char = chars.next();
+            }
+        } else {
+            files.push(arg);
+        }
+    }
+
+    if tblcols.is_some() && !tflag {
+        eprintln!("column: the -l flag cannot be used without the -t flag");
+        process::exit(1);
+    }
+
+    let mut entries: Vec<String> = Vec::new();
+    let mut eval = 0;
+
+    if files.is_empty() {
+        if let Err(e) = input(&mut io::stdin().lock(), &mut entries) {
+            eprintln!("column: {}", e);
+            eval = 1;
+        }
+    } else {
+        for f in &files {
+            match File::open(f) {
+                Ok(file) => {
+                    if let Err(e) = input(&mut BufReader::new(file), &mut entries) {
+                        eprintln!("column: {}: {}", f.to_string_lossy(), e);
+                        eval = 1;
+                    }
+                }
+                Err(e) => {
+                    eprintln!("column: {}: {}", f.to_string_lossy(), e);
+                    eval = 1;
+                }
+            }
+        }
+    }
+
+    if entries.is_empty() {
+        process::exit(eval);
+    }
+
+    let maxlength = entries.iter().map(|s| str_width(s)).max().unwrap_or(0);
+    let maxlength = roundup(maxlength + 1, TAB);
+
+    if tflag {
+        maketbl(&entries, tblcols.unwrap_or(0), &separator);
+    } else if maxlength >= termwidth {
+        print_entries(&entries);
+    } else if xflag {
+        c_columnate(&entries, termwidth, maxlength);
+    } else {
+        r_columnate(&entries, termwidth, maxlength);
+    }
+
+    process::exit(eval);
+}
+
+fn get_terminal_width() -> Option<usize> {
+    #[cfg(unix)]
+    {
+        use libc::{ioctl, TIOCGWINSZ, winsize};
+        let mut win: winsize = unsafe { std::mem::zeroed() };
+        if unsafe { ioctl(1, TIOCGWINSZ, &mut win) } == 0 && win.ws_col > 0 {
+            return Some(win.ws_col as usize);
+        }
+    }
+    None
+}
+
+fn parse_usize(s: &str, name: &str) -> usize {
+    match s.parse::<usize>() {
+        Ok(v) => v,
+        Err(_) => {
+            eprintln!("column: invalid {} \"{}\": value out of range", name, s);
+            process::exit(1);
+        }
+    }
+}
+
+fn input<R: io::Read>(reader: &mut BufReader<R>, entries: &mut Vec<String>) -> io::Result<()> {
+    let mut line = String::new();
+    loop {
+        line.clear();
+        match reader.read_line(&mut line) {
+            Ok(0) => break,
+            Ok(_) => {}
+            Err(e) => return Err(e),
+        }
+        if line.ends_with('\n') {
+            line.pop();
+            if line.ends_with('\r') {
+                line.pop();
+            }
+        }
+        if line.trim().is_empty() {
+            continue;
+        }
+        entries.push(line);
+    }
+    Ok(())
+}
+
+fn str_width(s: &str) -> usize {
+    s.chars().map(|c| char_width(c)).sum()
+}
+
+fn char_width(c: char) -> usize {
+    if c.is_ascii() {
+        if c.is_control() { 0 } else { 1 }
+    } else if c.is_control() {
+        0
+    } else {
+        let cp = c as u32;
+        if is_wide_char(cp) { 2 } else { 1 }
+    }
+}
+
+fn is_wide_char(cp: u32) -> bool {
+    (0x1100..=0x115F).contains(&cp) ||
+    (0x2329..=0x232A).contains(&cp) ||
+    (0x2E80..=0xA4CF).contains(&cp) && cp != 0x303F ||
+    (0xAC00..=0xD7A3).contains(&cp) ||
+    (0xF900..=0xFAFF).contains(&cp) ||
+    (0xFE10..=0xFE19).contains(&cp) ||
+    (0xFE30..=0xFE6F).contains(&cp) ||
+    (0xFF00..=0xFF60).contains(&cp) ||
+    (0xFFE0..=0xFFE6).contains(&cp) ||
+    (0x20000..=0x2FFFD).contains(&cp) ||
+    (0x30000..=0x3FFFD).contains(&cp)
+}
+
+fn roundup(v: usize, align: usize) -> usize {
+    (v + align - 1) / align * align
+}
+
+fn c_columnate(entries: &[String], termwidth: usize, maxlength: usize) {
+    let numcols = termwidth / maxlength;
+    let out = io::stdout();
+    let mut w = io::BufWriter::new(out.lock());
+
+    let mut chcnt = 0;
+    let mut col = 0;
+    let mut endcol = maxlength;
+    let mut first = true;
+
+    for entry in entries {
+        if !first {
+            if col >= numcols {
+                writeln!(w).unwrap();
+                chcnt = 0;
+                col = 0;
+                endcol = maxlength;
+            } else {
+                while roundup(chcnt + 1, TAB) <= endcol {
+                    write!(w, "\t").unwrap();
+                    chcnt = roundup(chcnt + 1, TAB);
+                }
+                endcol += maxlength;
+            }
+        }
+        first = false;
+        write!(w, "{}", entry).unwrap();
+        chcnt += str_width(entry);
+        col += 1;
+    }
+    if !first {
+        writeln!(w).unwrap();
+    }
+}
+
+fn r_columnate(entries: &[String], termwidth: usize, maxlength: usize) {
+    let numcols = termwidth / maxlength;
+    let numrows = if numcols > 0 {
+        (entries.len() + numcols - 1) / numcols
+    } else {
+        entries.len()
+    };
+
+    let out = io::stdout();
+    let mut w = io::BufWriter::new(out.lock());
+
+    for row in 0..numrows {
+        let mut endcol = maxlength;
+        let mut chcnt = 0;
+        let mut col = 0;
+        let mut base = row;
+
+        while col < numcols && base < entries.len() {
+            write!(w, "{}", entries[base]).unwrap();
+            chcnt += str_width(&entries[base]);
+            let next_base = base + numrows;
+            if next_base >= entries.len() {
+                break;
+            }
+            while roundup(chcnt + 1, TAB) <= endcol {
+                write!(w, "\t").unwrap();
+                chcnt = roundup(chcnt + 1, TAB);
+            }
+            endcol += maxlength;
+            base = next_base;
+            col += 1;
+        }
+        writeln!(w).unwrap();
+    }
+}
+
+fn print_entries(entries: &[String]) {
+    for entry in entries {
+        println!("{}", entry);
+    }
+}
+
+fn maketbl(entries: &[String], tblcols: usize, separator: &[char]) {
+    if entries.is_empty() {
+        return;
+    }
+
+    let mut parsed: Vec<Vec<String>> = Vec::new();
+    let mut lens: Vec<usize> = Vec::new();
+
+    for entry in entries {
+        let mut cols: Vec<String> = Vec::new();
+        let mut chars = entry.chars().peekable();
+        let mut current = String::new();
+
+        while let Some(&ch) = chars.peek() {
+            if separator.contains(&ch) {
+                chars.next();
+                if !current.is_empty() {
+                    cols.push(current.clone());
+                    current.clear();
+                }
+            } else {
+                current.push(chars.next().unwrap());
+            }
+        }
+        if !current.is_empty() {
+            cols.push(current);
+        }
+
+        if tblcols > 0 && cols.len() > tblcols {
+            let excess: String = cols[tblcols..].join("");
+            cols.truncate(tblcols);
+            if let Some(last) = cols.last_mut() {
+                last.push_str(&excess);
+            }
+        }
+
+        for (i, col) in cols.iter().enumerate() {
+            let w = str_width(col);
+            while i >= lens.len() {
+                lens.push(0);
+            }
+            if w > lens[i] {
+                lens[i] = w;
+            }
+        }
+
+        parsed.push(cols);
+    }
+
+    for row in &parsed {
+        for (i, col) in row.iter().enumerate() {
+            print!("{}", col);
+            if i < row.len() - 1 {
+                let pad = lens[i] - str_width(col) + 2;
+                for _ in 0..pad {
+                    print!(" ");
+                }
+            }
+        }
+        println!();
+    }
+}
+
+fn usage() {
+    eprintln!("usage: column [-tx] [-c columns] [-l tblcols] [-s sep] [file ...]");
+    process::exit(1);
+}

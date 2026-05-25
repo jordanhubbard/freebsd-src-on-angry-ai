@@ -1,0 +1,13 @@
+=== STEP 657 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1
+Scope: contrib/llvm-project/llvm/lib/Target/VE/TargetInfo
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The build system is treating `.info` directives as errors. Let me try building the unit directly.
+
+ACTION: BUILD

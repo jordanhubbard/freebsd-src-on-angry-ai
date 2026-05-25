@@ -1,0 +1,20 @@
+=== STEP 170 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/colrm/Makefile:
+PROGRESS:
+📄 File: usr.bin/colrm/Makefile
+
+```
+PROG=	colrm
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+Good, `usr.bin/colrm` is a manageable unit. Let me create the Rust replacement:
+
+ACTION: SET_SCOPE usr.bin/colrm

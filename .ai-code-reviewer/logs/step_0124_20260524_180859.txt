@@ -1,0 +1,14 @@
+=== STEP 124 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory contrib/llvm-project/clang/lib/Analysis/plugins/CheckerOptionHandling skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/llvm-project/llvm/lib/Telemetry
+
+--- RESPONSE ---
+
+
+The `contrib/llvm-project/clang/lib/Analysis/plugins/CheckerOptionHandling` directory was auto-skipped after 3 failed attempts. This is a contrib/llvm-project directory which is outside the scope of FreeBSD userland translation. Let me look for a better unit from the pending queue.
+
+ACTION: SET_SCOPE bin/cat/tests

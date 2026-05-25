@@ -1,0 +1,31 @@
+=== STEP 823 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ypwhich/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/ypwhich
+   Files: 0/3
+📄 File: usr.bin/ypwhich/Makefile
+
+```
+YPSERV=${SRCTOP}/usr.sbin/ypserv/common
+.PATH: ${YPSERV}
+
+PACKAGE=	yp
+PROG=	ypwhich
+SRCS=	yplib_host.c ypwhich.c
+
+CFLAGS+=	-I${YPSERV} -I.
+
+WARNS?=	2
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+Let me try a simpler unit from bin/.
+
+ACTION: SET_SCOPE bin/cat

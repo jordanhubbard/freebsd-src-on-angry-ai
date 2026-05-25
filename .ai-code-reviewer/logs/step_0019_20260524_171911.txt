@@ -1,0 +1,11 @@
+=== STEP 19 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'tap_file'
+
+--- RESPONSE ---
+
+
+I'm missing lines 217-506. Let me try to read the man page and then figure out the missing middle section.
+
+ACTION: READ_FILE usr.bin/tcopy/tcopy.1

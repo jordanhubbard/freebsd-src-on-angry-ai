@@ -1,0 +1,210 @@
+=== STEP 51 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/rust/src/main.rs
+   Chunks: 2/2
+✏️  Edits: 2 files modified
+
+```
+=== CHUNK 2/2: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust/src/main.rs === [line_chunk: chunk_2]
+=== Lines 251-436 (186 lines) ===
+
+    fn write_blk(&self, src: &[u8]) {
+        let len = src.len() as u32;
+        let hdr = len.to_le_bytes();
+        let nwrite = unsafe { libc::write(self.fd, hdr.as_ptr() as *const c_void, 4) };
+        if nwrite != 4 {
+            eprintln!(
+                "tcopy: write error, file {}, record {}",
+                unsafe { FILEN }, unsafe { RECORD }
+            );
+            process::exit(5);
+        }
+        let nwrite = unsafe { libc::write(self.fd, src.as_ptr() as *const c_void, src.len()) };
+        if nwrite < 0 || (nwrite as usize) != src.len() {
+            if nwrite == -1 {
+                let err = io::Error::last_os_error();
+                eprintln!(
+                    "tcopy: write error, file {}, record {}: {}",
+                    unsafe { FILEN }, unsafe { RECORD }, err
+                );
+            } else {
+                eprintln!(
+                    "tcopy: write error, file {}, record {}",
+                    unsafe { FILEN }, unsafe { RECORD }
+                );
+                eprintln!(
+                    "tcopy: write ({}) != read ({})",
+                    nwrite,
+                    src.len()
+                );
+            }
+            eprintln!("tcopy: copy aborted");
+            process::exit(5);
+        }
+    }
+
+    fn file_mark(&self) {
+        let mark = 0xffu32.to_le_bytes();
+        let nwrite = unsafe { libc::write(self.fd, mark.as_ptr() as *const c_void, 4) };
+        if nwrite != 4 {
+            eprintln!(
+                "tcopy: write error, file {}, record {}",
+                unsafe { FILEN }, unsafe { RECORD }
+            );
+            process::exit(5);
+        }
+    }
+
+    fn rewind(&self) {
+        if unsafe { libc::lseek(self.fd, 0, libc::SEEK_SET) } < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!("tcopy: tape op (rewind): {}", err);
+            process::exit(6);
+        }
+    }
+}
+
+enum Tape {
+    Dev(TapeDev),
+    File(TapFile),
+}
+
+impl Tape {
+    fn read_blk(&mut self, dst: &mut [u8]) -> ssize_t {
+        match self {
+            Tape::Dev(d) => d.read_blk(dst),
+            Tape::File(f) => f.read_blk(dst),
+        }
+    }
+
+    fn verify_blk(&mut self, dst: &mut [u8], expected: usize) -> ssize_t {
+        match self {
+            Tape::Dev(d) => d.verify_blk(dst, expected),
+            Tape::File(f) => f.verify_blk(dst, expected),
+        }
+    }
+
+    fn write_blk(&self, src: &[u8]) {
+        match self {
+            Tape::Dev(d) => d.write_blk(src),
+            Tape::File(f) => f.write_blk(src),
+        }
+    }
+
+    fn file_mark(&self) {
+        match self {
+            Tape::Dev(d) => d.file_mark(),
+            Tape::File(f) => f.file_mark(),
+        }
+    }
+
+    fn rewind(&self) {
+        match self {
+            Tape::Dev(d) => d.rewind(),
+            Tape::File(f) => f.rewind(),
+        }
+    }
+
+    fn set_direction(&mut self, dir: Direction) {
+        match self {
+            Tape::Dev(d) => d.direction = dir,
+            Tape::File(f) => f.direction = dir,
+        }
+    }
+}
+
+fn open_arg(name: &str, mode: u32, rawfile: bool) -> Tape {
+    let c_name = CString::new(name).unwrap();
+
+    if mode & libc::O_ACCMODE() == libc::O_RDONLY {
+        let fd = unsafe { libc::open(c_name.as_ptr(), libc::O_RDONLY) };
+        if fd < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!("tcopy: {}: {}", name, err);
+            process::exit(1);
+        }
+        let mut st: libc::stat = unsafe { std::mem::zeroed() };
+        if unsafe { libc::fstat(fd, &mut st) } < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!("tcopy: fstat: {}", err);
+            process::exit(1);
+        }
+        if (st.st_mode as libc::c_uint & libc::S_IFMT as libc::c_uint)
+            == libc::S_IFCHR as libc::c_uint
+        {
+            let mut dev = TapeDev::new(fd, name, false);
+            let mut buf = vec![0u8; unsafe { MAXBLK as usize }];
+            let _ = dev.read_blk(&mut buf);
+            Tape::Dev(dev)
+        } else if rawfile {
+            let mut dev = TapeDev::new(fd, name, false);
+            let mut buf = vec![0u8; unsafe { MAXBLK as usize }];
+            let _ = dev.read_blk(&mut buf);
+            Tape::Dev(dev)
+        } else {
+            Tape::File(TapFile::new(fd, name, false))
+        }
+    } else {
+        let flags = if mode & libc::O_ACCMODE() == libc::O_WRONLY {
+            libc::O_WRONLY | libc::O_CREAT | libc::O_TRUNC
+        } else {
+            libc::O_RDWR | libc::O_CREAT
+        };
+        let fd = unsafe { libc::open(c_name.as_ptr(), flags, 0o666 as libc::mode_t) };
+        if fd < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!("tcopy: {}: {}", name, err);
+            process::exit(1);
+        }
+        let mut st: libc::stat = unsafe { std::mem::zeroed() };
+        if unsafe { libc::fstat(fd, &mut st) } < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!("tcopy: fstat: {}", err);
+            process::exit(1);
+        }
+        if (st.st_mode as libc::c_uint & libc::S_IFMT as libc::c_uint)
+            == libc::S_IFCHR as libc::c_uint
+        {
+            Tape::Dev(TapeDev::new(fd, name, true))
+        } else {
+            Tape::File(TapFile::new(fd, name, true))
+        }
+    }
+}
+
+fn report_total() {
+    let dur = unsafe { T_END.duration_since(T_START).as_secs_f64() };
+    let tot = unsafe { TSIZE + FSIZE };
+    let msg = unsafe { MSG };
+    if msg.is_null() {
+        return;
+    }
+    unsafe {
+        libc::fprintf(
+            msg,
+            b"total length: %ju bytes\0".as_ptr() as *const _,
+            tot as libc::uintmax_t,
+        );
+        libc::fprintf(
+            msg,
+            b" time: %.0f s\0".as_ptr() as *const _,
+            dur,
+        );
+        let tot_kb = tot / 1024;
+        let rate = (tot_kb as f64) / dur;
+        libc::fprintf(
+            msg,
+```
+
+--- RESPONSE ---
+
+
+I need to see the original C source to understand the complete implementation before writing the full Rust replacement.
+
+ACTION: READ_FILE usr.bin/tcopy/tcopy.c

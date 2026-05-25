@@ -1,0 +1,15 @@
+=== STEP 110 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*Makefile.inc1*':
+```
+./release/Makefile.inc1
+./Makefile.inc1
+```
+
+--- RESPONSE ---
+
+
+Let me check how the build system works for this unit:
+
+ACTION: READ_FILE Makefile.inc1

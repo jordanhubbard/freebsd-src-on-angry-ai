@@ -1,0 +1,31 @@
+=== STEP 32 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/tcopy.cc
+   Chunks: 9/13
+
+```
+=== CHUNK 9/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/tcopy.cc === [function: usage]
+=== Lines 580-588 (9 lines) ===
+
+static void
+usage(void)
+{
+	fprintf(stderr,
+            "usage: tcopy [-crvx] [-l logfile] [-s maxblk] [src [dest]]\n"
+        );
+	exit(1);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

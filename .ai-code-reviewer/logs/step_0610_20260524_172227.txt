@@ -1,0 +1,20 @@
+=== STEP 610 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/column/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "column"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "column"
+path = "src/main.rs"
+<<<

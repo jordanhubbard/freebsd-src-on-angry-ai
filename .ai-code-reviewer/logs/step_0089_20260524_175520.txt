@@ -1,0 +1,607 @@
+=== STEP 89 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/rust/src/main.rs
+✏️  Edits: 2 files modified
+
+```
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ * Copyright (c) 2025 Poul-Henning Kamp, <phk@FreeBSD.org>
+ * Copyright (c) 1985, 1987, 1993 The Regents of the University of California.
+ */
+
+use std::ffi::CString;
+use std::os::fd::RawFd;
+use std::process;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::time::Instant;
+
+type ssize_t = i64;
+type c_int = i32;
+type c_void = std::ffi::c_void;
+type daddr_t = i64;
+type mode_t = u32;
+type uintmax_t = u64;
+
+const NOCOUNT: ssize_t = -2;
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Operation { READ, VERIFY, COPY, COPYVERIFY }
+
+extern "C" {
+    fn read(fd: RawFd, buf: *mut c_void, count: usize) -> ssize_t;
+    fn write(fd: RawFd, buf: *const c_void, count: usize) -> ssize_t;
+    fn open(path: *const i8, oflag: c_int, ...) -> RawFd;
+    fn fstat(fd: RawFd, buf: *mut stat) -> c_int;
+    fn ioctl(fd: RawFd, request: c_ulong, ...) -> c_int;
+    fn lseek(fd: RawFd, offset: off_t, whence: c_int) -> off_t;
+    fn signal(signum: c_int, handler: Option<unsafe extern "C" fn(c_int)>) -> Option<unsafe extern "C" fn(c_int)>;
+    fn fprintf(stream: *mut FILE, format: *const i8, ...) -> c_int;
+    fn fflush(stream: *mut FILE) -> c_int;
+    fn fopen(filename: *const i8, mode: *const i8) -> *mut FILE;
+    fn setbuf(stream: *mut FILE, buf: *mut i8);
+    fn sysctlbyname(name: *const i8, oldp: *mut c_void, oldlenp: *mut usize, newp: *const c_void, newlen: usize) -> c_int;
+    fn setbuf(stream: *mut FILE, buf: *mut i8);
+}
+
+type c_ulong = u64;
+type off_t = i64;
+
+#[repr(C)]
+struct stat {
+    st_mode: mode_t,
+    _pad: [u8; 128],
+}
+
+#[repr(C)]
+struct mtop {
+    mt_op: c_int,
+    mt_count: daddr_t,
+    mt_stat: c_int,
+}
+
+struct FILE;
+
+static mut FILEN: c_int = 0;
+static mut RECORD: u64 = 0;
+static mut FSIZE: usize = 0;
+static mut TSIZE: usize = 0;
+static mut LASTNREAD: ssize_t = 0;
+static mut LASTREC: u64 = 0;
+static mut MAXBLK: i64 = 0;
+static mut MSG: *mut FILE = std::ptr::null_mut();
+static mut T_START: Instant = Instant::now();
+static mut T_END: Instant = Instant::now();
+static WANT_INFO: AtomicBool = AtomicBool::new(false);
+
+const O_RDONLY: c_int = 0;
+const O_WRONLY: c_int = 1;
+const O_RDWR: c_int = 2;
+const O_CREAT: c_int = 0o100;
+const O_TRUNC: c_int = 0o1000;
+const O_ACCMODE: c_int = 3;
+const S_IFMT: mode_t = 0o170000;
+const S_IFCHR: mode_t = 0o020000;
+const SEEK_SET: c_int = 0;
+const SIGINT: c_int = 2;
+const SIGINFO: c_int = 29;
+const SIG_IGN: Option<unsafe extern "C" fn(c_int)> = Some(sig_ign);
+const MTWEOF: c_int = 2;
+const MTREW: c_int = 1;
+const MTIOCTOP: c_ulong = 0xc020_6f00;
+const EX_DATAERR: i32 = 65;
+const EX_CANTCREAT: i32 = 73;
+const EX_USAGE: i32 = 64;
+const EINVAL: c_int = 22;
+const EFBIG: c_int = 27;
+
+unsafe extern "C" fn sig_ign(_: c_int) {}
+
+struct TapeDev {
+    fd: RawFd,
+    name: String,
+    max_read_size: usize,
+}
+
+impl TapeDev {
+    fn new(fd: RawFd, name: &str) -> Self {
+        TapeDev { fd, name: name.to_string(), max_read_size: 0 }
+    }
+
+    fn read_blk(&mut self, dst: &mut [u8]) -> ssize_t {
+        let len = dst.len();
+        let mut retval: ssize_t = -1;
+        if self.max_read_size == 0 {
+            let mut mrs = len;
+            while mrs > 0 {
+                retval = unsafe { libc_read(self.fd, dst.as_mut_ptr() as *mut c_void, mrs) };
+                if retval >= 0 { break; }
+                let err = std::io::Error::last_os_error().raw_os_error().unwrap_or(-1);
+                if err != EINVAL && err != EFBIG { break; }
+                if mrs < 512 { eprintln!("tcopy: Cannot find a sane max blocksize"); process::exit(1); }
+                let i = (mrs - 1).next_power_of_two().trailing_zeros() as usize;
+                mrs = 1usize << (i - 1);
+            }
+            self.max_read_size = mrs;
+        } else {
+            retval = unsafe { libc_read(self.fd, dst.as_mut_ptr() as *mut c_void, self.max_read_size) };
+        }
+        if retval < 0 {
+            let err = std::io::Error::last_os_error();
+            eprintln!("tcopy: read error, {}, file {}, record {}: {}", self.name, unsafe { FILEN }, unsafe { RECORD }, err);
+            process::exit(1);
+        }
+        retval
+    }
+
+    fn write_blk(&self, src: &[u8]) {
+        assert!(!src.is_empty());
+        let nwrite = unsafe { libc_write(self.fd, src.as_ptr() as *const c_void, src.len()) };
+        if nwrite < 0 || (nwrite as usize) != src.len() {
+            if nwrite == -1 {
+                eprintln!("tcopy: write error, file {}, record {}: {}", unsafe { FILEN }, unsafe { RECORD }, std::io::Error::last_os_error());
+            } else {
+                eprintln!("tcopy: write error, file {}, record {}", unsafe { FILEN }, unsafe { RECORD });
+                eprintln!("tcopy: write ({}) != read ({})", nwrite, src.len());
+            }
+            eprintln!("tcopy: copy aborted");
+            process::exit(5);
+        }
+    }
+
+    fn file_mark(&self) {
+        let mut op: mtop = unsafe { std::mem::zeroed() };
+        op.mt_op = MTWEOF;
+        op.mt_count = 1;
+        if unsafe { libc_ioctl(self.fd, MTIOCTOP, &mut op as *mut mtop as *mut c_void) } < 0 {
+            eprintln!("tcopy: tape op (write file mark): {}", std::io::Error::last_os_error());
+            process::exit(6);
+        }
+    }
+
+    fn rewind(&self) {
+        let mut op: mtop = unsafe { std::mem::zeroed() };
+        op.mt_op = MTREW;
+        op.mt_count = 1;
+        if unsafe { libc_ioctl(self.fd, MTIOCTOP, &mut op as *mut mtop as *mut c_void) } < 0 {
+            eprintln!("tcopy: tape op (rewind): {}", std::io::Error::last_os_error());
+            process::exit(6);
+        }
+    }
+}
+
+struct TapFile {
+    fd: RawFd,
+    name: String,
+}
+
+impl TapFile {
+    fn new(fd: RawFd, name: &str) -> Self {
+        TapFile { fd, name: name.to_string() }
+    }
+
+    fn full_read(fd: RawFd, dst: &mut [u8]) -> ssize_t {
+        let len = dst.len();
+        let mut retval = unsafe { libc_read(fd, dst.as_mut_ptr() as *mut c_void, len) };
+        if retval <= 0 || (retval as usize) == len { return retval; }
+        let mut ptr = dst.as_mut_ptr().add(retval as usize);
+        let mut left = len - (retval as usize);
+        while left > 0 {
+            retval = unsafe { libc_read(fd, ptr as *mut c_void, left) };
+            if retval <= 0 { return retval; }
+            left -= retval as usize;
+            ptr = ptr.add(retval as usize);
+        }
+        len as ssize_t
+    }
+
+    fn read_blk(&mut self, dst: &mut [u8]) -> ssize_t {
+        let len = dst.len();
+        let mut lbuf = [0u8; 4];
+        let nread = Self::full_read(self.fd, &mut lbuf);
+        if nread == 0 { return 0; }
+        if (nread as usize) != 4 { eprintln!("tcopy: Corrupt tap-file, read hdr1={}", nread); process::exit(EX_DATAERR); }
+        let u = u32::from_le_bytes(lbuf);
+        if u == 0 || (u >> 24) == 0xff { return 0; }
+        if (u as usize) > len { eprintln!("tcopy: tapfile blocksize too big, 0x{:08x}", u); process::exit(17); }
+        let nread = Self::full_read(self.fd, &mut dst[..u as usize]);
+        if (nread as usize) != u as usize { eprintln!("tcopy: Corrupt tap-file, read hdr2={}, expected={}", nread, u); process::exit(EX_DATAERR); }
+        u as ssize_t
+    }
+
+    fn write_blk(&self, src: &[u8]) {
+        let hdr = (src.len() as u32).to_le_bytes();
+        let nwrite = unsafe { libc_write(self.fd, hdr.as_ptr() as *const c_void, 4) };
+        if nwrite != 4 { eprintln!("tcopy: write error, file {}, record {}", unsafe { FILEN }, unsafe { RECORD }); process::exit(5); }
+        let nwrite = unsafe { libc_write(self.fd, src.as_ptr() as *const c_void, src.len()) };
+        if nwrite < 0 || (nwrite as usize) != src.len() {
+            if nwrite == -1 { eprintln!("tcopy: write error, file {}, record {}: {}", unsafe { FILEN }, unsafe { RECORD }, std::io::Error::last_os_error()); }
+            else { eprintln!("tcopy: write error, file {}, record {}", unsafe { FILEN }, unsafe { RECORD }); eprintln!("tcopy: write ({}) != read ({})", nwrite, src.len()); }
+            eprintln!("tcopy: copy aborted");
+            process::exit(5);
+        }
+    }
+
+    fn file_mark(&self) {
+        let mark = 0xffu32.to_le_bytes();
+        let nwrite = unsafe { libc_write(self.fd, mark.as_ptr() as *const c_void, 4) };
+        if nwrite != 4 { eprintln!("tcopy: write error, file {}, record {}", unsafe { FILEN }, unsafe { RECORD }); process::exit(5); }
+    }
+
+    fn rewind(&self) {
+        if unsafe { libc_lseek(self.fd, 0, SEEK_SET) } < 0 {
+            eprintln!("tcopy: tape op (rewind): {}", std::io::Error::last_os_error());
+            process::exit(6);
+        }
+    }
+}
+```
+
+--- RESPONSE ---
+
+
+The file was truncated again. Let me append the remaining code:
+
+ACTION: EDIT_FILE usr.bin/tcopy/rust/src/main.rs
+OLD:
+<<<
+    fn rewind(&self) {
+        if unsafe { libc_lseek(self.fd, 0, SEEK_SET) } < 0 {
+            eprintln!("tcopy: tape op (rewind): {}", std::io::Error::last_os_error());
+            process::exit(6);
+        }
+    }
+}
+>>>
+NEW:
+<<<
+    fn rewind(&self) {
+        if unsafe { libc_lseek(self.fd, 0, SEEK_SET) } < 0 {
+            eprintln!("tcopy: tape op (rewind): {}", std::io::Error::last_os_error());
+            process::exit(6);
+        }
+    }
+}
+
+enum Tape { Dev(TapeDev), File(TapFile) }
+
+impl Tape {
+    fn read_blk(&mut self, dst: &mut [u8]) -> ssize_t { match self { Tape::Dev(d) => d.read_blk(dst), Tape::File(f) => f.read_blk(dst) } }
+    fn verify_blk(&mut self, dst: &mut [u8], _expected: usize) -> ssize_t { self.read_blk(dst) }
+    fn write_blk(&self, src: &[u8]) { match self { Tape::Dev(d) => d.write_blk(src), Tape::File(f) => f.write_blk(src) } }
+    fn file_mark(&self) { match self { Tape::Dev(d) => d.file_mark(), Tape::File(f) => f.file_mark() } }
+    fn rewind(&self) { match self { Tape::Dev(d) => d.rewind(), Tape::File(f) => f.rewind() } }
+}
+
+fn open_arg(name: &str, mode: c_int, rawfile: bool) -> Tape {
+    let c_name = CString::new(name).unwrap();
+    if mode & O_ACCMODE == O_RDONLY {
+        let fd = unsafe { libc_open(c_name.as_ptr(), O_RDONLY) };
+        if fd < 0 { eprintln!("tcopy: {}: {}", name, std::io::Error::last_os_error()); process::exit(1); }
+        let mut st: stat = unsafe { std::mem::zeroed() };
+        if unsafe { libc_fstat(fd, &mut st) } < 0 { eprintln!("tcopy: fstat: {}", std::io::Error::last_os_error()); process::exit(1); }
+        if (st.st_mode & S_IFMT) == S_IFCHR {
+            let mut dev = TapeDev::new(fd, name);
+            let mut buf = vec![0u8; unsafe { MAXBLK as usize }];
+            let _ = dev.read_blk(&mut buf);
+            Tape::Dev(dev)
+        } else if rawfile {
+            let mut dev = TapeDev::new(fd, name);
+            let mut buf = vec![0u8; unsafe { MAXBLK as usize }];
+            let _ = dev.read_blk(&mut buf);
+            Tape::Dev(dev)
+        } else {
+            Tape::File(TapFile::new(fd, name))
+        }
+    } else {
+        let flags = if mode & O_ACCMODE == O_WRONLY { O_WRONLY | O_CREAT | O_TRUNC } else { O_RDWR | O_CREAT };
+        let fd = unsafe { libc_open(c_name.as_ptr(), flags, 0o666 as mode_t) };
+        if fd < 0 { eprintln!("tcopy: {}: {}", name, std::io::Error::last_os_error()); process::exit(1); }
+        let mut st: stat = unsafe { std::mem::zeroed() };
+        if unsafe { libc_fstat(fd, &mut st) } < 0 { eprintln!("tcopy: fstat: {}", std::io::Error::last_os_error()); process::exit(1); }
+        if (st.st_mode & S_IFMT) == S_IFCHR {
+            Tape::Dev(TapeDev::new(fd, name))
+        } else {
+            Tape::File(TapFile::new(fd, name))
+        }
+    }
+}
+
+fn expand_number(s: &str, result: &mut i64) -> bool {
+    let s = s.trim();
+    let (digits, suffix) = match s.find(|c: char| !c.is_ascii_digit()) {
+        Some(i) => (&s[..i], &s[i..]),
+        None => (s, ""),
+    };
+    if digits.is_empty() { return true; }
+    let mut val: i64 = match digits.parse() { Ok(v) => v, Err(_) => return true };
+    match suffix {
+        "" => {}
+        "b" | "B" => { val *= 512; }
+        "k" | "K" => { val *= 1024; }
+        "m" | "M" => { val *= 1024 * 1024; }
+        "g" | "G" => { val *= 1024 * 1024 * 1024; }
+        _ => return true,
+    }
+    *result = val;
+    false
+}
+
+fn report_total() {
+    let dur = unsafe { T_END.duration_since(T_START).as_secs_f64() };
+    let tot = unsafe { TSIZE + FSIZE };
+    let msg = unsafe { MSG };
+    if msg.is_null() { return; }
+    unsafe {
+        libc_fprintf(msg, b"total length: %ju bytes\0".as_ptr() as *const i8, tot as uintmax_t);
+        libc_fprintf(msg, b" time: %.0f s\0".as_ptr() as *const i8, dur);
+        let tot_kb = tot / 1024;
+        let rate = if dur > 0.0 { (tot_kb as f64) / dur } else { 0.0 };
+        libc_fprintf(msg, b" rate: %.1f kB/s\0".as_ptr() as *const i8, rate);
+        libc_fprintf(msg, b"\n\0".as_ptr() as *const i8);
+    }
+}
+
+fn progress(nread: ssize_t) {
+    let msg = unsafe { MSG };
+    if nread != unsafe { LASTNREAD } {
+        if unsafe { LASTNREAD } != 0 && unsafe { LASTNREAD } != NOCOUNT {
+            if unsafe { LASTREC } == 0 && nread == 0 {
+                unsafe { libc_fprintf(msg, b"%ju records\n\0".as_ptr() as *const i8, RECORD as uintmax_t); }
+            } else if unsafe { RECORD - LASTREC } > 1 {
+                unsafe { libc_fprintf(msg, b"records %ju to %ju\n\0".as_ptr() as *const i8, LASTREC as uintmax_t, RECORD as uintmax_t); }
+            } else {
+                unsafe { libc_fprintf(msg, b"record %ju\n\0".as_ptr() as *const i8, LASTREC as uintmax_t); }
+            }
+        }
+        if nread != 0 {
+            unsafe { libc_fprintf(msg, b"file %d: block size %zd: \0".as_ptr() as *const i8, FILEN, nread); }
+        }
+        unsafe { libc_fflush(msg); }
+        unsafe { LASTREC = RECORD; }
+    }
+    if nread > 0 {
+        unsafe { FSIZE += nread as usize; RECORD += 1; }
+    } else {
+        if unsafe { LASTNREAD } <= 0 && unsafe { LASTNREAD } != NOCOUNT {
+            unsafe { libc_fprintf(msg, b"eot\n\0".as_ptr() as *const i8); }
+            return;
+        }
+        unsafe {
+            libc_fprintf(msg, b"file %d: eof after %ju records: %ju bytes\n\0".as_ptr() as *const i8, FILEN, RECORD as uintmax_t, FSIZE as uintmax_t);
+            FILEN += 1;
+            TSIZE += FSIZE;
+            FSIZE = 0;
+            RECORD = 0;
+            LASTREC = 0;
+            LASTNREAD = 0;
+        }
+    }
+    unsafe { LASTNREAD = nread; }
+}
+
+unsafe extern "C" fn sigintr(_sig: c_int) {
+    unsafe {
+        libc_fprintf(MSG, b"tcopy: interrupted\n\0".as_ptr() as *const i8);
+        report_total();
+    }
+    process::exit(1);
+}
+
+unsafe extern "C" fn siginfo(_sig: c_int) {
+    WANT_INFO.store(true, Ordering::SeqCst);
+}
+
+fn check_want_info() {
+    if WANT_INFO.swap(false, Ordering::SeqCst) {
+        unsafe {
+            libc_fprintf(MSG, b"file %d: record %ju: %ju bytes\n\0".as_ptr() as *const i8, FILEN, RECORD as uintmax_t, FSIZE as uintmax_t);
+            libc_fflush(MSG);
+        }
+    }
+}
+
+fn read_or_copy(input: &mut Tape, output: &Option<Tape>) {
+    let mut needeof = false;
+    let mut prev_read = NOCOUNT;
+    let mut buff = vec![0u8; unsafe { MAXBLK as usize }];
+    unsafe { T_START = Instant::now(); }
+    loop {
+        check_want_info();
+        let nread = input.read_blk(&mut buff);
+        progress(nread);
+        if nread > 0 {
+            if let Some(ref out) = output {
+                if needeof { out.file_mark(); needeof = false; }
+                out.write_blk(&buff[..nread as usize]);
+            }
+        } else {
+            if prev_read <= 0 && prev_read != NOCOUNT { break; }
+            needeof = true;
+        }
+        prev_read = nread;
+    }
+    unsafe { T_END = Instant::now(); }
+    report_total();
+}
+
+fn verify(input: &mut Tape, output: &Option<Tape>) {
+    let output = output.as_ref().expect("verify requires output");
+    let mut buf1 = vec![0u8; unsafe { MAXBLK as usize }];
+    let mut buf2 = vec![0u8; unsafe { MAXBLK as usize }];
+    let mut eot = 0;
+    unsafe { FILEN = 0; TSIZE = 0; T_START = Instant::now(); }
+    loop {
+        check_want_info();
+        let nread1 = input.read_blk(&mut buf1);
+        let nread2 = output.verify_blk(&mut buf2, nread1 as usize);
+        progress(nread1);
+        if nread1 != nread2 {
+            eprintln!("tcopy: tapes have different block sizes; {} != {}.", nread1, nread2);
+            process::exit(1);
+        }
+        if nread1 > 0 {
+            let slice1 = &buf1[..nread1 as usize];
+            let slice2 = &buf2[..nread1 as usize];
+            if slice1 != slice2 {
+                eprintln!("tcopy: tapes have different data.");
+                process::exit(1);
+            }
+            eot = 0;
+        } else if eot > 0 {
+            break;
+        }
+        eot += 1;
+    }
+    unsafe { T_END = Instant::now(); }
+    report_total();
+    let msg = unsafe { MSG };
+    unsafe { libc_fprintf(msg, b"tcopy: tapes are identical.\n\0".as_ptr() as *const i8); }
+    unsafe { libc_fprintf(msg, b"rewinding\n\0".as_ptr() as *const i8); }
+    input.rewind();
+    output.rewind();
+}
+
+fn usage() {
+    eprintln!("usage: tcopy [-crvx] [-l logfile] [-s maxblk] [src [dest]]");
+    process::exit(1);
+}
+
+fn main() {
+    let mut op = Operation::READ;
+    let mut rawfile = false;
+    let mut maxphys: u64 = 0;
+    let mut l_maxphys = std::mem::size_of::<u64>() as usize;
+
+    unsafe {
+        libc_setbuf(libc_stderr(), std::ptr::null_mut());
+        if libc_sysctlbyname(b"kern.maxphys\0".as_ptr() as *const i8, &mut maxphys as *mut _ as *mut c_void, &mut l_maxphys, std::ptr::null(), 0) == 0 {
+            MAXBLK = maxphys as i64;
+        }
+        MSG = libc_stdout();
+    }
+
+    let args: Vec<String> = std::env::args().collect();
+    let mut optind = 1;
+    let mut logfile: Option<String> = None;
+
+    while optind < args.len() {
+        let arg = &args[optind];
+        if !arg.starts_with('-') { break; }
+        optind += 1;
+        for ch in arg[1..].chars() {
+            match ch {
+                'c' => op = Operation::COPYVERIFY,
+                'l' => {
+                    if optind >= args.len() { usage(); }
+                    logfile = Some(args[optind].clone());
+                    optind += 1;
+                }
+                'r' => rawfile = true,
+                's' => {
+                    if optind >= args.len() { usage(); }
+                    let s = &args[optind];
+                    let mut tmp: i64 = 0;
+                    if expand_number(s, &mut tmp) || tmp <= 0 {
+                        eprintln!("tcopy: illegal block size");
+                        usage();
+                    }
+                    unsafe { MAXBLK = tmp; }
+                    optind += 1;
+                }
+                'v' => op = Operation::VERIFY,
+                'x' => unsafe { MSG = libc_stderr(); },
+                _ => usage(),
+            }
+        }
+    }
+
+    let remaining: Vec<&String> = args[optind..].iter().collect();
+    let argc = remaining.len();
+
+    match argc {
+        0 => { if op != Operation::READ { usage(); } }
+        1 => { if op != Operation::READ { usage(); } }
+        2 => {
+            if op == Operation::READ { op = Operation::COPY; }
+            if remaining[1] == "-" {
+                if op == Operation::COPYVERIFY { eprintln!("tcopy: Cannot copy+verify with '-' destination"); process::exit(EX_USAGE); }
+                unsafe { MSG = libc_stderr(); }
+            }
+        }
+        _ => usage(),
+    }
+
+    if let Some(ref lf) = logfile {
+        let c_lf = CString::new(lf.as_str()).unwrap();
+        let f = unsafe { libc_fopen(c_lf.as_ptr(), b"w\0".as_ptr() as *const i8) };
+        if f.is_null() { eprintln!("tcopy: Cannot open {}", lf); process::exit(EX_CANTCREAT); }
+        unsafe { libc_setbuf(f, std::ptr::null_mut()); MSG = f; }
+    }
+
+    let mut output: Option<Tape> = None;
+    if argc == 2 {
+        if op == Operation::VERIFY {
+            output = Some(open_arg(remaining[1], O_RDWR, 0));
+        } else {
+            output = Some(open_arg(remaining[1], O_WRONLY, rawfile));
+        }
+    }
+
+    let mut input = if argc == 0 {
+        open_arg("/dev/rsa0", O_RDONLY, false)
+    } else {
+        open_arg(remaining[0], O_RDONLY, false)
+    };
+
+    unsafe {
+        if libc_signal(SIGINT, SIG_IGN) != SIG_IGN {
+            libc_signal(SIGINT, Some(sigintr));
+        }
+        if libc_signal(SIGINFO, SIG_IGN) != SIG_IGN {
+            libc_signal(SIGINFO, Some(siginfo));
+        }
+    }
+
+    if op != Operation::VERIFY {
+        if op == Operation::COPYVERIFY {
+            let msg = unsafe { MSG };
+            unsafe { libc_fprintf(msg, b"rewinding\n\0".as_ptr() as *const i8); }
+            input.rewind();
+            if let Some(ref out) = output { out.rewind(); }
+        }
+        read_or_copy(&mut input, &output);
+        if op == Operation::COPY || op == Operation::COPYVERIFY {
+            if let Some(ref out) = output {
+                out.file_mark();
+                out.file_mark();
+            }
+        }
+    }
+
+    if op == Operation::VERIFY || op == Operation::COPYVERIFY {
+        if op == Operation::COPYVERIFY {
+            let msg = unsafe { MSG };
+            unsafe { libc_fprintf(msg, b"rewinding\n\0".as_ptr() as *const i8); }
+            input.rewind();
+            if let Some(ref out) = output { out.rewind(); }
+        }
+        verify(&mut input, &output);
+    }
+
+    let msg = unsafe { MSG };
+    if !msg.is_null() && msg != libc_stderr() && msg != libc_stdout() {
+        unsafe {
+            libc_fprintf(libc_stderr(), b"total length: %ju bytes\0".as_ptr() as *const i8, (TSIZE + FSIZE) as uintmax_t);
+        }
+    }
+}
+
+// Helper wrappers for variadic FFI
+extern "C" {
+    fn libc_read(fd: RawFd, buf: *mut c_void

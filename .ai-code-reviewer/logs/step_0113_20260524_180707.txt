@@ -1,0 +1,27 @@
+=== STEP 113 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*build.sh*':
+```
+./sys/dev/random/build.sh
+./sys/contrib/libsodium/dist-build/android-build.sh
+./sys/contrib/openzfs/.github/workflows/scripts/qemu-prepare-for-build.sh
+./sys/contrib/openzfs/.github/workflows/scripts/qemu-4-build.sh
+./crypto/libecc/scripts/crossbuild.sh
+./crypto/openssl/test/recipes/95-test_external_cf_quiche_data/quiche-build.sh
+./tools/tools/nanobsd/rescue/build.sh
+./tools/tools/nanobsd/pcengines/build.sh
+./tools/tools/sysbuild/sysbuild.sh
+./contrib/pjdfstest/travis/build.sh
+./contrib/libcbor/oss-fuzz/build.sh
+./contrib/kyua/admin/travis-build.sh
+./contrib/kyua/doc/manbuild.sh
+./contrib/lutok/admin/travis-build.sh
+```
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails. Let me check if there's a specific build configuration:
+
+ACTION: FIND_FILE Makefile

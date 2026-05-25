@@ -1,0 +1,42 @@
+=== STEP 252 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/random/Makefile
+OLD:
+<<<
+PROG=	random
+MAN=	random.6
+SRCS=	random.c randomize_fd.c
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	random
+MAN=	random.6
+SRCS=	random.c randomize_fd.c
+
+RUSTPROG=	random
+RUSTCARGO=	${.CURDIR}
+RUSTTARGETDIR=	${.OBJDIR}/rust-target
+
+all: ${RUSTPROG}.rust
+
+${RUSTPROG}.rust:
+	@echo "[RUST] Building ${RUSTPROG}"
+	@mkdir -p ${RUSTTARGETDIR}
+	@cargo build --manifest-path ${RUSTCARGO}/Cargo.toml \
+	    --target-dir ${RUSTTARGETDIR} 2>&1
+	@cp ${RUSTTARGETDIR}/debug/${RUSTPROG} ${.OBJDIR}/${RUSTPROG}.rust
+
+clean:
+	@rm -f ${.OBJDIR}/${RUSTPROG}.rust
+	@rm -rf ${RUSTTARGETDIR}
+
+.include <bsd.prog.mk>
+>>>

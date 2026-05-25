@@ -1,0 +1,13 @@
+=== STEP 737 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/strings has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Xtensa/TargetInfo
+
+--- RESPONSE ---
+
+
+I need to find a FreeBSD userland unit with C source files. Let me search for available units.
+
+ACTION: FIND_FILE usr.bin/*/*.c

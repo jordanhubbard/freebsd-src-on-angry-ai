@@ -175,6 +175,14 @@
     "attempts": 1,
     "last_attempt": "2026-05-24T16:52:19.787193"
   },
+  "contrib/llvm-project/llvm/lib/Target/VE/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T17:42:27.691483"
+  },
+  "contrib/llvm-project/llvm/lib/Target/XCore/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:10:34.103423"
+  },
   "contrib/llvm-project/llvm/lib/Telemetry": {
     "attempts": 3,
     "last_attempt": "2026-05-24T15:46:59.847502"
@@ -234,6 +242,14 @@
   "lib/liby": {
     "attempts": 1,
     "last_attempt": "2026-05-24T00:31:26.880417"
+  },
+  "libexec/rtld-elf": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:28:42.412907"
+  },
+  "sbin/dmesg": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:21:53.865225"
   },
   "sbin/md5": {
     "attempts": 1,
@@ -475,6 +491,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-24T11:38:44.513710"
   },
+  "usr.bin/ncal": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:23:41.187843"
+  },
   "usr.bin/nice": {
     "attempts": 3,
     "last_attempt": "2026-05-22T03:45:59.312336"
@@ -496,8 +516,8 @@
     "last_attempt": "2026-05-22T20:52:37.876664"
   },
   "usr.bin/pr": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T07:16:06.719728"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T18:24:00.755866"
   },
   "usr.bin/primes": {
     "attempts": 2,
@@ -584,16 +604,16 @@
     "last_attempt": "2026-05-24T06:37:04.734047"
   },
   "usr.bin/wall": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T00:45:11.579423"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T18:24:13.223319"
   },
   "usr.bin/wc": {
     "attempts": 2,
     "last_attempt": "2026-05-22T21:02:33.048865"
   },
   "usr.bin/whereis": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T13:16:10.359664"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T18:24:22.297903"
   },
   "usr.bin/who": {
     "attempts": 2,
@@ -607,6 +627,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-24T12:51:15.364348"
   },
+  "usr.bin/xinstall": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:24:54.600749"
+  },
   "usr.bin/yes": {
     "attempts": 3,
     "last_attempt": "2026-05-21T22:50:38.271361"
@@ -616,7 +640,7 @@
     "last_attempt": "2026-05-22T04:31:46.528600"
   },
   "usr.bin/ypwhich": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T00:44:08.809386"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T18:30:48.763926"
   }
 }

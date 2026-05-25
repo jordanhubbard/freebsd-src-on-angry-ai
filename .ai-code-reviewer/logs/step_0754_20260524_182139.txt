@@ -1,0 +1,10 @@
+=== STEP 754 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Directory not found: sbin/mergemaster
+TIP: Use LIST_DIR to see available directories
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE sbin

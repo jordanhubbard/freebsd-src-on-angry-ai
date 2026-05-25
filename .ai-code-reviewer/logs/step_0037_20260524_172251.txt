@@ -1,0 +1,11 @@
+=== STEP 37 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'tap_file::write_blk'
+
+--- RESPONSE ---
+
+
+I'm missing lines 217-506 of tcopy.cc. Let me search for the missing content.
+
+ACTION: GREP open_arg

@@ -1,0 +1,280 @@
+=== STEP 47 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust/src/main.rs:
+
+📋 CHUNKED FILE REWRITE MODE
+   File: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust/src/main.rs
+   Total chunks: 2
+   Strategy: Function-by-function rewrite
+   Use ACTION: NEXT_CHUNK to continue
+   Use ACTION: SKIP_FILE to move to next file
+
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/rust/src/main.rs
+   Chunks: 1/2
+✏️  Edits: 2 files modified
+
+```
+=== CHUNK 1/2: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust/src/main.rs === [line_chunk: chunk_1]
+=== Lines 1-250 (250 lines) ===
+
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2025 Poul-Henning Kamp, <phk@FreeBSD.org>
+ * Copyright (c) 1985, 1987, 1993
+ *	The Regents of the University of California.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+use std::ffi::CString;
+use std::fs::{File, OpenOptions};
+use std::io::{self, Read, Write};
+use std::os::fd::{AsRawFd, FromRawFd, RawFd};
+use std::os::unix::io::AsRawFd as _;
+use std::process;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::time::Instant;
+
+use libc::{c_int, c_void, daddr_t, size_t, ssize_t};
+
+const MAXREC: usize = 1024 * 1024;
+const NOCOUNT: ssize_t = -2;
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Operation {
+    READ,
+    VERIFY,
+    COPY,
+    COPYVERIFY,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Direction {
+    SRC,
+    DST,
+}
+
+// Global state for tape devices
+static mut FILEN: c_int = 0;
+static mut RECORD: u64 = 0;
+static mut FSIZE: usize = 0;
+static mut TSIZE: usize = 0;
+static mut LASTNREAD: ssize_t = 0;
+static mut LASTREC: u64 = 0;
+static mut MAXBLK: i64 = 0;
+static mut MSG: *mut libc::FILE = std::ptr::null_mut();
+static mut T_START: Instant = Instant::now();
+static mut T_END: Instant = Instant::now();
+static WANT_INFO: AtomicBool = AtomicBool::new(false);
+
+struct TapeDev {
+    fd: RawFd,
+    name: String,
+    direction: Direction,
+    max_read_size: usize,
+}
+
+impl TapeDev {
+    fn new(fd: RawFd, name: &str, destination: bool) -> Self {
+        TapeDev {
+            fd,
+            name: name.to_string(),
+            direction: if destination { Direction::DST } else { Direction::SRC },
+            max_read_size: 0,
+        }
+    }
+
+    fn read_blk(&mut self, dst: &mut [u8]) -> ssize_t {
+        let len = dst.len();
+        let mut retval: ssize_t = -1;
+
+        if self.max_read_size == 0 {
+            let mut max_read_size = len;
+            while max_read_size > 0 {
+                let buf = &mut dst[..max_read_size];
+                match unsafe { libc::read(self.fd, buf.as_mut_ptr() as *mut c_void, max_read_size) } {
+                    r if r >= 0 => {
+                        retval = r;
+                        break;
+                    }
+                    _ if unsafe { io::Error::last_os_error().raw_os_error() } != Some(libc::EINVAL)
+                        && unsafe { io::Error::last_os_error().raw_os_error() } != Some(libc::EFBIG) =>
+                    {
+                        retval = unsafe { libc::read(self.fd, buf.as_mut_ptr() as *mut c_void, max_read_size) };
+                        break;
+                    }
+                    _ => {}
+                }
+                if max_read_size < 512 {
+                    eprintln!("tcopy: Cannot find a sane max blocksize");
+                    process::exit(1);
+                }
+                // Reduce to next lower power of two
+                let i = (max_read_size - 1).next_power_of_two().trailing_zeros() as usize;
+                max_read_size = 1usize << (i - 1);
+            }
+            self.max_read_size = max_read_size;
+        } else {
+            let buf = &mut dst[..self.max_read_size];
+            retval = unsafe { libc::read(self.fd, buf.as_mut_ptr() as *mut c_void, self.max_read_size) };
+        }
+
+        if retval < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!(
+                "tcopy: read error, {}, file {}, record {}: {}",
+                self.name, unsafe { FILEN }, unsafe { RECORD }, err
+            );
+            process::exit(1);
+        }
+        retval
+    }
+
+    fn verify_blk(&mut self, dst: &mut [u8], _expected: usize) -> ssize_t {
+        self.read_blk(dst)
+    }
+
+    fn write_blk(&self, src: &[u8]) {
+        assert!(!src.is_empty());
+        let nwrite = unsafe { libc::write(self.fd, src.as_ptr() as *const c_void, src.len()) };
+        if nwrite < 0 || (nwrite as usize) != src.len() {
+            if nwrite == -1 {
+                let err = io::Error::last_os_error();
+                eprintln!(
+                    "tcopy: write error, file {}, record {}: {}",
+                    unsafe { FILEN }, unsafe { RECORD }, err
+                );
+            } else {
+                eprintln!(
+                    "tcopy: write error, file {}, record {}",
+                    unsafe { FILEN }, unsafe { RECORD }
+                );
+                eprintln!(
+                    "tcopy: write ({}) != read ({})",
+                    nwrite,
+                    src.len()
+                );
+            }
+            eprintln!("tcopy: copy aborted");
+            process::exit(5);
+        }
+    }
+
+    fn file_mark(&self) {
+        let mut op: libc::mtop = unsafe { std::mem::zeroed() };
+        op.mt_op = libc::MTWEOF as c_int;
+        op.mt_count = 1 as daddr_t;
+        if unsafe { libc::ioctl(self.fd, libc::MTIOCTOP, &mut op) } < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!("tcopy: tape op (write file mark): {}", err);
+            process::exit(6);
+        }
+    }
+
+    fn rewind(&self) {
+        let mut op: libc::mtop = unsafe { std::mem::zeroed() };
+        op.mt_op = libc::MTREW as c_int;
+        op.mt_count = 1 as daddr_t;
+        if unsafe { libc::ioctl(self.fd, libc::MTIOCTOP, &mut op) } < 0 {
+            let err = io::Error::last_os_error();
+            eprintln!("tcopy: tape op (rewind): {}", err);
+            process::exit(6);
+        }
+    }
+}
+
+struct TapFile {
+    fd: RawFd,
+    name: String,
+    direction: Direction,
+    max_read_size: usize,
+}
+
+impl TapFile {
+    fn new(fd: RawFd, name: &str, destination: bool) -> Self {
+        TapFile {
+            fd,
+            name: name.to_string(),
+            direction: if destination { Direction::DST } else { Direction::SRC },
+            max_read_size: 0,
+        }
+    }
+
+    fn full_read(fd: RawFd, dst: &mut [u8]) -> ssize_t {
+        let len = dst.len();
+        let mut retval = unsafe { libc::read(fd, dst.as_mut_ptr() as *mut c_void, len) };
+        if retval <= 0 || (retval as usize) == len {
+            return retval;
+        }
+
+        let mut ptr = dst.as_mut_ptr().add(retval as usize);
+        let mut left = len - (retval as usize);
+        while left > 0 {
+            retval = unsafe { libc::read(fd, ptr as *mut c_void, left) };
+            if retval <= 0 {
+                return retval;
+            }
+            left -= retval as usize;
+            ptr = ptr.add(retval as usize);
+        }
+        len as ssize_t
+    }
+
+    fn read_blk(&mut self, dst: &mut [u8]) -> ssize_t {
+        let len = dst.len();
+        let mut lbuf = [0u8; 4];
+
+        let nread = Self::full_read(self.fd, &mut lbuf);
+        if nread == 0 {
+            return 0;
+        }
+
+        if (nread as usize) != 4 {
+            eprintln!(
+                "tcopy: Corrupt tap-file, read hdr1={}",
+                nread
+            );
+            process::exit(libc::EX_DATAERR);
+        }
+
+        let u = u32::from_le_bytes(lbuf);
+        if u == 0 || (u >> 24) == 0xff {
+            return 0;
+        }
+
+        if (u as usize) > len {
+            eprintln!("tcopy: tapfile blocksize too big, 0x{:08x}", u);
+            process::exit(17);
+        }
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

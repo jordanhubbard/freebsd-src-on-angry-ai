@@ -1,0 +1,27 @@
+=== STEP 142 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/printenv:
+```
+.depend
+.depend.printenv.pieo
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+cargo-target
+printenv
+printenv.1
+printenv.1.gz
+printenv.c
+printenv.debug
+printenv.full
+printenv.pieo
+src
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/printenv
