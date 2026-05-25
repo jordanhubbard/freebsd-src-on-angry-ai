@@ -1,0 +1,47 @@
+=== STEP 101 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1
+Scope: tools/regression/tls/ttls2
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE tools/regression/tls/ttls2/Makefile
+OLD:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+# Rust replacement build
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+# Rust replacement build
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>

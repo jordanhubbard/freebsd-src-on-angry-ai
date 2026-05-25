@@ -1,0 +1,66 @@
+=== STEP 138 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5:
+```
+.github
+NOTICE
+README
+src
+```
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE crypto/krb5/src/lib/krb5/error_tables/src/lib.rs
+CONTENT:
+<<<
+//! Rust replacement for krb5 error table initialization.
+//!
+//! Provides C ABI compatible `krb5_init_ets` and `krb5_free_ets` functions
+//! that mirror the original C implementation behavior.
+
+use std::sync::Once;
+
+static INIT: Once = Once::new();
+
+/// Opaque context type - matches the C krb5_context pointer.
+/// In the Rust replacement, we accept it but don't use it,
+/// matching the original C implementation's behavior.
+#[repr(C)]
+pub struct krb5_context {
+    _data: [u8; 0],
+}
+
+extern "C" {
+    fn initialize_krb5_error_table();
+    fn initialize_k5e1_error_table();
+    fn initialize_kv5m_error_table();
+    fn initialize_kdb5_error_table();
+    fn initialize_asn1_error_table();
+    fn initialize_k524_error_table();
+}
+
+/// Initialize krb5 library error tables.
+/// Thread-safe wrapper that ensures initialization happens exactly once.
+/// This is the Rust replacement for the C krb5_init_ets function.
+#[no_mangle]
+pub unsafe extern "C" fn krb5_init_ets(context: *mut krb5_context) {
+    INIT.call_once(|| {
+        initialize_krb5_error_table();
+        initialize_k5e1_error_table();
+        initialize_kv5m_error_table();
+        initialize_kdb5_error_table();
+        initialize_asn1_error_table();
+        initialize_k524_error_table();
+    });
+}
+
+/// Free krb5 library error tables.
+/// The original C implementation is a no-op, so this Rust replacement
+/// also does nothing.
+#[no_mangle]
+pub unsafe extern "C" fn krb5_free_ets(context: *mut krb5_context) {
+    // No-op, matching original C behavior
+}
+>>>

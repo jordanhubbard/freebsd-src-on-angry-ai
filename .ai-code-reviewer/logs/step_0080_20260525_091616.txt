@@ -1,0 +1,96 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls2/src/main.rs:
+PROGRESS:
+📁 Directory: tools/regression/tls/ttls2
+   Files: 0/2
+📄 File: tools/regression/tls/ttls2/src/main.rs
+✏️  Edits: 4 files modified
+
+```
+use std::thread;
+use std::time::Duration;
+
+thread_local! {
+    static I: std::cell::Cell<i32> = const { std::cell::Cell::new(0) };
+}
+
+fn foo1() {
+    let handle = thread::current();
+    let addr = &I as *const std::cell::Cell<i32> as *const ();
+    println!("thread {:?}, &i = {:p}", handle.id(), addr);
+    for val in 0..10 {
+        I.set(val);
+        println!("thread {:?}, i = {}", handle.id(), val);
+        thread::sleep(Duration::from_secs(1));
+    }
+}
+
+fn foo2() {
+    let handle = thread::current();
+    let addr = &I as *const std::cell::Cell<i32> as *const ();
+    println!("thread {:?}, &i = {:p}", handle.id(), addr);
+    for val in (1..11).rev() {
+        I.set(val);
+        println!("thread {:?}, i = {}", handle.id(), val);
+        thread::sleep(Duration::from_secs(1));
+    }
+}
+
+fn main() {
+    let t1 = thread::spawn(foo1);
+    let t2 = thread::spawn(foo2);
+    t1.join().unwrap();
+    t2.join().unwrap();
+}
+```
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails. Let me check if there's a build log or adjust the Makefile approach.
+
+ACTION: EDIT_FILE tools/regression/tls/ttls2/Makefile
+OLD:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+# Rust replacement build
+RUST_PROG=	ttls2
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.rust:
+	@${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+${RUST_PROG}.rust: .rust
+	@cp ${CARGO_TARGET_DIR}/debug/${RUST_PROG} ${.OBJDIR}/${RUST_PROG}.rust
+
+all: ${RUST_PROG}.rust
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+# Rust replacement build
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.rust:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+all: .rust
+
+.include <bsd.prog.mk>
+>>>

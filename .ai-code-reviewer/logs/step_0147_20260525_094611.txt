@@ -1,0 +1,14 @@
+=== STEP 147 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libthr/arch/amd64/include:
+```
+pthread_md.h
+```
+
+--- RESPONSE ---
+
+
+This unit is a subdirectory of `lib/libthr` with no standalone Makefile. It's not a coherent rewrite unit on its own. Let me find a better unit.
+
+ACTION: SET_SCOPE usr.bin

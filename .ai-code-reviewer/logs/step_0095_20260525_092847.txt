@@ -1,0 +1,58 @@
+=== STEP 95 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: tools/regression/tls/ttls2
+Pending source/build changes: 4 files modified
+Files: tools/regression/tls/ttls2/Cargo.toml, tools/regression/tls/ttls2/src/main.rs, tools/regression/tls/ttls2/Makefile, Makefile.inc1
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in tools/regression/tls/ttls2
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+Let me revert the Makefile.inc1 changes and try a cleaner approach.
+
+ACTION: EDIT_FILE Makefile.inc1
+OLD:
+<<<
+.if (make(buildworld) || make(buildkernel) || make(kernel-toolchain) || \
+    make(toolchain) || make(_cross-tools))
+.if ${USING_SYSTEM_COMPILER} == "yes"
+# SYSTEM_COMPILER: Determined that CC=${CC} matches the source tree.  Not bootstrapping a cross-compiler.
+.elif ${MK_CLANG_BOOTSTRAP} == "yes"
+# SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+.endif
+.if ${USING_SYSTEM_LINKER} == "yes"
+# SYSTEM_LINKER: Determined that LD=${LD} matches the source tree.  Not bootstrapping a cross-linker.
+.elif ${MK_LLD_BOOTSTRAP} == "yes"
+# SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker.
+.endif
+.endif
+>>>
+NEW:
+<<<
+.if (make(buildworld) || make(buildkernel) || make(kernel-toolchain) || \
+    make(toolchain) || make(_cross-tools))
+.if ${USING_SYSTEM_COMPILER} == "yes"
+@echo "SYSTEM_COMPILER: Determined that CC=${CC} matches the source tree.  Not bootstrapping a cross-compiler."
+.elif ${MK_CLANG_BOOTSTRAP} == "yes"
+@echo "SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler."
+.endif
+.if ${USING_SYSTEM_LINKER} == "yes"
+@echo "SYSTEM_LINKER: Determined that LD=${LD} matches the source tree.  Not bootstrapping a cross-linker."
+.elif ${MK_LLD_BOOTSTRAP} == "yes"
+@echo "SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker."
+.endif
+.endif
+>>>

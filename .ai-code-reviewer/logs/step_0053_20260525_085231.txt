@@ -1,0 +1,29 @@
+=== STEP 53 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib:
+```
+Makefile.in
+apputils
+comerr32.def
+crypto
+deps
+gssapi
+gssapi32.def
+kadm5
+kdb
+krad
+krb5
+krb5.rc
+krb5_32.def
+rpc
+win_glue.c
+xpprof32.def
+```
+
+--- RESPONSE ---
+
+
+This unit is part of the Kerberos library build system using autoconf/automake (`Makefile.in`), not a FreeBSD Makefile. It has no FreeBSD build integration and is a subdirectory of a larger library. This is not suitable for the configured objective.
+
+ACTION: SET_SCOPE bin/cat/tests

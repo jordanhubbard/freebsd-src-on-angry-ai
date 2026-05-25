@@ -179,6 +179,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T06:36:22.530138"
   },
+  "contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T09:02:51.212219"
+  },
   "contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-24T18:18:24.143744"
@@ -248,8 +252,8 @@
     "last_attempt": "2026-05-24T05:19:11.095157"
   },
   "crypto/krb5/src/lib/krb5/error_tables": {
-    "attempts": 1,
-    "last_attempt": "2026-05-25T05:32:19.468081"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T08:51:29.759908"
   },
   "crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd": {
     "attempts": 3,
@@ -272,8 +276,8 @@
     "last_attempt": "2026-05-23T13:51:49.358239"
   },
   "lib/libthr/arch/amd64/amd64": {
-    "attempts": 1,
-    "last_attempt": "2026-05-25T05:44:44.314908"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T09:44:04.543006"
   },
   "lib/libutil": {
     "attempts": 3,
@@ -376,8 +380,12 @@
     "last_attempt": "2026-05-23T08:16:37.282405"
   },
   "tools/regression/tls/ttls2": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T08:29:17.550357"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T08:31:45.569498"
+  },
+  "tools/regression/tls/ttls4": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T10:01:18.694854"
   },
   "usr.bin/apply": {
     "attempts": 3,

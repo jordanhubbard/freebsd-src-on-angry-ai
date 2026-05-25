@@ -1,0 +1,17 @@
+=== STEP 20 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls2:
+```
+Cargo.toml
+Makefile
+src
+ttls2.c
+```
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level FreeBSD build infrastructure, not from my unit. Let me verify the Rust crate compiles standalone first, then adjust the Makefile integration.
+
+ACTION: BUILD

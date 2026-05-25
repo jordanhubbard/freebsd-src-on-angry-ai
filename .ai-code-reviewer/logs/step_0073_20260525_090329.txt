@@ -1,0 +1,14 @@
+=== STEP 73 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/chflags is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE lib/libthr/arch/amd64/amd64
+
+--- RESPONSE ---
+
+
+The `lib/libthr/arch/amd64/amd64` unit is a subdirectory of the threading library with no standalone Makefile. It's not suitable for an independent Rust rewrite. Let me find a better unit.
+
+ACTION: FIND_FILE bin/*/Makefile

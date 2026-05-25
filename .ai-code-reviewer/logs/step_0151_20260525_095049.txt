@@ -1,0 +1,9 @@
+=== STEP 151 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk/bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR share/mk

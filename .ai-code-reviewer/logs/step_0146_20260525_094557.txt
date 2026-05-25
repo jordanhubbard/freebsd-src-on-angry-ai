@@ -1,0 +1,10 @@
+=== STEP 146 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libthr/arch/amd64/include is a directory, not a file
+TIP: Use LIST_FILES to see directory contents
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR lib/libthr/arch/amd64/include

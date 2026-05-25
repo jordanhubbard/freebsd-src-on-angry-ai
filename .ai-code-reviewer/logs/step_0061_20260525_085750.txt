@@ -1,0 +1,27 @@
+=== STEP 61 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/krb5/error_tables/src/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE crypto/krb5/src/lib/krb5/error_tables/Makefile
+CONTENT:
+# Makefile for krb5 error_tables - Rust replacement
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+PROG=		krb5_error_tables
+
+all: ${CARGO_TARGET_DIR}/libkrb5_error_tables.a
+
+${CARGO_TARGET_DIR}/libkrb5_error_tables.a: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${CARGO_TARGET_DIR}

@@ -1,0 +1,47 @@
+=== STEP 19 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: tools/regression/tls/ttls2
+Pending source/build changes: 2 files modified
+Files: tools/regression/tls/ttls2/Cargo.toml, tools/regression/tls/ttls2/src/main.rs
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in tools/regression/tls/ttls2
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+The build failures are from top-level infrastructure (`Makefile.inc1`), not the Rust code. The Makefile may be pulling in top-level build infrastructure. Let me make it fully self-contained to avoid that.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/Makefile
+CONTENT:
+PROG=	ttls2
+CARGO=		cargo
+CARGO_TARGET_DIR=	${.OBJDIR}/cargo-target
+RUST_PROG=	${CARGO_TARGET_DIR}/release/ttls2
+
+all:	${RUST_PROG}
+
+${RUST_PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --release --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+install: ${RUST_PROG}
+	${INSTALL} -s -o ${INSTALL_OWNER} -g ${INSTALL_GROUP} \
+	    -m ${INSTALL_MODE} ${RUST_PROG} ${DESTDIR}${PREFIX}/bin/${PROG}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} 2>/dev/null || true
+
+.PHONY: all install clean

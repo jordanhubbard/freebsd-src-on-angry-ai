@@ -1,0 +1,26 @@
+=== STEP 128 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/krb5:
+```
+Makefile.in
+asn.1
+ccache
+deps
+error_tables
+keytab
+krb
+krb5_libinit.c
+krb5_libinit.h
+libkrb5.exports
+os
+rcache
+unicode
+```
+
+--- RESPONSE ---
+
+
+This unit is part of the Kerberos 5 library with autoconf-generated Makefiles and complex dependencies. It's not a good candidate for a small, buildable Rust rewrite. Let me skip it.
+
+ACTION: SET_SCOPE bin/cat/tests

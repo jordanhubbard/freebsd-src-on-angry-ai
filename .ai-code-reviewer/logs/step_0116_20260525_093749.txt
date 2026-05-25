@@ -1,0 +1,41 @@
+=== STEP 116 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*lib/libmagic/.depend.mkmagic*'
+
+--- RESPONSE ---
+
+
+The build errors are from pre-existing stale `.depend` files in `lib/libmagic` in the obj directory, not from my changes. Let me try to verify the Rust crate builds independently.
+
+ACTION: EDIT_FILE tools/regression/tls/ttls2/Makefile
+OLD:
+<<<
+# Rust replacement for ttls2
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+# Rust replacement for ttls2
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>

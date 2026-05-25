@@ -1,0 +1,48 @@
+=== STEP 70 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls2/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/src/main.rs
+CONTENT:
+<<<
+use std::thread;
+use std::time::Duration;
+
+thread_local! {
+    static I: std::cell::Cell<i32> = const { std::cell::Cell::new(0) };
+}
+
+fn foo1() {
+    let handle = thread::current();
+    let addr = &I as *const std::cell::Cell<i32> as *const ();
+    println!("thread {:?}, &i = {:p}", handle.id(), addr);
+    for val in 0..10 {
+        I.set(val);
+        println!("thread {:?}, i = {}", handle.id(), val);
+        thread::sleep(Duration::from_secs(1));
+    }
+}
+
+fn foo2() {
+    let handle = thread::current();
+    let addr = &I as *const std::cell::Cell<i32> as *const ();
+    println!("thread {:?}, &i = {:p}", handle.id(), addr);
+    for val in (1..11).rev() {
+        I.set(val);
+        println!("thread {:?}, i = {}", handle.id(), val);
+        thread::sleep(Duration::from_secs(1));
+    }
+}
+
+fn main() {
+    let t1 = thread::spawn(foo1);
+    let t2 = thread::spawn(foo2);
+    t1.join().unwrap();
+    t2.join().unwrap();
+}
+>>>

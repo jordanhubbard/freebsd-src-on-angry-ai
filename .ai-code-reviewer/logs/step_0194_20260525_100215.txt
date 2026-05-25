@@ -1,0 +1,51 @@
+=== STEP 194 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+I need to integrate the Rust build into the Makefile. Since there's no `bsd.rust.mk`, I'll add explicit cargo rules.
+
+ACTION: EDIT_FILE tools/regression/tls/ttls4/Makefile
+OLD:
+<<<
+PROG=	ttls4
+LIBADD=	pthread
+MAN=
+DEBUG_FLAGS= -g
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	ttls4
+LIBADD=	pthread
+MAN=
+DEBUG_FLAGS= -g
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+# Build the Rust replacement
+RUST_PROG=	${CARGO_TARGET_DIR}/debug/ttls4
+
+.if exists(${.CURDIR}/Cargo.toml)
+PROG=
+SRCS=
+LIBADD=
+
+all: ${RUST_PROG}
+
+${RUST_PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean
+.else
+.include <bsd.prog.mk>
+.endif
+>>>

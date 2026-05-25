@@ -1,0 +1,12 @@
+=== STEP 182 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE tools/regression/tls/ttls4
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE tools/regression/tls/ttls4

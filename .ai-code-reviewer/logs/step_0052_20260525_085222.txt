@@ -1,0 +1,42 @@
+=== STEP 52 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1.
+Remaining files in tools/regression/tls/ttls2:
+  (All tracked files rewritten or skipped in this directory)
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/Makefile
+CONTENT:
+```
+PROG=	ttls2
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+RUST_PROG=	${CARGO_TARGET_DIR}/release/ttls2
+
+DESTDIR?=
+PREFIX?=	/usr/local
+INSTALL?=	install
+INSTALL_OWNER?=	root
+INSTALL_GROUP?=	wheel
+INSTALL_MODE?=	555
+
+all:	${RUST_PROG}
+
+${RUST_PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --release --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+install: ${RUST_PROG}
+	${INSTALL} -s -o ${INSTALL_OWNER} -g ${INSTALL_GROUP} \
+	    -m ${INSTALL_MODE} ${RUST_PROG} ${DESTDIR}${PREFIX}/bin/${PROG}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} 2>/dev/null || true
+
+.PHONY: all install clean
+```

@@ -1,0 +1,64 @@
+=== STEP 166 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/crypto/krb5/src/lib/krb5/error_tables:
+```
+Cargo.toml
+Makefile
+Makefile.in
+asn1_err.et
+deps
+init_ets.c
+k5e1_err.et
+kdb5_err.et
+krb524_err.et
+krb5_err.et
+kv5m_err.et
+src
+```
+
+--- RESPONSE ---
+
+
+The `crypto/krb5` tree is a third-party MIT Kerberos autoconf tree, not a proper FreeBSD build unit. The build system is running the parent autoconf build, not my Makefile. Let me try a completely standalone approach.
+
+ACTION: EDIT_FILE crypto/krb5/src/lib/krb5/error_tables/Makefile
+OLD:
+<<<
+# $FreeBSD$
+# Rust replacement for krb5 error tables
+
+CARGO = cargo
+CARGO_MANIFEST = Cargo.toml
+CARGO_TARGET_DIR = target
+
+.PHONY: all clean
+
+all:
+	@echo "Building krb5_error_tables Rust crate..."
+	$(CARGO) build --manifest-path $(CARGO_MANIFEST) --target-dir $(CARGO_TARGET_DIR) --release
+	@echo "Rust build complete."
+
+clean:
+	$(CARGO) clean --manifest-path $(CARGO_MANIFEST) --target-dir $(CARGO_TARGET_DIR)
+>>>
+NEW:
+<<<
+# $FreeBSD$
+# Rust replacement for krb5 error tables
+# Standalone Makefile for the Rust crate
+
+CARGO = cargo
+CARGO_MANIFEST = Cargo.toml
+CARGO_TARGET_DIR = target
+
+.PHONY: all clean
+
+all:
+	@echo "Building krb5_error_tables Rust crate..."
+	$(CARGO) build --manifest-path $(CARGO_MANIFEST) --target-dir $(CARGO_TARGET_DIR) --release
+	@echo "Rust build complete."
+
+clean:
+	$(CARGO) clean --manifest-path $(CARGO_MANIFEST) --target-dir $(CARGO_TARGET_DIR)
+>>>

@@ -1,0 +1,43 @@
+=== STEP 77 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+No `bsd.rust.mk` exists in the tree. I need to add explicit Makefile rules to build the Rust crate as part of the FreeBSD build.
+
+ACTION: EDIT_FILE tools/regression/tls/ttls2/Makefile
+OLD:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+# Rust replacement build
+RUST_PROG=	ttls2
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.rust:
+	@${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+
+${RUST_PROG}.rust: .rust
+	@cp ${CARGO_TARGET_DIR}/debug/${RUST_PROG} ${.OBJDIR}/${RUST_PROG}.rust
+
+all: ${RUST_PROG}.rust
+
+.include <bsd.prog.mk>
+>>>
