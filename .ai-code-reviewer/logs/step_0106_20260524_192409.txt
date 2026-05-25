@@ -1,0 +1,273 @@
+=== STEP 106 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/rust/src/main.rs
+   Chunks: 2/3
+✏️  Edits: 3 files modified
+
+```
+=== CHUNK 2/3: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust/src/main.rs === [line_chunk: chunk_2]
+=== Lines 251-500 (250 lines) ===
+
+        if n != 4 { eprintln!("tcopy: write error"); process::exit(5); }
+        let n = unsafe { write(self.fd, src.as_ptr() as *const std::os::raw::c_void, src.len()) };
+        if n < 0 || (n as usize) != src.len() { eprintln!("tcopy: write error"); process::exit(5); }
+    }
+    fn file_mark(&mut self) {
+        let eof = 0xffffffffu32.to_le_bytes();
+        let n = unsafe { write(self.fd, eof.as_ptr() as *const std::os::raw::c_void, 4) };
+        if n != 4 { eprintln!("tcopy: write error"); process::exit(5); }
+    }
+    fn rewind(&mut self) {
+        let f = unsafe { std::fs::File::from_raw_fd(self.fd) };
+        let _ = f.seek(SeekFrom::Start(0));
+        let _ = f.into_raw_fd();
+    }
+}
+
+fn open_arg(name: &str, is_output: bool, rawfile: bool) -> Box<dyn TapeOps> {
+    let flags = if is_output { O_WRONLY | O_CREAT | O_TRUNC } else { O_RDONLY };
+    let c_name = CString::new(name).unwrap();
+    let fd = unsafe { open(c_name.as_ptr(), flags, 0o666) };
+    if fd < 0 { eprintln!("tcopy: {}: {}", name, io::Error::last_os_error()); process::exit(1); }
+    let mut st: stat = unsafe { std::mem::zeroed() };
+    let is_reg = unsafe { fstat(fd, &mut st) == 0 && (st.st_mode & S_IFMT) == S_IFREG };
+    if is_reg && (rawfile || is_output) { Box::new(TapFile::new(fd, name)) }
+    else if is_reg { Box::new(TapFile::new(fd, name)) }
+    else { Box::new(TapeDev::new(fd, name)) }
+}
+
+fn read_or_copy(input: &mut Box<dyn TapeOps>, output: &mut Option<Box<dyn TapeOps>>) {
+    unsafe { G_TSTART = Some(Instant::now()); }
+    let mut buf = vec![0u8; unsafe { G_MAXBLK as usize }];
+    let mut needeof = false;
+    let mut prev_read = NOCOUNT;
+    loop {
+        check_want_info();
+        let nread = input.read_blk(&mut buf);
+        progress(nread);
+        if nread > 0 {
+            if let Some(ref mut out) = output {
+                if needeof { out.file_mark(); needeof = false; }
+                out.write_blk(&buf[..nread as usize]);
+            }
+        } else {
+            if prev_read <= 0 && prev_read != NOCOUNT { break; }
+            needeof = true;
+        }
+        prev_read = nread;
+    }
+    unsafe { G_TEND = Some(Instant::now()); }
+    unsafe { report_total(G_MSG.as_mut().unwrap()); }
+}
+
+fn verify(input: &mut Box<dyn TapeOps>, output: &mut Box<dyn TapeOps>) {
+    unsafe { G_TSTART = Some(Instant::now()); G_FILN = 0; G_TSIZE = 0; }
+    let mut buf1 = vec![0u8; unsafe { G_MAXBLK as usize }];
+    let mut buf2 = vec![0u8; unsafe { G_MAXBLK as usize }];
+    let mut eot = 0;
+    loop {
+        check_want_info();
+        let nread1 = input.read_blk(&mut buf1);
+        let nread2 = output.verify_blk(&mut buf2, buf1.len());
+        progress(nread1);
+        if nread1 != nread2 {
+            eprintln!("tcopy: tapes have different block sizes; {} != {}.", nread1, nread2);
+            process::exit(1);
+        }
+        if nread1 > 0 && buf1[..nread1 as usize] != buf2[..nread1 as usize] {
+            eprintln!("tcopy: tapes have different data.");
+            process::exit(1);
+        } else if nread1 > 0 {
+            eot = 0;
+        } else if eot > 0 {
+            break;
+        }
+        eot += 1;
+    }
+    unsafe { G_TEND = Some(Instant::now()); }
+    unsafe {
+        let msg = G_MSG.as_mut().unwrap();
+        report_total(msg);
+        write!(msg, "tcopy: tapes are identical.\n").unwrap();
+        write!(msg, "rewinding\n").unwrap();
+    }
+    input.rewind();
+    output.rewind();
+}
+
+extern "C" fn siginfo_handler(_sig: i32) { WANT_INFO.store(true, Ordering::SeqCst); }
+
+extern "C" fn sigintr_handler(_sig: i32) {
+    unsafe {
+        G_TEND = Some(Instant::now());
+        if G_RECORD != 0 {
+            if G_RECORD - G_LASTREC > 1 {
+                write!(io::stderr(), "records {} to {}\n", G_LASTREC, G_RECORD).unwrap();
+            } else {
+                write!(io::stderr(), "record {}\n", G_LASTREC).unwrap();
+            }
+        }
+        write!(io::stderr(), "interrupt at file {}: record {}\n", G_FILN, G_RECORD).unwrap();
+        report_total(io::stderr());
+    }
+    process::exit(1);
+}
+
+fn main() {
+    let mut op = Operation::Read;
+    let mut logfile: Option<String> = None;
+    let mut rawfile = false;
+    let mut args: Vec<String> = Vec::new();
+
+    unsafe {
+        let stderr = io::stderr().as_raw_fd();
+        // setbuf(stderr, NULL) - disable buffering
+    }
+
+    // Get kern.maxphys
+    let mut maxphys: u64 = 0;
+    let mut len = std::mem::size_of::<u64>();
+    let c_name = CString::new("kern.maxphys").unwrap();
+    if unsafe { sysctlbyname(c_name.as_ptr(), &mut maxphys as *mut _ as *mut std::os::raw::c_void,
+        &mut len, std::ptr::null(), 0) } == 0 {
+        unsafe { G_MAXBLK = maxphys as i64; }
+    }
+    if unsafe { G_MAXBLK } == 0 {
+        unsafe { G_MAXBLK = MAXREC as i64; }
+    }
+
+    // Parse arguments
+    let argv: Vec<String> = std::env::args().collect();
+    let mut i = 1;
+    while i < argv.len() {
+        let arg = &argv[i];
+        if arg.starts_with('-') && arg.len() > 1 {
+            let mut chars = arg[1..].chars();
+            let opt = chars.next().unwrap();
+            let rest = chars.as_str();
+            match opt {
+                'c' => op = Operation::CopyVerify,
+                'r' => rawfile = true,
+                'v' => op = Operation::Verify,
+                'x' => {}
+                'l' => {
+                    i += 1;
+                    if i >= argv.len() { usage(); }
+                    logfile = Some(argv[i].clone());
+                }
+                's' => {
+                    i += 1;
+                    if i >= argv.len() { usage(); }
+                    match expand_number(&argv[i]) {
+                        Some(v) if v > 0 => { unsafe { G_MAXBLK = v; } }
+                        _ => { eprintln!("tcopy: illegal block size"); usage(); }
+                    }
+                }
+                _ => usage(),
+            }
+            // Handle combined flags like -cv
+            if !rest.is_empty() {
+                for c in rest.chars() {
+                    match c {
+                        'c' => op = Operation::CopyVerify,
+                        'r' => rawfile = true,
+                        'v' => op = Operation::Verify,
+                        'x' => {}
+                        'l' | 's' => {
+                            i += 1;
+                            if i >= argv.len() { usage(); }
+                            match c {
+                                'l' => logfile = Some(argv[i].clone()),
+                                's' => {
+                                    match expand_number(&argv[i]) {
+                                        Some(v) if v > 0 => { unsafe { G_MAXBLK = v; } }
+                                        _ => { eprintln!("tcopy: illegal block size"); usage(); }
+                                    }
+                                }
+                                _ => {}
+                            }
+                        }
+                        _ => usage(),
+                    }
+                }
+            }
+        } else {
+            args.push(arg.clone());
+        }
+        i += 1;
+    }
+
+    // Check for -x flag
+    let has_x = argv.iter().any(|a| {
+        if a.starts_with('-') {
+            a[1..].chars().any(|c| c == 'x')
+        } else { false }
+    });
+
+    if args.len() > 2 { usage(); }
+
+    // Determine operation based on args
+    if args.len() == 2 {
+        if op == Operation::Read { op = Operation::Copy; }
+    }
+
+    // Setup msg output
+    let mut msg: Box<dyn io::Write> = if let Some(ref lf) = logfile {
+        match std::fs::File::create(lf) {
+            Ok(f) => Box::new(f),
+            Err(e) => { eprintln!("tcopy: Cannot open {}: {}", lf, e); process::exit(73); }
+        }
+    } else if has_x || (args.len() == 2 && args[1] == "-") {
+        Box::new(io::stderr())
+    } else {
+        Box::new(io::stdout())
+    };
+    unsafe { G_MSG = Some(msg); }
+
+    // Setup signal handlers
+    unsafe {
+        if signal(SIGINT, SIG_IGN) != SIG_IGN {
+            signal(SIGINT, Some(sigintr_handler));
+        }
+    }
+
+    // Open input
+    let src_name = if args.is_empty() { PATH_DEFTAPE } else { &args[0] };
+    let mut input: Box<dyn TapeOps> = open_arg(src_name, false, false);
+
+    // Open output if needed
+    let mut output: Option<Box<dyn TapeOps>> = None;
+    if args.len() == 2 {
+        if op == Operation::Verify {
+            output = Some(open_arg(&args[1], false, false));
+        } else {
+            output = Some(open_arg(&args[1], true, rawfile));
+        }
+    }
+
+    // Execute operation
+    if op != Operation::Verify {
+        if op == Operation::CopyVerify {
+            if let Some(ref mut out) = output {
+                unsafe {
+                    let msg = G_MSG.as_mut().unwrap();
+                    write!(msg, "rewinding\n").unwrap();
+                }
+                input.rewind();
+                out.rewind();
+            }
+        }
+        read_or_copy(&mut input, &mut output);
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

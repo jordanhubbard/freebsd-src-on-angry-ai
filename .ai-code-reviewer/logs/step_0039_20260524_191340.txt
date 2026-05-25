@@ -1,0 +1,30 @@
+=== STEP 39 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/brandelf/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/brandelf
+   Files: 0/3
+📄 File: usr.bin/brandelf/Makefile
+
+```
+.include <src.opts.mk>
+
+PROG=	brandelf
+
+.if ${MK_CASPER} != "no"
+LIBADD+=	casper
+LIBADD+=	cap_fileargs
+CFLAGS+=	-DWITH_CASPER
+.endif
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+Let me check if there's Rust build infrastructure in the FreeBSD tree.
+
+ACTION: FIND_FILE bsd.rust.mk

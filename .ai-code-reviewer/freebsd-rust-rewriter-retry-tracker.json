@@ -327,6 +327,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T09:42:44.986549"
   },
+  "usr.bin/brandelf": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T19:12:43.618269"
+  },
   "usr.bin/caesar": {
     "attempts": 2,
     "last_attempt": "2026-05-22T08:55:04.328352"

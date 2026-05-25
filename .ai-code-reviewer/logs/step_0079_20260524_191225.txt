@@ -1,0 +1,11 @@
+=== STEP 79 ===
+
+--- REQUEST ---
+LIST_DIR_ERROR: Directory not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/rust
+
+--- RESPONSE ---
+
+
+Let me check how other units in the tree handle Rust FFI without the `libc` crate.
+
+ACTION: FIND_FILE Cargo.toml

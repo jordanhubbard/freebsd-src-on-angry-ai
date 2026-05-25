@@ -1,0 +1,14 @@
+=== STEP 101 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/asa is already marked complete.
+
+Completed work units are closed after a successful build and commit; do not reopen the same unit for incremental polish.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Telemetry
+
+--- RESPONSE ---
+
+
+I need to provide the complete action with all blocks. Here is the full edit:
+
+ACTION: EDIT_FILE usr.bin/brandelf/Makefile

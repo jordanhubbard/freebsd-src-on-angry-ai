@@ -1,0 +1,11 @@
+=== STEP 122 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block. Let me write the Cargo.toml:
+
+ACTION: WRITE_FILE usr.bin/brandelf/Cargo.toml
