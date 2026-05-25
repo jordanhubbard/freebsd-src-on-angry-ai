@@ -1,0 +1,14 @@
+=== STEP 342 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/clang/clang-scan-deps is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE tools/regression/tls/ttls2
+
+--- RESPONSE ---
+
+
+I need to find a work unit I can actually complete. Let me try a simple one:
+
+ACTION: SET_SCOPE usr.bin/clang/clang-scan-deps

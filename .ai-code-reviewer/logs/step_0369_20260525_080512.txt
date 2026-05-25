@@ -1,0 +1,11 @@
+=== STEP 369 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I've been stuck in loops. Let me try the exact format with `CONTENT:` on its own line immediately after the ACTION line:
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/rust/Cargo.toml

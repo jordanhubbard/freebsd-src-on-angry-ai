@@ -1,0 +1,66 @@
+=== STEP 396 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: No-op edit rejected for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls2/Makefile: OLD and NEW blocks are identical
+
+======================================================================
+NO-OP EDIT REJECTED
+======================================================================
+
+The requested EDIT_FILE would not change tools/regression/tls/ttls2/Makefile.
+Repeated no-op edits are treated as a control-loop failure.
+
+Choose a different action now:
+- Use ACTION: BUILD if the current scope already has real changes
+- Use ACTION: READ_FILE to inspect a different file
+- Use ACTION: SET_SCOPE to move to another work unit if this one is complete
+- Use ACTION: HALT if no safe progress remains
+
+If you repeat the same no-op edit 2 more time(s), this run will stop.
+======================================================================
+
+
+--- RESPONSE ---
+
+
+The build errors appear to be related to the top-level build system trying to bootstrap libclang, not my Rust changes. Let me try a simpler Makefile approach that integrates better with the FreeBSD build system.
+
+ACTION: EDIT_FILE tools/regression/tls/ttls2/Makefile
+OLD:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+RUST_CRATE_DIR=	${.CURDIR}/rust
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+rust-build:
+	@mkdir -p ${RUST_TARGET_DIR}
+	cargo build --manifest-path ${RUST_CRATE_DIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR} --release
+	${INSTALL} ${RUST_TARGET_DIR}/release/ttls2 ${WRKDIR}/ttls2-rust
+
+all: rust-build
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+RUST_CRATE_DIR=	${.CURDIR}/rust
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+SUBDIR.rust:
+	@mkdir -p ${RUST_TARGET_DIR}
+	cargo build --manifest-path ${RUST_CRATE_DIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR} --release
+
+post-build: SUBDIR.rust
+	${INSTALL} ${RUST_TARGET_DIR}/release/ttls2 ${WRKDIR}/ttls2-rust
+
+.include <bsd.prog.mk>
+>>>

@@ -1,0 +1,329 @@
+=== STEP 51 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.sbin/lastlogin/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source directory and main.rs file.
+
+ACTION: WRITE_FILE usr.sbin/lastlogin/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-4-Clause
+//
+// Copyright (c) 1996 John M. Vinopal
+// Copyright (c) 2018 Philip Paeps
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed for the NetBSD Project
+//	by John M. Vinopal.
+// 4. The name of the author may not be used to endorse or promote products
+//    derived from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+// IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+// OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+// IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
+// AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int};
+use std::process;
+use std::time;
+
+// FFI declarations for utmpx functions
+extern "C" {
+    fn setutxdb(db: c_int, file: *const c_char) -> c_int;
+    fn getutxent() -> *mut utmpx;
+    fn getutxuser(name: *const c_char) -> *mut utmpx;
+    fn endutxent();
+    fn free(p: *mut std::ffi::c_void);
+}
+
+// Constants from utmpx.h
+const UTXDB_LASTLOGIN: c_int = 2;
+const USER_PROCESS: c_int = 7;
+
+// timeval struct
+#[repr(C)]
+#[derive(Clone, Copy)]
+struct Timeval {
+    tv_sec: time_t,
+    tv_usec: c_int,
+}
+
+type time_t = i64;
+
+// utmpx struct - matches FreeBSD's layout
+#[repr(C)]
+struct utmpx {
+    ut_type: c_int,
+    ut_tv: Timeval,
+    ut_id: [c_char; 8],
+    ut_pid: i32,
+    ut_user: [c_char; 16],
+    ut_line: [c_char; 80],
+    ut_host: [c_char; 128],
+    ut_addr_v6: [i32; 4],
+    __unused: [c_char; 200],
+}
+
+impl utmpx {
+    fn user(&self) -> &CStr {
+        unsafe { CStr::from_ptr(self.ut_user.as_ptr()) }
+    }
+
+    fn line(&self) -> &CStr {
+        unsafe { CStr::from_ptr(self.ut_line.as_ptr()) }
+    }
+
+    fn host(&self) -> &CStr {
+        unsafe { CStr::from_ptr(self.ut_host.as_ptr()) }
+    }
+
+    fn tv_sec(&self) -> time_t {
+        self.ut_tv.tv_sec
+    }
+}
+
+fn usage() {
+    eprintln!("usage: lastlogin [-f file] [-rt] [user ...]");
+    process::exit(1);
+}
+
+fn ctime_r(t: time_t) -> String {
+    // Use std::time to format like ctime
+    let duration = std::time::Duration::from_secs(t as u64);
+    let sys_time = std::time::SystemTime::UNIX_EPOCH + duration;
+    let datetime = chrono_like_format(&sys_time);
+    datetime
+}
+
+fn chrono_like_format(sys_time: &std::time::SystemTime) -> String {
+    // ctime format: "Wed Jun 30 21:49:08 1993\n"
+    // We need to format manually since we can't use external crates
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    let secs = match sys_time.duration_since(UNIX_EPOCH) {
+        Ok(d) => d.as_secs(),
+        Err(_) => 0,
+    };
+
+    // Convert to UTC time components
+    let days = secs / 86400;
+    let tod = secs % 86400;
+    let hour = tod / 3600;
+    let min = (tod % 3600) / 60;
+    let sec = tod % 60;
+
+    // Calculate year, month, day from days since epoch
+    let (year, month, day, wday) = days_to_ymd(days);
+
+    let weekdays = ["Thu", "Fri", "Sat", "Sun", "Mon", "Tue", "Wed"];
+    let months = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ];
+
+    format!(
+        "{} {:>3} {:>2} {:02}:{:02}:{:02} {}\n",
+        weekdays[wday as usize],
+        months[month],
+        day,
+        hour,
+        min,
+        sec,
+        year
+    )
+}
+
+fn days_to_ymd(days_since_epoch: u64) -> (i32, usize, u32, u32) {
+    // Algorithm to convert days since Unix epoch to year/month/day
+    // Unix epoch is 1970-01-01 (Thursday)
+    let mut days = days_since_epoch as i64;
+    let mut year: i64 = 1970;
+
+    loop {
+        let days_in_year = if is_leap(year) { 366 } else { 365 };
+        if days < days_in_year {
+            break;
+        }
+        days -= days_in_year;
+        year += 1;
+    }
+
+    let month_days: [i64; 12] = if is_leap(year) {
+        [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    } else {
+        [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    };
+
+    let mut month: usize = 0;
+    let mut day: i64 = days;
+    for i in 0..12 {
+        if day < month_days[i] {
+            month = i;
+            break;
+        }
+        day -= month_days[i];
+        month = i + 1;
+    }
+
+    // Day of week: 0=Sun, 1=Mon, ..., 6=Sat
+    // Unix epoch (1970-01-01) was Thursday = 4
+    let dow = (days_since_epoch + 4) % 7;
+
+    (year as i32, month, (day + 1) as u32, dow)
+}
+
+fn is_leap(year: i64) -> bool {
+    (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+}
+
+fn output(u: &utmpx) {
+    let user = u.user().to_string_lossy();
+    let line = u.line().to_string_lossy();
+    let host = u.host().to_string_lossy();
+    let t = u.tv_sec();
+    let login_time = ctime_r(t);
+
+    // Format: user (10 chars left), tty (8 chars left), from (22 chars left), login-time
+    // The ctime output already has a trailing newline, so we strip it
+    let login_time_str = login_time.trim_end();
+
+    println!(
+        "{:<10} {:<8} {:<22} {}",
+        user, line, host, login_time_str
+    );
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
+    let mut file: Option<String> = None;
+    let mut order: i32 = 1;
+    let mut sort_by_time = false;
+    let mut optind = 1;
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg == "-f" {
+            if i + 1 >= args.len() {
+                usage();
+            }
+            file = Some(args[i + 1].clone());
+            i += 2;
+        } else if arg == "-r" {
+            order = -1;
+            i += 1;
+        } else if arg == "-t" {
+            sort_by_time = true;
+            i += 1;
+        } else if arg.starts_with('-') {
+            usage();
+        } else {
+            optind = i;
+            break;
+        }
+    }
+
+    let users: Vec<String> = args[optind..].to_vec();
+
+    let file_cstr = match &file {
+        Some(f) => Some(CString::new(f.as_bytes()).unwrap_or_else(|_| {
+            eprintln!("lastlogin: invalid filename");
+            process::exit(1);
+        })),
+        None => None,
+    };
+
+    let file_ptr = match &file_cstr {
+        Some(s) => s.as_ptr(),
+        None => std::ptr::null(),
+    };
+
+    if !users.is_empty() {
+        // Process usernames given on the command line
+        for user in &users {
+            if unsafe { setutxdb(UTXDB_LASTLOGIN, file_ptr) } != 0 {
+                eprintln!("lastlogin: failed to open lastlog database");
+                process::exit(1);
+            }
+
+            let user_cstr = CString::new(user.as_bytes()).unwrap_or_else(|_| {
+                eprintln!("lastlogin: invalid username");
+                process::exit(1);
+            });
+
+            let u_ptr = unsafe { getutxuser(user_cstr.as_ptr()) };
+            if u_ptr.is_null() {
+                eprintln!("lastlogin: user '{}' not found", user);
+                continue;
+            }
+
+            let u = unsafe { &*u_ptr };
+            output(u);
+            unsafe { free(u_ptr as *mut std::ffi::c_void) };
+            unsafe { endutxent() };
+        }
+    } else {
+        // Read all lastlog entries
+        if unsafe { setutxdb(UTXDB_LASTLOGIN, file_ptr) } != 0 {
+            eprintln!("lastlogin: failed to open lastlog database");
+            process::exit(1);
+        }
+
+        let mut entries: Vec<utmpx> = Vec::new();
+        loop {
+            let u_ptr = unsafe { getutxent() };
+            if u_ptr.is_null() {
+                break;
+            }
+            let u = unsafe { *u_ptr };
+            if u.ut_type == USER_PROCESS {
+                entries.push(u);
+            }
+        }
+        unsafe { endutxent() };
+
+        // Sort entries
+        if sort_by_time {
+            entries.sort_by(|a, b| {
+                let cmp = a.tv_sec().cmp(&b.tv_sec());
+                if order < 0 { cmp.reverse() } else { cmp }
+            });
+        } else {
+            entries.sort_by(|a, b| {
+                let cmp = a.user().to_string_lossy().cmp(&b.user().to_string_lossy());
+                if order < 0 { cmp.reverse() } else { cmp }
+            });
+        }
+
+        for entry in &entries {
+            output(entry);
+        }
+    }
+
+    process::exit(0);
+}
+>>>

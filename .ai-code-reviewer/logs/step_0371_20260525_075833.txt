@@ -1,0 +1,12 @@
+=== STEP 371 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/du is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE tools/regression/tls/ttls2
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/head

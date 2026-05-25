@@ -1,0 +1,9 @@
+=== STEP 218 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/sdt

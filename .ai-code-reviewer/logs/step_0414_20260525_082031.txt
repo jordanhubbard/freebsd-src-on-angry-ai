@@ -1,0 +1,52 @@
+=== STEP 414 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: tools/regression/tls/ttls2
+Pending source/build changes: 3 files modified
+Files: tools/regression/tls/ttls2/rust/Cargo.toml, tools/regression/tls/ttls2/rust/src/main.rs, tools/regression/tls/ttls2/Makefile
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in tools/regression/tls/ttls2
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: crypto/krb5/src/lib/krb5/error_tables
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE tools/regression/tls/ttls2/Makefile
+OLD:
+<<<
+RUST_CRATE_DIR=	${.CURDIR}/rust
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+all: rust-build
+
+rust-build:
+	@mkdir -p ${RUST_TARGET_DIR}
+	cargo build --manifest-path ${RUST_CRATE_DIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR} --release
+
+clean:
+	rm -rf ${RUST_TARGET_DIR}
+>>>
+NEW:
+<<<
+RUST_CRATE_DIR=	${.CURDIR}/rust
+RUST_TARGET_DIR=	${.OBJDIR}/rust-target
+
+all: rust-build
+
+rust-build:
+	@mkdir -p ${RUST_TARGET_DIR}
+	cargo build --manifest-path ${RUST_CRATE_DIR}/Cargo.toml --target-dir ${RUST_TARGET_DIR} --release
+
+clean:
+	rm -rf ${RUST_TARGET_DIR}
+>>>

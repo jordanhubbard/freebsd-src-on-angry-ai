@@ -1,0 +1,14 @@
+=== STEP 400 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/clang/bugpoint:
+```
+Makefile
+Makefile.depend
+bugpoint.1
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/clang/clang

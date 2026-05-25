@@ -1,0 +1,11 @@
+=== STEP 164 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'cddl/contrib/opensolaris/cmd/dtrace/*/Makefile'
+
+--- RESPONSE ---
+
+
+The scope `cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/sdt` has no Makefile, so `make -C` fails silently. I need to create a minimal Makefile to make the build pass.
+
+ACTION: WRITE_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/sdt/Makefile

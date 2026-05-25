@@ -120,8 +120,8 @@
     "last_attempt": "2026-05-25T03:25:26.071124"
   },
   "cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/sdt": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T05:13:45.293481"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T07:45:43.195149"
   },
   "contrib/libcbor/examples/bazel/src": {
     "attempts": 2,
@@ -230,6 +230,10 @@
   "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso1": {
     "attempts": 1,
     "last_attempt": "2026-05-24T04:06:57.818534"
+  },
+  "contrib/vis": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T07:52:44.557290"
   },
   "crypto/heimdal/lib/heimdal": {
     "attempts": 3,
@@ -415,6 +419,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-21T23:26:14.041313"
   },
+  "usr.bin/clang/clang": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T08:00:36.047638"
+  },
   "usr.bin/clang/clang-scan-deps": {
     "attempts": 3,
     "last_attempt": "2026-05-25T01:03:04.088391"
@@ -422,6 +430,10 @@
   "usr.bin/clang/llvm-dwp": {
     "attempts": 3,
     "last_attempt": "2026-05-24T13:06:51.569115"
+  },
+  "usr.bin/clang/llvm-size": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T08:12:27.529623"
   },
   "usr.bin/cmp": {
     "attempts": 3,
@@ -656,8 +668,8 @@
     "last_attempt": "2026-05-24T19:34:25.304115"
   },
   "usr.bin/primes": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T13:30:09.117228"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T06:01:01.558863"
   },
   "usr.bin/printf": {
     "attempts": 3,
@@ -779,6 +791,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-22T20:53:29.410015"
   },
+  "usr.bin/whois": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T06:10:19.445344"
+  },
   "usr.bin/write": {
     "attempts": 3,
     "last_attempt": "2026-05-24T12:50:50.889681"
@@ -800,7 +816,7 @@
     "last_attempt": "2026-05-25T00:55:04.006387"
   },
   "usr.sbin/lastlogin": {
-    "attempts": 1,
-    "last_attempt": "2026-05-25T05:54:47.579123"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T07:55:22.483504"
   }
 }

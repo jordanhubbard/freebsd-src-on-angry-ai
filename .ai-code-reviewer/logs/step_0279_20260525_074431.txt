@@ -1,0 +1,11 @@
+=== STEP 279 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I see - I need to include `CONTENT:` followed by `<<<` and `>>>` delimiters on separate lines.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/src/main.rs

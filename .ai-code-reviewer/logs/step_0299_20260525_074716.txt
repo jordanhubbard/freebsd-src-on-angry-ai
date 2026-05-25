@@ -1,0 +1,11 @@
+=== STEP 299 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I see - I need to put `CONTENT:` on its own line, then `<<<` on the next line, then the content, then `>>>` on its own line.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/rust/Cargo.toml

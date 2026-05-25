@@ -1,0 +1,134 @@
+=== STEP 137 ===
+
+--- REQUEST ---
+
+⚠️  INCOMPLETE RESPONSE DETECTED
+
+Problem: Mismatched <<< >>> delimiters (incomplete EDIT_FILE)
+Response length: 13278 chars
+Last 100 chars: ... choose_server(name),
+            };
+            do_whois(name, &h, &port, flags);
+        }
+    }
+}
+
+Your response appears to have been cut off before completion.
+Please provide a COMPLETE response including:
+1. Your analysis
+2. A SINGLE, COMPLETE ACTION directive
+3. For EDIT_FILE: both complete OLD and NEW blocks
+
+If you're working with a large file causing timeouts:
+- Focus on ONE specific issue at a time
+- Use smaller OLD/NEW blocks
+- Consider SKIP_FILE if the file is too complex
+
+
+--- RESPONSE ---
+
+
+The file is too large for a single response. Let me write a more compact version.
+
+ACTION: WRITE_FILE usr.bin/whois/src/main.rs
+CONTENT:
+/*-
+ * SPDX-License-Identifier: BSD-3-Clause
+ * Copyright (c) 1980, 1993 The Regents of the University of California.
+ * All rights reserved.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+use std::env;
+use std::io::{self, BufRead, Write};
+use std::net::TcpStream;
+use std::process;
+const ABUSEHOST: &str = "whois.abuse.net";
+const ANICHOST: &str = "whois.arin.net";
+const DENICHOST: &str = "whois.denic.de";
+const DKNICHOST: &str = "whois.dk-hostmaster.dk";
+const FNICHOST: &str = "whois.afrinic.net";
+const GNICHOST: &str = "whois.nic.gov";
+const IANAHOST: &str = "whois.iana.org";
+const INICHOST: &str = "whois.internic.net";
+const KNICHOST: &str = "whois.krnic.net";
+const LNICHOST: &str = "whois.lacnic.net";
+const MNICHOST: &str = "whois.ra.net";
+const PDBHOST: &str = "whois.peeringdb.com";
+const PNICHOST: &str = "whois.apnic.net";
+const QNICHOST_TAIL: &str = ".whois-servers.net";
+const RNICHOST: &str = "whois.ripe.net";
+const VNICHOST: &str = "whois.verisign-grs.com";
+const DEFAULT_PORT: &str = "whois";
+const CHOPSPAM: &str = ">>> Last update of WHOIS database:";
+const WHOIS_RECURSE: u32 = 0x01;
+const WHOIS_QUICK: u32 = 0x02;
+const WHOIS_SPAM_ME: u32 = 0x04;
+fn ishc(c: char) -> bool {
+    c.is_ascii_alphanumeric() || c == '.' || c == '-'
+}
+fn usage() -> ! {
+    eprintln!("usage: whois [-aAbfgiIklmPQrRS] [-c country-code | -h hostname] [-p port] name ...");
+    process::exit(64);
+}
+fn choose_server(domain: &str) -> String {
+    let dl = domain.to_lowercase();
+    let entries: [(&str, &str); 7] = [
+        ("-ARIN", ANICHOST), ("-NICAT", "at"), ("-NORID", "no"),
+        ("-RIPE", RNICHOST), (".ac.uk", "ac.uk"), (".gov.uk", "ac.uk"), ("", IANAHOST),
+    ];
+    for (sfx, srv) in &entries {
+        let sl = sfx.to_lowercase();
+        if sl.is_empty() { return srv.to_string(); }
+        if dl.len() > sl.len() && dl.ends_with(&sl) {
+            if *srv == "at" || *srv == "no" || *srv == "ac.uk" {
+                return format!("{}{}", srv, QNICHOST_TAIL);
+            }
+            return srv.to_string();
+        }
+    }
+    eprintln!("whois: no default whois server");
+    process::exit(70);
+}
+fn connect_host(hn: &str, pt: &str) -> io::Result<TcpStream> {
+    let addr = format!("{}:{}", hn, pt);
+    let mut le = None;
+    for a in addr.to_socket_addrs()? {
+        match TcpStream::connect_timeout(&a, std::time::Duration::from_secs(3)) {
+            Ok(s) => return Ok(s),
+            Err(e) => le = Some(e),
+        }
+    }
+    Err(le.unwrap_or_else(|| io::Error::new(io::ErrorKind::ConnectionRefused, "no address")))
+}
+fn trimsp(s: &str) -> &str { s.trim_start_matches(' ') }
+fn extract_hp(line: &str, prefix: &str, dpt: &str) -> Option<(String, String)> {
+    let t = trimsp(line);
+    if let Some(pos) = t.find(prefix) {
+        let r = trimsp(&t[pos + prefix.len()..]);
+        let he = r.chars().position(|c| !ishc(c)).unwrap_or(r.len());
+        let host = &r[..he];
+        if host.is_empty() { return None; }
+        let af = &r[he..];
+        if af.starts_with(':') {
+            let ps = &af[1..].trim_start();
+            let pe = ps.chars().position(|c| !c.is_ascii_digit()).unwrap_or(ps.len());
+            let pd = &ps[..pe];
+            if !pd.is_empty() && pd.len() < 6 {
+                return Some((host.to_string(), pd.to_string()));
+            }
+            return None;
+        }
+        Some((host.to_string(), dpt.to_string()))
+    } else { None }
+}

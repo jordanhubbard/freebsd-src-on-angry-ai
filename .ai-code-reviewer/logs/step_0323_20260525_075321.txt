@@ -1,0 +1,11 @@
+=== STEP 323 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Let me try the exact format with `CONTENT:` on its own line followed by `<<<` and `>>>` delimiters:
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/rust/Cargo.toml

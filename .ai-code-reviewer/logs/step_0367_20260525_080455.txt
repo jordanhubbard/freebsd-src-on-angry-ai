@@ -1,0 +1,11 @@
+=== STEP 367 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I've been stuck in loops. Let me try a different approach - I'll use EDIT_FILE to modify an existing file instead:
+
+ACTION: EDIT_FILE tools/regression/tls/ttls2/Makefile

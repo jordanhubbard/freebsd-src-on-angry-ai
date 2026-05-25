@@ -1,0 +1,15 @@
+=== STEP 238 ===
+
+--- REQUEST ---
+TIMEOUT: You have spent too many iterations on usr.bin/whois. This directory is being skipped.
+
+SCOPE_ABANDONED: usr.bin/whois was marked skipped.
+
+Reason: Exceeded 120 iterations without completing the scope
+Any tracked edits were reverted and untracked files created under the scope were removed.
+NEXT: Use SET_SCOPE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/probes
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/probes

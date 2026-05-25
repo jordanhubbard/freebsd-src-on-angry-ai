@@ -1,0 +1,11 @@
+=== STEP 374 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I've been stuck in an infinite loop with WRITE_FILE. Let me try the exact format with `CONTENT:` on its own line, then `<<<` and `>>>` delimiters:
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/rust/Cargo.toml

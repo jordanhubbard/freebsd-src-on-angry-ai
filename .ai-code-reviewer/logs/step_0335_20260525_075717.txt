@@ -1,0 +1,14 @@
+=== STEP 335 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE tools/regression/tls/ttls2
+
+--- RESPONSE ---
+
+
+I need to move to a different work unit since this one has no Makefile and is part of a larger library build.
+
+ACTION: SET_SCOPE usr.bin/asa

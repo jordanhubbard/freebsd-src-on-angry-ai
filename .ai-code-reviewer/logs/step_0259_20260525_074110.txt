@@ -1,0 +1,11 @@
+=== STEP 259 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block with the proper format.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/Cargo.toml

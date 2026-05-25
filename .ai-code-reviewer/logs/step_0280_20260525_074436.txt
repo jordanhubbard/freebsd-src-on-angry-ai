@@ -1,0 +1,11 @@
+=== STEP 280 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block with proper formatting on separate lines.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/src/main.rs

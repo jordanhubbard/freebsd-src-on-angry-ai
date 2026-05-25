@@ -1,0 +1,20 @@
+=== STEP 243 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/backlight:
+```
+.cargo
+Cargo.lock
+Cargo.toml
+Makefile
+backlight
+backlight.8
+backlight.c
+cargo-target
+src
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR bin/cat

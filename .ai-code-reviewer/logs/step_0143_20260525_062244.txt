@@ -1,0 +1,37 @@
+=== STEP 143 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: usr.bin/whois
+Pending source/build changes: 1 files modified
+Files: usr.bin/whois/Cargo.toml
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in usr.bin/whois
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: bin/cat/tests
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+I need to complete the usr.bin/whois unit first. Let me write a complete but compact main.rs.
+
+ACTION: WRITE_FILE usr.bin/whois/src/main.rs
+CONTENT:
+use std::env;
+use std::io::{self, BufRead, Write};
+use std::net::TcpStream;
+use std::process;
+const AN:&str="whois.arin.net";const RI:&str="whois.ripe.net";const AP:&str="whois.apnic.net";
+const AF:&str="whois.afrinic.net";const LA:&str="whois.lacnic.net";const IA:&str="whois.iana.org";
+const DE:&str="whois.denic.de";const DK:&str="whois.dk-hostmaster.dk";const VN:&str="whois.verisign-grs.com";
+const AH:&str="whois.abuse.net";const GN:&str="whois.nic.gov";const IN:&str="whois.internic.net";
+const KR:&str="whois.krnic.net";const RA:&str="whois.ra.net";const PD:&str="whois.peeringdb.com";
+const QT:&str=".whois-servers.net";const DP:&str="whois";const CS:&str=">>> Last update of WHOIS database:";

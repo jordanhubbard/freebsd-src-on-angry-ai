@@ -1,0 +1,46 @@
+=== STEP 390 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls2/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source file. Let me use the same format that worked:
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/rust/src/main.rs
+CONTENT:
+<<<
+use std::thread;
+use std::time::Duration;
+
+fn foo1() {
+    let mut i = 0;
+    let handle = thread::current();
+    println!("thread {:?}, &i = {:p}", handle.id(), &i);
+    for _ in 0..10 {
+        println!("thread {:?}, i = {}", handle.id(), i);
+        thread::sleep(Duration::from_secs(1));
+        i += 1;
+    }
+}
+
+fn foo2() {
+    let mut i = 10;
+    let handle = thread::current();
+    println!("thread {:?}, &i = {:p}", handle.id(), &i);
+    while i > 0 {
+        println!("thread {:?}, i = {}", handle.id(), i);
+        thread::sleep(Duration::from_secs(1));
+        i -= 1;
+    }
+}
+
+fn main() {
+    let t1 = thread::spawn(foo1);
+    let t2 = thread::spawn(foo2);
+    t1.join().unwrap();
+    t2.join().unwrap();
+}
+>>>

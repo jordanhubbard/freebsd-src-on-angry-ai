@@ -1,0 +1,31 @@
+=== STEP 130 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/whois
+   Files: 0/3
+📄 File: usr.bin/whois/Makefile
+
+```
+=== CHUNK 12/12: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whois/whois.c === [function: usage]
+=== Lines 603-610 (8 lines) ===
+
+static void
+usage(void)
+{
+	fprintf(stderr,
+	    "usage: whois [-aAbfgiIklmPQrRS] [-c country-code | -h hostname] "
+	    "[-p port] name ...\n");
+	exit(EX_USAGE);
+}
+
+```
+
+--- RESPONSE ---
+
+
+Now I have a complete understanding of the whois program. It's a network client that queries WHOIS servers, follows referrals, and has special handling for various RIRs. Let me create the Rust replacement.
+
+ACTION: WRITE_FILE usr.bin/whois/Cargo.toml

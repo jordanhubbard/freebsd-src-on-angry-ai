@@ -1,0 +1,114 @@
+=== STEP 223 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whois/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/whois
+   Files: 0/3
+📄 File: usr.bin/whois/src/main.rs
+✏️  Edits: 3 files modified
+
+```
+use std::io::{BufRead, Write};
+use std::net::TcpStream;
+use std::process;
+fn usage() -> ! {
+    eprintln!("usage: whois [-aAbfgiIklmPQrRS] [-c country-code | -h hostname] [-p port] name ...");
+    process::exit(64);
+}
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut host = "whois.iana.org";
+    let mut port = "whois";
+    let mut names: Vec<String> = Vec::new();
+    let mut i = 1;
+    while i < args.len() {
+        if args[i].starts_with('-') && args[i].len() > 1 {
+            for c in args[i][1..].chars() {
+                match c {
+                    'a' => host = "whois.arin.net",
+                    'A' => host = "whois.apnic.net",
+                    'b' => host = "whois.abuse.net",
+                    'f' => host = "whois.afrinic.net",
+                    'g' => host = "whois.nic.gov",
+                    'i' => host = "whois.internic.net",
+                    'I' => host = "whois.iana.org",
+                    'k' => host = "whois.krnic.net",
+                    'l' => host = "whois.lacnic.net",
+                    'm' => host = "whois.ra.net",
+                    'P' => host = "whois.peeringdb.com",
+                    'r' => host = "whois.ripe.net",
+                    'c' | 'h' | 'p' => {
+                        i += 1;
+                        if i >= args.len() { usage(); }
+                        match c {
+                            'c' => host = &format!("{}{}", args[i], ".whois-servers.net"),
+                            'h' => host = &args[i],
+                            'p' => port = &args[i],
+                            _ => {}
+                        }
+                        break;
+                    }
+                    _ => {}
+                }
+            }
+        } else {
+            names.push(args[i].clone());
+        }
+        i += 1;
+    }
+    if names.is_empty() { usage(); }
+    for name in &names {
+        let addr = format!("{}:{}", host, port);
+        let stream = match TcpStream::connect(&addr) {
+            Ok(s) => s,
+            Err(e) => { eprintln!("whois: connect(): {}", e); process::exit(71); }
+        };
+        let mut s = stream;
+        let req = format!("{} \r\n", name);
+        if let Err(e) = s.write_all(req.as_bytes()) {
+            eprintln!("whois: write(): {}", e); process::exit(71);
+        }
+        let reader = BufReader::new(s.try_clone().unwrap());
+        for line in reader.lines() {
+            match line {
+                Ok(l) => println!("{}", l),
+                Err(_) => break,
+            }
+        }
+    }
+}
+```
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors/0 warnings, which indicates a build infrastructure issue. Let me try simplifying the Makefile to match the pattern used by other successful units.
+
+ACTION: WRITE_FILE usr.bin/whois/Makefile
+CONTENT:
+.include <src.opts.mk>
+
+PROG=	whois
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}

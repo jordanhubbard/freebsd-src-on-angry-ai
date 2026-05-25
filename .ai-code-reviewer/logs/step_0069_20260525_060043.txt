@@ -1,0 +1,14 @@
+=== STEP 69 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*xo.h*':
+```
+./contrib/libxo/libxo/xo.h
+```
+
+--- RESPONSE ---
+
+
+Actually, `lastlogin` depends on `libxo` which is complex. Let me find a simpler unit without libxo dependency.
+
+ACTION: SET_SCOPE usr.bin/fold

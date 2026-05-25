@@ -1,0 +1,18 @@
+=== STEP 367 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/lastcomm:
+```
+Makefile
+Makefile.depend
+lastcomm.1
+lastcomm.c
+pathnames.h
+readrec.c
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/lastcomm

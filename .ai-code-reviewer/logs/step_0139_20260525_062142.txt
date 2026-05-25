@@ -1,0 +1,66 @@
+=== STEP 139 ===
+
+--- REQUEST ---
+
+⚠️  INCOMPLETE RESPONSE DETECTED
+
+Problem: Mismatched <<< >>> delimiters (incomplete EDIT_FILE)
+Response length: 2543 chars
+Last 100 chars: ..._string();
+        }
+    }
+    eprintln!("whois: no default whois server");
+    process::exit(70);
+}
+
+Your response appears to have been cut off before completion.
+Please provide a COMPLETE response including:
+1. Your analysis
+2. A SINGLE, COMPLETE ACTION directive
+3. For EDIT_FILE: both complete OLD and NEW blocks
+
+If you're working with a large file causing timeouts:
+- Focus on ONE specific issue at a time
+- Use smaller OLD/NEW blocks
+- Consider SKIP_FILE if the file is too complex
+
+
+--- RESPONSE ---
+
+
+The whois source is too large for a single write. Let me write a minimal but complete version in a very compact form.
+
+ACTION: WRITE_FILE usr.bin/whois/src/main.rs
+CONTENT:
+use std::env;
+use std::io::{self, BufRead, Write};
+use std::net::TcpStream;
+use std::process;
+const AN: &str = "whois.arin.net";
+const RI: &str = "whois.ripe.net";
+const AP: &str = "whois.apnic.net";
+const AF: &str = "whois.afrinic.net";
+const LA: &str = "whois.lacnic.net";
+const IA: &str = "whois.iana.org";
+const DE: &str = "whois.denic.de";
+const DK: &str = "whois.dk-hostmaster.dk";
+const VN: &str = "whois.verisign-grs.com";
+const AH: &str = "whois.abuse.net";
+const GN: &str = "whois.nic.gov";
+const IN: &str = "whois.internic.net";
+const KR: &str = "whois.krnic.net";
+const RA: &str = "whois.ra.net";
+const PD: &str = "whois.peeringdb.com";
+const QT: &str = ".whois-servers.net";
+const DP: &str = "whois";
+const CS: &str = ">>> Last update of WHOIS database:";
+const WR: u32 = 1;
+const WQ: u32 = 2;
+const WS: u32 = 4;
+fn ihc(c: char) -> bool { c.is_ascii_alphanumeric() || c == '.' || c == '-' }
+fn usage() -> ! {
+    eprintln!("usage: whois [-aAbfgiIklmPQrRS] [-c country-code | -h hostname] [-p port] name ...");
+    process::exit(64);
+}
+fn choose_server(domain: &str) -> String {
+    let dl = domain.to_lowercase();

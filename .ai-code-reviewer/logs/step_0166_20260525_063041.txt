@@ -1,0 +1,80 @@
+=== STEP 166 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whois/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/whois/src/main.rs
+CONTENT:
+use std::io::{BufRead, Write};
+use std::net::TcpStream;
+use std::process;
+fn usage() -> ! {
+    eprintln!("usage: whois [-aAbfgiIklmPQrRS] [-c country-code | -h hostname] [-p port] name ...");
+    process::exit(64);
+}
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut host = "whois.iana.org";
+    let mut port = "whois";
+    let mut names: Vec<String> = Vec::new();
+    let mut i = 1;
+    while i < args.len() {
+        if args[i].starts_with('-') && args[i].len() > 1 {
+            for c in args[i][1..].chars() {
+                match c {
+                    'a' => host = "whois.arin.net",
+                    'A' => host = "whois.apnic.net",
+                    'b' => host = "whois.abuse.net",
+                    'f' => host = "whois.afrinic.net",
+                    'g' => host = "whois.nic.gov",
+                    'i' => host = "whois.internic.net",
+                    'I' => host = "whois.iana.org",
+                    'k' => host = "whois.krnic.net",
+                    'l' => host = "whois.lacnic.net",
+                    'm' => host = "whois.ra.net",
+                    'P' => host = "whois.peeringdb.com",
+                    'r' => host = "whois.ripe.net",
+                    'c' | 'h' | 'p' => {
+                        i += 1;
+                        if i >= args.len() { usage(); }
+                        match c {
+                            'c' => host = &format!("{}{}", args[i], ".whois-servers.net"),
+                            'h' => host = &args[i],
+                            'p' => port = &args[i],
+                            _ => {}
+                        }
+                        break;
+                    }
+                    _ => {}
+                }
+            }
+        } else {
+            names.push(args[i].clone());
+        }
+        i += 1;
+    }
+    if names.is_empty() { usage(); }
+    for name in &names {
+        let addr = format!("{}:{}", host, port);
+        let stream = match TcpStream::connect(&addr) {
+            Ok(s) => s,
+            Err(e) => { eprintln!("whois: connect(): {}", e); process::exit(71); }
+        };
+        let mut s = stream;
+        let req = format!("{} \r\n", name);
+        if let Err(e) = s.write_all(req.as_bytes()) {
+            eprintln!("whois: write(): {}", e); process::exit(71);
+        }
+        let reader = BufReader::new(s.try_clone().unwrap());
+        for line in reader.lines() {
+            match line {
+                Ok(l) => println!("{}", l),
+                Err(_) => break,
+            }
+        }
+    }
+}

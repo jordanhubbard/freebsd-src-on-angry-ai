@@ -1,0 +1,63 @@
+=== STEP 419 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/clang/clang.prog.mk:
+PROGRESS:
+📁 Directory: usr.bin/clang/clang
+   Files: 0/4
+📄 File: usr.bin/clang/clang.prog.mk
+
+```
+
+.include "${SRCTOP}/lib/clang/clang.pre.mk"
+
+CFLAGS+=	-I${OBJTOP}/lib/clang/libclang
+CFLAGS+=	-I${OBJTOP}/lib/clang/libllvm
+
+.include "${SRCTOP}/lib/clang/clang.build.mk"
+
+# Special case for the bootstrap-tools phase.
+.if (defined(TOOLS_PREFIX) || ${MACHINE} == "host") && \
+    ${PROG_CXX} == "clang-tblgen"
+LIBDEPS+=	clangminimal
+LIBDEPS+=	llvmminimal
+.else
+LIBDEPS+=	clang
+LIBDEPS+=	llvm
+LIBADD+=	z
+LIBADD+=	zstd
+.endif
+
+.if defined(TOOLS_PREFIX) || ${MK_LLVM_LINK_STATIC_LIBRARIES} == "yes"
+LIBPRIV=
+LIBEXT=		a
+.else
+LIBPRIV=	private
+LIBEXT=		so
+.endif
+
+.for lib in ${LIBDEPS}
+DPADD+=		${OBJTOP}/lib/clang/lib${lib}/lib${LIBPRIV}${lib}.${LIBEXT}
+LDADD+=		${OBJTOP}/lib/clang/lib${lib}/lib${LIBPRIV}${lib}.${LIBEXT}
+.endfor
+
+PACKAGE?=	clang
+
+.if ${.MAKE.OS} == "FreeBSD" || !defined(BOOTSTRAPPING)
+LIBADD+=	execinfo
+LIBADD+=	ncursesw
+.endif
+LIBADD+=	pthread
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+This is a complex LLVM/Clang driver that depends on the entire LLVM/Clang build system. It's far too complex for a small rewrite. The build fails due to system compiler constraints that prevent building clang when it's needed for bootstrapping.
+
+Let me try to clear this scope by attempting a different approach.
+
+ACTION: BUILD

@@ -1,0 +1,16 @@
+=== STEP 305 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/vis:
+```
+Makefile
+extern.h
+foldit.c
+vis.1
+vis.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/vis

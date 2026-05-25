@@ -1,0 +1,41 @@
+=== STEP 150 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/whois/Makefile
+OLD:
+PROG=	whois
+
+.if defined(SOCKS)
+CFLAGS+=-DSOCKS
+CFLAGS+=-Dconnect=Rconnect -Dgetsockname=Rgetsockname -Dlisten=Rlisten \
+	-Daccept=Raccept -Drcmd=Rrcmd -Dbind=Rbind -Dselect=Rselect
+LDADD+=	-lsocks
+.endif
+
+.include <bsd.prog.mk>
+NEW:
+PROG=	whois
+
+.if defined(SOCKS)
+CFLAGS+=-DSOCKS
+CFLAGS+=-Dconnect=Rconnect -Dgetsockname=Rgetsockname -Dlisten=Rlisten \
+	-Daccept=Raccept -Drcmd=Rrcmd -Dbind=Rbind -Dselect=Rselect
+LDADD+=	-lsocks
+.endif
+
+.include <bsd.prog.mk>
+
+RUSTPROG=	whois
+RUSTCARGO=	${.CURDIR}/Cargo.toml
+RUSTTARGET=	${.OBJDIR}/cargo-target
+
+${RUSTPROG}-rust:
+	@${CARGO} build --manifest-path ${RUSTCARGO} --target-dir ${RUSTTARGET}
+	@${CP} ${RUSTTARGET}/debug/${RUSTPROG} ${.OBJDIR}/${RUSTPROG}-rust
+
+CLEANFILES+=	${RUSTPROG}-rust

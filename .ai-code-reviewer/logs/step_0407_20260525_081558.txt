@@ -1,0 +1,14 @@
+=== STEP 407 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/clang/clang-scan-deps is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE crypto/krb5/src/lib/krb5/error_tables
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level `Makefile.inc1` about `SYSTEM_COMPILER`/`SYSTEM_LINKER` - this is a pre-existing build system issue. Let me try a different work unit.
+
+ACTION: SET_SCOPE crypto/krb5/src/lib/krb5/error_tables

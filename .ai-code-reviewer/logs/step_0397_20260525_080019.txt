@@ -1,0 +1,59 @@
+=== STEP 397 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/clang:
+```
+Makefile
+Makefile.inc
+bugpoint
+clang
+clang-format
+clang-scan-deps
+clang-tblgen
+clang.prog.mk
+llc
+lld
+lldb
+lldb-server
+lldb-tblgen
+lli
+llvm-ar
+llvm-as
+llvm-bcanalyzer
+llvm-cov
+llvm-cxxdump
+llvm-cxxfilt
+llvm-diff
+llvm-dis
+llvm-dwarfdump
+llvm-dwarfutil
+llvm-dwp
+llvm-extract
+llvm-link
+llvm-lto
+llvm-lto2
+llvm-mc
+llvm-mca
+llvm-min-tblgen
+llvm-modextract
+llvm-nm
+llvm-objcopy
+llvm-objdump
+llvm-pdbutil
+llvm-profdata
+llvm-readobj
+llvm-rtdyld
+llvm-size
+llvm-strings
+llvm-symbolizer
+llvm-tblgen
+llvm-xray
+llvm.prog.mk
+opt
+toolchain
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/clang/bugpoint

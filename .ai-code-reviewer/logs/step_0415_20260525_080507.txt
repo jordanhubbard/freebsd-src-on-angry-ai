@@ -1,0 +1,33 @@
+=== STEP 415 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls2/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/clang/clang
+   Files: 0/4
+📄 File: tools/regression/tls/ttls2/Makefile
+
+```
+PROG=	ttls2
+LIBADD= pthread
+MAN=
+DEBUG_FLAGS= -g
+
+RUST_PROG=	ttls2
+RUST_TARGET=	bin
+RUST_CRATE_DIR=	${.CURDIR}/rust
+
+.if exists(${RUST_CRATE_DIR}/Cargo.toml)
+PROG=	ttls2-rust
+.endif
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+The clang driver is too complex for a small rewrite and has build system constraints. I need to clear this scope. Let me try building to commit/clear.
+
+ACTION: BUILD

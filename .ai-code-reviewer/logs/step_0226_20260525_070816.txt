@@ -1,0 +1,11 @@
+=== STEP 226 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to create a Makefile for this scope. Let me try with explicit CONTENT:
+
+ACTION: WRITE_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/sdt/Makefile

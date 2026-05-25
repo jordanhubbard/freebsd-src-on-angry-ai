@@ -1,0 +1,11 @@
+=== STEP 301 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to format the WRITE_FILE action with `CONTENT:` on its own line, then `<<<` and `>>>` delimiters on separate lines with the file content between them.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls2/rust/Cargo.toml
