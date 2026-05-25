@@ -1,0 +1,35 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkuzip
+   Files: 0/26
+📄 File: usr.bin/mkuzip/mkuzip.c
+   Chunks: 8/11
+
+```
+=== CHUNK 8/11: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkuzip/mkuzip.c === [function: mkuz_safe_malloc]
+=== Lines 464-476 (13 lines) ===
+
+void *
+mkuz_safe_malloc(size_t size)
+{
+	void *retval;
+
+	retval = malloc(size);
+	if (retval == NULL) {
+		err(1, "can't allocate memory");
+		/* Not reached */
+	}
+	return retval;
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

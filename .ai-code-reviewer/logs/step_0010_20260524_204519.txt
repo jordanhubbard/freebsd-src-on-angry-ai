@@ -1,0 +1,54 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkuzip
+   Files: 0/26
+📄 File: usr.bin/mkuzip/mkuzip.c
+   Chunks: 6/11
+
+```
+=== CHUNK 6/11: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkuzip/mkuzip.c === [function: readblock]
+=== Lines 423-454 (32 lines) ===
+
+static struct mkuz_blk *
+readblock(int fd, u_int32_t clstsize)
+{
+	int numread;
+	struct mkuz_blk *rval;
+	static int blockcnt;
+	off_t cpos;
+
+	rval = mkuz_blk_ctor(clstsize);
+
+	rval->info.blkno = blockcnt;
+	blockcnt += 1;
+	cpos = lseek(fd, 0, SEEK_CUR);
+	if (cpos < 0) {
+		err(1, "readblock: lseek() failed");
+		/* Not reached */
+	}
+	rval->info.offset = cpos;
+
+	numread = read(fd, rval->data, clstsize);
+	if (numread < 0) {
+		err(1, "readblock: read() failed");
+		/* Not reached */
+	}
+	if (numread == 0) {
+		free(rval);
+		return MKUZ_BLK_EOF;
+	}
+	rval->info.len = numread;
+	return rval;
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

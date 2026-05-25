@@ -1,0 +1,31 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkuzip
+   Files: 0/26
+📄 File: usr.bin/mkuzip/mkuzip.c
+   Chunks: 7/11
+
+```
+=== CHUNK 7/11: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkuzip/mkuzip.c === [function: usage]
+=== Lines 455-463 (9 lines) ===
+
+static void
+usage(void)
+{
+
+	fprintf(stderr, "usage: mkuzip [-vZdLS] [-o outfile] [-s cluster_size] "
+	    "[-j ncompr] infile\n");
+	exit(1);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

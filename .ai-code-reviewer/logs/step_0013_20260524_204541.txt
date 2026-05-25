@@ -1,0 +1,32 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkuzip
+   Files: 0/26
+📄 File: usr.bin/mkuzip/mkuzip.c
+   Chunks: 9/11
+
+```
+=== CHUNK 9/11: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkuzip/mkuzip.c === [function: mkuz_safe_zmalloc]
+=== Lines 477-486 (10 lines) ===
+
+void *
+mkuz_safe_zmalloc(size_t size)
+{
+	void *retval;
+
+	retval = mkuz_safe_malloc(size);
+	bzero(retval, size);
+	return retval;
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

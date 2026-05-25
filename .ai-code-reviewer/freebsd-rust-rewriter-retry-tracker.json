@@ -172,8 +172,8 @@
     "last_attempt": "2026-05-24T18:18:24.143744"
   },
   "contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T20:27:02.512341"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T20:56:42.109153"
   },
   "contrib/llvm-project/llvm/lib/Telemetry": {
     "attempts": 3,
@@ -504,8 +504,8 @@
     "last_attempt": "2026-05-22T20:10:15.732158"
   },
   "usr.bin/mkuzip": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T20:41:40.717546"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T20:44:39.402389"
   },
   "usr.bin/morse": {
     "attempts": 3,

@@ -1,0 +1,26 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkuzip
+   Files: 0/26
+📄 File: usr.bin/mkuzip/mkuzip.c
+   Chunks: 3/11
+
+```
+=== CHUNK 3/11: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkuzip/mkuzip.c === [function: cleanup]
+=== Lines 100-103 (4 lines) ===
+
+static void cleanup(void);
+
+static char *cleanfile = NULL;
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK
