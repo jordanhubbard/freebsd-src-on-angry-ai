@@ -1,0 +1,42 @@
+=== STEP 4 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo/SystemZTargetInfo.cpp:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo/SystemZTargetInfo.cpp
+
+```
+//===-- SystemZTargetInfo.cpp - SystemZ target implementation -------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#include "TargetInfo/SystemZTargetInfo.h"
+#include "llvm/MC/TargetRegistry.h"
+#include "llvm/Support/Compiler.h"
+
+using namespace llvm;
+
+Target &llvm::getTheSystemZTarget() {
+  static Target TheSystemZTarget;
+  return TheSystemZTarget;
+}
+
+// NOLINTNEXTLINE(readability-identifier-naming)
+extern "C" LLVM_ABI LLVM_EXTERNAL_VISIBILITY void
+LLVMInitializeSystemZTargetInfo() {
+  RegisterTarget<Triple::systemz, /*HasJIT=*/true> X(
+      getTheSystemZTarget(), "systemz", "SystemZ", "SystemZ");
+}
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo/SystemZTargetInfo.h

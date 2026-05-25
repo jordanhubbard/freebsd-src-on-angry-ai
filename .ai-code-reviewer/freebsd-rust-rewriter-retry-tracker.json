@@ -187,6 +187,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T20:56:42.109153"
   },
+  "contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo": {
+    "attempts": 2,
+    "last_attempt": "2026-05-24T23:21:17.700456"
+  },
   "contrib/llvm-project/llvm/lib/Target/VE/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-24T21:37:29.427066"
@@ -386,6 +390,14 @@
   "usr.bin/cksum": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:26:14.041313"
+  },
+  "usr.bin/clang/clang": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T23:22:38.292546"
+  },
+  "usr.bin/clang/clang-scan-deps": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T23:22:02.179184"
   },
   "usr.bin/clang/llvm-dwp": {
     "attempts": 3,
@@ -620,8 +632,8 @@
     "last_attempt": "2026-05-24T19:34:25.304115"
   },
   "usr.bin/primes": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T13:30:09.117228"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T23:13:18.267797"
   },
   "usr.bin/printf": {
     "attempts": 3,

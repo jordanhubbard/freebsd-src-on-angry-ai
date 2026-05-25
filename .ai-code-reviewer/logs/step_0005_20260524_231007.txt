@@ -1,0 +1,41 @@
+=== STEP 5 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo/SystemZTargetInfo.h:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo/SystemZTargetInfo.h
+
+```
+//===-- SystemZTargetInfo.h - SystemZ target implementation -----*- C++ -*-===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIB_TARGET_SYSTEMZ_TARGETINFO_SYSTEMZTARGETINFO_H
+#define LLVM_LIB_TARGET_SYSTEMZ_TARGETINFO_SYSTEMZTARGETINFO_H
+
+namespace llvm {
+
+class Target;
+
+Target &getTheSystemZTarget();
+
+} // namespace llvm
+
+#endif // LLVM_LIB_TARGET_SYSTEMZ_TARGETINFO_SYSTEMZTARGETINFO_H
+
+```
+
+--- RESPONSE ---
+
+
+This unit is LLVM vendor code (`contrib/llvm-project`), which is deeply integrated with LLVM's internal C++ infrastructure and is not FreeBSD userland code. Per the objective "Translate FreeBSD userland C/C++ libraries and commands to Rust," this is outside scope. I should skip this unit and find a relevant one.
+
+Let me look for a small, buildable FreeBSD userland unit with C source.
+
+ACTION: LIST_DIR bin/cat
