@@ -171,6 +171,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T18:18:24.143744"
   },
+  "contrib/llvm-project/llvm/lib/Target/Lanai/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T22:06:34.336171"
+  },
   "contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-24T20:56:42.109153"
@@ -384,8 +388,8 @@
     "last_attempt": "2026-05-22T07:03:11.300903"
   },
   "usr.bin/column": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T17:06:20.337211"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T22:07:24.585281"
   },
   "usr.bin/comm": {
     "attempts": 3,

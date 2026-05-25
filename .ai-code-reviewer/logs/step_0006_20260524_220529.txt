@@ -1,0 +1,14 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Lanai/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me find a suitable small unit with C source files that isn't skipped.
+
+ACTION: LIST_DIR bin

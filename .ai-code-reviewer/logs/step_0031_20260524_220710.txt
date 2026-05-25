@@ -1,0 +1,41 @@
+=== STEP 31 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/Lanai/TargetInfo/LanaiTargetInfo.h:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/Lanai/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/Lanai/TargetInfo/LanaiTargetInfo.h
+
+```
+//===-- LanaiTargetInfo.h - Lanai Target Implementation ---------*- C++ -*-===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIB_TARGET_LANAI_TARGETINFO_LANAITARGETINFO_H
+#define LLVM_LIB_TARGET_LANAI_TARGETINFO_LANAITARGETINFO_H
+
+namespace llvm {
+
+class Target;
+
+Target &getTheLanaiTarget();
+
+} // namespace llvm
+
+#endif // LLVM_LIB_TARGET_LANAI_TARGETINFO_LANAITARGETINFO_H
+
+```
+
+--- RESPONSE ---
+
+
+This is an LLVM target backend subdirectory, not a FreeBSD userland command or library. It's deeply embedded in the LLVM build system with complex dependencies on LLVM's TargetRegistry, Triple, and other infrastructure. This is not relevant to the configured objective of translating FreeBSD userland C/C++ to Rust.
+
+Let me find a proper userland unit. Let me check some usr.bin directories that might still be pending.
+
+ACTION: SET_SCOPE usr.bin/expand
