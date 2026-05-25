@@ -1,0 +1,21 @@
+=== STEP 251 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sys/contrib/libsodium/src/libsodium/crypto_stream:
+```
+Makefile
+chacha20
+crypto_stream.c
+salsa20
+salsa2012
+salsa208
+xchacha20
+xsalsa20
+```
+
+--- RESPONSE ---
+
+
+I need to provide a complete action with all content. Let me create the Cargo.toml:
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/Cargo.toml

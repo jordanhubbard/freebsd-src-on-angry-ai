@@ -1,0 +1,14 @@
+=== STEP 156 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*crypto_stream_xsalsa20.h*':
+```
+./sys/contrib/libsodium/src/libsodium/include/sodium/crypto_stream_xsalsa20.h
+```
+
+--- RESPONSE ---
+
+
+Let me understand the libsodium build structure better.
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/crypto_stream_xsalsa20.h

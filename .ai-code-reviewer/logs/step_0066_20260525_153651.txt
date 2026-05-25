@@ -1,0 +1,9 @@
+=== STEP 66 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for '^- \[ \]'
+
+--- RESPONSE ---
+
+
+ACTION: GREP ^- \[ \].*\.c

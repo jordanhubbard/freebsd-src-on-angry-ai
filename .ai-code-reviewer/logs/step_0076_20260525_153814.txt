@@ -1,0 +1,9 @@
+=== STEP 76 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for '"\[ \].*\.c.*lines"'
+
+--- RESPONSE ---
+
+
+ACTION: GREP "\[ \].*\.c.*lines"

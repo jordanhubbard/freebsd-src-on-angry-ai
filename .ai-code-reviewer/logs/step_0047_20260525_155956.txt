@@ -1,0 +1,375 @@
+=== STEP 47 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/newgrp/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source directory and main.rs:
+
+ACTION: WRITE_FILE usr.bin/newgrp/src/main.rs
+CONTENT:
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2002 Tim J. Robbins.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * newgrp -- change to a new group
+ */
+
+use std::env;
+use std::ffi::{CStr, CString};
+use std::os::unix::process::CommandExt;
+use std::process;
+
+use libc::{
+    c_char, gid_t, getegid, geteuid, getgid, getgroups, getgrgid, getgrnam, getpwuid, getuid,
+    initgroups, setgid, setgroups, setuid, seteuid, sysconf,
+};
+use libc::{NGROUPS_MAX, _SC_NGROUPS_MAX};
+
+extern "C" {
+    fn getpass(prompt: *const c_char) -> *mut c_char;
+    fn crypt(key: *const c_char, salt: *const c_char) -> *mut c_char;
+    fn login_getpwclass(pwd: *const libc::passwd) -> *mut libc::login_cap;
+    fn setusercontext(
+        lc: *mut libc::login_cap,
+        pwd: *const libc::passwd,
+        uid: libc::uid_t,
+        flags: libc::c_int,
+    );
+    fn login_close(lc: *mut libc::login_cap);
+}
+
+static PATH_BSHELL: &str = "/bin/sh";
+
+fn priv_start(euid: libc::uid_t) {
+    if unsafe { seteuid(euid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+}
+
+fn priv_end(uid: libc::uid_t) {
+    if unsafe { seteuid(uid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+}
+
+fn usage() -> ! {
+    eprintln!("usage: newgrp [-l] [group]");
+    process::exit(1);
+}
+
+fn inarray(gid: gid_t, grps: &[gid_t]) -> bool {
+    grps.contains(&gid)
+}
+
+fn restoregrps(pwd: &libc::passwd, euid: libc::uid_t, uid: libc::uid_t) {
+    priv_start(euid);
+    let initres = unsafe { initgroups(pwd.pw_name, pwd.pw_gid) };
+    let setres = unsafe { setgid(pwd.pw_gid) };
+    priv_end(uid);
+
+    if initres < 0 {
+        eprintln!("newgrp: initgroups: {}", std::io::Error::last_os_error());
+    }
+    if setres < 0 {
+        eprintln!("newgrp: setgid: {}", std::io::Error::last_os_error());
+    }
+}
+
+fn addgroup(grpname: &str, pwd: &libc::passwd, euid: libc::uid_t, uid: libc::uid_t) {
+    let egid = unsafe { getegid() };
+
+    // Try it as a group name, then a group id.
+    let grp = unsafe {
+        let cname = CString::new(grpname).unwrap();
+        let g = getgrnam(cname.as_ptr());
+        if g.is_null() {
+            // Try as numeric gid
+            if let Ok(lgid) = grpname.parse::<i64>() {
+                if lgid > 0 {
+                    let g = getgrgid(lgid as gid_t);
+                    if !g.is_null() {
+                        g
+                    } else {
+                        eprintln!("newgrp: {}: bad group name", grpname);
+                        return;
+                    }
+                } else {
+                    eprintln!("newgrp: {}: bad group name", grpname);
+                    return;
+                }
+            } else {
+                eprintln!("newgrp: {}: bad group name", grpname);
+                return;
+            }
+        } else {
+            g
+        }
+    };
+
+    // Check if user is a member of the requested group
+    let mut dbmember = false;
+    if unsafe { pwd.pw_gid == (*grp).gr_gid } {
+        dbmember = true;
+    }
+    if !dbmember {
+        let mut p = unsafe { (*grp).gr_mem };
+        while !unsafe { *p }.is_null() {
+            let member = unsafe { CStr::from_ptr(*p).to_string_lossy().into_owned() };
+            if member == unsafe { CStr::from_ptr(pwd.pw_name).to_string_lossy().into_owned() } {
+                dbmember = true;
+                break;
+            }
+            p = unsafe { p.add(1) };
+        }
+    }
+
+    // If not a member and group has a password, prompt for it
+    if !dbmember && unsafe { !(*(*grp).gr_passwd).is_null() && *(*grp).gr_passwd != 0 } && uid != 0 {
+        let pass = unsafe { getpass(b"Password:\0".as_ptr() as *const c_char) };
+        if pass.is_null() {
+            return;
+        }
+        let cryptpw = unsafe {
+            crypt(pass, (*grp).gr_passwd)
+        };
+        if cryptpw.is_null()
+            || unsafe {
+                strcmp_cstr(CStr::from_ptr(cryptpw), CStr::from_ptr((*grp).gr_passwd)) != 0
+            }
+        {
+            eprintln!("Sorry");
+            return;
+        }
+    }
+
+    let ngrps_max = unsafe { sysconf(_SC_NGROUPS_MAX) as usize };
+    let mut grps: Vec<gid_t> = vec![0; ngrps_max];
+    let ngrps = unsafe { getgroups(ngrps_max, grps.as_mut_ptr()) as usize };
+    if ngrps == usize::MAX {
+        eprintln!("newgrp: getgroups: {}", std::io::Error::last_os_error());
+        return;
+    }
+    grps.truncate(ngrps);
+
+    let grp_gid = unsafe { (*grp).gr_gid };
+
+    // Remove requested gid from supp. list if it exists and doesn't match our prior egid
+    if grp_gid != egid && inarray(grp_gid, &grps) {
+        if let Some(pos) = grps.iter().position(|&g| g == grp_gid) {
+            grps.remove(pos);
+            priv_start(euid);
+            if unsafe { setgroups(grps.len(), grps.as_ptr()) } < 0 {
+                priv_end(uid);
+                eprintln!("newgrp: setgroups: {}", std::io::Error::last_os_error());
+                return;
+            }
+            priv_end(uid);
+        }
+    }
+
+    // Set the new effective gid
+    priv_start(euid);
+    if unsafe { setgid(grp_gid) } < 0 {
+        priv_end(uid);
+        eprintln!("newgrp: setgid: {}", std::io::Error::last_os_error());
+        return;
+    }
+    priv_end(uid);
+
+    // Add old effective gid to supp. list if it does not exist
+    if !inarray(egid, &grps) {
+        if grps.len() >= ngrps_max {
+            eprintln!("newgrp: too many groups");
+        } else {
+            grps.push(egid);
+            priv_start(euid);
+            if unsafe { setgroups(grps.len(), grps.as_ptr()) } < 0 {
+                priv_end(uid);
+                eprintln!("newgrp: setgroups: {}", std::io::Error::last_os_error());
+                return;
+            }
+            priv_end(uid);
+        }
+    }
+}
+
+fn strcmp_cstr(a: &CStr, b: &CStr) -> libc::c_int {
+    let a_bytes = a.to_bytes();
+    let b_bytes = b.to_bytes();
+    let len = a_bytes.len().min(b_bytes.len());
+    for i in 0..len {
+        if a_bytes[i] != b_bytes[i] {
+            return a_bytes[i] as libc::c_int - b_bytes[i] as libc::c_int;
+        }
+    }
+    (a_bytes.len() - b_bytes.len()) as libc::c_int
+}
+
+fn loginshell(pwd: &libc::passwd) -> ! {
+    let shell = if unsafe { *pwd.pw_shell == 0 } {
+        PATH_BSHELL
+    } else {
+        unsafe { CStr::from_ptr(pwd.pw_shell).to_str().unwrap() }
+    };
+
+    let home = unsafe { CStr::from_ptr(pwd.pw_dir).to_str().unwrap() };
+    let name = unsafe { CStr::from_ptr(pwd.pw_name).to_str().unwrap() };
+
+    // Change to home directory
+    if let Err(e) = env::set_current_dir(home) {
+        eprintln!("newgrp: {}: {}", home, e);
+        let _ = env::set_current_dir("/");
+    }
+
+    // Save TERM and KRBTKFILE
+    let term = env::var("TERM").ok();
+    let ticket = env::var("KRBTKFILE").ok();
+
+    // Clear environment
+    env::clear();
+
+    // Set up login context
+    unsafe {
+        let lc = login_getpwclass(pwd);
+        if !lc.is_null() {
+            setusercontext(lc, pwd, pwd.pw_uid, libc::LOGIN_SETPATH | libc::LOGIN_SETUMASK | libc::LOGIN_SETENV);
+            login_close(lc);
+        }
+    }
+
+    env::set_var("USER", name);
+    env::set_var("SHELL", shell);
+    env::set_var("HOME", home);
+    if let Some(t) = term {
+        env::set_var("TERM", t);
+    }
+    if let Some(t) = ticket {
+        env::set_var("KRBTKFILE", t);
+    }
+
+    let shell_arg = format!("-{}", shell);
+    let shell_c = CString::new(shell).unwrap();
+    let shell_arg_c = CString::new(shell_arg).unwrap();
+
+    unsafe {
+        process::Command::new(&shell_c)
+            .arg(&shell_arg_c)
+            .exec();
+    }
+
+    eprintln!("newgrp: {}: {}", shell, std::io::Error::last_os_error());
+    process::exit(1);
+}
+
+fn doshell(pwd: &libc::passwd) -> ! {
+    let shell = if unsafe { *pwd.pw_shell == 0 } {
+        PATH_BSHELL
+    } else {
+        unsafe { CStr::from_ptr(pwd.pw_shell).to_str().unwrap() }
+    };
+
+    let shell_c = CString::new(shell).unwrap();
+
+    unsafe {
+        process::Command::new(&shell_c)
+            .arg(&shell_c)
+            .exec();
+    }
+
+    eprintln!("newgrp: {}: {}", shell, std::io::Error::last_os_error());
+    process::exit(1);
+}
+
+fn main() {
+    let euid = unsafe { geteuid() };
+    let uid = unsafe { getuid() };
+
+    if euid != 0 {
+        eprintln!("newgrp: need root permissions to function properly, check setuid bit");
+    }
+
+    if unsafe { seteuid(uid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+
+    let pwd_ptr = unsafe { getpwuid(uid) };
+    if pwd_ptr.is_null() {
+        eprintln!("newgrp: unknown user");
+        process::exit(1);
+    }
+    let pwd = unsafe { &*pwd_ptr };
+
+    let args: Vec<String> = env::args().collect();
+    let mut login = false;
+    let mut group_arg: Option<&str> = None;
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-l" | "-" => {
+                login = true;
+            }
+            arg if arg.starts_with('-') => {
+                usage();
+            }
+            arg => {
+                group_arg = Some(arg);
+            }
+        }
+        i += 1;
+    }
+
+    match group_arg {
+        None => restoregrps(pwd, euid, uid),
+        Some(g) => addgroup(g, pwd, euid, uid),
+    }
+
+    if unsafe { seteuid(euid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+    if unsafe { setuid(uid) } < 0 {
+        eprintln!("newgrp: setuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+
+    if login {
+        loginshell(pwd);
+    } else {
+        doshell(pwd);
+    }
+
+    process::exit(1);
+}

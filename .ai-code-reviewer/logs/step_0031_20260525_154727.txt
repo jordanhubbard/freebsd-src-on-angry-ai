@@ -1,0 +1,11 @@
+=== STEP 31 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'build-config*'
+
+--- RESPONSE ---
+
+
+Let me check what build command is being used for this unit:
+
+ACTION: FIND_FILE *.json

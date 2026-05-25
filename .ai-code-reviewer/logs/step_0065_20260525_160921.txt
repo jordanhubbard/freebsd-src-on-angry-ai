@@ -1,0 +1,72 @@
+=== STEP 65 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/newgrp/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/newgrp
+   Files: 0/3
+📄 File: usr.bin/newgrp/Makefile
+✏️  Edits: 2 files modified
+
+```
+PROG=	newgrp
+
+LIBADD=	crypt util
+
+.if defined(ENABLE_SUID_NEWGRP)
+BINMODE=	4555
+PRECIOUSPROG=
+.endif
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/newgrp/Makefile
+OLD:
+<<<
+PROG=	newgrp
+
+LIBADD=	crypt util
+
+.if defined(ENABLE_SUID_NEWGRP)
+BINMODE=	4555
+PRECIOUSPROG=
+.endif
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	newgrp
+
+LIBADD=	crypt util
+
+.if defined(ENABLE_SUID_NEWGRP)
+BINMODE=	4555
+PRECIOUSPROG=
+.endif
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>

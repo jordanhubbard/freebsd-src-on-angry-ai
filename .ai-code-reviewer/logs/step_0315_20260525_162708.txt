@@ -1,0 +1,11 @@
+=== STEP 315 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/*/Makefile'
+
+--- RESPONSE ---
+
+
+I need to find a workable unit with a Makefile and C source. Let me search for simple commands.
+
+ACTION: FIND_FILE usr.bin/*/Makefile

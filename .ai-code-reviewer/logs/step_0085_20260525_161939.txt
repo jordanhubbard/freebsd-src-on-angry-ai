@@ -1,0 +1,14 @@
+=== STEP 85 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/apply is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_kdf
+
+--- RESPONSE ---
+
+
+Let me find a pending unit that hasn't been skipped:
+
+ACTION: SET_SCOPE usr.bin/ar

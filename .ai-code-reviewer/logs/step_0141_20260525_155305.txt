@@ -1,0 +1,209 @@
+=== STEP 141 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/truncate
+   Files: 0/3
+📄 File: usr.bin/truncate/src/main.rs
+   Chunks: 2/2
+✏️  Edits: 3 files modified
+
+```
+=== CHUNK 2/2: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/truncate/src/main.rs === [line_chunk: chunk_2]
+=== Lines 251-435 (185 lines) ===
+
+                i += 2;
+            }
+            _ => {
+                usage();
+            }
+        }
+    }
+
+    // Remaining args are filenames
+    let filenames: Vec<String> = argv[i..].to_vec();
+
+    // Validation
+    if filenames.is_empty() || (do_refer as u8) + (got_size as u8) + (do_dealloc as u8) != 1
+        || (do_dealloc && len == -1)
+    {
+        usage();
+    }
+
+    // Resolve reference file size
+    if do_refer {
+        let rn = rname.as_ref().unwrap();
+        match std::fs::metadata(rn) {
+            Ok(meta) => {
+                tsize = meta.len() as off_t;
+            }
+            Err(e) => {
+                eprintln!("truncate: {}: {}", rn, e);
+                process::exit(EXIT_FAILURE);
+            }
+        }
+    } else if do_relative || do_round {
+        rsize = sz;
+    } else if !do_dealloc {
+        tsize = sz;
+    }
+
+    let oflags = if no_create { O_WRONLY } else { O_WRONLY | O_CREAT };
+    let omode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+
+    let mut error_count: i32 = 0;
+
+    for fname in &filenames {
+        let fd = match open_file(fname, oflags, omode) {
+            Ok(f) => f,
+            Err(e) => {
+                if e.kind() != io::ErrorKind::NotFound {
+                    eprintln!("truncate: {}: {}", fname, e);
+                    error_count += 1;
+                }
+                continue;
+            }
+        };
+
+        let mut current_tsize = tsize;
+
+        if do_relative {
+            match std::fs::metadata(fname) {
+                Ok(meta) => {
+                    let cur_size = meta.len() as off_t;
+                    let oflow = match cur_size.checked_add(rsize) {
+                        Some(v) => v,
+                        None => {
+                            eprintln!(
+                                "truncate: {}: {}",
+                                fname,
+                                io::Error::from_raw_os_error(27) // EFBIG
+                            );
+                            error_count += 1;
+                            continue;
+                        }
+                    };
+                    current_tsize = oflow;
+                }
+                Err(e) => {
+                    eprintln!("truncate: {}: {}", fname, e);
+                    error_count += 1;
+                    continue;
+                }
+            }
+        }
+
+        if do_round {
+            match std::fs::metadata(fname) {
+                Ok(meta) => {
+                    let cur_size = meta.len() as off_t;
+                    let mut abs_sz = if rsize < 0 { -rsize } else { rsize };
+                    if abs_sz == 0 {
+                        abs_sz = 1;
+                    }
+                    if cur_size % abs_sz != 0 {
+                        let mut round = cur_size / abs_sz;
+                        if round != abs_sz && rsize < 0 {
+                            round -= 1;
+                        } else if rsize > 0 {
+                            round += 1;
+                        }
+                        current_tsize = if round < 0 { 0 } else { round } * abs_sz;
+                    } else {
+                        current_tsize = cur_size;
+                    }
+                }
+                Err(e) => {
+                    eprintln!("truncate: {}: {}", fname, e);
+                    error_count += 1;
+                    continue;
+                }
+            }
+        }
+
+        if current_tsize < 0 {
+            current_tsize = 0;
+        }
+
+        if do_dealloc {
+            let sr = spacectl_range {
+                r_offset: off,
+                r_len: len,
+            };
+            let mut result = spacectl_range {
+                r_offset: 0,
+                r_len: 0,
+            };
+            let r = unsafe {
+                fspacectl(
+                    fd.as_raw_fd(),
+                    SPACECTL_DEALLOC,
+                    &sr,
+                    0,
+                    &mut result,
+                )
+            };
+            if r == -1 {
+                eprintln!(
+                    "truncate: {}: {}",
+                    fname,
+                    io::Error::last_os_error()
+                );
+                error_count += 1;
+            }
+        }
+
+        if do_truncate {
+            if let Err(e) = ftruncate_rust(&fd, current_tsize) {
+                eprintln!("truncate: {}: {}", fname, e);
+                error_count += 1;
+            }
+        }
+    }
+
+    if error_count > 0 {
+        process::exit(EXIT_FAILURE);
+    }
+    process::exit(EXIT_SUCCESS);
+}
+
+fn open_file(path: &str, flags: c_int, mode: mode_t) -> io::Result<std::fs::File> {
+    let cpath = CString::new(path).map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "invalid path"))?;
+    let fd = unsafe { libc_open(cpath.as_ptr(), flags, mode as u32) };
+    if fd < 0 {
+        return Err(io::Error::last_os_error());
+    }
+    Ok(unsafe { std::fs::File::from_raw_fd(fd) })
+}
+
+extern "C" {
+    fn open(path: *const i8, oflag: c_int, ...) -> c_int;
+}
+
+fn libc_open(path: *const i8, oflag: c_int, mode: u32) -> c_int {
+    unsafe { open(path, oflag, mode) }
+}
+
+fn ftruncate_rust(file: &std::fs::File, size: off_t) -> io::Result<()> {
+    let fd = file.as_raw_fd();
+    let r = unsafe { libc_ftruncate(fd, size) };
+    if r == -1 {
+        Err(io::Error::last_os_error())
+    } else {
+        Ok(())
+    }
+}
+
+extern "C" {
+    fn ftruncate(fd: c_int, length: off_t) -> c_int;
+}
+```
+
+--- RESPONSE ---
+
+
+Let me read the original C source to understand the full behavior before attempting to build.
+
+ACTION: READ_FILE usr.bin/truncate/truncate.c

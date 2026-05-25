@@ -1,0 +1,566 @@
+=== STEP 52 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/src/main.rs:
+PROGRESS:
+📁 Directory: usr.bin/newgrp
+   Files: 0/3
+📄 File: usr.bin/basename/src/main.rs
+✏️  Edits: 2 files modified
+
+```
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1991, 1993, 1994
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::env;
+use std::ffi::CString;
+use std::os::raw::c_char;
+use std::process;
+
+extern "C" {
+    fn basename(s: *const c_char) -> *mut c_char;
+}
+
+fn stripsuffix(p: &mut String, suffix: &str) {
+    if suffix.is_empty() {
+        return;
+    }
+    let plen = p.len();
+    let slen = suffix.len();
+    if slen >= plen {
+        return;
+    }
+    let start = plen - slen;
+    // Check that suffix matches at the end
+    if &p[start..] != suffix {
+        return;
+    }
+    // Ensure the match occurred on a character boundary
+    if !p.is_char_boundary(start) {
+        return;
+    }
+    p.truncate(start);
+}
+
+fn usage() {
+    eprintln!(
+        "usage: basename string [suffix]\n\
+         \tbasename [-a] [-s suffix] string [...]"
+    );
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut aflag = false;
+    let mut suffix: Option<String> = None;
+    let mut optind = 1;
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg == "-a" {
+            aflag = true;
+            i += 1;
+        } else if arg.starts_with("-s") {
+            if arg.len() == 2 {
+                // -s suffix (separate argument)
+                if i + 1 >= args.len() {
+                    usage();
+                }
+                suffix = Some(args[i + 1].clone());
+                i += 2;
+            } else {
+                // -ssuffix (combined)
+                suffix = Some(arg[2..].to_string());
+                i += 1;
+            }
+        } else if arg.starts_with('-') {
+            usage();
+        } else {
+            optind = i;
+            break;
+        }
+    }
+
+    let remaining: Vec<String> = args[optind..].to_vec();
+
+    if remaining.is_empty() {
+        usage();
+    }
+
+    if remaining[0].is_empty() {
+        println!();
+        process::exit(0);
+    }
+
+    // Handle POSIX two-arg form: basename string [suffix]
+    let suffix = if suffix.is_none() && !aflag && remaining.len() == 2 {
+        Some(remaining[1].clone())
+    } else {
+        suffix
+    };
+
+    let suffix_str = suffix.as_deref().unwrap_or("");
+
+    // Determine which arguments are strings to process.
+    // In POSIX two-arg form (no -a, no -s, exactly 2 args), the second arg is suffix.
+    let num_strings = if !aflag && suffix.is_none() && remaining.len() == 2 {
+        1
+    } else {
+        remaining.len()
+    };
+
+    for arg in &remaining[..num_strings] {
+        let c_arg = match CString::new(arg.as_bytes()) {
+            Ok(s) => s,
+            Err(_) => {
+                eprintln!("basename: invalid argument");
+                process::exit(1);
+            }
+        };
+        let result = unsafe { basename(c_arg.as_ptr()) };
+        if result.is_null() {
+            eprintln!("basename: error processing argument");
+            process::exit(1);
+        }
+        let base = unsafe { std::ffi::CStr::from_ptr(result) }
+            .to_string_lossy()
+            .into_owned();
+        let mut base = base;
+        stripsuffix(&mut base, suffix_str);
+        println!("{}", base);
+    }
+
+    process::exit(0);
+}
+```
+
+--- RESPONSE ---
+
+
+I see - the completed units use raw FFI without the `libc` crate. Let me rewrite the main.rs to avoid the `libc` dependency:
+
+ACTION: WRITE_FILE usr.bin/newgrp/src/main.rs
+CONTENT:
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2002 Tim J. Robbins.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * newgrp -- change to a new group
+ */
+
+use std::env;
+use std::ffi::{CStr, CString};
+use std::os::raw::{c_char, c_int, c_long};
+use std::os::unix::process::CommandExt;
+use std::process;
+
+type gid_t = u32;
+type uid_t = u32;
+
+#[repr(C)]
+struct passwd {
+    pw_name: *mut c_char,
+    pw_passwd: *mut c_char,
+    pw_uid: uid_t,
+    pw_gid: gid_t,
+    pw_gecos: *mut c_char,
+    pw_class: *mut c_char,
+    pw_dir: *mut c_char,
+    pw_shell: *mut c_char,
+}
+
+#[repr(C)]
+struct group {
+    gr_name: *mut c_char,
+    gr_passwd: *mut c_char,
+    gr_gid: gid_t,
+    gr_mem: *mut *mut c_char,
+}
+
+type login_cap = ();
+
+extern "C" {
+    fn geteuid() -> uid_t;
+    fn getuid() -> uid_t;
+    fn getegid() -> gid_t;
+    fn getgid() -> gid_t;
+    fn seteuid(uid: uid_t) -> c_int;
+    fn setuid(uid: uid_t) -> c_int;
+    fn setgid(gid: gid_t) -> c_int;
+    fn getpwuid(uid: uid_t) -> *mut passwd;
+    fn getgrnam(name: *const c_char) -> *mut group;
+    fn getgrgid(gid: gid_t) -> *mut group;
+    fn initgroups(name: *const c_char, basegid: gid_t) -> c_int;
+    fn getgroups(ngroups: c_int, grouplist: *mut gid_t) -> c_int;
+    fn setgroups(ngroups: c_int, grouplist: *const gid_t) -> c_int;
+    fn sysconf(name: c_int) -> c_long;
+    fn getpass(prompt: *const c_char) -> *mut c_char;
+    fn crypt(key: *const c_char, salt: *const c_char) -> *mut c_char;
+    fn login_getpwclass(pwd: *const passwd) -> *mut login_cap;
+    fn setusercontext(
+        lc: *mut login_cap,
+        pwd: *const passwd,
+        uid: uid_t,
+        flags: c_int,
+    );
+    fn login_close(lc: *mut login_cap);
+}
+
+const _SC_NGROUPS_MAX: c_int = 10;
+const LOGIN_SETPATH: c_int = 0x0001;
+const LOGIN_SETUMASK: c_int = 0x0002;
+const LOGIN_SETENV: c_int = 0x0004;
+const PATH_BSHELL: &str = "/bin/sh";
+
+fn priv_start(euid: uid_t) {
+    if unsafe { seteuid(euid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+}
+
+fn priv_end(uid: uid_t) {
+    if unsafe { seteuid(uid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+}
+
+fn usage() -> ! {
+    eprintln!("usage: newgrp [-l] [group]");
+    process::exit(1);
+}
+
+fn inarray(gid: gid_t, grps: &[gid_t]) -> bool {
+    grps.contains(&gid)
+}
+
+fn restoregrps(pwd: &passwd, euid: uid_t, uid: uid_t) {
+    priv_start(euid);
+    let initres = unsafe { initgroups(pwd.pw_name, pwd.pw_gid) };
+    let setres = unsafe { setgid(pwd.pw_gid) };
+    priv_end(uid);
+
+    if initres < 0 {
+        eprintln!("newgrp: initgroups: {}", std::io::Error::last_os_error());
+    }
+    if setres < 0 {
+        eprintln!("newgrp: setgid: {}", std::io::Error::last_os_error());
+    }
+}
+
+fn addgroup(grpname: &str, pwd: &passwd, euid: uid_t, uid: uid_t) {
+    let egid = unsafe { getegid() };
+
+    let cname = CString::new(grpname).unwrap();
+    let grp = unsafe {
+        let g = getgrnam(cname.as_ptr());
+        if g.is_null() {
+            if let Ok(lgid) = grpname.parse::<i64>() {
+                if lgid > 0 {
+                    let g = getgrgid(lgid as gid_t);
+                    if !g.is_null() {
+                        g
+                    } else {
+                        eprintln!("newgrp: {}: bad group name", grpname);
+                        return;
+                    }
+                } else {
+                    eprintln!("newgrp: {}: bad group name", grpname);
+                    return;
+                }
+            } else {
+                eprintln!("newgrp: {}: bad group name", grpname);
+                return;
+            }
+        } else {
+            g
+        }
+    };
+
+    let mut dbmember = false;
+    if unsafe { pwd.pw_gid == (*grp).gr_gid } {
+        dbmember = true;
+    }
+    if !dbmember {
+        let mut p = unsafe { (*grp).gr_mem };
+        while !unsafe { *p }.is_null() {
+            let member = unsafe { CStr::from_ptr(*p).to_string_lossy().into_owned() };
+            if member == unsafe { CStr::from_ptr(pwd.pw_name).to_string_lossy().into_owned() } {
+                dbmember = true;
+                break;
+            }
+            p = unsafe { p.add(1) };
+        }
+    }
+
+    if !dbmember
+        && unsafe { *(*grp).gr_passwd != 0 }
+        && uid != 0
+    {
+        let pass = unsafe { getpass(b"Password:\0".as_ptr() as *const c_char) };
+        if pass.is_null() {
+            return;
+        }
+        let cryptpw = unsafe { crypt(pass, (*grp).gr_passwd) };
+        if cryptpw.is_null()
+            || unsafe {
+                strcmp_cstr(CStr::from_ptr(cryptpw), CStr::from_ptr((*grp).gr_passwd)) != 0
+            }
+        {
+            eprintln!("Sorry");
+            return;
+        }
+    }
+
+    let ngrps_max = unsafe { sysconf(_SC_NGROUPS_MAX) as usize };
+    let mut grps: Vec<gid_t> = vec![0; ngrps_max];
+    let ngrps = unsafe { getgroups(ngrps_max as c_int, grps.as_mut_ptr()) as usize };
+    if ngrps == usize::MAX {
+        eprintln!("newgrp: getgroups: {}", std::io::Error::last_os_error());
+        return;
+    }
+    grps.truncate(ngrps);
+
+    let grp_gid = unsafe { (*grp).gr_gid };
+
+    if grp_gid != egid && inarray(grp_gid, &grps) {
+        if let Some(pos) = grps.iter().position(|&g| g == grp_gid) {
+            grps.remove(pos);
+            priv_start(euid);
+            if unsafe { setgroups(grps.len() as c_int, grps.as_ptr()) } < 0 {
+                priv_end(uid);
+                eprintln!("newgrp: setgroups: {}", std::io::Error::last_os_error());
+                return;
+            }
+            priv_end(uid);
+        }
+    }
+
+    priv_start(euid);
+    if unsafe { setgid(grp_gid) } < 0 {
+        priv_end(uid);
+        eprintln!("newgrp: setgid: {}", std::io::Error::last_os_error());
+        return;
+    }
+    priv_end(uid);
+
+    if !inarray(egid, &grps) {
+        if grps.len() >= ngrps_max {
+            eprintln!("newgrp: too many groups");
+        } else {
+            grps.push(egid);
+            priv_start(euid);
+            if unsafe { setgroups(grps.len() as c_int, grps.as_ptr()) } < 0 {
+                priv_end(uid);
+                eprintln!("newgrp: setgroups: {}", std::io::Error::last_os_error());
+                return;
+            }
+            priv_end(uid);
+        }
+    }
+}
+
+fn strcmp_cstr(a: &CStr, b: &CStr) -> c_int {
+    let a_bytes = a.to_bytes();
+    let b_bytes = b.to_bytes();
+    let len = a_bytes.len().min(b_bytes.len());
+    for i in 0..len {
+        if a_bytes[i] != b_bytes[i] {
+            return a_bytes[i] as c_int - b_bytes[i] as c_int;
+        }
+    }
+    (a_bytes.len() as c_int) - (b_bytes.len() as c_int)
+}
+
+fn loginshell(pwd: &passwd) -> ! {
+    let shell = if unsafe { *pwd.pw_shell == 0 } {
+        PATH_BSHELL
+    } else {
+        unsafe { CStr::from_ptr(pwd.pw_shell).to_str().unwrap() }
+    };
+
+    let home = unsafe { CStr::from_ptr(pwd.pw_dir).to_str().unwrap() };
+    let name = unsafe { CStr::from_ptr(pwd.pw_name).to_str().unwrap() };
+
+    if let Err(e) = env::set_current_dir(home) {
+        eprintln!("newgrp: {}: {}", home, e);
+        let _ = env::set_current_dir("/");
+    }
+
+    let term = env::var("TERM").ok();
+    let ticket = env::var("KRBTKFILE").ok();
+
+    env::clear();
+
+    unsafe {
+        let lc = login_getpwclass(pwd);
+        if !lc.is_null() {
+            setusercontext(
+                lc,
+                pwd,
+                pwd.pw_uid,
+                LOGIN_SETPATH | LOGIN_SETUMASK | LOGIN_SETENV,
+            );
+            login_close(lc);
+        }
+    }
+
+    env::set_var("USER", name);
+    env::set_var("SHELL", shell);
+    env::set_var("HOME", home);
+    if let Some(t) = term {
+        env::set_var("TERM", t);
+    }
+    if let Some(t) = ticket {
+        env::set_var("KRBTKFILE", t);
+    }
+
+    let shell_arg = format!("-{}", shell);
+    let shell_c = CString::new(shell).unwrap();
+    let shell_arg_c = CString::new(shell_arg).unwrap();
+
+    unsafe {
+        process::Command::new(&shell_c)
+            .arg(&shell_arg_c)
+            .exec();
+    }
+
+    eprintln!("newgrp: {}: {}", shell, std::io::Error::last_os_error());
+    process::exit(1);
+}
+
+fn doshell(pwd: &passwd) -> ! {
+    let shell = if unsafe { *pwd.pw_shell == 0 } {
+        PATH_BSHELL
+    } else {
+        unsafe { CStr::from_ptr(pwd.pw_shell).to_str().unwrap() }
+    };
+
+    let shell_c = CString::new(shell).unwrap();
+
+    unsafe {
+        process::Command::new(&shell_c)
+            .arg(&shell_c)
+            .exec();
+    }
+
+    eprintln!("newgrp: {}: {}", shell, std::io::Error::last_os_error());
+    process::exit(1);
+}
+
+fn main() {
+    let euid = unsafe { geteuid() };
+    let uid = unsafe { getuid() };
+
+    if euid != 0 {
+        eprintln!("newgrp: need root permissions to function properly, check setuid bit");
+    }
+
+    if unsafe { seteuid(uid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+
+    let pwd_ptr = unsafe { getpwuid(uid) };
+    if pwd_ptr.is_null() {
+        eprintln!("newgrp: unknown user");
+        process::exit(1);
+    }
+    let pwd = unsafe { &*pwd_ptr };
+
+    let args: Vec<String> = env::args().collect();
+    let mut login = false;
+    let mut group_arg: Option<&str> = None;
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-l" | "-" => {
+                login = true;
+            }
+            arg if arg.starts_with('-') => {
+                usage();
+            }
+            arg => {
+                group_arg = Some(arg);
+            }
+        }
+        i += 1;
+    }
+
+    match group_arg {
+        None => restoregrps(pwd, euid, uid),
+        Some(g) => addgroup(g, pwd, euid, uid),
+    }
+
+    if unsafe { seteuid(euid) } < 0 {
+        eprintln!("newgrp: seteuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+    if unsafe { setuid(uid) } < 0 {
+        eprintln!("newgrp: setuid: {}", std::io::Error::last_os_error());
+        process::exit(1);
+    }
+
+    if login {
+        loginshell(pwd);
+    } else {
+        doshell(pwd);
+    }
+
+    process::exit(1);
+}

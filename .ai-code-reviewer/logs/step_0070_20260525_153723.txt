@@ -1,0 +1,9 @@
+=== STEP 70 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for '\[ \].*\.c.*\.h'
+
+--- RESPONSE ---
+
+
+ACTION: GREP ^- \[ \].*\.c
