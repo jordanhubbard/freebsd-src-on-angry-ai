@@ -798,5 +798,9 @@
   "usr.bin/ypwhich": {
     "attempts": 3,
     "last_attempt": "2026-05-25T00:55:04.006387"
+  },
+  "usr.sbin/lastlogin": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T05:54:47.579123"
   }
 }

@@ -1,0 +1,11 @@
+=== STEP 53 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+No `bsd.rust.mk` exists. Let me check how previously completed units integrated Rust into their Makefiles.
+
+ACTION: LIST_DIR usr.bin/asa

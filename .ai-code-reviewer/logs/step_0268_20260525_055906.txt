@@ -1,0 +1,15 @@
+=== STEP 268 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/tabs/Makefile
+OLD:
+PROG=	tabs
+
+LIBADD=	tinfow
+
+.include <bsd.prog.mk>
