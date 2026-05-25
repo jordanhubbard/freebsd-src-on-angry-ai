@@ -1,0 +1,235 @@
+=== STEP 234 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/bintrans/rust/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me create the qp module:
+
+ACTION: WRITE_FILE usr.bin/bintrans/rust/src/qp.rs
+CONTENT:
+<<<
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2024 The FreeBSD Foundation
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read, Write};
+use std::process;
+
+fn hexval(c: u8) -> u8 {
+    if b'0' <= c && c <= b'9' {
+        c - b'0'
+    } else {
+        10 + c.to_ascii_uppercase() - b'A'
+    }
+}
+
+fn decode_char(s: &[u8]) -> u8 {
+    16 * hexval(s[1].to_ascii_uppercase()) + hexval(s[2].to_ascii_uppercase())
+}
+
+fn decode_quoted_printable(body: &[u8], fpo: &mut dyn Write, rfc2047: bool) {
+    let mut i = 0;
+    while i < body.len() {
+        match body[i] {
+            b'=' => {
+                if i + 1 >= body.len() {
+                    fpo.write_all(&[body[i]]).unwrap();
+                    i += 1;
+                    continue;
+                }
+                if body[i + 1] == b'\r' && i + 2 < body.len() && body[i + 2] == b'\n' {
+                    i += 3;
+                    continue;
+                }
+                if body[i + 1] == b'\n' {
+                    i += 2;
+                    continue;
+                }
+                if !is_hex(body[i + 1]) || !is_hex(body[i + 2]) {
+                    fpo.write_all(&[body[i]]).unwrap();
+                    i += 1;
+                    continue;
+                }
+                fpo.write_all(&[decode_char(&body[i..i + 3])]).unwrap();
+                i += 3;
+                continue;
+            }
+            b'_' if rfc2047 => {
+                fpo.write_all(&[0x20]).unwrap();
+                i += 1;
+                continue;
+            }
+            _ => {
+                fpo.write_all(&[body[i]]).unwrap();
+                i += 1;
+                continue;
+            }
+        }
+    }
+}
+
+fn is_hex(c: u8) -> bool {
+    (b'0' <= c && c <= b'9') || (b'A' <= c && c <= b'F') || (b'a' <= c && c <= b'f')
+}
+
+fn encode_quoted_printable(body: &[u8], fpo: &mut dyn Write, rfc2047: bool) {
+    let mut linelen: usize = 0;
+    let mut prev: u8 = 0;
+
+    for &b in body {
+        if linelen == 75 {
+            fpo.write_all(b"=\r\n").unwrap();
+            linelen = 0;
+        }
+        if b > 127 || b == b'=' || (b == b'.' && body.windows(2).any(|w| w[0] == b'.' && (w[1] == b'\n' || w[1] == b'\r'))) {
+            write!(fpo, "={:02X}", b).unwrap();
+            linelen += 3;
+            prev = b;
+        } else if b < 33 && b != b'\n' {
+            if (b == b' ' || b == b'\t') {
+                if b == 0x20 && rfc2047 {
+                    fpo.write_all(b"_").unwrap();
+                } else {
+                    fpo.write_all(&[b]).unwrap();
+                }
+                prev = b;
+            } else {
+                write!(fpo, "={:02X}", b).unwrap();
+                linelen += 3;
+                prev = b'_';
+            }
+        } else if b == b'\n' {
+            if prev == b' ' || prev == b'\t' {
+                fpo.write_all(b"=").unwrap();
+            }
+            fpo.write_all(b"\n").unwrap();
+            linelen = 0;
+            prev = 0;
+        } else {
+            fpo.write_all(&[b]).unwrap();
+            prev = b;
+        }
+        if b != b'\n' {
+            linelen += 1;
+        }
+    }
+}
+
+fn qp(fp: &mut dyn Read, fpo: &mut dyn Write, encode: bool, rfc2047: bool) {
+    let mut reader = BufReader::new(fp);
+    let mut line = String::new();
+    loop {
+        line.clear();
+        match reader.read_line(&mut line) {
+            Ok(0) => break,
+            Ok(_) => {
+                if encode {
+                    encode_quoted_printable(line.as_bytes(), fpo, rfc2047);
+                } else {
+                    decode_quoted_printable(line.as_bytes(), fpo, rfc2047);
+                }
+            }
+            Err(_) => break,
+        }
+    }
+}
+
+fn usage() {
+    eprintln!("usage: bintrans qp [-d] [-r] [-o outputfile] [file name]");
+}
+
+pub fn main_quotedprintable(args: &[String]) {
+    let mut encode = true;
+    let mut rfc2047 = false;
+    let mut outfile: Option<String> = None;
+    let mut infile: Option<String> = None;
+
+    let mut i = 0;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-d" | "--decode" => {
+                encode = false;
+            }
+            "-r" | "--rfc2047" => {
+                rfc2047 = true;
+            }
+            "-o" | "--output" => {
+                i += 1;
+                if i < args.len() {
+                    outfile = Some(args[i].clone());
+                } else {
+                    usage();
+                    process::exit(1);
+                }
+            }
+            "-u" => {
+                // backward compatibility, fall through to -d
+                encode = false;
+            }
+            _ => {
+                if !args[i].starts_with('-') {
+                    infile = Some(args[i].clone());
+                } else {
+                    usage();
+                    process::exit(1);
+                }
+            }
+        }
+        i += 1;
+    }
+
+    let mut fpo: Box<dyn Write> = if let Some(ref o) = outfile {
+        match File::create(o) {
+            Ok(f) => Box::new(f),
+            Err(e) => {
+                eprintln!("{}: {}", o, e);
+                process::exit(1);
+            }
+        }
+    } else {
+        Box::new(io::stdout())
+    };
+
+    let mut fp: Box<dyn Read> = if let Some(ref i) = infile {
+        match File::open(i) {
+            Ok(f) => Box::new(f),
+            Err(e) => {
+                eprintln!("{}: {}", i, e);
+                process::exit(1);
+            }
+        }
+    } else {
+        Box::new(io::stdin())
+    };
+
+    qp(&mut *fp, &mut *fpo, encode, rfc2047);
+}
+>>>

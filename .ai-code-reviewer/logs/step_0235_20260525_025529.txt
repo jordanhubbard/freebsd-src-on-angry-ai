@@ -1,0 +1,316 @@
+=== STEP 235 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/bintrans/rust/src/qp.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me create the uuencode module:
+
+ACTION: WRITE_FILE usr.bin/bintrans/rust/src/uuencode.rs
+CONTENT:
+<<<
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2024 The FreeBSD Foundation
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+use std::fs::File;
+use std::io::{self, Read, Write};
+use std::os::unix::fs::MetadataExt;
+use std::process;
+
+fn enc(c: u8) -> u8 {
+    if c != 0 {
+        (c & 0o77) + b' '
+    } else {
+        b'`'
+    }
+}
+
+fn arg_to_col(w: &str) -> usize {
+    match w.parse::<i64>() {
+        Ok(v) if v < 0 => {
+            eprintln!("columns argument must be non-negative");
+            process::exit(2);
+        }
+        Ok(v) => v as usize,
+        Err(_) => {
+            eprintln!("invalid column value: {}", w);
+            process::exit(2);
+        }
+    }
+}
+
+fn base64_encode_body(input: &mut dyn Read, output: &mut dyn Write, mode: u16, remotefile: &str, raw: bool, columns: usize) {
+    if !raw {
+        writeln!(output, "begin-base64 {:o} {}", mode, remotefile).unwrap();
+    }
+
+    let mut buf = [0u8; 1023];
+    let mut carry = 0usize;
+
+    loop {
+        match input.read(&mut buf) {
+            Ok(0) => break,
+            Ok(n) => {
+                let encoded = base64_encode_bytes(&buf[..n]);
+                if columns == 0 {
+                    output.write_all(encoded.as_bytes()).unwrap();
+                    continue;
+                }
+                let mut i = 0;
+                while i < encoded.len() {
+                    let remaining = columns - carry;
+                    let chunk_len = encoded[i..].len().min(remaining);
+                    output.write_all(&encoded.as_bytes()[i..i + chunk_len]).unwrap();
+                    i += chunk_len;
+                    carry = (carry + chunk_len) % columns;
+                    if carry == 0 {
+                        output.write_all(b"\n").unwrap();
+                    }
+                }
+            }
+            Err(_) => break,
+        }
+    }
+
+    if columns == 0 || carry != 0 {
+        output.write_all(b"\n").unwrap();
+    }
+    if !raw {
+        writeln!(output, "====").unwrap();
+    }
+}
+
+fn base64_encode_bytes(input: &[u8]) -> String {
+    const TABLE: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let mut result = String::with_capacity((input.len() + 2) / 3 * 4);
+    let mut i = 0;
+    while i < input.len() {
+        let b0 = input[i];
+        let b1 = if i + 1 < input.len() { input[i + 1] } else { 0 };
+        let b2 = if i + 2 < input.len() { input[i + 2] } else { 0 };
+        let remaining = input.len() - i;
+
+        result.push(TABLE[((b0 >> 2) & 0x3F) as usize] as char);
+        result.push(TABLE[(((b0 << 4) | (b1 >> 4)) & 0x3F) as usize] as char);
+        if remaining > 1 {
+            result.push(TABLE[(((b1 << 2) | (b2 >> 6)) & 0x3F) as usize] as char);
+        } else {
+            result.push('=');
+        }
+        if remaining > 2 {
+            result.push(TABLE[(b2 & 0x3F) as usize] as char);
+        } else {
+            result.push('=');
+        }
+        i += 3;
+    }
+    result
+}
+
+fn encode_body(input: &mut dyn Read, output: &mut dyn Write, mode: u16, remotefile: &str, raw: bool) {
+    if !raw {
+        writeln!(output, "begin {:o} {}", mode, remotefile).unwrap();
+    }
+
+    let mut buf = [0u8; 45];
+    loop {
+        match input.read(&mut buf) {
+            Ok(0) => break,
+            Ok(n) => {
+                let ch = enc(n as u8);
+                output.write_all(&[ch]).unwrap();
+                let mut i = 0;
+                while i < n {
+                    let remaining = n - i;
+                    let b0 = buf[i];
+                    let b1 = if i + 1 < n { buf[i + 1] } else { 0 };
+                    let b2 = if i + 2 < n { buf[i + 2] } else { 0 };
+
+                    output.write_all(&[enc(b0 >> 2)]).unwrap();
+                    output.write_all(&[enc(((b0 << 4) | (b1 >> 4)) & 0x3F)]).unwrap();
+                    if remaining > 1 {
+                        output.write_all(&[enc(((b1 << 2) | (b2 >> 6)) & 0x3F)]).unwrap();
+                    } else {
+                        output.write_all(&[enc(0)]).unwrap();
+                    }
+                    if remaining > 2 {
+                        output.write_all(&[enc(b2 & 0x3F)]).unwrap();
+                    } else {
+                        output.write_all(&[enc(0)]).unwrap();
+                    }
+                    i += 3;
+                }
+                output.write_all(b"\n").unwrap();
+            }
+            Err(_) => break,
+        }
+    }
+    if !raw {
+        writeln!(output, "{}", enc(0) as char).unwrap();
+        writeln!(output, "end").unwrap();
+    }
+}
+
+fn usage() {
+    eprintln!(
+        "usage: uuencode [-m] [-o outfile] [infile] remotefile\n\
+         b64encode [-o outfile] [infile] remotefile"
+    );
+}
+
+pub fn main_encode(args: &[String]) {
+    let mut base64 = false;
+    let mut outfile: Option<String> = None;
+    let mut raw = false;
+    let mut columns = 76usize;
+    let mut infile: Option<String> = None;
+    let mut remotefile: Option<String> = None;
+
+    let mut i = 0;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-m" => base64 = true,
+            "-r" => raw = true,
+            "-o" => {
+                i += 1;
+                if i < args.len() {
+                    outfile = Some(args[i].clone());
+                } else {
+                    usage();
+                    process::exit(1);
+                }
+            }
+            "-w" => {
+                i += 1;
+                if i < args.len() {
+                    columns = arg_to_col(&args[i]);
+                } else {
+                    usage();
+                    process::exit(1);
+                }
+            }
+            _ => {
+                if !args[i].starts_with('-') {
+                    if remotefile.is_none() {
+                        infile = Some(args[i].clone());
+                    } else {
+                        remotefile = Some(args[i].clone());
+                    }
+                } else {
+                    usage();
+                    process::exit(1);
+                }
+            }
+        }
+        i += 1;
+    }
+
+    // Handle positional args: [infile] remotefile
+    let mut positional: Vec<String> = args.iter().filter(|a| !a.starts_with('-')).cloned().collect();
+    let (infile, remotefile) = match positional.len() {
+        2 => (Some(positional.remove(0)), Some(positional.remove(0))),
+        1 => (None, Some(positional.remove(0))),
+        _ => {
+            usage();
+            process::exit(1);
+        }
+    };
+
+    let remotefile = remotefile.unwrap();
+
+    let mut input: Box<dyn Read> = if let Some(ref f) = infile {
+        match File::open(f) {
+            Ok(file) => {
+                let meta = file.metadata().unwrap();
+                let mode = (meta.mode() & 0o777) as u16;
+                let mut fpo: Box<dyn Write> = if let Some(ref o) = outfile {
+                    Box::new(File::create(o).unwrap_or_else(|e| {
+                        eprintln!("unable to open {} for output: {}", o, e);
+                        process::exit(1);
+                    }))
+                } else {
+                    Box::new(io::stdout())
+                };
+                if base64 {
+                    base64_encode_body(&mut file, &mut *fpo, mode, &remotefile, raw, columns);
+                } else {
+                    encode_body(&mut file, &mut *fpo, mode, &remotefile, raw);
+                }
+                return;
+            }
+            Err(e) => {
+                eprintln!("{}: {}", f, e);
+                process::exit(1);
+            }
+        }
+    } else {
+        Box::new(io::stdin())
+    };
+
+    let mode = 0o666 & !0o022; // RW & ~umask(RW)
+    let mut fpo: Box<dyn Write> = if let Some(ref o) = outfile {
+        Box::new(File::create(o).unwrap_or_else(|e| {
+            eprintln!("unable to open {} for output: {}", o, e);
+            process::exit(1);
+        }))
+    } else {
+        Box::new(io::stdout())
+    };
+
+    if base64 {
+        base64_encode_body(&mut *input, &mut *fpo, mode, &remotefile, raw, columns);
+    } else {
+        encode_body(&mut *input, &mut *fpo, mode, &remotefile, raw);
+    }
+}
+
+pub fn base64_encode_or_decode(args: &[String]) {
+    // base64 command: -d for decode, otherwise encode
+    let mut decode = false;
+    let mut i = 0;
+    let mut positional: Vec<String> = Vec::new();
+    while i < args.len() {
+        match args[i].as_str() {
+            "-d" => decode = true,
+            _ => {
+                if !args[i].starts_with('-') {
+                    positional.push(args[i].clone());
+                }
+            }
+        }
+        i += 1;
+    }
+    if decode {
+        uudecode::main_base64_decode(&positional);
+    } else {
+        main_encode(args);
+    }
+}
+>>>

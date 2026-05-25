@@ -1,0 +1,123 @@
+=== STEP 233 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/bintrans/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/bintrans/rust/src/main.rs
+CONTENT:
+<<<
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2024 The FreeBSD Foundation
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+mod qp;
+mod uudecode;
+mod uuencode;
+
+use std::env;
+use std::ffi::OsString;
+use std::os::unix::ffi::OsStrExt;
+use std::process;
+
+enum Coder {
+    Uuencode,
+    Uudecode,
+    B64encode,
+    B64decode,
+    Base64,
+    Qp,
+}
+
+fn search(progname: &str) -> Option<Coder> {
+    match progname {
+        "uuencode" => Some(Coder::Uuencode),
+        "uudecode" => Some(Coder::Uudecode),
+        "b64encode" => Some(Coder::B64encode),
+        "b64decode" => Some(Coder::B64decode),
+        "base64" => Some(Coder::Base64),
+        "qp" => Some(Coder::Qp),
+        _ => None,
+    }
+}
+
+fn main() {
+    let args: Vec<OsString> = env::args_os().collect();
+    let progname = if args.len() > 0 {
+        args[0].as_encoded_bytes()
+    } else {
+        b"bintrans"
+    };
+    let progname = std::str::from_utf8(progname).unwrap_or("bintrans");
+
+    let coder = search(progname).or_else(|| {
+        if args.len() > 1 {
+            let subcmd = args[1].as_encoded_bytes();
+            let subcmd = std::str::from_utf8(subcmd).unwrap_or("");
+            search(subcmd).map(|c| {
+                // Skip the subcommand argument
+                let rest: Vec<OsString> = args[2..].to_vec();
+                let _ = rest; // will be handled by the match below
+                c
+            })
+        } else {
+            None
+        }
+    });
+
+    match coder {
+        Some(Coder::Uuencode) | Some(Coder::B64encode) => {
+            let args: Vec<String> = env::args().skip(1).collect();
+            uuencode::main_encode(&args);
+        }
+        Some(Coder::Uudecode) | Some(Coder::B64decode) => {
+            let args: Vec<String> = env::args().skip(1).collect();
+            uudecode::main_decode(&args);
+        }
+        Some(Coder::Base64) => {
+            let args: Vec<String> = env::args().skip(1).collect();
+            uuencode::base64_encode_or_decode(&args);
+        }
+        Some(Coder::Qp) => {
+            let args: Vec<String> = env::args().skip(1).collect();
+            qp::main_quotedprintable(&args);
+        }
+        None => {
+            eprintln!(
+                "usage: {} <uuencode | uudecode> ...\n\
+                 {} <b64encode | b64decode> ...\n\
+                 {} <base64> ...\n\
+                 {} <qp> ...",
+                progname, progname, progname, progname
+            );
+            process::exit(64); // EX_USAGE
+        }
+    }
+}
+>>>
