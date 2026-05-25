@@ -1,0 +1,71 @@
+=== STEP 144 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/touch
+   Files: 0/3
+📄 File: usr.bin/touch/touch.c
+   Chunks: 11/14
+
+```
+=== CHUNK 11/14: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch/touch.c === [function: stime_darg]
+=== Lines 305-353 (49 lines) ===
+
+static void
+stime_darg(const char *arg, struct timespec *tvp)
+{
+	struct tm t = { .tm_sec = 0 };
+	const char *fmt, *colon;
+	char *p;
+	int val, isutc = 0;
+
+	tvp[0].tv_nsec = 0;
+	t.tm_isdst = -1;
+	colon = strchr(arg, ':');
+	if (colon == NULL || strchr(colon + 1, ':') == NULL)
+		goto bad;
+	fmt = strchr(arg, 'T') != NULL ? "%Y-%m-%dT%H:%M:%S" :
+	    "%Y-%m-%d %H:%M:%S";
+	p = strptime(arg, fmt, &t);
+	if (p == NULL)
+		goto bad;
+	/* POSIX: must have at least one digit after dot */
+	if ((*p == '.' || *p == ',') && isdigit((unsigned char)p[1])) {
+		p++;
+		val = 100000000;
+		while (isdigit((unsigned char)*p)) {
+			tvp[0].tv_nsec += val * (*p - '0');
+			p++;
+			val /= 10;
+		}
+	}
+	if (*p == 'Z') {
+		isutc = 1;
+		p++;
+	}
+	if (*p != '\0')
+		goto bad;
+
+	t.tm_yday = -1;
+	tvp[0].tv_sec = isutc ? timegm(&t) : mktime(&t);
+	if (t.tm_yday == -1)
+		goto bad;
+
+	tvp[1] = tvp[0];
+	return;
+
+bad:
+	errx(1, "out of range or illegal time specification: "
+	    "YYYY-MM-DDThh:mm:SS[.frac][tz]");
+}
+
+/* Calculate a time offset in seconds, given an arg of the format [-]HHMMSS. */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

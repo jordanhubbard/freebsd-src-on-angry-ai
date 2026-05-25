@@ -176,8 +176,8 @@
     "last_attempt": "2026-05-24T20:56:42.109153"
   },
   "contrib/llvm-project/llvm/lib/Target/VE/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T20:59:17.300115"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T21:19:33.805024"
   },
   "contrib/llvm-project/llvm/lib/Target/XCore/TargetInfo": {
     "attempts": 1,
@@ -616,8 +616,8 @@
     "last_attempt": "2026-05-24T17:16:18.748401"
   },
   "usr.bin/touch": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T07:41:39.695022"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T21:07:45.490243"
   },
   "usr.bin/tr": {
     "attempts": 3,

@@ -1,0 +1,13 @@
+=== STEP 3 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat/tests has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/VE/TargetInfo
+
+--- RESPONSE ---
+
+
+The `bin/cat/tests` unit has no C/C++ source files, and the LLVM vendor directories are not FreeBSD userland. Let me find a proper small FreeBSD userland unit with C source files.
+
+ACTION: LIST_DIR bin

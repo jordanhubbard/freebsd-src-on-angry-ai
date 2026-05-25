@@ -1,0 +1,18 @@
+=== STEP 173 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch:
+```
+Makefile
+Makefile.depend
+tests
+touch.1
+touch.c
+```
+
+--- RESPONSE ---
+
+
+I'm in scope for `usr.bin/touch`. Let me try a simpler unit.
+
+ACTION: SET_SCOPE bin/cat

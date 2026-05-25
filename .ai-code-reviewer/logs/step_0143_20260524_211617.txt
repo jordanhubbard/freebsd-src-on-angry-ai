@@ -1,0 +1,53 @@
+=== STEP 143 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/touch
+   Files: 0/3
+📄 File: usr.bin/touch/touch.c
+   Chunks: 10/14
+
+```
+=== CHUNK 10/14: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch/touch.c === [function: stime_arg2]
+=== Lines 274-304 (31 lines) ===
+
+static void
+stime_arg2(const char *arg, int year, struct timespec *tvp)
+{
+	time_t now;
+	struct tm *t;
+
+	now = time(NULL);
+	if ((t = localtime(&now)) == NULL)
+		err(1, "localtime");
+
+	t->tm_mon = ATOI2(arg);		/* MMDDhhmm[yy] */
+	--t->tm_mon;			/* Convert from 01-12 to 00-11 */
+	t->tm_mday = ATOI2(arg);
+	t->tm_hour = ATOI2(arg);
+	t->tm_min = ATOI2(arg);
+	if (year) {
+		t->tm_year = ATOI2(arg);
+		if (t->tm_year < 39)	/* support 2000-2038 not 1902-1969 */
+			t->tm_year += 100;
+	}
+
+	t->tm_isdst = -1;		/* Figure out DST. */
+	t->tm_yday = -1;
+	tvp[0].tv_sec = tvp[1].tv_sec = mktime(t);
+	if (t->tm_yday == -1)
+		errx(1, "out of range or illegal time specification: "
+		    "MMDDhhmm[yy]");
+
+	tvp[0].tv_nsec = tvp[1].tv_nsec = 0;
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

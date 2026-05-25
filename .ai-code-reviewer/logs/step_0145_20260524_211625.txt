@@ -1,0 +1,51 @@
+=== STEP 145 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/touch
+   Files: 0/3
+📄 File: usr.bin/touch/touch.c
+   Chunks: 12/14
+
+```
+=== CHUNK 12/14: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/touch/touch.c === [function: timeoffset]
+=== Lines 354-382 (29 lines) ===
+
+int
+timeoffset(const char *arg)
+{
+	int offset;
+	int isneg;
+
+	offset = 0;
+	isneg = *arg == '-';
+	if (isneg)
+		arg++;
+	switch (strlen(arg)) {
+	default:				/* invalid */
+		errx(1, "Invalid offset spec, must be [-][[HH]MM]SS");
+
+	case 6:					/* HHMMSS */
+		offset = ATOI2(arg);
+		/* FALLTHROUGH */
+	case 4:					/* MMSS */
+		offset = offset * 60 + ATOI2(arg);
+		/* FALLTHROUGH */
+	case 2:					/* SS */
+		offset = offset * 60 + ATOI2(arg);
+	}
+	if (isneg)
+		return (-offset);
+	else
+		return (offset);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK
