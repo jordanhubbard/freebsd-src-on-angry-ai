@@ -1,0 +1,13 @@
+=== STEP 3 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat/tests has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE crypto/krb5/src/lib/krb5/error_tables
+
+--- RESPONSE ---
+
+
+`bin/cat/tests` has no C/C++ source files - it's a tests-only directory. Per constraints, I should not fabricate rewrites for units without relevant source. Let me try the next suggested unit.
+
+ACTION: SET_SCOPE crypto/krb5/src/lib/krb5/error_tables

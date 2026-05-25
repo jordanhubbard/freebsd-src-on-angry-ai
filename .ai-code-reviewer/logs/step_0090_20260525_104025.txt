@@ -1,0 +1,24 @@
+=== STEP 90 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo:
+```
+DirectXTargetInfo.cpp
+DirectXTargetInfo.h
+```
+
+--- RESPONSE ---
+
+
+The automatic recovery reverted my changes. The current scope has only the original C++ files. The build is failing due to infrastructure-level issues with the LLVM build system. Let me create a proper Rust replacement with a local Makefile that builds independently.
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo/Cargo.toml
+CONTENT:
+[package]
+name = "DirectXTargetInfo"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"

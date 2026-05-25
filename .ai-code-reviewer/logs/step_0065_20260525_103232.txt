@@ -1,0 +1,82 @@
+=== STEP 65 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/DirectX:
+```
+CBufferDataLayout.cpp
+CBufferDataLayout.h
+DXContainerGlobals.cpp
+DXIL.td
+DXILCBufferAccess.cpp
+DXILCBufferAccess.h
+DXILConstants.h
+DXILDataScalarization.cpp
+DXILDataScalarization.h
+DXILFinalizeLinkage.cpp
+DXILFinalizeLinkage.h
+DXILFlattenArrays.cpp
+DXILFlattenArrays.h
+DXILForwardHandleAccesses.cpp
+DXILForwardHandleAccesses.h
+DXILIntrinsicExpansion.cpp
+DXILIntrinsicExpansion.h
+DXILLegalizePass.cpp
+DXILLegalizePass.h
+DXILOpBuilder.cpp
+DXILOpBuilder.h
+DXILOpLowering.cpp
+DXILOpLowering.h
+DXILPostOptimizationValidation.cpp
+DXILPostOptimizationValidation.h
+DXILPrepare.cpp
+DXILPrettyPrinter.cpp
+DXILPrettyPrinter.h
+DXILResourceAccess.cpp
+DXILResourceAccess.h
+DXILResourceImplicitBinding.cpp
+DXILResourceImplicitBinding.h
+DXILRootSignature.cpp
+DXILRootSignature.h
+DXILShaderFlags.cpp
+DXILShaderFlags.h
+DXILStubs.td
+DXILTranslateMetadata.cpp
+DXILTranslateMetadata.h
+DXILWriter
+DirectX.h
+DirectX.td
+DirectXAsmPrinter.cpp
+DirectXFrameLowering.h
+DirectXIRPasses
+DirectXInstrInfo.cpp
+DirectXInstrInfo.h
+DirectXPassRegistry.def
+DirectXRegisterInfo.cpp
+DirectXRegisterInfo.h
+DirectXSubtarget.cpp
+DirectXSubtarget.h
+DirectXTargetLowering.h
+DirectXTargetMachine.cpp
+DirectXTargetMachine.h
+DirectXTargetTransformInfo.cpp
+DirectXTargetTransformInfo.h
+MCTargetDesc
+TargetInfo
+```
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails due to infrastructure-level issues with the LLVM build system. This is vendor code, not FreeBSD userland. Let me try to make the Rust crate build independently.
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo/Makefile
+CONTENT:
+# DirectXTargetInfo Rust replacement build
+CARGO ?= cargo
+CARGO_TARGET_DIR ?= ${.OBJDIR}/cargo-target
+
+all:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}

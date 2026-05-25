@@ -1,0 +1,32 @@
+=== STEP 206 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls4/Makefile:
+PROGRESS:
+📁 Directory: tools/regression/tls/ttls4
+   Files: 0/2
+📄 File: tools/regression/tls/ttls4/Makefile
+✏️  Edits: 3 files modified
+
+```
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+RUST_PROG=	${CARGO_TARGET_DIR}/debug/ttls4
+
+all: ${RUST_PROG}
+
+${RUST_PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

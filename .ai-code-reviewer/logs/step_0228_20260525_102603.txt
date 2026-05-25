@@ -1,0 +1,72 @@
+=== STEP 228 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls4/Makefile:
+PROGRESS:
+📁 Directory: tools/regression/tls/ttls4
+   Files: 0/2
+📄 File: tools/regression/tls/ttls4/Makefile
+✏️  Edits: 4 files modified
+
+```
+PROG=	ttls4
+BINDIR?=	/usr/local/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails. The Rust code uses `const { ... }` syntax which may not be supported. Let me fix the Rust source.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls4/src/main.rs
+CONTENT:
+<<<
+use std::cell::Cell;
+use std::thread;
+
+thread_local!(static N: Cell<i32> = Cell::new(0));
+
+fn f1() {
+    N.with(|n| {
+        let val = n.get();
+        if val != 0 {
+            eprintln!("bug, n == {}", val);
+            std::process::exit(1);
+        }
+        n.set(1);
+    });
+}
+
+fn main() {
+    for _ in 0..1000 {
+        let handle = thread::spawn(|| f1());
+        handle.join().unwrap();
+    }
+    thread::sleep(std::time::Duration::from_secs(2));
+    for _ in 0..1000 {
+        let handle = thread::spawn(|| f1());
+        handle.join().unwrap();
+    }
+}
+>>>

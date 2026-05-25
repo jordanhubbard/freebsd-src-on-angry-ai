@@ -1,0 +1,14 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/false is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me try finding a viable pending unit by checking some simple usr.bin commands.
+
+ACTION: SET_SCOPE usr.bin/yes

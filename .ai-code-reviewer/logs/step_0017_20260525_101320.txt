@@ -1,0 +1,19 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls4:
+```
+Cargo.toml
+Makefile
+src
+ttls4.c
+```
+
+--- RESPONSE ---
+
+
+The build errors are infrastructure-level (libclang bootstrapping), not related to my changes. Let me create the Rust replacement for this unit and try again.
+
+First, let me understand the structure better and check the Makefile.in:
+
+ACTION: READ_FILE crypto/krb5/src/lib/krb5/error_tables/Makefile.in

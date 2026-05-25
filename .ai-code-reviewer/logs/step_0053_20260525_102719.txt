@@ -1,0 +1,14 @@
+=== STEP 53 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/cksum is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE tools/regression/tls/ttls4
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails due to infrastructure-level issues with the LLVM build system. This is vendor code, not FreeBSD userland. Let me try to find a proper FreeBSD userland unit.
+
+ACTION: SET_SCOPE usr.bin/cksum

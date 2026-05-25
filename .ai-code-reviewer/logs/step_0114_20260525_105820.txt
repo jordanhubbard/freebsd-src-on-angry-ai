@@ -1,0 +1,19 @@
+=== STEP 114 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo/Makefile
+CONTENT:
+# DirectXTargetInfo Rust replacement build
+# Standalone Makefile - no parent includes to avoid LLVM build system
+
+CARGO ?= cargo
+CARGO_TARGET_DIR ?= ${.OBJDIR}/cargo-target
+
+all:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}

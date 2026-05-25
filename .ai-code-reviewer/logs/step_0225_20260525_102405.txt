@@ -1,0 +1,43 @@
+=== STEP 225 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls4/src/main.rs:
+PROGRESS:
+📁 Directory: tools/regression/tls/ttls4
+   Files: 0/2
+📄 File: tools/regression/tls/ttls4/src/main.rs
+✏️  Edits: 4 files modified
+
+```
+use std::thread;
+
+thread_local!(static N: std::cell::Cell<i32> = const { std::cell::Cell::new(0) });
+
+fn f1() {
+    N.with(|n| {
+        let val = n.get();
+        if val != 0 {
+            eprintln!("bug, n == {}", val);
+            std::process::exit(1);
+        }
+        n.set(1);
+    });
+}
+
+fn main() {
+    for _ in 0..1000 {
+        let handle = thread::spawn(|| f1());
+        handle.join().unwrap();
+    }
+    std::thread::sleep(std::time::Duration::from_secs(2));
+    for _ in 0..1000 {
+        let handle = thread::spawn(|| f1());
+        handle.join().unwrap();
+    }
+}
+```
+
+--- RESPONSE ---
+
+
+ACTION: BUILD
