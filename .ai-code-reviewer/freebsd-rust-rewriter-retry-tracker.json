@@ -172,8 +172,8 @@
     "last_attempt": "2026-05-24T18:18:24.143744"
   },
   "contrib/llvm-project/llvm/lib/Target/Lanai/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T22:06:34.336171"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T22:12:18.412267"
   },
   "contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo": {
     "attempts": 3,

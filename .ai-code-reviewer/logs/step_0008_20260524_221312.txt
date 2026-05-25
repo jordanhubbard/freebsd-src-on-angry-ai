@@ -1,0 +1,14 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/chmod is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE cddl/contrib/opensolaris/cmd/dtrace/test/tst/amd64/arrays
+
+--- RESPONSE ---
+
+
+The `bin/*` commands appear to be skipped. Let me try a `usr.bin` unit that's not a tests directory.
+
+ACTION: SET_SCOPE usr.bin/asa
