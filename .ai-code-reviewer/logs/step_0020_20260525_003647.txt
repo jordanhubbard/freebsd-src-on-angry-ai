@@ -1,0 +1,14 @@
+=== STEP 20 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/kill is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me try some other simple commands that might be pending.
+
+ACTION: SET_SCOPE bin/mkdir

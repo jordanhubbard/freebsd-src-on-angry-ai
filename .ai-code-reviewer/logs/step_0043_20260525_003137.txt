@@ -1,0 +1,11 @@
+=== STEP 43 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+This is a large unit with 22 source files. Let me understand the build environment and check how previous units integrated Rust.
+
+ACTION: FIND_FILE share/mk/bsd.rust.mk

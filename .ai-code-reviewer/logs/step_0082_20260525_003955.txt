@@ -1,0 +1,17 @@
+=== STEP 82 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo:
+```
+SystemZTargetInfo.cpp
+SystemZTargetInfo.h
+```
+
+--- RESPONSE ---
+
+
+Analysis: This is LLVM target infrastructure code, not FreeBSD userland. It's deeply integrated with the LLVM build system and not a standalone command or library. Per the constraint "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating placeholder Rust," I should skip this.
+
+Let me find a better unit - a small FreeBSD userland command. Let me check what's available in usr.bin that hasn't been attempted.
+
+ACTION: FIND_FILE usr.bin/*/Makefile

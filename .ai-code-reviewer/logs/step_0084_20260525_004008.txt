@@ -1,0 +1,14 @@
+=== STEP 84 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/mkimg is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE usr.bin/clang/clang-scan-deps
+
+--- RESPONSE ---
+
+
+Analysis: The mkimg unit is still marked as skipped in the retry tracker. I need to pick a different unit. Let me try the suggested next unit.
+
+ACTION: SET_SCOPE usr.bin/clang/clang-scan-deps

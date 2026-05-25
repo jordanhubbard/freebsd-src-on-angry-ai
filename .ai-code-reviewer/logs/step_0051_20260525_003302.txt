@@ -1,0 +1,46 @@
+=== STEP 51 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 2/15
+
+```
+=== CHUNK 2/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: print_formats]
+=== Lines 82-105 (24 lines) ===
+
+static void
+print_formats(int usage)
+{
+	struct mkimg_format *f;
+	const char *sep;
+
+	if (usage) {
+		fprintf(stderr, "    formats:\n");
+		f = NULL;
+		while ((f = format_iterate(f)) != NULL) {
+			fprintf(stderr, "\t%s\t-  %s\n", f->name,
+			    f->description);
+		}
+	} else {
+		sep = "";
+		f = NULL;
+		while ((f = format_iterate(f)) != NULL) {
+			printf("%s%s", sep, f->name);
+			sep = " ";
+		}
+		putchar('\n');
+	}
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

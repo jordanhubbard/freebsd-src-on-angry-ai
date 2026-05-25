@@ -1,0 +1,65 @@
+=== STEP 59 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 10/15
+
+```
+=== CHUNK 10/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: sparse_write]
+=== Lines 332-372 (41 lines) ===
+
+ssize_t
+sparse_write(int fd, const void *ptr, size_t sz)
+{
+	const char *buf, *p;
+	off_t ofs;
+	size_t len;
+	ssize_t wr, wrsz;
+
+	buf = ptr;
+	wrsz = 0;
+	p = memchr(buf, 0, sz);
+	while (sz > 0) {
+		len = (p != NULL) ? (size_t)(p - buf) : sz;
+		if (len > 0) {
+			len = (len + secsz - 1) & ~(secsz - 1);
+			if (len > sz)
+				len = sz;
+			wr = write(fd, buf, len);
+			if (wr < 0)
+				return (-1);
+		} else {
+			while (len < sz && *p++ == '\0')
+				len++;
+			if (len < sz)
+				len &= ~(secsz - 1);
+			if (len == 0)
+				continue;
+			ofs = lseek(fd, len, SEEK_CUR);
+			if (ofs < 0)
+				return (-1);
+			wr = len;
+		}
+		buf += wr;
+		sz -= wr;
+		wrsz += wr;
+		p = memchr(buf, 0, sz);
+	}
+	return (wrsz);
+}
+#endif /* SPARSE_WRITE */
+
+
+```
+
+--- RESPONSE ---
+
+
+Let me read the Makefile and understand the build structure.
+
+ACTION: READ_FILE usr.bin/mkimg/Makefile
