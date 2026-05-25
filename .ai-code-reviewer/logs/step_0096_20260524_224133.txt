@@ -1,0 +1,9 @@
+=== STEP 96 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/test/tst/amd64/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/Makefile

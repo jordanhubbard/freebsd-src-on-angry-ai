@@ -1,0 +1,11 @@
+=== STEP 28 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk/bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+No bsd.rust.mk exists. Let me check what make infrastructure is available.
+
+ACTION: FIND_FILE share/mk/bsd.*

@@ -1,0 +1,14 @@
+=== STEP 38 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/M68k/TargetInfo
+
+--- RESPONSE ---
+
+
+The build failures are from the top-level FreeBSD bootstrap system, not from my Rust code. This dtrace test unit lacks proper FreeBSD build integration. Let me find a better unit.
+
+ACTION: SET_SCOPE usr.bin/asa

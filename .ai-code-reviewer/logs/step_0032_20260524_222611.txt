@@ -1,0 +1,36 @@
+=== STEP 32 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/cddl/contrib/opensolaris/cmd/dtrace/test/tst:
+```
+amd64
+common
+i386
+i86xpv
+```
+
+--- RESPONSE ---
+
+
+This is a dtrace test helper without a Makefile. I need to create a Makefile with explicit cargo build rules. Let me create one:
+
+ACTION: WRITE_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/amd64/arrays/Makefile
+CONTENT:
+<<<
+# Makefile for tst.rax Rust replacement
+
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all:	tst.rax
+
+tst.rax: Cargo.toml src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	${INSTALL} ${CARGO_TARGET_DIR}/release/tst.rax ${.OBJDIR}/tst.rax
+
+clean:
+	rm -f ${.OBJDIR}/tst.rax
+
+.PHONY: all clean
+>>>

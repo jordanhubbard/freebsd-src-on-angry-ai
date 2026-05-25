@@ -111,6 +111,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-21T19:44:21.180208"
   },
+  "cddl/contrib/opensolaris/cmd/dtrace/test/tst/amd64/arrays": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T22:42:21.132011"
+  },
   "contrib/libcbor/examples/bazel/src": {
     "attempts": 2,
     "last_attempt": "2026-05-24T04:52:38.054752"
@@ -175,6 +179,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-24T22:12:18.412267"
   },
+  "contrib/llvm-project/llvm/lib/Target/M68k/TargetInfo": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T22:44:04.940714"
+  },
   "contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-24T20:56:42.109153"
@@ -234,6 +242,10 @@
   "lib/libnv": {
     "attempts": 1,
     "last_attempt": "2026-05-24T12:23:01.284030"
+  },
+  "lib/librt": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T22:23:33.270569"
   },
   "lib/libssp_nonshared": {
     "attempts": 3,
@@ -351,6 +363,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-23T15:42:22.227998"
   },
+  "usr.bin/bintrans": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T22:22:49.783111"
+  },
   "usr.bin/bluetooth/bthost": {
     "attempts": 3,
     "last_attempt": "2026-05-22T09:42:44.986549"
@@ -395,9 +411,17 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T16:58:09.899107"
   },
+  "usr.bin/compress": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T22:23:53.721893"
+  },
   "usr.bin/csplit": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T15:00:12.231595"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T22:23:58.311473"
+  },
+  "usr.bin/ctags": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T22:24:03.486688"
   },
   "usr.bin/ctlstat": {
     "attempts": 3,
@@ -407,9 +431,13 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T12:48:33.015005"
   },
-  "usr.bin/dpv": {
+  "usr.bin/diff": {
     "attempts": 1,
-    "last_attempt": "2026-05-24T18:15:24.545477"
+    "last_attempt": "2026-05-24T22:24:23.833327"
+  },
+  "usr.bin/dpv": {
+    "attempts": 2,
+    "last_attempt": "2026-05-24T22:24:29.772423"
   },
   "usr.bin/du": {
     "attempts": 3,
@@ -436,8 +464,8 @@
     "last_attempt": "2026-05-24T20:08:54.754258"
   },
   "usr.bin/factor": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T21:02:55.887706"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T22:24:48.733514"
   },
   "usr.bin/false": {
     "attempts": 3,
@@ -552,8 +580,8 @@
     "last_attempt": "2026-05-24T21:50:43.044942"
   },
   "usr.bin/mt": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T19:46:56.766871"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T22:40:32.050090"
   },
   "usr.bin/ncal": {
     "attempts": 1,
@@ -635,9 +663,13 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T13:14:21.810481"
   },
-  "usr.bin/tabs": {
+  "usr.bin/su": {
     "attempts": 1,
-    "last_attempt": "2026-05-24T21:28:54.646456"
+    "last_attempt": "2026-05-24T22:44:52.584506"
+  },
+  "usr.bin/tabs": {
+    "attempts": 2,
+    "last_attempt": "2026-05-24T22:45:03.390378"
   },
   "usr.bin/tail": {
     "attempts": 3,

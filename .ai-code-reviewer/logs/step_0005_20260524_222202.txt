@@ -1,0 +1,11 @@
+=== STEP 5 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'cddl/contrib/opensolaris/cmd/dtrace/test/tst/**/Makefile'
+
+--- RESPONSE ---
+
+
+Let me check for Makefiles at higher levels in the dtrace test tree.
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/cmd/dtrace/test/*/Makefile

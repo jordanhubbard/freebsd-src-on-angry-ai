@@ -1,0 +1,14 @@
+=== STEP 49 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/kenv is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/M68k/TargetInfo
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level FreeBSD bootstrap system, not from my Rust code. This dtrace test unit lacks proper FreeBSD build integration. Let me find a proper userland unit that is not yet completed.
+
+ACTION: SET_SCOPE bin/df

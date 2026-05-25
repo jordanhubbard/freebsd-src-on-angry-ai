@@ -1,0 +1,16 @@
+=== STEP 31 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/cddl/contrib/opensolaris/cmd/dtrace/test:
+```
+README
+cmd
+tst
+```
+
+--- RESPONSE ---
+
+
+This is a dtrace test directory without its own Makefile. The test files are likely built by parent infrastructure. Since there's no `bsd.rust.mk`, I need to create a Makefile with explicit rules. Let me check how similar test directories are structured.
+
+ACTION: LIST_DIR cddl/contrib/opensolaris/cmd/dtrace/test/tst

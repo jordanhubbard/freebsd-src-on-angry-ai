@@ -1,0 +1,14 @@
+=== STEP 9 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/cddl/contrib/opensolaris/cmd/dtrace:
+```
+dtrace.1
+dtrace.c
+test
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/Makefile

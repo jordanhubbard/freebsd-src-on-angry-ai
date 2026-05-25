@@ -1,0 +1,9 @@
+=== STEP 29 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'share/mk/bsd.*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR share/mk

@@ -1,0 +1,19 @@
+=== STEP 69 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/factor:
+```
+Makefile
+Makefile.depend
+Makefile.depend.options
+factor.6
+factor.c
+tests
+```
+
+--- RESPONSE ---
+
+
+Let me check what changes are pending.
+
+ACTION: LIST_DIR cddl/contrib/opensolaris/cmd/dtrace/test/tst/amd64/arrays
