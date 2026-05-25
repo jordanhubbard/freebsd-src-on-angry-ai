@@ -168,20 +168,12 @@
     "last_attempt": "2026-05-24T06:36:22.530138"
   },
   "contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T16:15:42.481546"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T18:18:24.143744"
   },
   "contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo": {
     "attempts": 1,
     "last_attempt": "2026-05-24T16:52:19.787193"
-  },
-  "contrib/llvm-project/llvm/lib/Target/VE/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T17:42:27.691483"
-  },
-  "contrib/llvm-project/llvm/lib/Target/XCore/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T18:10:34.103423"
   },
   "contrib/llvm-project/llvm/lib/Telemetry": {
     "attempts": 3,
@@ -242,14 +234,6 @@
   "lib/liby": {
     "attempts": 1,
     "last_attempt": "2026-05-24T00:31:26.880417"
-  },
-  "libexec/rtld-elf": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T18:28:42.412907"
-  },
-  "sbin/dmesg": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T18:21:53.865225"
   },
   "sbin/md5": {
     "attempts": 1,
@@ -383,13 +367,21 @@
     "attempts": 2,
     "last_attempt": "2026-05-24T15:00:12.231595"
   },
+  "usr.bin/ctlstat": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:15:00.959777"
+  },
   "usr.bin/cut": {
     "attempts": 3,
     "last_attempt": "2026-05-24T12:48:33.015005"
   },
-  "usr.bin/du": {
+  "usr.bin/dpv": {
     "attempts": 1,
-    "last_attempt": "2026-05-24T06:54:48.607766"
+    "last_attempt": "2026-05-24T18:15:24.545477"
+  },
+  "usr.bin/du": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T18:16:09.117546"
   },
   "usr.bin/enigma": {
     "attempts": 3,
@@ -436,8 +428,8 @@
     "last_attempt": "2026-05-24T13:18:59.845697"
   },
   "usr.bin/lastcomm": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T06:39:07.084821"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T18:17:10.143294"
   },
   "usr.bin/limits": {
     "attempts": 3,
@@ -488,12 +480,16 @@
     "last_attempt": "2026-05-24T11:33:05.895773"
   },
   "usr.bin/morse": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T11:38:44.513710"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T18:18:34.302035"
+  },
+  "usr.bin/msgs": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:19:14.033100"
   },
   "usr.bin/ncal": {
     "attempts": 1,
-    "last_attempt": "2026-05-24T18:23:41.187843"
+    "last_attempt": "2026-05-24T18:19:23.385284"
   },
   "usr.bin/nice": {
     "attempts": 3,
@@ -516,8 +512,8 @@
     "last_attempt": "2026-05-22T20:52:37.876664"
   },
   "usr.bin/pr": {
-    "attempts": 3,
-    "last_attempt": "2026-05-24T18:24:00.755866"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T07:16:06.719728"
   },
   "usr.bin/primes": {
     "attempts": 2,
@@ -530,6 +526,10 @@
   "usr.bin/protect": {
     "attempts": 1,
     "last_attempt": "2026-05-22T09:14:54.939410"
+  },
+  "usr.bin/random": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T18:20:46.788804"
   },
   "usr.bin/rwall": {
     "attempts": 1,
@@ -556,8 +556,8 @@
     "last_attempt": "2026-05-24T04:11:01.671319"
   },
   "usr.bin/tcopy": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T13:35:18.140445"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T17:16:18.748401"
   },
   "usr.bin/touch": {
     "attempts": 2,
@@ -604,8 +604,8 @@
     "last_attempt": "2026-05-24T06:37:04.734047"
   },
   "usr.bin/wall": {
-    "attempts": 3,
-    "last_attempt": "2026-05-24T18:24:13.223319"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T00:45:11.579423"
   },
   "usr.bin/wc": {
     "attempts": 2,
@@ -613,7 +613,7 @@
   },
   "usr.bin/whereis": {
     "attempts": 3,
-    "last_attempt": "2026-05-24T18:24:22.297903"
+    "last_attempt": "2026-05-24T18:44:54.927395"
   },
   "usr.bin/who": {
     "attempts": 2,
@@ -627,10 +627,6 @@
     "attempts": 1,
     "last_attempt": "2026-05-24T12:51:15.364348"
   },
-  "usr.bin/xinstall": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T18:24:54.600749"
-  },
   "usr.bin/yes": {
     "attempts": 3,
     "last_attempt": "2026-05-21T22:50:38.271361"
@@ -640,7 +636,7 @@
     "last_attempt": "2026-05-22T04:31:46.528600"
   },
   "usr.bin/ypwhich": {
-    "attempts": 3,
-    "last_attempt": "2026-05-24T18:30:48.763926"
+    "attempts": 1,
+    "last_attempt": "2026-05-24T00:44:08.809386"
   }
 }

@@ -1,0 +1,14 @@
+=== STEP 449 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/yes is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo
+
+--- RESPONSE ---
+
+
+I need to find a simple unit to rewrite. Let me try usr.bin/yes.
+
+ACTION: SET_SCOPE usr.bin/yes

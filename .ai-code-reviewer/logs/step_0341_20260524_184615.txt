@@ -1,0 +1,48 @@
+=== STEP 341 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/whereis
+   Files: 0/4
+📄 File: usr.bin/whereis/whereis.c
+   Chunks: 11/13
+
+```
+=== CHUNK 11/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whereis/whereis.c === [function: colonify]
+=== Lines 225-250 (26 lines) ===
+
+static char *
+colonify(ccharp *cpp)
+{
+	size_t s;
+	char *cp;
+	int i;
+
+	if (cpp == NULL)
+		return (0);
+
+	for (s = 0, i = 0; cpp[i] != NULL; i++)
+		s += strlen(cpp[i]) + 1;
+	if ((cp = malloc(s + 1)) == NULL)
+		abort();
+	for (i = 0, *cp = '\0'; cpp[i] != NULL; i++) {
+		strcat(cp, cpp[i]);
+		strcat(cp, ":");
+	}
+	cp[s - 1] = '\0';		/* eliminate last colon */
+
+	return (cp);
+}
+
+/*
+ * Provide defaults for all options and directory lists.
+ */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

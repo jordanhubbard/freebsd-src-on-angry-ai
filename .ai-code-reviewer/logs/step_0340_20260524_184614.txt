@@ -1,0 +1,48 @@
+=== STEP 340 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/whereis
+   Files: 0/4
+📄 File: usr.bin/whereis/whereis.c
+   Chunks: 10/13
+
+```
+=== CHUNK 10/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whereis/whereis.c === [function: decolonify]
+=== Lines 199-224 (26 lines) ===
+
+static void
+decolonify(char *s, ccharp **cppp, int *ip)
+{
+	char *cp;
+
+	while ((cp = strchr(s, ':')), *s != '\0') {
+		if (cp)
+			*cp = '\0';
+		if (strlen(s) && !contains(*cppp, s)) {
+			*cppp = realloc(*cppp, (*ip + 2) * sizeof(char *));
+			if (*cppp == NULL)
+				abort();
+			(*cppp)[*ip] = s;
+			(*cppp)[*ip + 1] = NULL;
+			(*ip)++;
+		}
+		if (cp)
+			s = cp + 1;
+		else
+			break;
+	}
+}
+
+/*
+ * Join string list `cpp' into a colon-separated string.
+ */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

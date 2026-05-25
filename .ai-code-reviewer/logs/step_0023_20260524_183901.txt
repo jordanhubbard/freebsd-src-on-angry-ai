@@ -1,0 +1,11 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for '^int64_t maxblk'
+
+--- RESPONSE ---
+
+
+Let me search within the tcopy directory specifically for the missing global variables and functions.
+
+ACTION: GREP static

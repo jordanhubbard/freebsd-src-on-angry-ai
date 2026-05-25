@@ -1,0 +1,13 @@
+=== STEP 50 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust:
+```
+Cargo.toml
+src
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/tcopy/rust/src

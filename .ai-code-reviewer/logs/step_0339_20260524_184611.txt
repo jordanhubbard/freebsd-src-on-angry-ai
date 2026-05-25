@@ -1,0 +1,45 @@
+=== STEP 339 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/whereis
+   Files: 0/4
+📄 File: usr.bin/whereis/whereis.c
+   Chunks: 9/13
+
+```
+=== CHUNK 9/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whereis/whereis.c === [function: contains]
+=== Lines 176-198 (23 lines) ===
+
+static int
+contains(ccharp *cpp, const char *s)
+{
+	ccharp cp;
+
+	if (cpp == NULL)
+		return (0);
+
+	while ((cp = *cpp) != NULL) {
+		if (strcmp(cp, s) == 0)
+			return (1);
+		cpp++;
+	}
+	return (0);
+}
+
+/*
+ * Split string `s' at colons, and pass it to the string list pointed
+ * to by `cppp' (which has `*ip' elements).  Note that the original
+ * string is modified by replacing the colon with a NUL byte.  The
+ * partial string is only added if it has a length greater than 0, and
+ * if it's not already contained in the string list.
+ */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

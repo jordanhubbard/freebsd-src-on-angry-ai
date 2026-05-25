@@ -1,0 +1,93 @@
+=== STEP 402 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/whereis
+   Files: 0/4
+📄 File: usr.bin/basename/Makefile
+✏️  Edits: 1 files modified
+
+```
+.include <src.opts.mk>
+
+PROG=	basename
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+MLINKS=	basename.1 dirname.1
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+```
+
+--- RESPONSE ---
+
+
+Now I understand the pattern. Let me fix the Makefile to match the completed units, then create the Rust source files.
+
+ACTION: EDIT_FILE usr.bin/whereis/Makefile
+OLD:
+<<<
+PROG=	whereis
+SRCS=	#none
+
+RUST_PROG=	whereis
+RUSTDIR=	rust
+
+.include <bsd.prog.mk>
+
+# Rust build integration
+whereis: rust_whereis
+rust_whereis:
+	@cd ${.CURDIR}/rust && cargo build --release --target-dir ${.OBJDIR}/rust-target
+	@cp ${.OBJDIR}/rust-target/release/whereis ${.OBJDIR}/whereis.rust
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	whereis
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>

@@ -1,0 +1,36 @@
+=== STEP 32 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/tcopy.cc
+   Chunks: 6/13
+
+```
+=== CHUNK 6/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/tcopy.cc === [function: check_want_info]
+=== Lines 548-561 (14 lines) ===
+
+static void
+check_want_info(void)
+{
+	if (want_info) {
+		(void)clock_gettime(CLOCK_MONOTONIC, &t_end);
+		fprintf(stderr, "tcopy: file %d record %ju ",
+		    filen, (uintmax_t)record);
+		report_total(stderr);
+		want_info = 0;
+	}
+}
+
+#else /* !SIGINFO */
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

@@ -1,0 +1,333 @@
+=== STEP 45 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/rust/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The file was cut off. Let me write a complete, self-contained implementation.
+
+ACTION: WRITE_FILE usr.bin/tcopy/rust/src/main.rs
+CONTENT:
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2025 Poul-Henning Kamp, <phk@FreeBSD.org>
+ * Copyright (c) 1985, 1987, 1993
+ *   The Regents of the University of California.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS''
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS
+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+ * THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// FreeBSD-specific constants (avoid external libc crate)
+const MTIOCTOP: u32 = 0xc020_6d07; // _IOR('m', 7, struct mtop)
+const MTWEOF: i32 = 1;
+const MTREW: i32 = 0;
+const SYS_IOCTL: i32 = 54;
+const SYS_SYSCTL: i32 = 202;
+const SYS_OPEN: i32 = 5;
+const SYS_CLOSE: i32 = 6;
+const SYS_READ: i32 = 0;
+const SYS_WRITE: i32 = 1;
+const SYS_FSTAT: i32 = 195;
+const SYS_CLOCK_GETTIME: i32 = 222;
+const CLOCK_MONOTONIC: i32 = 4;
+const O_RDONLY: i32 = 0;
+const O_WRONLY: i32 = 1;
+const O_CREAT: i32 = 0x200;
+const O_TRUNC: i32 = 0x400;
+const S_IFMT: i32 = 0o170000;
+const S_IFREG: i32 = 0o100000;
+const S_IRUSR: i32 = 0o400;
+const S_IWUSR: i32 = 0o200;
+const S_IRGRP: i32 = 0o040;
+const S_IWGRP: i32 = 0o020;
+const S_IROTH: i32 = 0o004;
+const S_IWOTH: i32 = 0o002;
+const SIGINT: i32 = 2;
+const SIGINFO: i32 = 29;
+const SIG_IGN: i32 = -1;
+const EX_USAGE: i32 = 64;
+const EX_CANTCREAT: i32 = 73;
+const EX_DATAERR: i32 = 65;
+
+#[repr(C)]
+struct Mtop {
+    mt_op: i32,
+    mt_count: i64,
+}
+
+#[repr(C)]
+struct Stat {
+    st_mode: i32,
+    _pad: [u8; 124],
+}
+
+#[repr(C)]
+struct TimeSpec {
+    tv_sec: i64,
+    tv_nsec: i64,
+}
+
+const MAXREC: usize = 1024 * 1024;
+const NOCOUNT: i64 = -2;
+const PATH_DEFTAPE: &str = "/dev/rsa0";
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Operation {
+    Read,
+    Verify,
+    Copy,
+    CopyVerify,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Direction {
+    Src,
+    Dst,
+}
+
+struct TapeDev {
+    fd: i32,
+    name: String,
+    direction: Direction,
+    max_read_size: usize,
+}
+
+impl TapeDev {
+    fn new(fd: i32, name: &str, destination: bool) -> Self {
+        TapeDev {
+            fd,
+            name: name.to_string(),
+            direction: if destination { Direction::Dst } else { Direction::Src },
+            max_read_size: 0,
+        }
+    }
+
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        let len = dst.len();
+        let mut max_read_size = if self.max_read_size == 0 { len } else { self.max_read_size };
+        let mut retval: i64 = -1;
+
+        if self.max_read_size == 0 {
+            while max_read_size > 0 {
+                let buf = &mut dst[..max_read_size];
+                retval = unsafe {
+                    libc_syscall(SYS_READ, self.fd, buf.as_mut_ptr() as usize, max_read_size)
+                };
+                if retval >= 0 {
+                    self.max_read_size = max_read_size;
+                    break;
+                }
+                // Check errno for EINVAL/EFBIG
+                let errno = unsafe { __errno() };
+                if errno != 22 && errno != 76 { // EINVAL, EFBIG
+                    self.max_read_size = max_read_size;
+                    break;
+                }
+                if max_read_size < 512 {
+                    eprintln!("tcopy: Cannot find a sane max blocksize");
+                    process_exit(1);
+                }
+                // Reduce to next lower power of two
+                let bits = (max_read_size as u64).next_power_of_two().trailing_zeros();
+                max_read_size = 1usize << (bits.saturating_sub(1));
+            }
+        } else {
+            let buf = &mut dst[..self.max_read_size];
+            retval = unsafe {
+                libc_syscall(SYS_READ, self.fd, buf.as_mut_ptr() as usize, self.max_read_size)
+            };
+        }
+
+        if retval < 0 {
+            eprintln!(
+                "tcopy: read error, {}, file {}, record {}",
+                self.name, G_FILN, G_RECORD
+            );
+            process_exit(1);
+        }
+        retval
+    }
+
+    fn verify_blk(&mut self, dst: &mut [u8], _expected: usize) -> i64 {
+        self.read_blk(dst)
+    }
+
+    fn write_blk(&mut self, src: &[u8]) {
+        assert!(!src.is_empty());
+        let nwrite = unsafe {
+            libc_syscall(SYS_WRITE, self.fd, src.as_ptr() as usize, src.len())
+        };
+        if nwrite < 0 || (nwrite as usize) != src.len() {
+            if nwrite < 0 {
+                eprintln!(
+                    "tcopy: write error, file {}, record {}",
+                    G_FILN, G_RECORD
+                );
+            } else {
+                eprintln!(
+                    "tcopy: write error, file {}, record {}",
+                    G_FILN, G_RECORD
+                );
+                eprintln!("tcopy: write ({}) != read ({})", nwrite, src.len());
+            }
+            eprintln!("tcopy: copy aborted");
+            process_exit(5);
+        }
+    }
+
+    fn file_mark(&mut self) {
+        let mut op = Mtop { mt_op: MTWEOF, mt_count: 1 };
+        let ret = unsafe {
+            libc_syscall(
+                SYS_IOCTL,
+                self.fd,
+                MTIOCTOP,
+                &mut op as *mut Mtop as usize,
+            )
+        };
+        if ret < 0 {
+            eprintln!("tcopy: tape op (write file mark)");
+            process_exit(6);
+        }
+    }
+
+    fn rewind(&mut self) {
+        let mut op = Mtop { mt_op: MTREW, mt_count: 1 };
+        let ret = unsafe {
+            libc_syscall(
+                SYS_IOCTL,
+                self.fd,
+                MTIOCTOP,
+                &mut op as *mut Mtop as usize,
+            )
+        };
+        if ret < 0 {
+            eprintln!("tcopy: tape op (rewind)");
+            process_exit(6);
+        }
+    }
+}
+
+struct TapFile {
+    base: TapeDev,
+}
+
+impl TapFile {
+    fn new(fd: i32, name: &str, dst: bool) -> Self {
+        TapFile {
+            base: TapeDev::new(fd, name, dst),
+        }
+    }
+
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        let mut lbuf = [0u8; 4];
+        let nread = full_read(self.base.fd, &mut lbuf);
+        if nread == 0 {
+            return 0;
+        }
+        if nread != 4 {
+            eprintln!("tcopy: Corrupt tap-file, read hdr1={}", nread);
+            process_exit(17);
+        }
+        let u = u32::from_le_bytes(lbuf) as u64;
+        if u == 0 || (u >> 24) == 0xff {
+            return 0;
+        }
+        if u as usize > dst.len() {
+            eprintln!("tcopy: tapfile blocksize too big, 0x{:08x}", u);
+            process_exit(17);
+        }
+        let data_len = u as usize;
+        let n = unsafe {
+            libc_syscall(
+                SYS_READ,
+                self.base.fd,
+                dst[..data_len].as_mut_ptr() as usize,
+                data_len,
+            )
+        };
+        if n < 0 {
+            eprintln!("tcopy: read error in tap file");
+            process_exit(1);
+        }
+        n
+    }
+
+    fn write_blk(&mut self, src: &[u8]) {
+        let len = src.len() as u32;
+        let hdr = len.to_le_bytes();
+        unsafe {
+            libc_syscall(SYS_WRITE, self.base.fd, hdr.as_ptr() as usize, 4);
+            libc_syscall(SYS_WRITE, self.base.fd, src.as_ptr() as usize, src.len());
+        };
+    }
+
+    fn file_mark(&mut self) {
+        let eof = 0xffffffffu32.to_le_bytes();
+        unsafe {
+            libc_syscall(SYS_WRITE, self.base.fd, eof.as_ptr() as usize, 4);
+        };
+    }
+
+    fn rewind(&mut self) {
+        // lseek to beginning
+        unsafe {
+            libc_syscall(59, self.base.fd, 0, 0); // SYS_LSEEK, offset 0, whence SEEK_SET
+        };
+    }
+}
+
+trait TapeOps {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64;
+    fn verify_blk(&mut self, dst: &mut [u8], expected: usize) -> i64;
+    fn write_blk(&mut self, src: &[u8]);
+    fn file_mark(&mut self);
+    fn rewind(&mut self);
+}
+
+impl TapeOps for TapeDev {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        TapeDev::read_blk(self, dst)
+    }
+    fn verify_blk(&mut self, dst: &mut [u8], expected: usize) -> i64 {
+        TapeDev::verify_blk(self, dst, expected)
+    }
+    fn write_blk(&mut self, src: &[u8]) {
+        TapeDev::write_blk(self, src)
+    }
+    fn file_mark(&mut self) {
+        TapeDev::file_mark(self)
+    }
+    fn rewind(&mut self) {
+        TapeDev::rewind(self)
+    }
+}
+
+impl TapeOps for TapFile {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        TapFile::read_blk(self, dst)
+    }
+    fn

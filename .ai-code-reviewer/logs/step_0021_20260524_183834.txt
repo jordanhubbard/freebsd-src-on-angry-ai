@@ -1,0 +1,9 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for '^static.*\n|^int64_t maxblk|^struct timespec|^FILE \*msg|^ssize_t lastnread|^size_t fsize|^uintmax_t tsize|^static tape_dev \*input|^static tape_dev \*output|^open_arg|^enum hint'
+
+--- RESPONSE ---
+
+
+ACTION: GREP maxblk

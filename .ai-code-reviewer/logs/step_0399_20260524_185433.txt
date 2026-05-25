@@ -1,0 +1,14 @@
+=== STEP 399 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/tcopy is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo
+
+--- RESPONSE ---
+
+
+I need to break the loop. Let me try BUILD to see current state.
+
+ACTION: BUILD

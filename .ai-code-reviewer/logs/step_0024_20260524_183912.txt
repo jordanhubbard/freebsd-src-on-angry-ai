@@ -1,0 +1,64 @@
+=== STEP 24 ===
+
+--- REQUEST ---
+GREP_RESULT for 'static':
+```
+./tests/sys/acl/acl-api-test.c:46:static const mode_t all_modes[] = {
+./tests/sys/acl/acl-api-test.c:58:static mode_t gen_random_mode(void)
+./tests/sys/devrandom/uint128_test.c:46:static void
+./tests/sys/devrandom/uint128_test.c:47:vec_u32_tole128(uint8_t dst[static 16], const uint32_t src[static 4])
+./tests/sys/devrandom/uint128_test.c:55:static void
+./tests/sys/netinet/broadcast.c:42:static const char buf[] = "Hello";
+./tests/sys/netinet/broadcast.c:45:static int
+./tests/sys/netinet/broadcast.c:57:static void
+./tests/sys/netinet/so_reuseport_lb_test.c:53:static void
+./tests/sys/netinet/so_reuseport_lb_test.c:116:static int
+./tests/sys/netinet/so_reuseport_lb_test.c:250:static void *
+./tests/sys/netinet/fibs_multibind_test.c:87:static void
+./tests/sys/netinet/fibs_multibind_test.c:96:static int
+./tests/sys/netinet/fibs_multibind_test.c:109:static int
+./tests/sys/netinet/udp_bindings.c:43:static const char buf[] = "Hello";
+./tests/sys/netinet/udp_bindings.c:45:static void
+./tests/sys/netinet/udp_bindings.c:62:static void *
+./tests/sys/netinet/ip6_mrouted.c:37:static STAILQ_HEAD(, mif) miflist = STAILQ_HEAD_INITIALIZER(miflist);
+./tests/sys/netinet/ip6_mrouted.c:39:static void *
+./tests/sys/netinet/ip6_mrouted.c:50:static void
+./tests/sys/netinet/raw.c:47:static int
+./tests/sys/netinet/raw.c:87:	static const struct rcvr {
+./tests/sys/netinet/raw.c:105:	static const struct test {
+./tests/sys/netinet/multicast-send.c:40:static in_port_t
+./tests/sys/netinet/ip_reass_test.c:58:static void
+./tests/sys/netinet/ip_reass_test.c:78:static struct lopacket *
+./tests/sys/netinet/ip_reass_test.c:109:static void
+./tests/sys/netinet/ip6_v4mapped_test.c:66:static void
+./tests/sys/netinet/ip6_v4mapped_test.c:153:static void
+./tests/sys/netinet/multicast-receive.c:43:static in_port_t
+./tests/sys/netinet/tcp_connect_port_test.c:51:static void
+./tests/sys/netinet/tcp_connect_port_test.c:117:static void
+./tests/sys/netinet/tcp_connect_port_test.c:159:static void
+./tests/sys/netinet/socket_afinet.c:336:static bool
+./tests/sys/netinet/socket_afinet.c:393:static bool
+./tests/sys/netinet/socket_afinet.c:399:static bool
+./tests/sys/netinet/libalias/perf.c:41:static void usage(void) __dead2;
+./tests/sys/netinet/libalias/perf.c:60:static void
+./tests/sys/netinet/libalias/util.h:51:static inline int
+./tests/sys/netinet/libalias/util.h:59:static inline int
+./tests/sys/netinet/udp_io.c:41:static void
+./tests/sys/net/bpf/pcap-test.c:41:static int
+./tests/sys/net/bpf/pcap-test.c:51:static pcap_direction_t
+./tests/sys/net/bpf/pcap-test.c:54:	static const struct dirstr {
+./tests/sys/net/bpf/bpf_multi_read.c:34:static void
+./tests/sys/net/routing/rtsock_print.h:59:static const char *const msgtypes[] = {
+./tests/sys/net/routing/rtsock_print.h:81:static const char metricnames[] =
+./tests/sys/net/routing/rtsock_print.h:84:static const char routeflags[] =
+./tests/sys/net/routing/test_rtsock_lladdr.c:31:static void
+./tests/sys/net/routing/test_rtsock_lladdr.c:45:static inline struct rtsock_test_config *
+... [54998 more matches]
+```
+
+--- RESPONSE ---
+
+
+The grep is searching the entire tree. Let me look at the file more carefully. I need to find the missing middle section (lines 217-506). Let me search for specific patterns.
+
+ACTION: FIND_FILE usr.bin/tcopy/tcopy.cc
