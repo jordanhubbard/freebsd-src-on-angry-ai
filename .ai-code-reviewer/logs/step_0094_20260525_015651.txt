@@ -1,0 +1,32 @@
+=== STEP 94 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/join
+   Files: 0/3
+📄 File: usr.bin/join/join.c
+   Chunks: 15/24
+
+```
+=== CHUNK 15/24: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/join/join.c === [function: cmp]
+=== Lines 381-390 (10 lines) ===
+
+static int
+cmp(LINE *lp1, u_long fieldno1, LINE *lp2, u_long fieldno2)
+{
+	if (lp1->fieldcnt <= fieldno1)
+		return (lp2->fieldcnt <= fieldno2 ? 0 : -1);
+	if (lp2->fieldcnt <= fieldno2)
+		return (1);
+	return (mbscoll(lp1->fields[fieldno1], lp2->fields[fieldno2]));
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

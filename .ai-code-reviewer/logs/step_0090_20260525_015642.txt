@@ -1,0 +1,24 @@
+=== STEP 90 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/join
+   Files: 0/3
+📄 File: usr.bin/join/join.c
+   Chunks: 11/24
+
+```
+=== CHUNK 11/24: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/join/join.c === [function: usage]
+=== Lines 103-104 (2 lines) ===
+
+static void usage(void) __dead2;
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

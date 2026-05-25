@@ -1,0 +1,36 @@
+=== STEP 96 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/join
+   Files: 0/3
+📄 File: usr.bin/join/join.c
+   Chunks: 17/24
+
+```
+=== CHUNK 17/24: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/join/join.c === [function: towcs]
+=== Lines 407-420 (14 lines) ===
+
+static wchar_t *
+towcs(const char *s)
+{
+	wchar_t *wcs;
+	size_t n;
+
+	if ((n = mbsrtowcs(NULL, &s, 0, NULL)) == (size_t)-1)
+		return (NULL);
+	if ((wcs = malloc((n + 1) * sizeof(*wcs))) == NULL)
+		return (NULL);
+	mbsrtowcs(wcs, &s, n + 1, NULL);
+	return (wcs);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

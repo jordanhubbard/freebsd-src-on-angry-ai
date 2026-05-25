@@ -1,0 +1,18 @@
+=== STEP 73 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/join:
+```
+Makefile
+Makefile.depend
+join.1
+join.c
+tests
+```
+
+--- RESPONSE ---
+
+
+I have uncommitted changes from a previous scope. Let me try building to clear the state.
+
+ACTION: BUILD

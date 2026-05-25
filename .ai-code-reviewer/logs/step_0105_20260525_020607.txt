@@ -1,0 +1,249 @@
+=== STEP 105 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/revnetgroup/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me write the Rust source file:
+
+ACTION: WRITE_FILE libexec/revnetgroup/rust/src/main.rs
+CONTENT:
+```rust
+use std::collections::HashMap;
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read};
+use std::process;
+
+#[derive(Clone, Debug)]
+struct NetgroupTriple {
+    host: Option<String>,
+    user: Option<String>,
+    domain: Option<String>,
+}
+
+type ForwardTable = HashMap<String, String>;
+type ReverseTable = HashMap<(String, String), Vec<String>>;
+
+fn usage() {
+    eprintln!("usage: revnetgroup -u | -h [-f netgroup_file]");
+    process::exit(1);
+}
+
+fn read_netgroup_file<R: Read>(reader: R) -> ForwardTable {
+    let mut table = ForwardTable::new();
+    let buf_reader = BufReader::new(reader);
+    let mut lines: Vec<String> = Vec::new();
+
+    for line in buf_reader.lines() {
+        match line {
+            Ok(l) => lines.push(l),
+            Err(_) => break,
+        }
+    }
+
+    let mut merged: Vec<String> = Vec::new();
+    let mut current = String::new();
+    for line in lines {
+        if line.starts_with('#') {
+            continue;
+        }
+        if current.is_empty() {
+            current = line;
+        } else {
+            current.push_str(&line);
+        }
+        if current.ends_with('\\') {
+            current.pop();
+        } else {
+            merged.push(current);
+            current = String::new();
+        }
+    }
+    if !current.is_empty() {
+        merged.push(current);
+    }
+
+    for line in merged {
+        if let Some(pos) = line.find(|c: char| c == ' ' || c == '\t') {
+            let key = line[..pos].to_string();
+            let data = line[pos..].trim_start().to_string();
+            if !key.is_empty() {
+                table.insert(key, data);
+            }
+        }
+    }
+
+    table
+}
+
+fn parse_netgroup_data(
+    data: &str,
+    forward: &ForwardTable,
+    visited: &mut Vec<String>,
+) -> Vec<NetgroupTriple> {
+    let mut triples = Vec::new();
+    let mut pos = 0;
+    let bytes = data.as_bytes();
+
+    while pos < bytes.len() {
+        while pos < bytes.len() && (bytes[pos] == b' ' || bytes[pos] == b'\t' || bytes[pos] == b',') {
+            pos += 1;
+        }
+        if pos >= bytes.len() {
+            break;
+        }
+
+        if bytes[pos] == b'(' {
+            pos += 1;
+            let mut fields: [Option<String>; 3] = [None, None, None];
+            for i in 0..3 {
+                while pos < bytes.len() && (bytes[pos] == b' ' || bytes[pos] == b'\t') {
+                    pos += 1;
+                }
+                if pos >= bytes.len() || bytes[pos] == b')' || bytes[pos] == b',' {
+                    fields[i] = None;
+                } else {
+                    let start = pos;
+                    while pos < bytes.len()
+                        && bytes[pos] != b','
+                        && bytes[pos] != b')'
+                        && bytes[pos] != b' '
+                        && bytes[pos] != b'\t'
+                    {
+                        pos += 1;
+                    }
+                    fields[i] = Some(String::from_utf8_lossy(&bytes[start..pos]).to_string());
+                }
+            }
+            if pos < bytes.len() && bytes[pos] == b')' {
+                pos += 1;
+            }
+            triples.push(NetgroupTriple {
+                host: fields[0],
+                user: fields[1],
+                domain: fields[2],
+            });
+        } else {
+            let start = pos;
+            while pos < bytes.len()
+                && bytes[pos] != b','
+                && bytes[pos] != b' '
+                && bytes[pos] != b'\t'
+                && bytes[pos] != b')'
+            {
+                pos += 1;
+            }
+            let name = String::from_utf8_lossy(&bytes[start..pos]).to_string();
+            if !name.is_empty() {
+                if !visited.contains(&name) {
+                    visited.push(name.clone());
+                    if let Some(ref nested_data) = forward.get(&name) {
+                        let nested = parse_netgroup_data(nested_data, forward, visited);
+                        triples.extend(nested);
+                    }
+                }
+            }
+        }
+    }
+
+    triples
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        usage();
+    }
+
+    let mut hosts_mode: Option<bool> = None;
+    let mut netgroup_file = String::from("/etc/netgroup");
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-u" => {
+                if hosts_mode.is_some() {
+                    eprintln!("please use only one of -u or -h");
+                    usage();
+                }
+                hosts_mode = Some(false);
+            }
+            "-h" => {
+                if hosts_mode.is_some() {
+                    eprintln!("please use only one of -u or -h");
+                    usage();
+                }
+                hosts_mode = Some(true);
+            }
+            "-f" => {
+                i += 1;
+                if i >= args.len() {
+                    usage();
+                }
+                netgroup_file = args[i].clone();
+            }
+            _ => {
+                usage();
+            }
+        }
+        i += 1;
+    }
+
+    let hosts_mode = match hosts_mode {
+        Some(m) => m,
+        None => usage(),
+    };
+
+    let forward: ForwardTable = if netgroup_file == "-" {
+        read_netgroup_file(io::stdin())
+    } else {
+        match File::open(&netgroup_file) {
+            Ok(f) => read_netgroup_file(f),
+            Err(e) => {
+                eprintln!("{}: {}", netgroup_file, e);
+                process::exit(1);
+            }
+        }
+    };
+
+    let mut reverse: ReverseTable = HashMap::new();
+
+    for (group_name, data) in &forward {
+        let mut visited = Vec::new();
+        visited.push(group_name.clone());
+        let triples = parse_netgroup_data(data, &forward, &mut visited);
+
+        for triple in triples {
+            let (member, domain) = if hosts_mode {
+                match &triple.host {
+                    Some(h) if h != "-" => (h.clone(), triple.domain.clone().unwrap_or_else(|| "*".to_string())),
+                    _ => continue,
+                }
+            } else {
+                match &triple.user {
+                    Some(u) if u != "-" => (u.clone(), triple.domain.clone().unwrap_or_else(|| "*".to_string())),
+                    _ => continue,
+                }
+            };
+            reverse
+                .entry((member, domain))
+                .or_insert_with(Vec::new)
+                .push(group_name.clone());
+        }
+    }
+
+    let mut keys: Vec<_> = reverse.keys().collect();
+    keys.sort();
+    for key in keys {
+        let groups = &reverse[key];
+        let groups_str = groups.join(",");
+        println!("{}.{} \t{}", key.0, key.1, groups_str);
+    }
+
+    process::exit(0);
+}
+```

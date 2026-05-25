@@ -1,0 +1,11 @@
+=== STEP 211 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to provide a complete action with content. Here is the full action:
+
+ACTION: WRITE_FILE usr.bin/yes/Cargo.toml

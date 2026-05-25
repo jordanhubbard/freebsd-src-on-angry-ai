@@ -1,0 +1,56 @@
+=== STEP 98 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/join
+   Files: 0/3
+📄 File: usr.bin/join/join.c
+   Chunks: 19/24
+
+```
+=== CHUNK 19/24: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/join/join.c === [function: outoneline]
+=== Lines 441-474 (34 lines) ===
+
+static void
+outoneline(INPUT *F, LINE *lp)
+{
+	u_long cnt;
+
+	/*
+	 * Output a single line from one of the files, according to the
+	 * join rules.  This happens when we are writing unmatched single
+	 * lines.  Output empty fields in the right places.
+	 */
+	if (olist)
+		for (cnt = 0; cnt < olistcnt; ++cnt) {
+			if (olist[cnt].filenum == (unsigned)F->number)
+				outfield(lp, olist[cnt].fieldno, 0);
+			else if (olist[cnt].filenum == 0)
+				outfield(lp, F->joinf, 0);
+			else
+				outfield(lp, 0, 1);
+		}
+	else {
+		/*
+		 * Output the join field, then the remaining fields.
+		 */
+		outfield(lp, F->joinf, 0);
+		for (cnt = 0; cnt < lp->fieldcnt; ++cnt)
+			if (F->joinf != cnt)
+				outfield(lp, cnt, 0);
+	}
+	(void)printf("\n");
+	if (ferror(stdout))
+		err(1, "stdout");
+	needsep = 0;
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

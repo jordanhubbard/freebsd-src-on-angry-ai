@@ -1,0 +1,20 @@
+=== STEP 99 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE libexec/revnetgroup/rust/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "revnetgroup"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "revnetgroup"
+path = "src/main.rs"
+<<<

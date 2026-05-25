@@ -1,0 +1,51 @@
+=== STEP 109 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+No `bsd.rust.mk` exists in the tree. I need to add explicit local Makefile rules to build the Rust binary. Let me update the Makefile:
+
+ACTION: EDIT_FILE libexec/revnetgroup/Makefile
+OLD:
+```
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+.include <bsd.prog.mk>
+```
+NEW:
+```
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+# Rust replacement build
+RUSTC?=	rustc
+CARGO?=	cargo
+RUST_CRATE=	${.CURDIR}/rust
+RUST_TARGET=	${.OBJDIR}/rust-target
+RUST_BIN=	${RUST_TARGET}/release/revnetgroup
+
+all:	revnetgroup revnetgroup-rust
+
+revnetgroup-rust:
+	${CARGO} build --release --manifest-path ${RUST_CRATE}/Cargo.toml \
+	    --target-dir ${RUST_TARGET}
+
+clean:	clean-rust
+
+clean-rust:
+	${RM} -rf ${RUST_TARGET}
+
+.include <bsd.prog.mk>
+```

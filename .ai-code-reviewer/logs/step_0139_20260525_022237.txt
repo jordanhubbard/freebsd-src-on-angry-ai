@@ -1,0 +1,367 @@
+=== STEP 139 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/revnetgroup/rust/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE libexec/revnetgroup/rust/src/main.rs
+CONTENT:
+```
+// SPDX-License-Identifier: BSD-4-Clause
+//
+// Rust replacement for revnetgroup(8)
+// Reverse netgroup map generator program
+
+use std::ffi::{CStr, CString};
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read};
+use std::process;
+
+const TABLESIZE: usize = 256;
+const HASH_MASK: u32 = 0x000000FF;
+const LINSIZ: usize = 1024 * 10;
+
+// FFI declarations for internal netgroup functions
+extern "C" {
+    fn __setnetgrent(name: *const i8);
+    fn __getnetgrent(
+        host: *mut *mut i8,
+        user: *mut *mut i8,
+        domain: *mut *mut i8,
+    ) -> std::os::raw::c_int;
+    fn __endnetgrent();
+}
+
+#[derive(Clone)]
+struct GroupEntry {
+    key: String,
+    data: String,
+    next: Option<Box<GroupEntry>>,
+}
+
+#[derive(Clone)]
+struct GroupList {
+    groupname: String,
+    next: Option<Box<GroupList>>,
+}
+
+#[derive(Clone)]
+struct MemberEntry {
+    key: String,
+    domain: String,
+    groups: Option<Box<GroupList>>,
+    next: Option<Box<MemberEntry>>,
+}
+
+fn hash(key: &[u8]) -> u32 {
+    let mut h: u32 = 0;
+    let mut key = key;
+    if key.is_empty() {
+        return h;
+    }
+    let loop_count = (key.len() + 8 - 1) >> 3;
+    let remainder = key.len() & (8 - 1);
+
+    for _ in 0..loop_count {
+        match remainder {
+            0 => {
+                if !key.is_empty() {
+                    h = key[0] as u32 + 65599 * h;
+                    key = &key[1..];
+                }
+            }
+            _ => {}
+        }
+        if !key.is_empty() {
+            h = key[0] as u32 + 65599 * h;
+            key = &key[1..];
+        }
+        if !key.is_empty() {
+            h = key[0] as u32 + 65599 * h;
+            key = &key[1..];
+        }
+        if !key.is_empty() {
+            h = key[0] as u32 + 65599 * h;
+            key = &key[1..];
+        }
+        if !key.is_empty() {
+            h = key[0] as u32 + 65599 * h;
+            key = &key[1..];
+        }
+        if !key.is_empty() {
+            h = key[0] as u32 + 65599 * h;
+            key = &key[1..];
+        }
+        if !key.is_empty() {
+            h = key[0] as u32 + 65599 * h;
+            key = &key[1..];
+        }
+        if !key.is_empty() {
+            h = key[0] as u32 + 65599 * h;
+            key = &key[1..];
+        }
+    }
+    h
+}
+
+fn hashkey(key: &str) -> u32 {
+    hash(key.as_bytes()) & HASH_MASK
+}
+
+fn store(table: &mut [Option<Box<GroupEntry>>], key: &str, data: &str) {
+    let i = hashkey(key) as usize;
+    let new = Box::new(GroupEntry {
+        key: key.to_string(),
+        data: data.to_string(),
+        next: table[i].take(),
+    });
+    table[i] = Some(new);
+}
+
+fn mstore(
+    table: &mut [Option<Box<MemberEntry>>],
+    key: &str,
+    data: &str,
+    domain: &str,
+) {
+    let i = hashkey(key) as usize;
+    let mut cur = &table[i];
+
+    let tmp = Box::new(GroupList {
+        groupname: data.to_string(),
+        next: None,
+    });
+
+    // Check if member already exists
+    let mut found = false;
+    let mut cur_ref = cur;
+    while let Some(entry) = cur_ref {
+        if entry.key == key {
+            // Update grouplist
+            let mut new_groups = Box::new(GroupList {
+                groupname: data.to_string(),
+                next: entry.groups.clone(),
+            });
+            // We need to update the entry in place - rebuild the table entry
+            let mut rebuilt = Some(entry.clone());
+            if let Some(ref mut e) = rebuilt {
+                e.groups = Some(new_groups);
+            }
+            // Rebuild linked list
+            let mut next_rest = entry.next.clone();
+            table[i] = rebuilt;
+            // Reattach rest of list
+            let mut tail = &mut table[i];
+            while let Some(ref mut t) = tail {
+                if t.next.is_none() {
+                    t.next = next_rest;
+                    break;
+                }
+                tail = &mut t.next;
+            }
+            found = true;
+            break;
+        }
+        cur_ref = &entry.next;
+    }
+
+    if !found {
+        let new = Box::new(MemberEntry {
+            key: key.to_string(),
+            domain: if domain.is_empty() {
+                "*".to_string()
+            } else {
+                domain.to_string()
+            },
+            groups: Some(tmp),
+            next: table[i].take(),
+        });
+        table[i] = Some(new);
+    }
+}
+
+fn usage() {
+    eprintln!("usage: revnetgroup -u | -h [-f netgroup_file]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 2 {
+        usage();
+    }
+
+    let mut hosts: Option<bool> = None;
+    let mut netgroup_file = String::from("/etc/netgroup");
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        match arg.as_str() {
+            "-u" => {
+                if hosts.is_some() {
+                    eprintln!("please use only one of -u or -h");
+                    usage();
+                }
+                hosts = Some(false);
+            }
+            "-h" => {
+                if hosts.is_some() {
+                    eprintln!("please use only one of -u or -h");
+                    usage();
+                }
+                hosts = Some(true);
+            }
+            "-f" => {
+                i += 1;
+                if i >= args.len() {
+                    usage();
+                }
+                netgroup_file = args[i].clone();
+            }
+            _ => {
+                usage();
+            }
+        }
+        i += 1;
+    }
+
+    let hosts = match hosts {
+        Some(h) => h,
+        None => usage(),
+    };
+
+    // Read netgroup file
+    let mut lines: Vec<String> = Vec::new();
+    if netgroup_file == "-" {
+        let stdin = io::stdin();
+        let reader = stdin.lock();
+        for line in reader.lines() {
+            match line {
+                Ok(l) => lines.push(l),
+                Err(_) => break,
+            }
+        }
+    } else {
+        let file = match File::open(&netgroup_file) {
+            Ok(f) => f,
+            Err(e) => {
+                eprintln!("{}: {}", netgroup_file, e);
+                process::exit(1);
+            }
+        };
+        let reader = BufReader::new(file);
+        for line in reader.lines() {
+            match line {
+                Ok(l) => lines.push(l),
+                Err(_) => break,
+            }
+        }
+    }
+
+    // Parse netgroup entries into hash table
+    let mut gtable: Vec<Option<Box<GroupEntry>>> = vec![None; TABLESIZE];
+
+    let mut line_iter = lines.into_iter();
+    while let Some(mut line) = line_iter.next() {
+        if line.starts_with('#') {
+            continue;
+        }
+        // Handle backslash line continuations
+        while line.ends_with('\\') {
+            line.pop(); // remove backslash
+            if let Some(next_line) = line_iter.next() {
+                line.push_str(&next_line);
+            } else {
+                break;
+            }
+        }
+
+        // Parse key and data
+        let mut parts = line.splitn(2, char::is_whitespace);
+        let key = match parts.next() {
+            Some(k) => k.to_string(),
+            None => continue,
+        };
+        let data = match parts.next() {
+            Some(d) => d.to_string(),
+            None => continue,
+        };
+
+        store(&mut gtable, &key, &data);
+    }
+
+    // Build reverse mapping using netgroup iteration
+    let mut mtable: Vec<Option<Box<MemberEntry>>> = vec![None; TABLESIZE];
+
+    for i in 0..TABLESIZE {
+        let mut gcur = &gtable[i];
+        while let Some(entry) = gcur {
+            let key_cstr = CString::new(entry.key.as_bytes()).unwrap();
+            unsafe {
+                __setnetgrent(key_cstr.as_ptr());
+                let mut host: *mut i8 = std::ptr::null_mut();
+                let mut user: *mut i8 = std::ptr::null_mut();
+                let mut domain: *mut i8 = std::ptr::null_mut();
+                while __getnetgrent(&mut host, &mut user, &mut domain) != 0 {
+                    let host_str = if !host.is_null() {
+                        Some(CStr::from_ptr(host).to_string_lossy().into_owned())
+                    } else {
+                        None
+                    };
+                    let user_str = if !user.is_null() {
+                        Some(CStr::from_ptr(user).to_string_lossy().into_owned())
+                    } else {
+                        None
+                    };
+                    let domain_str = if !domain.is_null() {
+                        CStr::from_ptr(domain).to_string_lossy().into_owned()
+                    } else {
+                        String::new()
+                    };
+
+                    if hosts {
+                        if let Some(ref h) = host_str {
+                            if h != "-" {
+                                mstore(&mut mtable, h, &entry.key, &domain_str);
+                            }
+                        }
+                    } else {
+                        if let Some(ref u) = user_str {
+                            if u != "-" {
+                                mstore(&mut mtable, u, &entry.key, &domain_str);
+                            }
+                        }
+                    }
+                }
+            }
+            gcur = &entry.next;
+        }
+    }
+
+    unsafe { __endnetgrent() };
+
+    // Output results
+    for i in 0..TABLESIZE {
+        let mut mcur = &mtable[i];
+        while let Some(entry) = mcur {
+            print!("{}.{}", entry.key, entry.domain);
+            let mut tmp = &entry.groups;
+            while let Some(g) = tmp {
+                print!("{}", g.groupname);
+                tmp = &g.next;
+                if tmp.is_some() {
+                    print!(",");
+                }
+            }
+            println!();
+            mcur = &entry.next;
+        }
+    }
+
+    process::exit(0);
+}
+```

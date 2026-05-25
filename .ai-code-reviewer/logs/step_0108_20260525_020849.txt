@@ -1,0 +1,26 @@
+=== STEP 108 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/revnetgroup/Makefile:
+PROGRESS:
+📁 Directory: libexec/revnetgroup
+   Files: 0/6
+📄 File: libexec/revnetgroup/Makefile
+✏️  Edits: 2 files modified
+
+```
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE bsd.rust.mk

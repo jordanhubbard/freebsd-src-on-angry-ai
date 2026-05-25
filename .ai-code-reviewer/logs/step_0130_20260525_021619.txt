@@ -1,0 +1,36 @@
+=== STEP 130 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE libexec/revnetgroup/Makefile
+CONTENT:
+```
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+# Rust replacement build
+CARGO?=	cargo
+RUST_CRATE=	${.CURDIR}/rust
+RUST_TARGET=	${.OBJDIR}/rust-target
+
+all:	revnetgroup revnetgroup-rust
+
+revnetgroup-rust:
+	${CARGO} build --release --manifest-path ${RUST_CRATE}/Cargo.toml \
+	    --target-dir ${RUST_TARGET}
+
+clean:	clean-rust
+
+clean-rust:
+	${RM} -rf ${RUST_TARGET}
+
+.include <bsd.prog.mk>
+```
