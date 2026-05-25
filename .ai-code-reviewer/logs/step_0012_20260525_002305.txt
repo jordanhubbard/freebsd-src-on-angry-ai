@@ -1,0 +1,44 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 8/15
+
+```
+=== CHUNK 8/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: pwr_of_two]
+=== Lines 225-246 (22 lines) ===
+
+static int
+pwr_of_two(u_int nr)
+{
+
+	return (((nr & (nr - 1)) == 0) ? 1 : 0);
+}
+
+/*
+ * A partition specification has the following format:
+ *	<type> ':' <kind> <contents>
+ * where:
+ *	type	  the partition type alias
+ *	kind	  the interpretation of the contents specification
+ *		  ':'   contents holds the size of an empty partition
+ *		  '='   contents holds the name of a file to read
+ *		  '-'   contents holds a command to run; the output of
+ *			which is the contents of the partition.
+ *	contents  the specification of a partition's contents
+ *
+ * A specification that is a single dash indicates an unused partition
+ * entry.
+ */
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

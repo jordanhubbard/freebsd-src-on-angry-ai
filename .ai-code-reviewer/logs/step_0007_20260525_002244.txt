@@ -1,0 +1,46 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 3/15
+
+```
+=== CHUNK 3/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: print_schemes]
+=== Lines 106-129 (24 lines) ===
+
+static void
+print_schemes(int usage)
+{
+	struct mkimg_scheme *s;
+	const char *sep;
+
+	if (usage) {
+		fprintf(stderr, "    schemes:\n");
+		s = NULL;
+		while ((s = scheme_iterate(s)) != NULL) {
+			fprintf(stderr, "\t%s\t-  %s\n", s->name,
+			    s->description);
+		}
+	} else {
+		sep = "";
+		s = NULL;
+		while ((s = scheme_iterate(s)) != NULL) {
+			printf("%s%s", sep, s->name);
+			sep = " ";
+		}
+		putchar('\n');
+	}
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

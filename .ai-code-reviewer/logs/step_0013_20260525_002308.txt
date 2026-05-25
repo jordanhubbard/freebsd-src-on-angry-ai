@@ -1,0 +1,107 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 9/15
+
+```
+=== CHUNK 9/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: parse_part]
+=== Lines 247-331 (85 lines) ===
+
+static int
+parse_part(const char *spec)
+{
+	struct part *part;
+	char *sep;
+	size_t len;
+	int error;
+
+	if (strcmp(spec, "-") == 0) {
+		nparts++;
+		return (0);
+	}
+
+	part = calloc(1, sizeof(struct part));
+	if (part == NULL)
+		return (ENOMEM);
+
+	sep = strchr(spec, ':');
+	if (sep == NULL) {
+		error = EINVAL;
+		goto errout;
+	}
+	len = sep - spec + 1;
+	if (len < 2) {
+		error = EINVAL;
+		goto errout;
+	}
+	part->alias = malloc(len);
+	if (part->alias == NULL) {
+		error = ENOMEM;
+		goto errout;
+	}
+	strlcpy(part->alias, spec, len);
+	spec = sep + 1;
+
+	switch (*spec) {
+	case ':':
+		part->kind = PART_KIND_SIZE;
+		break;
+	case '=':
+		part->kind = PART_KIND_FILE;
+		break;
+	case '-':
+		part->kind = PART_KIND_PIPE;
+		break;
+	default:
+		error = EINVAL;
+		goto errout;
+	}
+	spec++;
+
+	part->contents = strdup(spec);
+	if (part->contents == NULL) {
+		error = ENOMEM;
+		goto errout;
+	}
+
+	spec = part->alias;
+	sep = strchr(spec, '/');
+	if (sep != NULL) {
+		*sep++ = '\0';
+		if (strlen(part->alias) == 0 || strlen(sep) == 0) {
+			error = EINVAL;
+			goto errout;
+		}
+		part->label = strdup(sep);
+		if (part->label == NULL) {
+			error = ENOMEM;
+			goto errout;
+		}
+	}
+
+	part->index = nparts;
+	TAILQ_INSERT_TAIL(&partlist, part, link);
+	nparts++;
+	return (0);
+
+ errout:
+	if (part->alias != NULL)
+		free(part->alias);
+	free(part);
+	return (error);
+}
+
+#if defined(SPARSE_WRITE)
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

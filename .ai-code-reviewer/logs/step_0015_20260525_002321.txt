@@ -1,0 +1,43 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 11/15
+
+```
+=== CHUNK 11/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: mkimg_chs]
+=== Lines 373-393 (21 lines) ===
+
+void
+mkimg_chs(lba_t lba, u_int maxcyl, u_int *cylp, u_int *hdp, u_int *secp)
+{
+	u_int hd, sec;
+
+	*cylp = *hdp = *secp = ~0U;
+	if (nsecs == 1 || nheads == 1)
+		return;
+
+	sec = lba % nsecs + 1;
+	lba /= nsecs;
+	hd = lba % nheads;
+	lba /= nheads;
+	if (lba > maxcyl)
+		return;
+
+	*cylp = lba;
+	*hdp = hd;
+	*secp = sec;
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

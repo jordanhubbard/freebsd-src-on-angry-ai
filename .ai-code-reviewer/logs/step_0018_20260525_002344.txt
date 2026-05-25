@@ -1,0 +1,161 @@
+=== STEP 18 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 14/15
+
+```
+=== CHUNK 14/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: mkimg]
+=== Lines 444-582 (139 lines) ===
+
+static void
+mkimg(void)
+{
+	FILE *fp;
+	struct part *part;
+	struct stat sb;
+	char *p;
+	lba_t block, blkoffset;
+	uint64_t bytesize, byteoffset;
+	char *size, *offset;
+	bool abs_offset;
+	int error, fd;
+
+	/* First check partition information */
+	TAILQ_FOREACH(part, &partlist, link) {
+		error = scheme_check_part(part);
+		if (error)
+			errc(EX_DATAERR, error, "partition %d", part->index+1);
+	}
+
+	block = scheme_metadata(SCHEME_META_IMG_START, 0);
+	abs_offset = false;
+	TAILQ_FOREACH(part, &partlist, link) {
+		byteoffset = blkoffset = 0;
+		abs_offset = false;
+
+		/* Look for an offset. Set size too if we can. */
+		switch (part->kind) {
+		case PART_KIND_SIZE:
+			offset = part->contents;
+			size = strsep(&offset, ":");
+			if (expand_number(size, &bytesize) == -1)
+				error = errno;
+			break;
+		case PART_KIND_FILE:
+			size = part->contents;
+			if (stat(part->contents, &sb) == 0) {
+				if (S_ISDIR(sb.st_mode)) {
+					errc(EX_IOERR, EISDIR, "partition %d",
+					    part->index + 1);
+				}
+				offset = NULL;
+			} else {
+				p = strrchr(part->contents, ':');
+				if (p != NULL) {
+					*p = '\0';
+					offset = p + 1;
+				} else {
+					offset = NULL;
+				}
+			}
+			if (offset != NULL) {
+				if (*offset != '+')
+					abs_offset = true;
+				else
+					offset++;
+				if (expand_number(offset, &byteoffset) == -1)
+					error = errno;
+			}
+			break;
+		}
+
+		/* Work out exactly where the partition starts. */
+		blkoffset = (byteoffset + secsz - 1) / secsz;
+		if (abs_offset)
+			block = scheme_metadata(SCHEME_META_PART_ABSOLUTE,
+			    blkoffset);
+		else
+			block = scheme_metadata(SCHEME_META_PART_BEFORE,
+			    block + blkoffset);
+		part->block = block;
+
+		if (verbose)
+			fprintf(stderr, "partition %d: starting block %llu "
+			    "... ", part->index + 1, (long long)part->block);
+
+		/* Pull in partition contents, set size if we haven't yet. */
+		switch (part->kind) {
+		case PART_KIND_FILE:
+			fd = open(part->contents, O_RDONLY, 0);
+			if (fd != -1) {
+				error = image_copyin(block, fd, &bytesize);
+				close(fd);
+			} else
+				error = errno;
+			break;
+		case PART_KIND_PIPE:
+			fp = popen(part->contents, "r");
+			if (fp != NULL) {
+				fd = fileno(fp);
+				error = image_copyin(block, fd, &bytesize);
+				pclose(fp);
+			} else
+				error = errno;
+			break;
+		}
+		if (error)
+			errc(EX_IOERR, error, "partition %d", part->index + 1);
+		part->size = (bytesize + secsz - 1) / secsz;
+		if (verbose) {
+			bytesize = part->size * secsz;
+			fprintf(stderr, "size %llu bytes (%llu blocks)\n",
+			     (long long)bytesize, (long long)part->size);
+			if (abs_offset) {
+				fprintf(stderr,
+				    "    location %llu bytes (%llu blocks)\n",
+				    (long long)byteoffset,
+				    (long long)blkoffset);
+			} else if (blkoffset > 0) {
+				fprintf(stderr,
+				    "    offset %llu bytes (%llu blocks)\n",
+				    (long long)byteoffset,
+				    (long long)blkoffset);
+			}
+		}
+		block = scheme_metadata(SCHEME_META_PART_AFTER,
+		    part->block + part->size);
+	}
+
+	mkimg_validate();
+
+	block = scheme_metadata(SCHEME_META_IMG_END, block);
+	error = image_set_size(block);
+	if (!error) {
+		error = capacity_resize(block);
+		block = image_get_size();
+	}
+	if (!error) {
+		error = format_resize(block);
+		block = image_get_size();
+	}
+	if (error)
+		errc(EX_IOERR, error, "image sizing");
+	ncyls = block / (nsecs * nheads);
+	error = scheme_write(block);
+	if (error)
+		errc(EX_IOERR, error, "writing metadata");
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

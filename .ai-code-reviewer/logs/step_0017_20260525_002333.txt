@@ -1,0 +1,56 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/mkimg
+   Files: 0/22
+📄 File: usr.bin/mkimg/mkimg.c
+   Chunks: 13/15
+
+```
+=== CHUNK 13/15: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkimg/mkimg.c === [function: mkimg_validate]
+=== Lines 410-443 (34 lines) ===
+
+static void
+mkimg_validate(void)
+{
+	struct part *part, *part2;
+	lba_t start, end, start2, end2;
+	int i, j;
+
+	i = 0;
+
+	TAILQ_FOREACH(part, &partlist, link) {
+		start = part->block;
+		end = part->block + part->size;
+		j = i + 1;
+		part2 = TAILQ_NEXT(part, link);
+		if (part2 == NULL)
+			break;
+
+		TAILQ_FOREACH_FROM(part2, &partlist, link) {
+			start2 = part2->block;
+			end2 = part2->block + part2->size;
+
+			if ((start >= start2 && start < end2) ||
+			    (end > start2 && end <= end2)) {
+				errx(1, "partition %d overlaps partition %d",
+				    i, j);
+			}
+
+			j++;
+		}
+
+		i++;
+	}
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK
