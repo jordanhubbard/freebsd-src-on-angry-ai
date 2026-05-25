@@ -1,0 +1,103 @@
+=== STEP 167 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/pathchk/Makefile:
+PROGRESS:
+📁 Directory: usr.sbin/nologin
+   Files: 0/4
+📄 File: usr.bin/pathchk/Makefile
+✏️  Edits: 2 files modified
+
+```
+PROG=	pathchk
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+SRCS=	${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+
+${PROG}: ${SRCS}
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+.PHONY: all install clean
+
+${PROG}: .FORCE
+.FORCE:
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.sbin/nologin/Makefile
+OLD:
+<<<
+PROG=	nologin
+MAN=	nologin.5 nologin.8
+
+SYMLINKS=	..${BINDIR}/nologin /sbin/nologin
+
+# It is important that nologin be statically linked for security
+# reasons.  A dynamic non-setuid binary can be linked against a trojan
+# libc by setting LD_LIBRARY_PATH appropriately.  Both sshd(8) and
+# login(1) make it possible to log in with an unsanitized environment,
+# rendering a dynamic nologin binary virtually useless.
+NO_SHARED=	YES
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	nologin
+MAN=	nologin.5 nologin.8
+
+SYMLINKS=	..${BINDIR}/nologin /sbin/nologin
+
+# It is important that nologin be statically linked for security
+# reasons.  A dynamic non-setuid binary can be linked against a trojan
+# libc by setting LD_LIBRARY_PATH appropriately.  Both sshd(8) and
+# login(1) make it possible to log in with an unsanitized environment,
+# rendering a dynamic nologin binary virtually useless.
+NO_SHARED=	YES
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+SRCS=	${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+
+${PROG}: ${SRCS}
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+.PHONY: all install clean
+
+${PROG}: .FORCE
+.FORCE:
+<<<

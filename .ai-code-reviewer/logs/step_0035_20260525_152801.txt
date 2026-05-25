@@ -1,0 +1,9 @@
+=== STEP 35 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'build-config*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE *.sh

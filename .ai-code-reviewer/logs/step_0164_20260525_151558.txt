@@ -1,0 +1,68 @@
+=== STEP 164 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.sbin/nologin/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The `libc` crate is not vendored. I need to use raw FFI declarations instead. Let me fix the Rust source.
+
+ACTION: WRITE_FILE usr.sbin/nologin/src/main.rs
+CONTENT:
+use std::ffi::CStr;
+use std::io::Write;
+use std::process;
+
+extern "C" {
+    fn ttyname(fd: i32) -> *mut i8;
+    fn getlogin() -> *mut i8;
+    fn openlog(ident: *const i8, option: i32, facility: i32);
+    fn syslog(priority: i32, format: *const i8, ...) -> i32;
+    fn closelog();
+}
+
+const LOG_CONS: i32 = 0x08;
+const LOG_AUTH: i32 = 0x20;
+const LOG_CRIT: i32 = 0xa0;
+
+fn main() {
+    let message = "This account is currently not available.\n";
+
+    let tt = ttyname();
+    let user = getlogin();
+
+    unsafe {
+        openlog(b"nologin\0".as_ptr() as *const i8, LOG_CONS, LOG_AUTH);
+        let msg = format!("Attempted login by {} on {}", user, tt);
+        let c_msg = std::ffi::CString::new(msg).unwrap();
+        syslog(LOG_CRIT, b"%s\0".as_ptr() as *const i8, c_msg.as_ptr());
+        closelog();
+    }
+
+    print!("{}", message);
+    process::exit(1);
+}
+
+fn ttyname() -> String {
+    unsafe {
+        let name = ttyname(0);
+        if name.is_null() {
+            "UNKNOWN".to_string()
+        } else {
+            CStr::from_ptr(name).to_string_lossy().into_owned()
+        }
+    }
+}
+
+fn getlogin() -> String {
+    unsafe {
+        let name = getlogin();
+        if name.is_null() {
+            "UNKNOWN".to_string()
+        } else {
+            CStr::from_ptr(name).to_string_lossy().into_owned()
+        }
+    }
+}

@@ -1,0 +1,15 @@
+=== STEP 137 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/proccontrol:
+```
+Makefile
+Makefile.depend
+proccontrol.1
+proccontrol.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/proccontrol

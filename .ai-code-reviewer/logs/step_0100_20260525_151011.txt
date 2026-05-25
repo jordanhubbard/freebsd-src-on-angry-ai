@@ -1,0 +1,17 @@
+=== STEP 100 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ktrace:
+```
+Makefile
+Makefile.depend
+ktrace.1
+ktrace.c
+ktrace.h
+subr.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/killall

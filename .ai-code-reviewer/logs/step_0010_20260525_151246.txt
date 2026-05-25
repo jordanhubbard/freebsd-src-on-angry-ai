@@ -1,0 +1,64 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+GREP_RESULT for 'extern':
+```
+./tests/sys/netinet/libalias/3_natin.c:77:	 * Any external port
+./tests/sys/netinet/libalias/3_natin.c:98:	 * Any external host
+./tests/sys/netinet/libalias/3_natin.c:119:	 * Any external host, any port
+./tests/sys/netinet/libalias/2_natout.c:146:	/* should use a different external port */
+./tests/sys/netinet/libalias/2_natout.c:155:	/* should use a different external port */
+./tests/sys/netinet/libalias/2_natout.c:188:	/* should use the same external port */
+./tests/sys/netinet/libalias/util.h:44:extern struct in_addr masq, pub, pub2, prv1, prv2, prv3, cgn, ext, ANY_ADDR;
+./tests/sys/capsicum/syscalls.h:73:extern "C" {
+./tests/sys/capsicum/syscalls.h:74:extern int __sys_kmq_notify(int, const struct sigevent *);
+./tests/sys/capsicum/syscalls.h:75:extern int __sys_kmq_open(const char *, int, mode_t, const struct mq_attr *);
+./tests/sys/capsicum/capsicum-freebsd.h:8:extern "C" {
+./tests/sys/capsicum/capsicum-rights.h:5:extern "C" {
+./tests/sys/capsicum/capsicum.h:32:extern std::string capsicum_test_bindir;
+./tests/sys/capsicum/capsicum-test.h:17:extern bool verbose;
+./tests/sys/capsicum/capsicum-test.h:18:extern std::string tmpdir;
+./tests/sys/capsicum/capsicum-test.h:19:extern bool tmpdir_on_tmpfs;
+./tests/sys/kqueue/libkqueue/common.h:43:extern int vnode_fd;
+./tests/sys/kqueue/libkqueue/common.h:44:extern int kqfd;
+./tests/sys/kern/unix_passfd_test.c:900: * fails.  In this case the kernel must dispose of the externalized rights
+./tests/sys/posixshm/posixshm_test.c:1307:extern int __sys_shm_open2(const char *, int, mode_t, int, const char *);
+./tests/sys/arch/amd64/int0x80.c:33:extern char after_int0x80[];
+./tests/sys/cddl/zfs/tests/exec/mmap_exec.c:35:extern int errno;
+./tests/sys/cddl/zfs/bin/file_trunc.c:102:	extern char *optarg;
+./tests/sys/cddl/zfs/bin/file_trunc.c:103:	extern int optind, optopt;
+./tests/sys/cddl/zfs/bin/file_common.h:38:extern "C" {
+./tests/sys/cddl/zfs/bin/file_common.h:56:extern char *optarg;
+./tests/sys/cddl/zfs/bin/file_common.h:57:extern int optind, opterr, optopt;
+./tests/sys/cddl/zfs/bin/mktree.c:41:extern int errno;
+./tests/sys/vm/stack/stack_dt_need_exec_test.c:12:extern int checkstack(void);
+./stand/libofw/libofw.h:45:extern int	ofw_getdev(void **vdev, const char *devspec, const char **path);
+./stand/libofw/libofw.h:47:extern struct devsw		ofwdisk;
+./stand/libofw/libofw.h:48:extern struct devsw		ofw_netdev;
+./stand/libofw/openfirm.h:69:extern int		(*openfirmware)(void *);
+./stand/libofw/openfirm.h:70:extern phandle_t	chosen;
+./stand/libofw/openfirm.h:71:extern ihandle_t	memory, mmu;
+./stand/libofw/ofw_net.c:51:extern struct netif_stats	ofwn_stats[];
+./stand/efi/acpica/include/acpi_detect.h:35:extern EFI_GUID acpi;
+./stand/efi/acpica/include/acpi_detect.h:36:extern EFI_GUID acpi20;
+./stand/efi/acpica/include/acpi_detect.h:37:extern ACPI_TABLE_RSDP *rsdp;
+./stand/efi/include/efilib.h:37:extern EFI_HANDLE		IH;
+./stand/efi/include/efilib.h:38:extern EFI_SYSTEM_TABLE		*ST;
+./stand/efi/include/efilib.h:39:extern EFI_BOOT_SERVICES	*BS;
+./stand/efi/include/efi_drivers.h:37:extern struct devsw efipart_dev;
+./stand/efi/include/efi_drivers.h:38:extern int efipart_getdesc(struct devdesc *dev, char **out);
+./stand/efi/include/efi_drivers.h:41:extern const efi_driver_t fs_driver;
+./stand/efi/include/efi.h:95:extern EFI_LOADED_IMAGE *boot_img;
+./stand/efi/include/efi.h:96:extern bool boot_services_active;
+./stand/efi/include/efi_nii.h:82:extern EFI_GUID NetworkInterfaceIdentifierProtocol;
+./stand/efi/include/efi_nii.h:83:extern EFI_GUID NetworkInterfaceIdentifierProtocol_31;
+./stand/efi/include/efipciio.h:556:extern EFI_GUID gEfiPciIoProtocolGuid;
+... [13863 more matches]
+```
+
+--- RESPONSE ---
+
+
+Let me check how other recently completed units handle FFI syscalls.
+
+ACTION: LIST_DIR usr.bin/asa

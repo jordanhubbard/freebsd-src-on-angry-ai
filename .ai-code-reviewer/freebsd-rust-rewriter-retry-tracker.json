@@ -223,6 +223,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T00:24:56.720185"
   },
+  "contrib/netbsd-tests/lib/libc/arch/alpha": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T15:25:28.217801"
+  },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
     "last_attempt": "2026-05-22T22:17:17.637990"
@@ -311,9 +315,13 @@
     "attempts": 3,
     "last_attempt": "2026-05-25T13:36:49.051207"
   },
-  "sbin/md5": {
+  "sbin/clri": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T23:06:35.707184"
+    "last_attempt": "2026-05-25T15:10:38.051122"
+  },
+  "sbin/md5": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T15:10:55.011435"
   },
   "share/examples/FreeBSD_version": {
     "attempts": 3,
@@ -368,8 +376,8 @@
     "last_attempt": "2026-05-23T10:01:32.971754"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_stream": {
-    "attempts": 1,
-    "last_attempt": "2026-05-25T13:17:52.770879"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T15:23:58.644802"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_stream/salsa2012": {
     "attempts": 3,
@@ -579,6 +587,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-22T18:13:07.386524"
   },
+  "usr.bin/killall": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T15:10:15.564998"
+  },
   "usr.bin/last": {
     "attempts": 3,
     "last_attempt": "2026-05-24T13:18:59.845697"
@@ -704,8 +716,8 @@
     "last_attempt": "2026-05-22T22:23:07.340580"
   },
   "usr.bin/proccontrol": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T20:29:08.541672"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T15:12:05.927213"
   },
   "usr.bin/procstat": {
     "attempts": 3,
@@ -846,5 +858,9 @@
   "usr.sbin/lastlogin": {
     "attempts": 2,
     "last_attempt": "2026-05-25T07:55:22.483504"
+  },
+  "usr.sbin/nologin": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T15:13:27.663157"
   }
 }

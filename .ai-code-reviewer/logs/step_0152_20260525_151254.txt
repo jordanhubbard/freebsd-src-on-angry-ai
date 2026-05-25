@@ -1,0 +1,18 @@
+=== STEP 152 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/revnetgroup:
+```
+Makefile
+Makefile.depend
+hash.c
+hash.h
+parse_netgroup.c
+revnetgroup.8
+revnetgroup.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR libexec/rc

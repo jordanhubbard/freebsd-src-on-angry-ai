@@ -1,0 +1,29 @@
+=== STEP 153 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/rc:
+```
+Makefile
+debug.sh
+hooks.sh
+netstart
+network.subr
+pccard_ether
+rc
+rc.bsdextended
+rc.conf
+rc.d
+rc.firewall
+rc.initdiskless
+rc.resume
+rc.shutdown
+rc.subr
+rc.suspend
+safe_eval.sh
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/uniq

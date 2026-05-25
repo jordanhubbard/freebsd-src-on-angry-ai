@@ -1,0 +1,20 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/newgrp/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "newgrp"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "newgrp"
+path = "src/main.rs"
+<<<

@@ -1,0 +1,15 @@
+=== STEP 92 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/nohup:
+```
+Makefile
+Makefile.depend
+nohup.1
+nohup.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/nohup

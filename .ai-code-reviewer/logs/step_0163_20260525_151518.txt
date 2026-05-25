@@ -1,0 +1,77 @@
+=== STEP 163 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.sbin/nologin/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.sbin/nologin/src/main.rs
+CONTENT:
+use std::io::Write;
+use std::process;
+
+fn main() {
+    let message = "This account is currently not available.\n";
+
+    let tt = ttyname();
+    let user = getlogin();
+
+    openlog();
+    syslog(&user, &tt);
+    closelog();
+
+    print!("{}", message);
+    process::exit(1);
+}
+
+fn ttyname() -> String {
+    unsafe {
+        let name = libc::ttyname(0);
+        if name.is_null() {
+            "UNKNOWN".to_string()
+        } else {
+            std::ffi::CStr::from_ptr(name)
+                .to_string_lossy()
+                .into_owned()
+        }
+    }
+}
+
+fn getlogin() -> String {
+    unsafe {
+        let name = libc::getlogin();
+        if name.is_null() {
+            "UNKNOWN".to_string()
+        } else {
+            std::ffi::CStr::from_ptr(name)
+                .to_string_lossy()
+                .into_owned()
+        }
+    }
+}
+
+fn openlog() {
+    unsafe {
+        libc::openlog(
+            b"nologin\0".as_ptr() as *const i8,
+            libc::LOG_CONS,
+            libc::LOG_AUTH,
+        );
+    }
+}
+
+fn syslog(user: &str, tt: &str) {
+    let msg = format!("Attempted login by {} on {}", user, tt);
+    let c_msg = std::ffi::CString::new(msg).unwrap();
+    unsafe {
+        libc::syslog(libc::LOG_CRIT, b"%s\0".as_ptr() as *const i8, c_msg.as_ptr());
+    }
+}
+
+fn closelog() {
+    unsafe {
+        libc::closelog();
+    }
+}
