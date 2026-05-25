@@ -1,0 +1,47 @@
+=== STEP 548 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo
+Pending source/build changes: 2 files modified
+Files: contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo/Cargo.toml, contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo/src/lib.rs
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: usr.bin/at
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+I need to fix the build integration. The LLVM scope uses CMake, not FreeBSD's bsd.*.mk. Let me create a proper Makefile.
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo/Makefile
+CONTENT:
+<<<
+# Makefile for MSP430 TargetInfo Rust replacement
+# This Makefile builds the Rust crate independently.
+
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/rust-target
+
+.PHONY: all clean
+
+all: ${CARGO_TARGET_DIR}/libmsp430_target_info.a
+
+${CARGO_TARGET_DIR}/libmsp430_target_info.a: Cargo.toml src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR}
+	@rm -rf ${CARGO_TARGET_DIR}
+>>>

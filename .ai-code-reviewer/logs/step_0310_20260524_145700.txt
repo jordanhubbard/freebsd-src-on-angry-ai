@@ -1,0 +1,314 @@
+=== STEP 310 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I'll write the Rust source file in a compact form.
+
+ACTION: WRITE_FILE usr.bin/csplit/src/main.rs
+CONTENT:
+use std::ffi::CString;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read, Seek, SeekFrom, Write};
+use std::os::unix::io::AsRawFd;
+use std::process;
+use std::sync::Mutex;
+
+const PATH_MAX: usize = 1024;
+
+static STATE: Mutex<Option<GS>> = Mutex::new(None);
+
+struct GS {
+    prefix: String,
+    sufflen: usize,
+    sflag: bool,
+    kflag: bool,
+    lineno: i64,
+    reps: i64,
+    nfiles: i64,
+    maxfiles: i64,
+    currfile: String,
+    infn: String,
+    infile: BufReader<File>,
+    overfile: Option<File>,
+    truncofs: i64,
+    doclean: bool,
+    created_files: Vec<String>,
+}
+
+fn usage() -> ! {
+    eprintln!("usage: csplit [-ks] [-f prefix] [-n number] file args ...");
+    process::exit(1);
+}
+fn errx(code: i32, msg: &str) -> ! {
+    eprintln!("csplit: {}", msg);
+    process::exit(code);
+}
+fn err_sys(code: i32, msg: &str) -> ! {
+    eprintln!("csplit: {}: {}", msg, io::Error::last_os_error());
+    process::exit(code);
+}
+fn err_sys_path(code: i32, path: &str) -> ! {
+    eprintln!("csplit: {}: {}", path, io::Error::last_os_error());
+    process::exit(code);
+}
+
+fn cleanup() {
+    let state = STATE.lock().unwrap();
+    if let Some(ref s) = *state {
+        if !s.doclean { return; }
+        for f in &s.created_files { let _ = std::fs::remove_file(f); }
+    }
+}
+
+extern "C" fn handlesig(_: libc::c_int) {
+    let msg = b"csplit: caught signal, cleaning up\n";
+    let _ = unsafe { libc::write(libc::STDERR_FILENO, msg.as_ptr(), msg.len()) };
+    cleanup();
+    unsafe { libc::_exit(2) };
+}
+
+fn newfile() -> File {
+    let mut state = STATE.lock().unwrap();
+    let s = state.as_mut().expect("state");
+    let suffix = format!("{:0>width$}", s.nfiles, width = s.sufflen);
+    s.currfile = format!("{}{}", s.prefix, suffix);
+    if s.currfile.len() >= PATH_MAX { err_sys(1, "ENAMETOOLONG"); }
+    match File::create(&s.currfile) {
+        Ok(f) => { s.created_files.push(s.currfile.clone()); s.nfiles += 1; f }
+        Err(_) => err_sys_path(1, &s.currfile),
+    }
+}
+
+fn get_line() -> Option<String> {
+    let mut state = STATE.lock().unwrap();
+    let s = state.as_mut().expect("state");
+    let mut buf = String::new();
+    loop {
+        buf.clear();
+        let reader: &mut dyn BufRead = if let Some(ref mut of) = s.overfile {
+            of
+        } else { &mut s.infile };
+        match reader.read_line(&mut buf) {
+            Ok(0) => {
+                if s.overfile.is_some() { s.overfile = None; continue; }
+                return None;
+            }
+            Ok(_) => { s.lineno += 1; return Some(buf); }
+            Err(_) => err_sys_path(1, &s.infn),
+        }
+    }
+}
+
+fn toomuch(ofp: Option<&mut File>, n: i64) {
+    let mut state = STATE.lock().unwrap();
+    let s = state.as_mut().expect("state");
+    if let Some(ref mut over) = s.overfile {
+        let _ = over.flush();
+        let fd = over.as_raw_fd();
+        if unsafe { libc::ftruncate(fd, s.truncofs) } != 0 { err_sys(1, "overflow"); }
+        s.overfile = None;
+    }
+    if n == 0 { return; }
+    s.lineno -= n;
+    let ofp = ofp.expect("ofp needed");
+    let mut buf = vec![0u8; 8192];
+    let mut remaining = n;
+    loop {
+        let pos = ofp.seek(SeekFrom::Current(0)).unwrap_or_else(|_| err_sys(1, "seek"));
+        let back = if pos < buf.len() as i64 { 0 } else { buf.len() as i64 };
+        if pos > 0 {
+            ofp.seek(SeekFrom::Current(-(back as i64))).unwrap_or_else(|_| err_sys(1, "seek"));
+        } else {
+            ofp.seek(SeekFrom::Start(0)).unwrap_or_else(|_| err_sys(1, "seek"));
+        }
+        let nread = ofp.read(&mut buf[..back as usize]).unwrap_or_else(|_| errx(1, "can't read overflowed output"));
+        if nread == 0 { errx(1, "can't read overflowed output"); }
+        ofp.seek(SeekFrom::Current(-(nread as i64))).unwrap_or_else(|_| err_sys_path(1, &s.currfile));
+        let mut found = false;
+        for i in (0..nread).rev() {
+            if buf[i] == b'\n' { remaining -= 1; if remaining == 0 { found = true; break; } }
+        }
+        if !found || remaining <= 0 { break; }
+        let pos = ofp.seek(SeekFrom::Current(0)).unwrap_or_else(|_| err_sys(1, "seek"));
+        if pos == 0 { break; }
+    }
+    s.overfile = Some(ofp.try_clone().unwrap_or_else(|_| err_sys(1, "clone")));
+    s.truncofs = ofp.seek(SeekFrom::Current(0)).unwrap_or_else(|_| err_sys(1, "seek")) as i64;
+}
+
+fn do_rexp(expr: &str) {
+    let delim = expr.as_bytes()[0] as char;
+    let end = expr.rfind(delim).expect("missing trailing delimiter");
+    let re_str = &expr[1..end];
+    let offset_str = &expr[end + 1..];
+    let ofs: i64 = if offset_str.is_empty() { 0 } else {
+        offset_str.parse::<i64>().unwrap_or_else(|_| errx(1, &format!("{}: bad offset", offset_str)))
+    };
+    let c_re = CString::new(re_str).unwrap();
+    let mut cre = std::mem::MaybeUninit::<libc::regex_t>::uninit();
+    if unsafe { libc::regcomp(cre.as_mut_ptr(), c_re.as_ptr(), libc::REG_BASIC | libc::REG_NOSUB) } != 0 {
+        errx(1, &format!("{}: bad regular expression", re_str));
+    }
+    let mut ofp = if delim == '/' { newfile() } else {
+        File::create("/dev/null").unwrap_or_else(|_| err_sys(1, "tmpfile"))
+    };
+    let mut first = true;
+    loop {
+        let line = match get_line() {
+            Some(l) => l,
+            None => { toomuch(None, 0); unsafe { libc::regfree(cre.as_ptr()) }; errx(1, &format!("{}: no match", re_str)); }
+        };
+        if let Err(_) = ofp.write_all(line.as_bytes()) { break; }
+        if !first {
+            let c_line = CString::new(line.as_bytes()).unwrap();
+            if unsafe { libc::regexec(cre.as_ptr(), c_line.as_ptr(), 0, std::ptr::null_mut(), 0) } == 0 { break; }
+        }
+        first = false;
+    }
+    if ofs <= 0 {
+        toomuch(Some(&mut ofp), -ofs + 1);
+        let nwritten = ofp.seek(SeekFrom::Current(0)).unwrap_or_else(|_| err_sys(1, "seek"));
+        if !STATE.lock().unwrap().as_ref().unwrap().sflag && delim == '/' { println!("{}", nwritten); }
+    } else {
+        let mut remaining = ofs;
+        while remaining > 1 {
+            match get_line() {
+                Some(line) => { if let Err(_) = ofp.write_all(line.as_bytes()) { break; } remaining -= 1; }
+                None => break,
+            }
+        }
+        toomuch(None, 0);
+        let nwritten = ofp.seek(SeekFrom::Current(0)).unwrap_or_else(|_| err_sys(1, "seek"));
+        if !STATE.lock().unwrap().as_ref().unwrap().sflag && delim == '/' { println!("{}", nwritten); }
+        let _ = ofp.flush();
+    }
+    unsafe { libc::regfree(cre.as_ptr()) };
+}
+
+fn do_lineno(expr: &str) {
+    let tgtline: i64 = expr.parse().unwrap_or_else(|_| errx(1, &format!("{}: bad line number", expr)));
+    if tgtline <= 0 { errx(1, &format!("{}: bad line number", expr)); }
+    let mut state = STATE.lock().unwrap();
+    let s = state.as_mut().expect("state");
+    if tgtline <= s.lineno { errx(1, &format!("{}: can't go backwards", expr)); }
+    let mut lastline = tgtline;
+    let mut reps = s.reps;
+    while s.nfiles < s.maxfiles - 1 {
+        let mut ofp = newfile();
+        while s.lineno + 1 != lastline {
+            match get_line() {
+                Some(line) => { if let Err(_) = ofp.write_all(line.as_bytes()) { break; } }
+                None => errx(1, &format!("{}: out of range", lastline)),
+            }
+        }
+        let nwritten = ofp.seek(SeekFrom::Current(0)).unwrap_or_else(|_| err_sys(1, "seek"));
+        if !s.sflag { println!("{}", nwritten); }
+        let _ = ofp.flush();
+        if reps == 0 { break; }
+        reps -= 1;
+        lastline += tgtline;
+    }
+    s.reps = reps;
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut argv: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
+    let argc = argv.len();
+    let mut prefix = "xx".to_string();
+    let mut sufflen: usize = 2;
+    let mut sflag = false;
+    let mut kflag = false;
+    let mut optind = 1;
+    while optind < argc {
+        let arg = argv[optind];
+        if arg.starts_with('-') && arg.len() > 1 {
+            match arg {
+                "-k" => kflag = true,
+                "-s" => sflag = true,
+                "-f" => { optind += 1; if optind < argc { prefix = argv[optind].to_string(); } else { usage(); } }
+                "-n" => {
+                    optind += 1;
+                    if optind < argc {
+                        sufflen = argv[optind].parse::<usize>().unwrap_or_else(|_| errx(1, &format!("{}: bad suffix length", argv[optind])));
+                        if sufflen == 0 { errx(1, &format!("{}: bad suffix length", argv[optind])); }
+                    } else { usage(); }
+                }
+                _ => usage(),
+            }
+        } else { break; }
+        optind += 1;
+    }
+    if prefix.len() + sufflen >= PATH_MAX { errx(1, "name too long"); }
+    if optind >= argc { usage(); }
+    let infn = argv[optind];
+    optind += 1;
+    let infile = if infn == "-" { BufReader::new(io::stdin()) } else {
+        BufReader::new(File::open(infn).unwrap_or_else(|_| err_sys_path(1, infn)))
+    };
+    if !kflag {
+        unsafe {
+            libc::signal(libc::SIGHUP, handlesig as usize);
+            libc::signal(libc::SIGINT, handlesig as usize);
+            libc::signal(libc::SIGTERM, handlesig as usize);
+        }
+    }
+    let mut maxfiles: i64 = 1;
+    for _ in 0..sufflen {
+        if maxfiles > i64::MAX / 10 { errx(1, &format!("{}: suffix too long (limit {})", sufflen, sufflen)); }
+        maxfiles *= 10;
+    }
+    let state = GS {
+        prefix, sufflen, sflag, kflag, lineno: 0, reps: 0, nfiles: 0, maxfiles,
+        currfile: String::new(),
+        infn: if infn == "-" { "stdin".to_string() } else { infn.to_string() },
+        infile, overfile: None, truncofs: 0, doclean: !kflag, created_files: Vec::new(),
+    };
+    *STATE.lock().unwrap() = Some(state);
+    let mut ei = optind;
+    while ei < argc && STATE.lock().unwrap().as_ref().unwrap().nfiles < maxfiles - 1 {
+        let expr = argv[ei]; ei += 1;
+        let mut reps: i64 = 0;
+        if ei < argc && argv[ei].starts_with('{') {
+            let rs = &argv[ei][1..];
+            if let Some(end) = rs.find('}') {
+                reps = rs[..end].parse::<i64>().unwrap_or_else(|_| errx(1, &format!("{}: bad repetition count", rs[..end])));
+                if reps < 0 { errx(1, &format!("{}: bad repetition count", rs[..end])); }
+                ei += 1;
+            } else { errx(1, &format!("{}: bad repetition count", rs)); }
+        }
+        STATE.lock().unwrap().as_mut().unwrap().reps = reps;
+        let fc = expr.chars().next().unwrap();
+        if fc == '/' || fc == '%' {
+            let mut r = reps;
+            while r >= 0 && STATE.lock().unwrap().as_ref().unwrap().nfiles < maxfiles - 1 {
+                do_rexp(expr); r -= 1;
+            }
+        } else if fc.is_ascii_digit() {
+            do_lineno(expr);
+        } else {
+            errx(1, &format!("{}: unrecognised pattern", expr));
+        }
+    }
+    let mut state = STATE.lock().unwrap();
+    let s = state.as_mut().expect("state");
+    if !s.infile.fill_buf().unwrap_or(&[]).is_empty() {
+        let mut ofp = newfile();
+        loop {
+            match get_line() {
+                Some(line) => { if let Err(_) = ofp.write_all(line.as_bytes()) { break; } }
+                None => break,
+            }
+        }
+        let nwritten = ofp.seek(SeekFrom::Current(0)).unwrap_or_else(|_| err_sys(1, "seek"));
+        if !s.sflag { println!("{}", nwritten); }
+        let _ = ofp.flush();
+    }
+    toomuch(None, 0);
+    s.doclean = false;
+}

@@ -1,0 +1,11 @@
+=== STEP 134 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'bin/*/Cargo.toml'
+
+--- RESPONSE ---
+
+
+Let me find a small C command that hasn't been rewritten yet.
+
+ACTION: FIND_FILE usr.bin/*/

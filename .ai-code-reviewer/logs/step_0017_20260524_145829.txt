@@ -1,0 +1,9 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'usr.bin/tcopy/tcopy.cc:static.*open_arg'
+
+--- RESPONSE ---
+
+
+ACTION: GREP usr.bin/tcopy/tcopy.cc:open_arg

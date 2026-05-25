@@ -1,0 +1,17 @@
+=== STEP 560 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/at/at.c.
+Remaining files in usr.bin/at:
+  - usr.bin/at/Makefile.inc
+  - usr.bin/at/at.h
+  - usr.bin/at/panic.c
+  - usr.bin/at/panic.h
+  - usr.bin/at/parsetime.c
+  ... plus 4 more
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/cksum

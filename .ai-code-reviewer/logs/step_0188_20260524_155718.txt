@@ -1,0 +1,361 @@
+=== STEP 188 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tsort/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source. Let me write the main.rs:
+
+ACTION: WRITE_FILE usr.bin/tsort/src/main.rs
+CONTENT:
+/*-
+ * SPDX-License-Identifier: BSD-3-Clause
+ *
+ * Copyright (c) 1989, 1993, 1994
+ *	The Regents of the University of California.  All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+use std::collections::{HashMap, HashSet, VecDeque};
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read, Write, StdoutLock};
+use std::process;
+
+const NF_MARK: u8 = 0x1;
+const NF_ACYCLIC: u8 = 0x2;
+const NF_NODEST: u8 = 0x4;
+
+struct Node {
+    name: String,
+    arcs: Vec<String>,
+    refcnt: usize,
+    flags: u8,
+}
+
+struct Graph {
+    nodes: HashMap<String, Node>,
+    order: Vec<String>,
+}
+
+impl Graph {
+    fn new() -> Self {
+        Graph {
+            nodes: HashMap::new(),
+            order: Vec::new(),
+        }
+    }
+
+    fn get_or_insert(&mut self, name: &str) -> &mut Node {
+        if !self.nodes.contains_key(name) {
+            self.order.push(name.to_string());
+            self.nodes.insert(
+                name.to_string(),
+                Node {
+                    name: name.to_string(),
+                    arcs: Vec::new(),
+                    refcnt: 0,
+                    flags: 0,
+                },
+            );
+        }
+        self.nodes.get_mut(name).unwrap()
+    }
+
+    fn add_arc(&mut self, s1: &str, s2: &str) {
+        if s1 == s2 {
+            return;
+        }
+        let n1 = self.get_or_insert(s1);
+        let n2_name = s2.to_string();
+        let n2 = self.get_or_insert(s2);
+        // Check if arc already exists
+        if n1.arcs.contains(&n2_name) {
+            return;
+        }
+        n1.arcs.push(n2_name.clone());
+        n2.refcnt += 1;
+    }
+}
+
+fn find_cycle(
+    graph: &Graph,
+    from: &str,
+    to: &str,
+    longest_len: usize,
+    depth: usize,
+    cycle_buf: &mut Vec<String>,
+    longest_cycle: &mut Vec<String>,
+    flags: &mut HashMap<String, u8>,
+    debug: bool,
+    longest: bool,
+) -> usize {
+    let flag = flags.get(from).copied().unwrap_or(0);
+    if flag & (NF_NODEST | NF_MARK | NF_ACYCLIC) != 0 {
+        return 0;
+    }
+    *flags.get_mut(from).unwrap() |= NF_MARK;
+
+    let mut result = longest_len;
+    let node = graph.nodes.get(from).unwrap();
+
+    for arc_name in &node.arcs {
+        if cycle_buf.len() <= depth {
+            cycle_buf.push(arc_name.clone());
+        } else {
+            cycle_buf[depth] = arc_name.clone();
+        }
+
+        if arc_name == to {
+            if depth + 1 > result {
+                result = depth + 1;
+                longest_cycle.clear();
+                longest_cycle.extend_from_slice(&cycle_buf[..depth + 1]);
+            }
+        } else {
+            let arc_flag = flags.get(arc_name).copied().unwrap_or(0);
+            if arc_flag & (NF_MARK | NF_ACYCLIC | NF_NODEST) != 0 {
+                continue;
+            }
+            let len = find_cycle(
+                graph,
+                arc_name,
+                to,
+                result,
+                depth + 1,
+                cycle_buf,
+                longest_cycle,
+                flags,
+                debug,
+                longest,
+            );
+
+            if debug {
+                let _ = writeln!(
+                    io::stderr(),
+                    "{:>width$} {}->{} {}",
+                    "",
+                    from,
+                    to,
+                    len,
+                    width = depth
+                );
+            }
+
+            if len == 0 {
+                *flags.get_mut(arc_name).unwrap() |= NF_NODEST;
+            }
+
+            if len > result {
+                result = len;
+            }
+
+            if len > 0 && !longest {
+                break;
+            }
+        }
+    }
+
+    *flags.get_mut(from).unwrap() &= !NF_MARK;
+    result
+}
+
+fn tsort(
+    graph: &mut Graph,
+    debug: bool,
+    longest: bool,
+    quiet: bool,
+    stdout: &mut StdoutLock,
+) {
+    let mut flags: HashMap<String, u8> = HashMap::new();
+    for name in &graph.order {
+        flags.insert(name.clone(), 0);
+    }
+
+    let mut remaining: Vec<String> = graph.order.clone();
+
+    while !remaining.is_empty() {
+        let mut cnt = 0;
+        let mut next_remaining: Vec<String> = Vec::new();
+
+        for name in &remaining {
+            let node = graph.nodes.get(name).unwrap();
+            if node.refcnt == 0 {
+                let _ = writeln!(stdout, "{}", name);
+                cnt += 1;
+                // Decrease refcnt of neighbors
+                for arc_name in &node.arcs {
+                    let neighbor = graph.nodes.get_mut(arc_name).unwrap();
+                    neighbor.refcnt = neighbor.refcnt.saturating_sub(1);
+                }
+            } else {
+                next_remaining.push(name.clone());
+            }
+        }
+
+        if cnt == 0 {
+            // Cycle detected - need to find it
+            let mut cycle_buf: Vec<String> = Vec::new();
+            let mut longest_cycle: Vec<String> = Vec::new();
+
+            let mut found = false;
+            for name in &next_remaining {
+                let flag = flags.get(name).copied().unwrap_or(0);
+                if flag & NF_ACYCLIC == 0 {
+                    let len = find_cycle(
+                        graph,
+                        name,
+                        name,
+                        0,
+                        0,
+                        &mut cycle_buf,
+                        &mut longest_cycle,
+                        &mut flags,
+                        debug,
+                        longest,
+                    );
+                    if len > 0 {
+                        if !quiet {
+                            let _ = eprintln!("tsort: cycle in data");
+                            for member in &longest_cycle {
+                                let _ = eprintln!("tsort: {}", member);
+                            }
+                        }
+                        // Remove the node that started the cycle search
+                        let _ = writeln!(stdout, "{}", name);
+                        for arc_name in &graph.nodes.get(name).unwrap().arcs {
+                            let neighbor = graph.nodes.get_mut(arc_name).unwrap();
+                            neighbor.refcnt = neighbor.refcnt.saturating_sub(1);
+                        }
+                        // Clear NF_NODEST flags
+                        for f in flags.values_mut() {
+                            *f &= !NF_NODEST;
+                        }
+                        found = true;
+                        break;
+                    } else {
+                        *flags.get_mut(name).unwrap() |= NF_ACYCLIC;
+                        for f in flags.values_mut() {
+                            *f &= !NF_NODEST;
+                        }
+                    }
+                }
+            }
+
+            if !found {
+                eprintln!("tsort: internal error -- could not find cycle");
+                process::exit(1);
+            }
+        }
+
+        remaining = next_remaining;
+    }
+}
+
+fn usage() {
+    eprintln!("usage: tsort [-dlq] [file]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut debug = false;
+    let mut longest = false;
+    let mut quiet = false;
+    let mut file_arg: Option<String> = None;
+
+    let mut i = 1;
+    while i < args.len() {
+        if args[i].starts_with('-') {
+            for ch in args[i][1..].chars() {
+                match ch {
+                    'd' => debug = true,
+                    'l' => longest = true,
+                    'q' => quiet = true,
+                    _ => usage(),
+                }
+            }
+        } else {
+            file_arg = Some(args[i].clone());
+            i += 1;
+            if i < args.len() {
+                usage();
+            }
+        }
+        i += 1;
+    }
+
+    let reader: Box<dyn Read> = match file_arg {
+        Some(path) => match File::open(&path) {
+            Ok(f) => Box::new(f),
+            Err(e) => {
+                eprintln!("tsort: {}: {}", path, e);
+                process::exit(1);
+            }
+        },
+        None => Box::new(io::stdin()),
+    };
+
+    let buf_reader = BufReader::new(reader);
+    let mut words: Vec<String> = Vec::new();
+
+    for line in buf_reader.lines() {
+        let line = match line {
+            Ok(l) => l,
+            Err(e) => {
+                eprintln!("tsort: stdin: {}", e);
+                process::exit(1);
+            }
+        };
+        for word in line.split_whitespace() {
+            words.push(word.to_string());
+        }
+    }
+
+    if words.len() % 2 != 0 {
+        eprintln!("tsort: odd data count");
+        process::exit(1);
+    }
+
+    let mut graph = Graph::new();
+    let mut i = 0;
+    while i + 1 < words.len() {
+        graph.add_arc(&words[i], &words[i + 1]);
+        i += 2;
+    }
+
+    let stdout = io::stdout();
+    let mut lock = stdout.lock();
+    tsort(&mut graph, debug, longest, quiet, &mut lock);
+
+    if lock.flush().is_err() {
+        eprintln!("tsort: stdout");
+        process::exit(1);
+    }
+}

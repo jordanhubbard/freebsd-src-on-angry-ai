@@ -1,0 +1,42 @@
+=== STEP 410 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib:
+```
+APINotes
+AST
+ASTMatchers
+Analysis
+Basic
+CIR
+CodeGen
+CrossTU
+DirectoryWatcher
+Driver
+Edit
+ExtractAPI
+Format
+Frontend
+FrontendTool
+Headers
+Index
+IndexSerialization
+InstallAPI
+Interpreter
+Lex
+Parse
+Rewrite
+Sema
+Serialization
+StaticAnalyzer
+Support
+Testing
+Tooling
+```
+
+--- RESPONSE ---
+
+
+This is an LLVM project directory that uses CMake, not FreeBSD Makefiles. Let me check how FreeBSD builds LLVM.
+
+ACTION: FIND_FILE contrib/llvm-project/Makefile

@@ -1,0 +1,26 @@
+=== STEP 435 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Telemetry:
+```
+Telemetry.cpp
+```
+
+--- RESPONSE ---
+
+
+This is an LLVM library file that uses CMake, not FreeBSD Makefiles. Let me create a Rust replacement crate and a Makefile for this unit.
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Telemetry/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "Telemetry"
+version = "0.0.0"
+edition = "2021"
+
+[lib]
+name = "Telemetry"
+path = "src/lib.rs"
+crate-type = ["staticlib"]
+>>>

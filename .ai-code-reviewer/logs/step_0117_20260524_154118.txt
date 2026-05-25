@@ -1,0 +1,212 @@
+=== STEP 117 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/src/main.rs
+Scope: usr.bin/tcopy
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now let me add the TapeDevice trait and implementations:
+
+ACTION: EDIT_FILE usr.bin/tcopy/src/main.rs
+OLD:
+<<<
+fn usage() {
+    eprintln!("usage: tcopy [-crvx] [-l logfile] [-s maxblk] [src [dest]]");
+    process::exit(EX_USAGE);
+}
+>>>
+NEW:
+<<<
+fn usage() {
+    eprintln!("usage: tcopy [-crvx] [-l logfile] [-s maxblk] [src [dest]]");
+    process::exit(EX_USAGE);
+}
+
+trait TapeDevice {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64;
+    fn verify_blk(&mut self, dst: &mut [u8], expected: usize) -> i64;
+    fn write_blk(&mut self, src: &[u8]);
+    fn file_mark(&self);
+    fn rewind(&self);
+    fn get_fd(&self) -> RawFd;
+}
+
+impl TapeDevice for TapeDev {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        if self.max_read_size == 0 {
+            let mut max_read_size = dst.len();
+            loop {
+                let ret = unsafe {
+                    libc::read(self.fd, dst.as_mut_ptr() as *mut libc::c_void, max_read_size)
+                };
+                if ret >= 0 {
+                    self.max_read_size = max_read_size;
+                    return ret as i64;
+                }
+                let err = io::Error::last_os_error();
+                if err.raw_os_error() != Some(libc::EINVAL) && err.raw_os_error() != Some(libc::EFBIG) {
+                    eprintln!("tcopy: read error, {}, file {}, record {}",
+                        self.name, unsafe { FILEN }, unsafe { RECORD });
+                    process::exit(1);
+                }
+                if max_read_size < 512 {
+                    eprintln!("tcopy: Cannot find a sane max blocksize");
+                    process::exit(1);
+                }
+                let i = flsl((max_read_size - 1) as u64);
+                max_read_size = 1usize << (i as u32 - 1);
+            }
+        } else {
+            let ret = unsafe {
+                libc::read(self.fd, dst.as_mut_ptr() as *mut libc::c_void, self.max_read_size)
+            };
+            if ret < 0 {
+                eprintln!("tcopy: read error, {}, file {}, record {}",
+                    self.name, unsafe { FILEN }, unsafe { RECORD });
+                process::exit(1);
+            }
+            ret as i64
+        }
+    }
+
+    fn verify_blk(&mut self, dst: &mut [u8], _expected: usize) -> i64 {
+        self.read_blk(dst)
+    }
+
+    fn write_blk(&mut self, src: &[u8]) {
+        assert!(!src.is_empty());
+        let nwrite = unsafe {
+            libc::write(self.fd, src.as_ptr() as *const libc::c_void, src.len())
+        };
+        if nwrite < 0 || (nwrite as usize) != src.len() {
+            if nwrite < 0 {
+                eprintln!("tcopy: write error, file {}, record {}: {}",
+                    unsafe { FILEN }, unsafe { RECORD }, io::Error::last_os_error());
+            } else {
+                eprintln!("tcopy: write error, file {}, record {}",
+                    unsafe { FILEN }, unsafe { RECORD });
+                eprintln!("tcopy: write ({}) != read ({})", nwrite, src.len());
+            }
+            eprintln!("tcopy: copy aborted");
+            process::exit(5);
+        }
+    }
+
+    fn file_mark(&self) {
+        tape_write_eof(self.fd);
+    }
+
+    fn rewind(&self) {
+        tape_rewind(self.fd);
+    }
+
+    fn get_fd(&self) -> RawFd {
+        self.fd
+    }
+}
+
+impl TapeDevice for TapFile {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        let mut lbuf = [0u8; 4];
+        let nread = match full_read(self.fd, &mut lbuf) {
+            Ok(n) => n as i64,
+            Err(_) => return 0,
+        };
+        if nread == 0 { return 0; }
+        if nread != 4 {
+            eprintln!("tcopy: Corrupt tap-file, read hdr1={}", nread);
+            process::exit(EX_DATAERR);
+        }
+        let u = le32dec(&lbuf);
+        if u == 0 || (u >> 24) == 0xff { return 0; }
+        if u as usize > dst.len() {
+            eprintln!("tcopy: tapfile blocksize too big, 0x{:08x}", u);
+            process::exit(17);
+        }
+        let nread2 = match full_read(self.fd, &mut dst[..u as usize]) {
+            Ok(n) => n as i64,
+            Err(_) => return 0,
+        };
+        if nread2 != u as i64 {
+            eprintln!("tcopy: Corrupt tap-file, read hdr2={}", nread2);
+            process::exit(EX_DATAERR);
+        }
+        u as i64
+    }
+
+    fn verify_blk(&mut self, dst: &mut [u8], expected: usize) -> i64 {
+        self.read_blk(dst)
+    }
+
+    fn write_blk(&mut self, src: &[u8]) {
+        let len = src.len() as u32;
+        let hdr = len.to_le_bytes();
+        let mut written = 0;
+        while written < 4 {
+            match unsafe {
+                libc::write(self.fd, hdr[written..].as_ptr() as *const libc::c_void, 4 - written)
+            } {
+                -1 => {
+                    let err = io::Error::last_os_error();
+                    if err.kind() == io::ErrorKind::WouldBlock || err.kind() == io::ErrorKind::Interrupted {
+                        continue;
+                    }
+                    eprintln!("tcopy: write error, file {}, record {}: {}",
+                        unsafe { FILEN }, unsafe { RECORD }, err);
+                    process::exit(5);
+                }
+                n => written += n as usize,
+            }
+        }
+        written = 0;
+        while written < src.len() {
+            match unsafe {
+                libc::write(self.fd, src[written..].as_ptr() as *const libc::c_void, src.len() - written)
+            } {
+                -1 => {
+                    let err = io::Error::last_os_error();
+                    if err.kind() == io::ErrorKind::WouldBlock || err.kind() == io::ErrorKind::Interrupted {
+                        continue;
+                    }
+                    eprintln!("tcopy: write error, file {}, record {}: {}",
+                        unsafe { FILEN }, unsafe { RECORD }, err);
+                    process::exit(5);
+                }
+                n => written += n as usize,
+            }
+        }
+    }
+
+    fn file_mark(&self) {
+        let mark = [0u8; 4];
+        let mut written = 0;
+        while written < 4 {
+            match unsafe {
+                libc::write(self.fd, mark[written..].as_ptr() as *const libc::c_void, 4 - written)
+            } {
+                -1 => {
+                    let err = io::Error::last_os_error();
+                    if err.kind() == io::ErrorKind::WouldBlock || err.kind() == io::ErrorKind::Interrupted {
+                        continue;
+                    }
+                    eprintln!("tcopy: write error, file {}, record {}: {}",
+                        unsafe { FILEN }, unsafe { RECORD }, err);
+                    process::exit(5);
+                }
+                n => written += n as usize,
+            }
+        }
+    }
+
+    fn rewind(&self) {
+        unsafe { libc::lseek(self.fd, 0, libc::SEEK_SET); }
+    }
+
+    fn get_fd(&self) -> RawFd {
+        self.fd
+    }
+}
+>>>

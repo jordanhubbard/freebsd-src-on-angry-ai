@@ -1,0 +1,14 @@
+=== STEP 124 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory contrib/llvm-project/clang/lib/Analysis/plugins/CheckerOptionHandling skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/llvm-project/llvm/lib/Telemetry
+
+--- RESPONSE ---
+
+
+The current unit was auto-skipped. The next suggested unit is LLVM vendor code, which is outside the FreeBSD userland rewrite objective. Let me check the next queued units for something more appropriate.
+
+ACTION: SET_SCOPE bin/cat/tests

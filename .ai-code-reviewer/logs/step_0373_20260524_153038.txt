@@ -1,0 +1,17 @@
+=== STEP 373 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE Makefile.inc1
+OLD:
+<<<
+.info SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+>>>
+NEW:
+<<<
+.message SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+>>>

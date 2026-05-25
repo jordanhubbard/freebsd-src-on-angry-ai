@@ -1,0 +1,9 @@
+=== STEP 506 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'share/mk/bsd.*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE share/mk/bsd

@@ -1,0 +1,12 @@
+=== STEP 278 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: /usr/home/jkh/Src/freebsd-src-on-angry-AI is a directory, not a file
+TIP: Use LIST_FILES to see directory contents
+
+--- RESPONSE ---
+
+
+I need to break out of this corrupted state by removing the stale pending files from a previous session.
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Target/

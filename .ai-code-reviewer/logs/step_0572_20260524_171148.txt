@@ -1,0 +1,57 @@
+=== STEP 572 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/column/src/main.rs
+Scope: usr.bin/column
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to update the Makefile to integrate the Rust build. Let me add explicit rules since there's no `bsd.rust.mk`.
+
+ACTION: EDIT_FILE usr.bin/column/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	column
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}= tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	column
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}= tests
+
+# Rust build integration
+RUSTC?=	rustc
+CARGO?=	cargo
+COLUMN_RUST_DIR=	${.CURDIR}
+COLUMN_RUST_TARGET=	${OBJDIR}/rust-target
+COLUMN_RUST_BIN=	${COLUMN_RUST_TARGET}/debug/column
+
+.cargo-build: ${COLUMN_RUST_TARGET}/.cargo-build-stamp
+${COLUMN_RUST_TARGET}/.cargo-build-stamp: ${COLUMN_RUST_DIR}/Cargo.toml ${COLUMN_RUST_DIR}/src/main.rs
+	${MKDIR} ${COLUMN_RUST_TARGET}
+	${CARGO} build --manifest-path ${COLUMN_RUST_DIR}/Cargo.toml \
+	    --target-dir ${COLUMN_RUST_TARGET}
+	touch ${.TARGET}
+
+all: .cargo-build
+
+install: .cargo-build
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${COLUMN_RUST_BIN} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} -rf ${COLUMN_RUST_TARGET}
+
+.include <bsd.prog.mk>
+>>>

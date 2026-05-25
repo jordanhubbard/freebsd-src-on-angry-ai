@@ -1,0 +1,12 @@
+=== STEP 338 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*bsd.compiler.mk*':
+```
+./share/mk/bsd.compiler.mk
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE bsd.prog.mk

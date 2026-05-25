@@ -1,0 +1,11 @@
+=== STEP 471 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for '^\.info'
+
+--- RESPONSE ---
+
+
+The build is stuck in a loop with 0 errors/0 warnings. This scope is LLVM contrib code, not FreeBSD userland. Let me check what's actually pending.
+
+ACTION: LIST_DIR contrib/llvm-project/llvm/lib/Target/Hexagon

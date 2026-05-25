@@ -1,0 +1,11 @@
+=== STEP 66 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'usr.bin/tcopy/tcopy.cc:maxblk'
+
+--- RESPONSE ---
+
+
+Let me try to find the missing middle section by searching for specific patterns.
+
+ACTION: GREP usr.bin/tcopy/tcopy.cc

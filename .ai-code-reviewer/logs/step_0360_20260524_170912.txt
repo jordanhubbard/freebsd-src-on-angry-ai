@@ -1,0 +1,14 @@
+=== STEP 360 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/tcopy is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo
+
+--- RESPONSE ---
+
+
+I need to find a valid FreeBSD userland unit that isn't skipped. Let me try usr.bin/asa which was recently completed, or find another small command.
+
+ACTION: SET_SCOPE usr.bin/

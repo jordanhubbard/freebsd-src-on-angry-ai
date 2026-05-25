@@ -1,0 +1,9 @@
+=== STEP 509 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE bsd.rust.mk

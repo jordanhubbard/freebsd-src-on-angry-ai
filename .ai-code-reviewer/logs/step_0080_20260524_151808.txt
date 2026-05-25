@@ -1,0 +1,11 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/csplit/Cargo.toml*'
+
+--- RESPONSE ---
+
+
+Let me understand the current state better and try to build just the tcopy unit.
+
+ACTION: BUILD

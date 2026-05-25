@@ -1,0 +1,11 @@
+=== STEP 126 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bin/cat/cat.c*'
+
+--- RESPONSE ---
+
+
+The test directories don't have C source files. Let me find a small command with actual C source to rewrite.
+
+ACTION: FIND_FILE bin/*/

@@ -1,0 +1,62 @@
+=== STEP 65 ===
+
+--- REQUEST ---
+GREP_RESULT for 'open_arg':
+```
+./sys/compat/freebsd32/freebsd32_sysent.c:75:	{ .sy_narg = AS(open_args), .sy_call = (sy_call_t *)sys_open, .sy_auevent = AUE_OPEN_RWTC, .sy_flags = 0, .sy_thrcnt = SY_THR_STATIC },	/* 5 = open */
+./sys/compat/freebsd32/freebsd32_sysent.c:368:	{ .sy_narg = AS(fhopen_args), .sy_call = (sy_call_t *)sys_fhopen, .sy_auevent = AUE_FHOPEN, .sy_flags = 0, .sy_thrcnt = SY_THR_STATIC },	/* 298 = fhopen */
+./sys/compat/freebsd32/freebsd32_sysent.c:475:	{ .sy_narg = AS(freebsd32_ksem_open_args), .sy_call = (sy_call_t *)lkmressys, .sy_auevent = AUE_NULL, .sy_flags = 0, .sy_thrcnt = SY_THR_ABSENT },	/* 405 = freebsd32_ksem_open */
+./sys/compat/freebsd32/freebsd32_proto.h:327:struct freebsd32_ksem_open_args {
+./sys/compat/freebsd32/freebsd32_proto.h:375:struct freebsd32_kmq_open_args {
+./sys/compat/freebsd32/freebsd32_proto.h:767:int	freebsd32_ksem_open(struct thread *, struct freebsd32_ksem_open_args *);
+./sys/compat/freebsd32/freebsd32_systrace_args.c:55:		struct open_args *p = params;
+./sys/compat/freebsd32/freebsd32_systrace_args.c:1311:		struct fhopen_args *p = params;
+./sys/compat/freebsd32/freebsd32_systrace_args.c:1869:		struct freebsd32_ksem_open_args *p = params;
+./sys/compat/linux/linux_misc.c:2979:linux_mq_open(struct thread *td, struct linux_mq_open_args *args)
+./sys/compat/linux/linux_file.c:220:linux_open(struct thread *td, struct linux_open_args *args)
+./sys/arm64/linux/linux_systrace_args.c:1415:		struct linux_mq_open_args *p = params;
+./sys/arm64/linux/linux_proto.h:682:struct linux_mq_open_args {
+./sys/arm64/linux/linux_proto.h:947:struct linux_perf_event_open_args {
+./sys/arm64/linux/linux_proto.h:1171:struct linux_fsopen_args {
+./sys/arm64/linux/linux_sysent.c:197:	{ .sy_narg = AS(linux_mq_open_args), .sy_call = (sy_call_t *)linux_mq_open, .sy_auevent = AUE_NULL, .sy_flags = 0, .sy_thrcnt = SY_THR_STATIC },	/* 180 = linux_mq_open */
+./sys/sys/sysproto.h:52:struct open_args {
+./sys/sys/sysproto.h:719:struct fhopen_args {
+./sys/sys/sysproto.h:1051:struct ksem_open_args {
+./sys/kern/uipc_mqueue.c:1125:struct vop_open_args {
+./sys/kern/uipc_mqueue.c:1136:mqfs_open(struct vop_open_args *ap)
+./sys/kern/uipc_mqueue.c:2120:sys_kmq_open(struct thread *td, struct kmq_open_args *uap)
+./sys/kern/uipc_sem.c:629:struct ksem_open_args {
+./sys/kern/uipc_sem.c:638:sys_ksem_open(struct thread *td, struct ksem_open_args *uap)
+./sys/kern/uipc_sem.c:977:freebsd32_ksem_open(struct thread *td, struct freebsd32_ksem_open_args *uap)
+./sys/kern/vfs_subr.c:6485:	struct vop_open_args *a = ap;
+./sys/kern/vfs_syscalls.c:1131:struct open_args {
+./sys/kern/vfs_syscalls.c:1138:sys_open(struct thread *td, struct open_args *uap)
+./sys/kern/vfs_syscalls.c:4730:struct fhopen_args {
+./sys/kern/systrace_args.c:52:		struct open_args *p = params;
+./sys/kern/systrace_args.c:1332:		struct fhopen_args *p = params;
+./sys/kern/systrace_args.c:1968:		struct ksem_open_args *p = params;
+./sys/kern/uipc_shm.c:1384:freebsd12_shm_open(struct thread *td, struct freebsd12_shm_open_args *uap)
+./sys/kern/init_sysent.c:74:	{ .sy_narg = AS(open_args), .sy_call = (sy_call_t *)sys_open, .sy_auevent = AUE_OPEN_RWTC, .sy_flags = 0, .sy_thrcnt = SY_THR_STATIC },	/* 5 = open */
+./sys/kern/init_sysent.c:367:	{ .sy_narg = AS(fhopen_args), .sy_call = (sy_call_t *)sys_fhopen, .sy_auevent = AUE_FHOPEN, .sy_flags = 0, .sy_thrcnt = SY_THR_STATIC },	/* 298 = fhopen */
+./sys/kern/init_sysent.c:474:	{ .sy_narg = AS(ksem_open_args), .sy_call = (sy_call_t *)lkmressys, .sy_auevent = AUE_NULL, .sy_flags = 0, .sy_thrcnt = SY_THR_ABSENT },	/* 405 = ksem_open */
+./sys/dev/filemon/filemon_wrapper.c:213:filemon_wrapper_open(struct thread *td, struct open_args *uap)
+./sys/contrib/openzfs/module/os/freebsd/zfs/zfs_vnops_os.c:4613:struct vop_open_args {
+./sys/contrib/openzfs/module/os/freebsd/zfs/zfs_vnops_os.c:4622:zfs_freebsd_open(struct vop_open_args *ap)
+./sys/contrib/openzfs/module/os/freebsd/zfs/zfs_ctldir.c:451:zfsctl_common_open(struct vop_open_args *ap)
+./sys/amd64/linux32/linux32_proto.h:47:struct linux_open_args {
+./sys/amd64/linux32/linux32_proto.h:922:struct linux_mq_open_args {
+./sys/amd64/linux32/linux32_proto.h:1212:struct linux_perf_event_open_args {
+./sys/amd64/linux32/linux32_sysent.c:23:	{ .sy_narg = AS(linux_open_args), .sy_call = (sy_call_t *)linux_open, .sy_auevent = AUE_OPEN_RWTC, .sy_flags = 0, .sy_thrcnt = SY_THR_STATIC },	/* 5 = linux_open */
+./sys/amd64/linux32/linux32_sysent.c:295:	{ .sy_narg = AS(linux_mq_open_args), .sy_call = (sy_call_t *)linux_mq_open, .sy_auevent = AUE_NULL, .sy_flags = 0, .sy_thrcnt = SY_THR_STATIC },	/* 277 = linux_mq_open */
+./sys/amd64/linux32/linux32_systrace_args.c:47:		struct linux_open_args *p = params;
+./sys/amd64/linux32/linux32_systrace_args.c:1930:		struct linux_mq_open_args *p = params;
+./sys/amd64/linux/linux_systrace_args.c:35:		struct linux_open_args *p = params;
+./sys/amd64/linux/linux_systrace_args.c:1812:		struct linux_mq_open_args *p = params;
+./sys/amd64/linux/linux_proto.h:41:struct linux_open_args {
+... [31 more matches]
+```
+
+--- RESPONSE ---
+
+
+ACTION: GREP usr.bin/tcopy/tcopy.cc:maxblk

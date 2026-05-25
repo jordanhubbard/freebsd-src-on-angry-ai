@@ -1,0 +1,415 @@
+=== STEP 568 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/column/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/column/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1989, 1993, 1994
+// The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read, Write};
+use std::process;
+
+const TAB: usize = 8;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut termwidth: usize = 80;
+    let mut tblcols: Option<usize> = None;
+    let mut tflag = false;
+    let mut xflag = false;
+    let mut separator: String = "\t ".to_string();
+    let mut files: Vec<String> = Vec::new();
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg.starts_with('-') && arg.len() > 1 {
+            // Parse short options
+            let mut chars = arg[1..].chars();
+            let mut c = chars.next();
+            while let Some(ch) = c {
+                match ch {
+                    'c' => {
+                        let val = chars.as_str();
+                        let val_str = if val.is_empty() {
+                            i += 1;
+                            if i < args.len() {
+                                args[i].clone()
+                            } else {
+                                eprintln!("column: -c requires an argument");
+                                process::exit(1);
+                            }
+                        } else {
+                            val.to_string()
+                        };
+                        termwidth = val_str.parse::<usize>().unwrap_or_else(|_| {
+                            eprintln!("column: invalid terminal width \"{}\"", val_str);
+                            process::exit(1);
+                        });
+                        c = None;
+                    }
+                    'l' => {
+                        let val = chars.as_str();
+                        let val_str = if val.is_empty() {
+                            i += 1;
+                            if i < args.len() {
+                                args[i].clone()
+                            } else {
+                                eprintln!("column: -l requires an argument");
+                                process::exit(1);
+                            }
+                        } else {
+                            val.to_string()
+                        };
+                        tblcols = Some(val_str.parse::<usize>().unwrap_or_else(|_| {
+                            eprintln!("column: invalid max width \"{}\"", val_str);
+                            process::exit(1);
+                        }));
+                        c = None;
+                    }
+                    's' => {
+                        let val = chars.as_str();
+                        let val_str = if val.is_empty() {
+                            i += 1;
+                            if i < args.len() {
+                                args[i].clone()
+                            } else {
+                                eprintln!("column: -s requires an argument");
+                                process::exit(1);
+                            }
+                        } else {
+                            val.to_string()
+                        };
+                        separator = val_str;
+                        c = None;
+                    }
+                    't' => {
+                        tflag = true;
+                        c = chars.next();
+                    }
+                    'x' => {
+                        xflag = true;
+                        c = chars.next();
+                    }
+                    _ => {
+                        eprintln!("usage: column [-tx] [-c columns] [-l tblcols] [-s sep] [file ...]");
+                        process::exit(1);
+                    }
+                }
+            }
+        } else {
+            files.push(arg.clone());
+        }
+        i += 1;
+    }
+
+    // Try to get terminal width from ioctl
+    if let Ok(w) = get_terminal_width() {
+        if w > 0 {
+            termwidth = w;
+        }
+    } else {
+        // Try COLUMNS env var
+        if let Ok(cols) = env::var("COLUMNS") {
+            if let Ok(w) = cols.parse::<usize>() {
+                termwidth = w;
+            }
+        }
+    }
+
+    if tblcols.is_some() && !tflag {
+        eprintln!("column: the -l flag cannot be used without the -t flag");
+        process::exit(1);
+    }
+
+    let mut lines: Vec<String> = Vec::new();
+    let mut eval = 0;
+
+    if files.is_empty() {
+        input(&mut io::stdin().lock(), &mut lines);
+    } else {
+        for f in &files {
+            match File::open(f) {
+                Ok(file) => {
+                    input(&mut BufReader::new(file), &mut lines);
+                }
+                Err(e) => {
+                    eprintln!("column: {}: {}", f, e);
+                    eval = 1;
+                }
+            }
+        }
+    }
+
+    if lines.is_empty() {
+        process::exit(eval);
+    }
+
+    let maxlength = lines.iter().map(|l| width(l)).max().unwrap_or(0);
+    let maxlength = roundup(maxlength + 1, TAB);
+
+    if tflag {
+        maketbl(&lines, &separator, tblcols);
+    } else if maxlength >= termwidth {
+        print_lines(&lines);
+    } else if xflag {
+        c_columnate(&lines, termwidth, maxlength);
+    } else {
+        r_columnate(&lines, termwidth, maxlength);
+    }
+
+    process::exit(eval);
+}
+
+fn get_terminal_width() -> io::Result<usize> {
+    use libc::{ioctl, winsize, TIOCGWINSZ};
+    let mut win: winsize = unsafe { std::mem::zeroed() };
+    if unsafe { ioctl(1, TIOCGWINSZ, &mut win) } == 0 {
+        Ok(win.ws_col as usize)
+    } else {
+        Err(io::Error::last_os_error())
+    }
+}
+
+fn input<R: Read>(reader: &mut dyn BufRead, lines: &mut Vec<String>) {
+    let mut buf = String::new();
+    loop {
+        buf.clear();
+        match reader.read_line(&mut buf) {
+            Ok(0) => break,
+            Ok(_) => {
+                // Strip trailing newline
+                if buf.ends_with('\n') {
+                    buf.pop();
+                    if buf.ends_with('\r') {
+                        buf.pop();
+                    }
+                }
+                // Skip leading whitespace
+                let trimmed = buf.trim_start();
+                if trimmed.is_empty() {
+                    continue;
+                }
+                lines.push(trimmed.to_string());
+            }
+            Err(_) => break,
+        }
+    }
+}
+
+fn width(s: &str) -> usize {
+    let mut w = 0;
+    for c in s.chars() {
+        let cw = char_width(c);
+        if cw > 0 {
+            w += cw;
+        }
+    }
+    w
+}
+
+fn char_width(c: char) -> usize {
+    // Simple width calculation: most printable chars are 1, CJK etc are 2
+    // This is a simplified version of wcwidth
+    if c.is_control() || c == '\t' {
+        return 0;
+    }
+    // CJK and other wide characters
+    if c >= '\u{1100}' && c <= '\u{115F}' { return 2; }
+    if c >= '\u{2E80}' && c <= '\u{A4CF}' && c != '\u{303F}' { return 2; }
+    if c >= '\u{AC00}' && c <= '\u{D7A3}' { return 2; }
+    if c >= '\u{F900}' && c <= '\u{FAFF}' { return 2; }
+    if c >= '\u{FE10}' && c <= '\u{FE19}' { return 2; }
+    if c >= '\u{FE30}' && c <= '\u{FE6F}' { return 2; }
+    if c >= '\u{FF00}' && c <= '\u{FF60}' { return 2; }
+    if c >= '\u{FFE0}' && c <= '\u{FFE6}' { return 2; }
+    if c >= '\u{20000}' && c <= '\u{2FFFD}' && c != '\u{E0001}' { return 2; }
+    if c >= '\u{30000}' && c <= '\u{3FFFD}' && c != '\u{E0020}' { return 2; }
+    1
+}
+
+fn roundup(x: usize, y: usize) -> usize {
+    ((x + y - 1) / y) * y
+}
+
+fn r_columnate(lines: &[String], termwidth: usize, maxlength: usize) {
+    let numcols = termwidth / maxlength;
+    if numcols == 0 {
+        print_lines(lines);
+        return;
+    }
+    let entries = lines.len();
+    let numrows = (entries + numcols - 1) / numcols;
+
+    for row in 0..numrows {
+        let mut chcnt = 0;
+        let mut endcol = maxlength;
+        let mut col = 0;
+        let mut base = row;
+        let mut first = true;
+
+        while col < numcols && base < entries {
+            if !first {
+                // Print tabs to align
+                let mut cnt = roundup(chcnt + 1, TAB);
+                while cnt <= endcol {
+                    print!("\t");
+                    cnt = roundup(cnt + 1, TAB);
+                }
+                endcol += maxlength;
+            }
+            print!("{}", lines[base]);
+            chcnt += width(&lines[base]);
+            first = false;
+            col += 1;
+            base += numrows;
+        }
+        println!();
+    }
+}
+
+fn c_columnate(lines: &[String], termwidth: usize, maxlength: usize) {
+    let numcols = termwidth / maxlength;
+    if numcols == 0 {
+        print_lines(lines);
+        return;
+    }
+    let entries = lines.len();
+    let mut lp = 0;
+    let mut chcnt = 0;
+    let mut col = 0;
+    let mut endcol = maxlength;
+
+    while lp < entries {
+        if lp > 0 {
+            if col < numcols {
+                // Print tabs to align
+                let mut cnt = roundup(chcnt + 1, TAB);
+                while cnt <= endcol {
+                    print!("\t");
+                    cnt = roundup(cnt + 1, TAB);
+                }
+                endcol += maxlength;
+            }
+        }
+        print!("{}", lines[lp]);
+        chcnt += width(&lines[lp]);
+        lp += 1;
+        col += 1;
+        if col == numcols {
+            println!();
+            chcnt = 0;
+            col = 0;
+            endcol = maxlength;
+        }
+    }
+    if chcnt > 0 {
+        println!();
+    }
+}
+
+fn print_lines(lines: &[String]) {
+    for line in lines {
+        println!("{}", line);
+    }
+}
+
+fn maketbl(lines: &[String], separator: &str, tblcols: Option<usize>) {
+    if lines.is_empty() {
+        return;
+    }
+
+    // Parse each line into columns
+    let mut table: Vec<Vec<String>> = Vec::new();
+    let mut max_cols = 0;
+
+    for line in lines {
+        let mut cols: Vec<String> = Vec::new();
+        let mut current = String::new();
+        let mut in_sep = false;
+
+        for c in line.chars() {
+            if separator.contains(c) {
+                if !in_sep {
+                    cols.push(current.clone());
+                    current.clear();
+                    in_sep = true;
+                }
+            } else {
+                current.push(c);
+                in_sep = false;
+            }
+        }
+        if !current.is_empty() || !cols.is_empty() {
+            cols.push(current);
+        }
+        if cols.len() > max_cols {
+            max_cols = cols.len();
+        }
+        table.push(cols);
+    }
+
+    // Calculate max width for each column
+    let mut col_widths: Vec<usize> = vec![0; max_cols];
+    for row in &table {
+        for (i, col) in row.iter().enumerate() {
+            let w = width(col);
+            if i < col_widths.len() && w > col_widths[i] {
+                col_widths[i] = w;
+            }
+        }
+    }
+
+    // Print table
+    for row in &table {
+        for (i, col) in row.iter().enumerate() {
+            if i > 0 {
+                print!(" ");
+            }
+            print!("{}", col);
+            if i < row.len() - 1 {
+                let padding = col_widths[i].saturating_sub(width(col)) + 1;
+                for _ in 0..padding {
+                    print!(" ");
+                }
+            }
+        }
+        println!();
+    }
+}
+>>>

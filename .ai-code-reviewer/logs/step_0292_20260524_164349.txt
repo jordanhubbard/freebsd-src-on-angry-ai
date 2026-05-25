@@ -1,0 +1,14 @@
+=== STEP 292 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/tcopy is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo
+
+--- RESPONSE ---
+
+
+I'm stuck in a corrupted vendor scope with stale pending changes. Let me try to BUILD to commit and clear the state.
+
+ACTION: BUILD

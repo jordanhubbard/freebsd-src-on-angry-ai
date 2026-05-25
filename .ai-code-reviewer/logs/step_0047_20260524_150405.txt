@@ -1,0 +1,56 @@
+=== STEP 47 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/tcopy.cc
+   Chunks: 11/13
+
+```
+=== CHUNK 11/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/tcopy.cc === [function: read_or_copy]
+=== Lines 630-663 (34 lines) ===
+
+static void
+read_or_copy(void)
+{
+	int needeof;
+	ssize_t nread, prev_read;
+	char *buff = getspace(maxblk);
+
+	(void)clock_gettime(CLOCK_MONOTONIC, &t_start);
+	needeof = 0;
+	for (prev_read = NOCOUNT;;) {
+		check_want_info();
+		nread = input->read_blk(buff, maxblk);
+		progress(nread);
+		if (nread > 0) {
+			if (output != NULL) {
+				if (needeof) {
+					output->file_mark();
+					needeof = 0;
+				}
+				output->write_blk(buff, (size_t)nread);
+			}
+		} else {
+			if (prev_read <= 0 && prev_read != NOCOUNT) {
+				break;
+			}
+			needeof = 1;
+		}
+		prev_read = nread;
+	}
+	(void)clock_gettime(CLOCK_MONOTONIC, &t_end);
+	report_total(msg);
+	free(buff);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

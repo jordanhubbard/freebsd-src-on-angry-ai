@@ -1,0 +1,9 @@
+=== STEP 511 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE bsd

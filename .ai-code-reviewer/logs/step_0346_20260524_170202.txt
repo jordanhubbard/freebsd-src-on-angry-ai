@@ -1,0 +1,14 @@
+=== STEP 346 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/tcopy is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo
+
+--- RESPONSE ---
+
+
+I need to clean up the stale vendor LLVM Rust files from a previous session. Let me try to remove them.
+
+ACTION: WRITE_FILE contrib/

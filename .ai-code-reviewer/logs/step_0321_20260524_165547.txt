@@ -1,0 +1,14 @@
+=== STEP 321 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/tcopy is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo
+
+--- RESPONSE ---
+
+
+I'm stuck in vendor LLVM code which is not FreeBSD userland. Let me try to find a valid FreeBSD userland unit.
+
+ACTION: SET_SCOPE usr.bin/tcopy

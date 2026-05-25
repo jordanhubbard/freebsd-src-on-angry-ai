@@ -1,0 +1,14 @@
+=== STEP 216 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Marked current file as skipped.
+Remaining files in contrib/llvm-project/llvm/lib/Telemetry:
+  - contrib/llvm-project/llvm/lib/Telemetry/Telemetry.cpp
+Please READ_FILE another source file or SET_SCOPE to continue progress.
+
+--- RESPONSE ---
+
+
+This is vendor LLVM code, outside the FreeBSD userland rewrite objective. I need to move to the next pending unit.
+
+ACTION: SET_SCOPE bin/cat/tests

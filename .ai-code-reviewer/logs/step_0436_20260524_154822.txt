@@ -1,0 +1,102 @@
+=== STEP 436 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Telemetry/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Telemetry/src/lib.rs
+CONTENT:
+<<<
+// Rust replacement for LLVM Telemetry library
+// Provides basic telemetry framework functionality
+
+use std::collections::VecDeque;
+use std::sync::atomic::{AtomicU64, Ordering};
+
+static SESSION_COUNTER: AtomicU64 = AtomicU64::new(0);
+
+pub struct TelemetryInfo {
+    pub session_id: u64,
+}
+
+impl TelemetryInfo {
+    pub fn new() -> Self {
+        TelemetryInfo {
+            session_id: SESSION_COUNTER.fetch_add(1, Ordering::Relaxed),
+        }
+    }
+
+    pub fn serialize(&self) -> String {
+        format!("SessionId: {}", self.session_id)
+    }
+}
+
+pub trait Destination {
+    fn receive_entry(&self, entry: &TelemetryInfo) -> Result<(), String>;
+}
+
+pub struct Manager {
+    destinations: VecDeque<Box<dyn Destination>>,
+}
+
+impl Manager {
+    pub fn new() -> Self {
+        Manager {
+            destinations: VecDeque::new(),
+        }
+    }
+
+    pub fn add_destination(&mut self, dest: Box<dyn Destination>) {
+        self.destinations.push_back(dest);
+    }
+
+    pub fn dispatch(&self, entry: &TelemetryInfo) -> Result<(), String> {
+        let mut all_errs = Ok(());
+        for dest in &self.destinations {
+            if let Err(e) = dest.receive_entry(entry) {
+                all_errs = Err(e);
+            }
+        }
+        all_errs
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn telemetry_info_new() -> *mut TelemetryInfo {
+    let info = Box::new(TelemetryInfo::new());
+    Box::into_raw(info)
+}
+
+#[no_mangle]
+pub extern "C" fn telemetry_info_serialize(info: *const TelemetryInfo) -> *mut std::os::raw::c_char {
+    if info.is_null() {
+        return std::ptr::null_mut();
+    }
+    let s = unsafe { &*info }.serialize();
+    let c_str = std::ffi::CString::new(s).unwrap();
+    c_str.into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn telemetry_info_free(info: *mut TelemetryInfo) {
+    if !info.is_null() {
+        unsafe { drop(Box::from_raw(info)); }
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn manager_new() -> *mut Manager {
+    let manager = Box::new(Manager::new());
+    Box::into_raw(manager)
+}
+
+#[no_mangle]
+pub extern "C" fn manager_free(manager: *mut Manager) {
+    if !manager.is_null() {
+        unsafe { drop(Box::from_raw(manager)); }
+    }
+}
+>>>

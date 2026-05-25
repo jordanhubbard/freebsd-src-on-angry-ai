@@ -129,7 +129,7 @@
   },
   "contrib/llvm-project/clang/lib/Analysis/plugins/CheckerOptionHandling": {
     "attempts": 3,
-    "last_attempt": "2026-05-24T14:40:57.306091"
+    "last_attempt": "2026-05-24T15:19:00.013865"
   },
   "contrib/llvm-project/clang/lib/DirectoryWatcher/default": {
     "attempts": 3,
@@ -167,9 +167,17 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T06:36:22.530138"
   },
+  "contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T16:15:42.481546"
+  },
+  "contrib/llvm-project/llvm/lib/Target/MSP430/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T16:52:19.787193"
+  },
   "contrib/llvm-project/llvm/lib/Telemetry": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T14:44:44.923042"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T15:46:59.847502"
   },
   "contrib/netbsd-tests/lib/csu/dso": {
     "attempts": 3,
@@ -308,8 +316,8 @@
     "last_attempt": "2026-05-24T07:40:50.616914"
   },
   "usr.bin/at": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T12:38:33.705229"
+    "attempts": 3,
+    "last_attempt": "2026-05-24T17:05:45.540419"
   },
   "usr.bin/banner": {
     "attempts": 3,
@@ -348,16 +356,16 @@
     "last_attempt": "2026-05-22T07:03:11.300903"
   },
   "usr.bin/column": {
-    "attempts": 1,
-    "last_attempt": "2026-05-23T13:42:53.634602"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T17:06:20.337211"
   },
   "usr.bin/comm": {
     "attempts": 3,
     "last_attempt": "2026-05-22T16:58:09.899107"
   },
   "usr.bin/csplit": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T13:48:03.469535"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T15:00:12.231595"
   },
   "usr.bin/cut": {
     "attempts": 3,
@@ -529,7 +537,7 @@
   },
   "usr.bin/tcopy": {
     "attempts": 2,
-    "last_attempt": "2026-05-24T13:35:42.089125"
+    "last_attempt": "2026-05-24T13:35:18.140445"
   },
   "usr.bin/touch": {
     "attempts": 2,

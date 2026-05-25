@@ -1,0 +1,13 @@
+=== STEP 339 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*bsd.prog.mk*':
+```
+./tools/build/mk/bsd.prog.mk
+./share/mk/bsd.prog.mk
+```
+
+--- RESPONSE ---
+
+
+ACTION: GREP SYSTEM_COMPILER

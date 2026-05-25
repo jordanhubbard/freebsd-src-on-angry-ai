@@ -1,0 +1,37 @@
+=== STEP 316 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/csplit/Makefile
+OLD:
+.include <src.opts.mk>
+
+PROG=	csplit
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+NEW:
+.include <src.opts.mk>
+
+PROG=	csplit
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+RUSTPROG=	csplit
+
+.c.rust:
+	cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${.OBJDIR}/cargo-target --release
+
+${PROG}.rust: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs | .c.rust
+	@cp ${.OBJDIR}/cargo-target/release/${PROG} ${.OBJDIR}/${PROG}.rust
+
+CLEANFILES+= ${PROG}.rust
+
+.include <bsd.prog.mk>

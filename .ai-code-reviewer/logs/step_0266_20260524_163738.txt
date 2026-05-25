@@ -1,0 +1,9 @@
+=== STEP 266 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: No directory specified
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE

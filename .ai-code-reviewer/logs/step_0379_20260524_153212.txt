@@ -1,0 +1,45 @@
+=== STEP 379 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/clang/lib/Analysis:
+```
+AnalysisDeclContext.cpp
+BodyFarm.cpp
+CFG.cpp
+CFGReachabilityAnalysis.cpp
+CFGStmtMap.cpp
+CallGraph.cpp
+CalledOnceCheck.cpp
+CloneDetection.cpp
+CocoaConventions.cpp
+CodeInjector.cpp
+ConstructionContext.cpp
+Consumed.cpp
+Dominators.cpp
+ExprMutationAnalyzer.cpp
+FixitUtil.cpp
+FlowSensitive
+IntervalPartition.cpp
+IssueHash.cpp
+LifetimeSafety.cpp
+LiveVariables.cpp
+MacroExpansionContext.cpp
+ObjCNoReturn.cpp
+PathDiagnostic.cpp
+PostOrderCFGView.cpp
+ProgramPoint.cpp
+ReachableCode.cpp
+RetainSummaryManager.cpp
+ThreadSafety.cpp
+ThreadSafetyCommon.cpp
+ThreadSafetyLogical.cpp
+ThreadSafetyTIL.cpp
+UninitializedValues.cpp
+UnsafeBufferUsage.cpp
+plugins
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE contrib/llvm-project/clang/lib/Analysis/Makefile

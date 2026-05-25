@@ -1,0 +1,405 @@
+=== STEP 121 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/tcopy
+   Files: 1/3
+📄 File: usr.bin/tcopy/src/main.rs
+   Chunks: 2/2
+✏️  Edits: 2 files modified
+
+```
+=== CHUNK 2/2: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tcopy/src/main.rs === [line_chunk: chunk_2]
+=== Lines 251-460 (210 lines) ===
+
+    *lastnread_ref = nread;
+    *fsize_ref = fsize;
+    *tsize_ref = tsize;
+}
+
+fn check_want_info() {
+    if WANT_INFO.swap(false, Ordering::SeqCst) {
+        unsafe {
+            T_END = Instant::now();
+            libc::fprintf(libc::stderr, b"tcopy: file %d record %ju \0".as_ptr() as *const _,
+                FILEN, RECORD as libc::c_ulonglong);
+            report_total(libc::stderr);
+        }
+    }
+}
+
+fn getspace(blk: usize) -> Vec<u8> {
+    assert!(blk > 0);
+    vec![0u8; blk]
+}
+
+fn usage() {
+    eprintln!("usage: tcopy [-crvx] [-l logfile] [-s maxblk] [src [dest]]");
+    process::exit(EX_USAGE);
+}
+
+trait TapeDevice {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64;
+    fn verify_blk(&mut self, dst: &mut [u8], expected: usize) -> i64;
+    fn write_blk(&mut self, src: &[u8]);
+    fn file_mark(&self);
+    fn rewind(&self);
+    fn get_fd(&self) -> RawFd;
+}
+
+impl TapeDevice for TapeDev {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        if self.max_read_size == 0 {
+            let mut max_read_size = dst.len();
+            loop {
+                let ret = unsafe {
+                    libc::read(self.fd, dst.as_mut_ptr() as *mut libc::c_void, max_read_size)
+                };
+                if ret >= 0 {
+                    self.max_read_size = max_read_size;
+                    return ret as i64;
+                }
+                let err = io::Error::last_os_error();
+                if err.raw_os_error() != Some(libc::EINVAL) && err.raw_os_error() != Some(libc::EFBIG) {
+                    eprintln!("tcopy: read error, {}, file {}, record {}",
+                        self.name, unsafe { FILEN }, unsafe { RECORD });
+                    process::exit(1);
+                }
+                if max_read_size < 512 {
+                    eprintln!("tcopy: Cannot find a sane max blocksize");
+                    process::exit(1);
+                }
+                let i = flsl((max_read_size - 1) as u64);
+                max_read_size = 1usize << (i as u32 - 1);
+            }
+        } else {
+            let ret = unsafe {
+                libc::read(self.fd, dst.as_mut_ptr() as *mut libc::c_void, self.max_read_size)
+            };
+            if ret < 0 {
+                eprintln!("tcopy: read error, {}, file {}, record {}",
+                    self.name, unsafe { FILEN }, unsafe { RECORD });
+                process::exit(1);
+            }
+            ret as i64
+        }
+    }
+
+    fn verify_blk(&mut self, dst: &mut [u8], _expected: usize) -> i64 {
+        self.read_blk(dst)
+    }
+
+    fn write_blk(&mut self, src: &[u8]) {
+        assert!(!src.is_empty());
+        let nwrite = unsafe {
+            libc::write(self.fd, src.as_ptr() as *const libc::c_void, src.len())
+        };
+        if nwrite < 0 || (nwrite as usize) != src.len() {
+            if nwrite < 0 {
+                eprintln!("tcopy: write error, file {}, record {}: {}",
+                    unsafe { FILEN }, unsafe { RECORD }, io::Error::last_os_error());
+            } else {
+                eprintln!("tcopy: write error, file {}, record {}",
+                    unsafe { FILEN }, unsafe { RECORD });
+                eprintln!("tcopy: write ({}) != read ({})", nwrite, src.len());
+            }
+            eprintln!("tcopy: copy aborted");
+            process::exit(5);
+        }
+    }
+
+    fn file_mark(&self) {
+        tape_write_eof(self.fd);
+    }
+
+    fn rewind(&self) {
+        tape_rewind(self.fd);
+    }
+
+    fn get_fd(&self) -> RawFd {
+        self.fd
+    }
+}
+
+impl TapeDevice for TapFile {
+    fn read_blk(&mut self, dst: &mut [u8]) -> i64 {
+        let mut lbuf = [0u8; 4];
+        let nread = match full_read(self.fd, &mut lbuf) {
+            Ok(n) => n as i64,
+            Err(_) => return 0,
+        };
+        if nread == 0 { return 0; }
+        if nread != 4 {
+            eprintln!("tcopy: Corrupt tap-file, read hdr1={}", nread);
+            process::exit(EX_DATAERR);
+        }
+        let u = le32dec(&lbuf);
+        if u == 0 || (u >> 24) == 0xff { return 0; }
+        if u as usize > dst.len() {
+            eprintln!("tcopy: tapfile blocksize too big, 0x{:08x}", u);
+            process::exit(17);
+        }
+        let nread2 = match full_read(self.fd, &mut dst[..u as usize]) {
+            Ok(n) => n as i64,
+            Err(_) => return 0,
+        };
+        if nread2 != u as i64 {
+            eprintln!("tcopy: Corrupt tap-file, read hdr2={}", nread2);
+            process::exit(EX_DATAERR);
+        }
+        u as i64
+    }
+
+    fn verify_blk(&mut self, dst: &mut [u8], expected: usize) -> i64 {
+        self.read_blk(dst)
+    }
+
+    fn write_blk(&mut self, src: &[u8]) {
+        let len = src.len() as u32;
+        let hdr = len.to_le_bytes();
+        let mut written = 0;
+        while written < 4 {
+            match unsafe {
+                libc::write(self.fd, hdr[written..].as_ptr() as *const libc::c_void, 4 - written)
+            } {
+                -1 => {
+                    let err = io::Error::last_os_error();
+                    if err.kind() == io::ErrorKind::WouldBlock || err.kind() == io::ErrorKind::Interrupted {
+                        continue;
+                    }
+                    eprintln!("tcopy: write error, file {}, record {}: {}",
+                        unsafe { FILEN }, unsafe { RECORD }, err);
+                    process::exit(5);
+                }
+                n => written += n as usize,
+            }
+        }
+        written = 0;
+        while written < src.len() {
+            match unsafe {
+                libc::write(self.fd, src[written..].as_ptr() as *const libc::c_void, src.len() - written)
+            } {
+                -1 => {
+                    let err = io::Error::last_os_error();
+                    if err.kind() == io::ErrorKind::WouldBlock || err.kind() == io::ErrorKind::Interrupted {
+                        continue;
+                    }
+                    eprintln!("tcopy: write error, file {}, record {}: {}",
+                        unsafe { FILEN }, unsafe { RECORD }, err);
+                    process::exit(5);
+                }
+                n => written += n as usize,
+            }
+        }
+    }
+
+    fn file_mark(&self) {
+        let mark = [0u8; 4];
+        let mut written = 0;
+        while written < 4 {
+            match unsafe {
+                libc::write(self.fd, mark[written..].as_ptr() as *const libc::c_void, 4 - written)
+            } {
+                -1 => {
+                    let err = io::Error::last_os_error();
+                    if err.kind() == io::ErrorKind::WouldBlock || err.kind() == io::ErrorKind::Interrupted {
+                        continue;
+                    }
+                    eprintln!("tcopy: write error, file {}, record {}: {}",
+                        unsafe { FILEN }, unsafe { RECORD }, err);
+                    process::exit(5);
+                }
+                n => written += n as usize,
+            }
+        }
+    }
+
+    fn rewind(&self) {
+        unsafe { libc::lseek(self.fd, 0, libc::SEEK_SET); }
+    }
+
+    fn get_fd(&self) -> RawFd {
+        self.fd
+    }
+}
+```
+
+--- RESPONSE ---
+
+
+Now I need to add the remaining functions after the TapFile impl. Let me use a unique ending context:
+
+ACTION: EDIT_FILE usr.bin/tcopy/src/main.rs
+OLD:
+<<<
+    fn rewind(&self) {
+        unsafe { libc::lseek(self.fd, 0, libc::SEEK_SET); }
+    }
+
+    fn get_fd(&self) -> RawFd {
+        self.fd
+    }
+}
+>>>
+NEW:
+<<<
+    fn rewind(&self) {
+        unsafe { libc::lseek(self.fd, 0, libc::SEEK_SET); }
+    }
+
+    fn get_fd(&self) -> RawFd {
+        self.fd
+    }
+}
+
+extern "C" fn siginfo_handler(_sig: libc::c_int) {
+    WANT_INFO.store(true, Ordering::SeqCst);
+}
+
+fn open_arg(arg: &str, mode: &str) -> Box<dyn TapeDevice> {
+    let c_arg = CString::new(arg).unwrap();
+    
+    // Check if it looks like a device path
+    if arg.starts_with("/dev/") {
+        let flags = if mode == "output" {
+            libc::O_WRONLY
+        } else {
+            libc::O_RDONLY
+        };
+        let fd = unsafe { libc::open(c_arg.as_ptr(), flags) };
+        if fd < 0 {
+            eprintln!("tcopy: cannot open {}: {}", arg, io::Error::last_os_error());
+            process::exit(1);
+        }
+        return Box::new(TapeDev {
+            fd,
+            name: arg.to_string(),
+            direction: if mode == "output" { Direction::DST } else { Direction::SRC },
+            max_read_size: 0,
+        });
+    }
+    
+    // Regular file (tap format)
+    let flags = if mode == "output" {
+        libc::O_WRONLY | libc::O_CREAT | libc::O_TRUNC
+    } else {
+        libc::O_RDONLY
+    };
+    
+    let fd = unsafe { libc::open(c_arg.as_ptr(), flags, 0o644) };
+    if fd < 0 {
+        eprintln!("tcopy: cannot open {}: {}", arg, io::Error::last_os_error());
+        process::exit(1);
+    }
+    
+    Box::new(TapFile {
+        fd,
+        name: arg.to_string(),
+        direction: if mode == "output" { Direction::DST } else { Direction::SRC },
+        max_read_size: 0,
+    })
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    let mut op = Operation::COPY;
+    let mut logfile: Option<String> = None;
+    let mut maxblk: i64 = 0;
+    
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg == "-c" {
+            op = Operation::COPYVERIFY;
+        } else if arg == "-r" {
+            op = Operation::READ;
+        } else if arg == "-v" {
+            // verbose handled later
+        } else if arg == "-x" {
+            op = Operation::VERIFY;
+        } else if arg == "-l" {
+            i += 1;
+            if i >= args.len() { usage(); }
+            logfile = Some(args[i].clone());
+        } else if arg == "-s" {
+            i += 1;
+            if i >= args.len() { usage(); }
+            maxblk = expand_number(&args[i]).unwrap_or_else(|| {
+                eprintln!("tcopy: invalid block size: {}", args[i]);
+                usage();
+            });
+        } else if arg.starts_with('-') {
+            usage();
+        } else {
+            break;
+        }
+        i += 1;
+    }
+    
+    let src = if i < args.len() { &args[i] } else { _PATH_DEFTAPE };
+    let dest = if i + 1 < args.len() { &args[i + 1] } else { _PATH_DEFTAPE };
+    
+    // Setup signal handlers
+    unsafe {
+        libc::signal(libc::SIGINFO, Some(siginfo_handler));
+    }
+    
+    // Open log file
+    unsafe {
+        if let Some(ref lf) = logfile {
+            let c_lf = CString::new(lf.as_str()).unwrap();
+            MSG = libc::fopen(c_lf.as_ptr(), b"a\0".as_ptr() as *const _);
+            if MSG.is_null() {
+                eprintln!("tcopy: cannot open log file: {}", io::Error::last_os_error());
+                process::exit(1);
+            }
+        } else {
+            MSG = libc::stderr;
+        }
+        T_START = Instant::now();
+    }
+    
+    let mut src_dev = open_arg(src, "input");
+    let mut dest_dev: Option<Box<dyn TapeDevice>> = None;
+    
+    if op == Operation::COPY || op == Operation::COPYVERIFY {
+        dest_dev = Some(open_arg(dest, "output"));
+    }
+    
+    let blk = if maxblk > 0 { maxblk as usize } else { MAXREC };
+    let mut buf = getspace(blk);
+    
+    loop {
+        let nread = src_dev.read_blk(&mut buf);
+        progress(nread);
+        check_want_info();
+        
+        if nread <= 0 {
+            break;
+        }
+        
+        if op == Operation::COPY || op == Operation::COPYVERIFY {
+            if let Some(ref mut dd) = dest_dev {
+                dd.write_blk(&buf[..nread as usize]);
+            }
+        }
+    }
+    
+    if op == Operation::COPY || op == Operation::COPYVERIFY {
+        if let Some(ref dd) = dest_dev {
+            dd.file_mark();
+        }
+    }
+    
+    unsafe {
+        T_END = Instant::now();
+        if !logfile.is_none() && !MSG.is_null() {
+            libc::fclose(MSG);
+        }
+    }
+    
+    process::exit(EX_OK);
+}
+>>>

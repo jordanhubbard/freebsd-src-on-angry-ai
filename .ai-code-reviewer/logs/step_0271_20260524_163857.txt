@@ -1,0 +1,11 @@
+=== STEP 271 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: No directory specified
+
+--- RESPONSE ---
+
+
+I'm stuck in a corrupted vendor scope. Let me examine the pending files to clean them up.
+
+ACTION: READ_FILE

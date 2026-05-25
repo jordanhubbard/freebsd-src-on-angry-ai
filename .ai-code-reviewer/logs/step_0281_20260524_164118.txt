@@ -1,0 +1,14 @@
+=== STEP 281 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Telemetry:
+```
+Telemetry.cpp
+```
+
+--- RESPONSE ---
+
+
+I'm stuck in a corrupted vendor scope with stale pending changes from a previous session. Let me try to BUILD to commit and clear the state.
+
+ACTION: BUILD

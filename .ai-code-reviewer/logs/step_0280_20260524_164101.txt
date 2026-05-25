@@ -1,0 +1,9 @@
+=== STEP 280 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: No directory specified
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/llvm-project/llvm/lib/Telemetry

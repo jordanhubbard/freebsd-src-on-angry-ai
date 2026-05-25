@@ -1,0 +1,28 @@
+=== STEP 331 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/csplit:
+```
+Makefile
+Makefile.depend
+csplit.1
+csplit.c
+src
+tests
+```
+
+--- RESPONSE ---
+
+
+The Cargo.toml was lost due to the build failure (uncommitted changes). Let me recreate it.
+
+ACTION: WRITE_FILE usr.bin/csplit/Cargo.toml
+CONTENT:
+[package]
+name = "csplit"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "csplit"
+path = "src/main.rs"
