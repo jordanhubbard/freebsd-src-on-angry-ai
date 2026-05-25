@@ -224,12 +224,20 @@
     "last_attempt": "2026-05-24T00:24:56.720185"
   },
   "contrib/netbsd-tests/lib/libc/arch/alpha": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T16:30:12.767317"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/arm": {
     "attempts": 1,
-    "last_attempt": "2026-05-25T16:15:27.243426"
+    "last_attempt": "2026-05-25T16:35:04.321389"
   },
   "contrib/netbsd-tests/lib/libc/arch/hppa": {
     "attempts": 1,
     "last_attempt": "2026-05-25T16:23:10.886513"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/m68k": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:34:32.974349"
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
@@ -270,6 +278,10 @@
   "crypto/openssl/crypto/kdf": {
     "attempts": 2,
     "last_attempt": "2026-05-22T21:46:57.529904"
+  },
+  "lib/libmd": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:39:38.278452"
   },
   "lib/libnv": {
     "attempts": 1,
@@ -318,6 +330,10 @@
   "sbin/adjkerntz": {
     "attempts": 3,
     "last_attempt": "2026-05-25T13:36:49.051207"
+  },
+  "sbin/clri": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:38:17.880925"
   },
   "sbin/md5": {
     "attempts": 1,
@@ -416,8 +432,8 @@
     "last_attempt": "2026-05-22T19:54:44.158526"
   },
   "usr.bin/ar": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T07:40:50.616914"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T16:37:43.207011"
   },
   "usr.bin/at": {
     "attempts": 3,
@@ -712,8 +728,8 @@
     "last_attempt": "2026-05-22T22:23:07.340580"
   },
   "usr.bin/proccontrol": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T20:29:08.541672"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T16:40:09.021536"
   },
   "usr.bin/procstat": {
     "attempts": 3,

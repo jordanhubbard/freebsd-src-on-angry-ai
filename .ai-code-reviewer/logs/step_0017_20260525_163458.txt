@@ -1,0 +1,12 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Marked current file as skipped.
+Remaining files in contrib/netbsd-tests/lib/libc/arch/m68k:
+  - contrib/netbsd-tests/lib/libc/arch/m68k/return_one.S
+Please READ_FILE another source file or SET_SCOPE to continue progress.
+
+--- RESPONSE ---
+
+
+ACTION: SKIP_FILE

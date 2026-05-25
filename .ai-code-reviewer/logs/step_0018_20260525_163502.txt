@@ -1,0 +1,14 @@
+=== STEP 18 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Marked current file as skipped.
+Remaining files in contrib/netbsd-tests/lib/libc/arch/m68k:
+  - contrib/netbsd-tests/lib/libc/arch/m68k/return_one.S
+Please READ_FILE another source file or SET_SCOPE to continue progress.
+
+--- RESPONSE ---
+
+
+The remaining file is `.S` (assembly), not matching the required `.c/.cc/.cpp/.cxx` suffixes. Moving on.
+
+ACTION: SET_SCOPE contrib/netbsd-tests/lib/libc/arch/arm

@@ -1,0 +1,11 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check the broader build context for netbsd-tests.
+
+ACTION: LIST_DIR contrib/netbsd-tests

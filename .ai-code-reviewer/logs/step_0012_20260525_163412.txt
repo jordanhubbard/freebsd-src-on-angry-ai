@@ -1,0 +1,37 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests:
+```
+FREEBSD-upgrade
+bin
+crypto
+dev
+fs
+games
+h_macros.h
+include
+ipf
+kernel
+lib
+libexec
+modules
+net
+rump
+sbin
+share
+sys
+usr.bin
+usr.sbin
+```
+
+--- RESPONSE ---
+
+
+This unit is architecture-specific test infrastructure for Alpha, containing:
+1. `exec_prot_support.c` - trivial stub returning `NOTIMPL`
+2. `return_one.S` - Alpha assembly shellcode (a `nop` instruction)
+
+There's no Makefile, no build integration, and this is test support code for a deprecated architecture, not a userland command or library. The assembly shellcode cannot be meaningfully translated to Rust. Per the constraint "If a unit has no source relevant to the configured objective, choose another unit instead of fabricating placeholder Rust," I should skip this.
+
+ACTION: SKIP_FILE
