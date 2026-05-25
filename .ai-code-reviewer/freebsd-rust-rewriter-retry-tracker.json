@@ -279,6 +279,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-24T21:44:38.599133"
   },
+  "libexec/revnetgroup": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T01:42:07.491829"
+  },
   "libexec/ypxfr": {
     "attempts": 1,
     "last_attempt": "2026-05-24T21:44:49.304915"

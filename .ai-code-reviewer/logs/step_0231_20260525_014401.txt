@@ -1,0 +1,29 @@
+=== STEP 231 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whois/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/whois
+   Files: 0/3
+📄 File: usr.bin/whois/Makefile
+
+```
+PROG=	whois
+
+.if defined(SOCKS)
+CFLAGS+=-DSOCKS
+CFLAGS+=-Dconnect=Rconnect -Dgetsockname=Rgetsockname -Dlisten=Rlisten \
+	-Daccept=Raccept -Drcmd=Rrcmd -Dbind=Rbind -Dselect=Rselect
+LDADD+=	-lsocks
+.endif
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+The `whois.c` file is quite complex (~600 lines with network I/O, referrals, recursion). This is not a good candidate for a small first rewrite. Let me find a simpler unit.
+
+ACTION: LIST_DIR bin/cat

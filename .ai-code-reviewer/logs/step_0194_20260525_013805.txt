@@ -1,0 +1,17 @@
+=== STEP 194 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/who:
+```
+Makefile
+Makefile.depend
+who.1
+who.c
+```
+
+--- RESPONSE ---
+
+
+The build errors are from top-level `Makefile.inc1`, not from my changes. The current scope has no Makefile and can't be built independently. Let me try to find a unit that can build.
+
+ACTION: BUILD

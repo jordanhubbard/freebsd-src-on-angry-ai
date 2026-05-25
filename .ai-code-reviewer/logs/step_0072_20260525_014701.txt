@@ -1,0 +1,51 @@
+=== STEP 72 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/revnetgroup/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to update the Makefile to integrate the Rust build. Since there's no `bsd.rust.mk` in the tree, I'll add explicit local rules.
+
+ACTION: EDIT_FILE libexec/revnetgroup/Makefile
+OLD:
+<<<
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+# Rust replacement build
+RUSTPROG=	revnetgroup-rust
+RUSTCARGO=	${.CURDIR}/Cargo.toml
+RUSTOBJDIR=	${.OBJDIR}/rust-target
+
+.PHONY: rust-build
+rust-build:
+	@${CARGO} build --manifest-path ${RUSTCARGO} --target-dir ${RUSTOBJDIR}
+	@cp ${RUSTOBJDIR}/debug/revnetgroup ${.OBJDIR}/${RUSTPROG}
+
+all: rust-build
+
+install: install-prog rust-install
+rust-install: rust-build
+	@${INSTALL} -o ${INSTALL_OWNER} -g ${INSTALL_GROUP} -m ${INSTALL_MODE} \
+	    ${.OBJDIR}/${RUSTPROG} ${DESTDIR}${PREFIX}/libexec/${RUSTPROG}
+
+.include <bsd.prog.mk>
+>>>

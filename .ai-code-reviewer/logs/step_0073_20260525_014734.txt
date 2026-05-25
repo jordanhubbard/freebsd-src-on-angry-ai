@@ -1,0 +1,65 @@
+=== STEP 73 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/revnetgroup/Makefile
+Scope: libexec/revnetgroup
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Let me reconsider the Makefile approach. The `all` target override may conflict with `bsd.prog.mk`. Let me use a cleaner integration.
+
+ACTION: EDIT_FILE libexec/revnetgroup/Makefile
+OLD:
+<<<
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+# Rust replacement build
+RUSTPROG=	revnetgroup-rust
+RUSTCARGO=	${.CURDIR}/Cargo.toml
+RUSTOBJDIR=	${.OBJDIR}/rust-target
+
+.PHONY: rust-build
+rust-build:
+	@${CARGO} build --manifest-path ${RUSTCARGO} --target-dir ${RUSTOBJDIR}
+	@cp ${RUSTOBJDIR}/debug/revnetgroup ${.OBJDIR}/${RUSTPROG}
+
+all: rust-build
+
+install: install-prog rust-install
+rust-install: rust-build
+	@${INSTALL} -o ${INSTALL_OWNER} -g ${INSTALL_GROUP} -m ${INSTALL_MODE} \
+	    ${.OBJDIR}/${RUSTPROG} ${DESTDIR}${PREFIX}/libexec/${RUSTPROG}
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	revnetgroup
+SRCS=	revnetgroup.c hash.c parse_netgroup.c
+
+MAN= revnetgroup.8
+
+WARNS?=	2
+
+# Rust replacement build integration
+RUSTCARGO=	${.CURDIR}/Cargo.toml
+RUSTOBJDIR=	${.OBJDIR}/rust-target
+
+# Build the Rust replacement alongside the C program
+.PHONY: rust-build
+rust-build:
+	@echo "Building Rust replacement for revnetgroup..."
+	@${CARGO} build --manifest-path ${RUSTCARGO} --target-dir ${RUSTOBJDIR}
+
+# Hook into the normal build process
+beforedepend: rust-build
+
+.include <bsd.prog.mk>
+>>>

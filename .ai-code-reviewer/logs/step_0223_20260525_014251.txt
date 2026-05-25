@@ -1,0 +1,11 @@
+=== STEP 223 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to properly format the WRITE_FILE action with the CONTENT block.
+
+ACTION: WRITE_FILE usr.bin/whois/Cargo.toml

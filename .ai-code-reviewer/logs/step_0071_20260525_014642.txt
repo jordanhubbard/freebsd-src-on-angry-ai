@@ -1,0 +1,344 @@
+=== STEP 71 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/revnetgroup/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source directory and main.rs file.
+
+ACTION: WRITE_FILE libexec/revnetgroup/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-4-Clause
+//
+// Copyright (c) 1995 Bill Paul <wpaul@ctr.columbia.edu>. All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//	This product includes software developed by Bill Paul.
+// 4. Neither the name of the author nor the names of any co-contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY Bill Paul AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL Bill Paul OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::collections::HashMap;
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read};
+use std::process;
+
+const TABLESIZE: usize = 256;
+const HASH_MASK: u32 = 0x000000FF;
+const LINSIZ: usize = 1024 * 10;
+
+/// OZ's original sdbm hash function
+fn hash(key: &[u8]) -> u32 {
+    let mut h: u32 = 0;
+    let mut key = key;
+    if key.is_empty() {
+        return h;
+    }
+    let len = key.len();
+    let loop_count = (len + 8 - 1) >> 3;
+    let remainder = len & (8 - 1);
+
+    for _ in 0..loop_count {
+        for i in 0..8 {
+            if i < remainder || loop_count > 1 {
+                if let Some(&b) = key.first() {
+                    h = b as u32 + 65599 * h;
+                    key = &key[1..];
+                }
+            }
+        }
+    }
+    h
+}
+
+fn hashkey(key: &str) -> usize {
+    (hash(key.as_bytes()) & HASH_MASK) as usize
+}
+
+/// Entry in the raw netgroup table (group name -> raw data line)
+#[derive(Debug)]
+struct GroupEntry {
+    key: String,
+    data: String,
+}
+
+/// A netgroup triple (host, user, domain)
+#[derive(Debug, Clone)]
+struct NetgrpTriple {
+    host: Option<String>,
+    user: Option<String>,
+    domain: Option<String>,
+}
+
+/// Reverse mapping: member -> (domain, list of group names)
+#[derive(Debug)]
+struct MemberEntry {
+    domain: String,
+    groups: Vec<String>,
+}
+
+/// Parse the raw data string for a netgroup, expanding recursive references.
+/// Returns a list of NetgrpTriple entries.
+fn expand_netgroup(
+    data: &str,
+    gtable: &HashMap<String, String>,
+    parsed: &mut HashMap<String, bool>,
+) -> Vec<NetgrpTriple> {
+    let mut result = Vec::new();
+    let mut pos = data;
+
+    while !pos.is_empty() {
+        // Skip leading whitespace
+        pos = pos.trim_start();
+        if pos.is_empty() {
+            break;
+        }
+
+        if pos.starts_with('(') {
+            // Parse a triple: (host,user,domain)
+            let inner_end = match pos[1..].find(')') {
+                Some(idx) => idx + 1,
+                None => break,
+            };
+            let inner = &pos[1..inner_end];
+            pos = &pos[inner_end + 1..];
+
+            let mut fields: Vec<&str> = inner.split(',').collect();
+            while fields.len() < 3 {
+                fields.push("");
+            }
+
+            let host = parse_field(fields[0]);
+            let user = parse_field(fields[1]);
+            let domain = parse_field(fields[2]);
+
+            result.push(NetgrpTriple {
+                host,
+                user,
+                domain,
+            });
+        } else {
+            // It's a reference to another netgroup name
+            let end = pos.find(|c: char| c == ',' || c == ' ' || c == '\t').unwrap_or(pos.len());
+            let ref_name = pos[..end].trim();
+            pos = &pos[end..];
+
+            if !ref_name.is_empty() {
+                // Check for cycles
+                if let Some(&true) = parsed.get(ref_name) {
+                    // Cycle detected, skip
+                } else if let Some(ref_data) = gtable.get(ref_name) {
+                    parsed.insert(ref_name.to_string(), true);
+                    let sub = expand_netgroup(ref_data, gtable, parsed);
+                    result.extend(sub);
+                    parsed.insert(ref_name.to_string(), false);
+                }
+            }
+
+            // Skip separators
+            while let Some(c) = pos.chars().next() {
+                if c == ',' || c == ' ' || c == '\t' {
+                    pos = &pos[1..];
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    result
+}
+
+fn parse_field(s: &str) -> Option<String> {
+    let trimmed = s.trim();
+    if trimmed.is_empty() {
+        None
+    } else {
+        Some(trimmed.to_string())
+    }
+}
+
+fn usage() {
+    eprintln!("usage: revnetgroup -u | -h [-f netgroup_file]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        usage();
+    }
+
+    let mut hosts: Option<bool> = None;
+    let mut netgroup_file = String::from("/etc/netgroup");
+
+    let mut i = 1;
+    while i < args.len() {
+        match args[i].as_str() {
+            "-u" => {
+                if hosts.is_some() {
+                    eprintln!("please use only one of -u or -h");
+                    usage();
+                }
+                hosts = Some(false);
+            }
+            "-h" => {
+                if hosts.is_some() {
+                    eprintln!("please use only one of -u or -h");
+                    usage();
+                }
+                hosts = Some(true);
+            }
+            "-f" => {
+                i += 1;
+                if i >= args.len() {
+                    usage();
+                }
+                netgroup_file = args[i].clone();
+            }
+            _ => {
+                usage();
+            }
+        }
+        i += 1;
+    }
+
+    let hosts = match hosts {
+        Some(h) => h,
+        None => usage(),
+    };
+
+    // Read the netgroup file
+    let input: Vec<String>;
+    if netgroup_file == "-" {
+        let stdin = io::stdin();
+        let reader = BufReader::new(stdin.lock());
+        input = reader.lines().filter_map(|l| l.ok()).collect();
+    } else {
+        let file = match File::open(&netgroup_file) {
+            Ok(f) => f,
+            Err(e) => {
+                eprintln!("{}: {}", netgroup_file, e);
+                process::exit(1);
+            }
+        };
+        let reader = BufReader::new(file);
+        input = reader.lines().filter_map(|l| l.ok()).collect();
+    }
+
+    // Parse the netgroup file into a hash table: group_name -> data
+    let mut gtable: HashMap<String, String> = HashMap::new();
+
+    // We need to handle line continuations first
+    let mut lines: Vec<String> = Vec::new();
+    let mut current_line = String::new();
+    for line in &input {
+        if line.starts_with('#') {
+            continue;
+        }
+        if current_line.is_empty() {
+            current_line = line.clone();
+        } else {
+            current_line.push_str(line);
+        }
+        // Check for backslash continuation at end
+        if current_line.ends_with('\\') {
+            current_line.pop(); // remove the backslash
+        } else {
+            lines.push(current_line.clone());
+            current_line.clear();
+        }
+    }
+    if !current_line.is_empty() {
+        lines.push(current_line);
+    }
+
+    for line in &lines {
+        // Split into group name and data
+        let mut parts = line.splitn(2, |c: char| c == ' ' || c == '\t');
+        let key = match parts.next() {
+            Some(k) => k.to_string(),
+            None => continue,
+        };
+        let data = match parts.next() {
+            Some(d) => d.to_string(),
+            None => continue,
+        };
+        gtable.insert(key, data);
+    }
+
+    // Build reverse mapping: member -> (domain, [groups])
+    let mut mtable: HashMap<String, MemberEntry> = HashMap::new();
+
+    for (group_name, data) in &gtable {
+        let mut parsed: HashMap<String, bool> = HashMap::new();
+        parsed.insert(group_name.clone(), true);
+        let triples = expand_netgroup(data, &gtable, &mut parsed);
+
+        for triple in &triples {
+            let (member, domain) = if hosts {
+                match &triple.host {
+                    Some(h) if h != "-" => (h.clone(), triple.domain.clone().unwrap_or_else(|| "*".to_string())),
+                    _ => continue,
+                }
+            } else {
+                match &triple.user {
+                    Some(u) if u != "-" => (u.clone(), triple.domain.clone().unwrap_or_else(|| "*".to_string())),
+                    _ => continue,
+                }
+            };
+
+            let key = format!("{}.{}", member, domain);
+            let entry = mtable.entry(key).or_insert_with(|| MemberEntry {
+                domain: domain.clone(),
+                groups: Vec::new(),
+            });
+            entry.groups.push(group_name.clone());
+        }
+    }
+
+    // Output results in hash-table order for consistency
+    let mut keys: Vec<String> = mtable.keys().cloned().collect();
+    keys.sort();
+
+    for key in &keys {
+        let entry = &mtable[key];
+        print!("{}\t", key);
+        for (i, group) in entry.groups.iter().enumerate() {
+            if i > 0 {
+                print!(",");
+            }
+            print!("{}", group);
+        }
+        println!();
+    }
+
+    process::exit(0);
+}
+>>>
