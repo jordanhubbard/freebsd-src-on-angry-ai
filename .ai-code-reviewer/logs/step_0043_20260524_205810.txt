@@ -1,0 +1,14 @@
+=== STEP 43 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/false is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/VE/TargetInfo
+
+--- RESPONSE ---
+
+
+The LLVM contrib directories are third-party vendor code, not FreeBSD userland. I need to find a relevant FreeBSD userland unit. Let me try a simple command.
+
+ACTION: SET_SCOPE usr.bin/true

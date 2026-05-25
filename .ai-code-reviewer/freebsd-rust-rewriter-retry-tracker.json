@@ -175,6 +175,14 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T20:56:42.109153"
   },
+  "contrib/llvm-project/llvm/lib/Target/VE/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T20:59:17.300115"
+  },
+  "contrib/llvm-project/llvm/lib/Target/XCore/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T21:00:04.532730"
+  },
   "contrib/llvm-project/llvm/lib/Telemetry": {
     "attempts": 3,
     "last_attempt": "2026-05-24T15:46:59.847502"
@@ -408,8 +416,8 @@
     "last_attempt": "2026-05-24T20:08:54.754258"
   },
   "usr.bin/factor": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T12:40:12.526147"
+    "attempts": 2,
+    "last_attempt": "2026-05-24T21:02:55.887706"
   },
   "usr.bin/false": {
     "attempts": 3,
