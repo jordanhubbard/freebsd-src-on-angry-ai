@@ -1,0 +1,15 @@
+=== STEP 18 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo:
+```
+DirectXTargetInfo.cpp
+DirectXTargetInfo.h
+```
+
+--- RESPONSE ---
+
+
+This LLVM contrib directory is not FreeBSD userland code and has no FreeBSD build infrastructure. I need to find a proper FreeBSD userland unit. Let me check what's available.
+
+ACTION: LIST_DIR bin/echo

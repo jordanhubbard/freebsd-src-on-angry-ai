@@ -1,0 +1,12 @@
+=== STEP 4 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory crypto/krb5/src/lib/krb5/error_tables skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE lib/libthr/arch/amd64/amd64
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/cat

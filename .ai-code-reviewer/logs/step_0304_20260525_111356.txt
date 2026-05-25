@@ -1,0 +1,42 @@
+=== STEP 304 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls4/Makefile:
+PROGRESS:
+📁 Directory: tools/regression/tls/ttls4
+   Files: 0/2
+📄 File: tools/regression/tls/ttls4/Makefile
+✏️  Edits: 4 files modified
+
+```
+PROG=	ttls4
+LIBADD=	pthread
+MAN=
+DEBUG_FLAGS= -g
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+The Makefile keeps reverting. Let me write it fresh.
+
+ACTION: WRITE_FILE tools/regression/tls/ttls4/Makefile
+CONTENT:
+<<<
+# Rust replacement for ttls4 TLS test program
+CARGO ?= cargo
+CARGO_TARGET_DIR ?= $(CURDIR)/cargo-target
+
+all:
+	$(CARGO) build --manifest-path $(CURDIR)/Cargo.toml \
+	    --target-dir $(CARGO_TARGET_DIR) --release
+
+clean:
+	@$(CARGO) clean --manifest-path $(CURDIR)/Cargo.toml \
+	    --target-dir $(CARGO_TARGET_DIR) 2>/dev/null || true
+
+.PHONY: all clean
+>>>

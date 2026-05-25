@@ -1,0 +1,35 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*CMakeLists.txt*':
+```
+./contrib/tcpdump/CMakeLists.txt
+./contrib/ofed/librdmacm/man/CMakeLists.txt
+./contrib/libevent/CMakeLists.txt
+./contrib/googletest/googletest/CMakeLists.txt
+./contrib/googletest/googlemock/CMakeLists.txt
+./contrib/googletest/CMakeLists.txt
+./contrib/ntp/sntp/libevent/CMakeLists.txt
+./contrib/processor-trace/libipt/CMakeLists.txt
+./contrib/libder/CMakeLists.txt
+./contrib/libder/libder/CMakeLists.txt
+./contrib/libder/derdump/CMakeLists.txt
+./contrib/libder/tests/CMakeLists.txt
+./contrib/libpcap/testprogs/CMakeLists.txt
+./contrib/libpcap/CMakeLists.txt
+./contrib/libpcap/rpcapd/CMakeLists.txt
+./contrib/libcbor/test/CMakeLists.txt
+./contrib/libcbor/src/CMakeLists.txt
+./contrib/libcbor/examples/CMakeLists.txt
+./contrib/libcbor/CMakeLists.txt
+./contrib/libfido2/regress/CMakeLists.txt
+```
+
+--- RESPONSE ---
+
+
+This LLVM contrib directory is not FreeBSD userland code and has no build infrastructure suitable for the rewrite objective. I need to find a proper FreeBSD userland unit with C source and a Makefile.
+
+Let me search for a suitable unit.
+
+ACTION: FIND_FILE bin/*/Makefile

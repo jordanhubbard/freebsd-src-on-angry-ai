@@ -1,0 +1,15 @@
+=== STEP 20 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo:
+```
+DirectXTargetInfo.cpp
+DirectXTargetInfo.h
+```
+
+--- RESPONSE ---
+
+
+The current scope has no FreeBSD build infrastructure and is LLVM contrib code, not FreeBSD userland. Let me try building to clear the state.
+
+ACTION: BUILD

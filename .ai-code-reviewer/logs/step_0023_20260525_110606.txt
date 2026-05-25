@@ -1,0 +1,11 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/llvm-project/llvm/lib/Target/DirectX/CMakeLists.txt*'
+
+--- RESPONSE ---
+
+
+This is LLVM contrib code with no FreeBSD build infrastructure. I need to create a Rust replacement with build integration. Let me create a minimal Rust crate.
+
+ACTION: WRITE_FILE contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo/Cargo.toml

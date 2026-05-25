@@ -1,0 +1,96 @@
+=== STEP 281 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls4/ttls4.c:
+PROGRESS:
+📁 Directory: tools/regression/tls/ttls4
+   Files: 0/2
+📄 File: tools/regression/tls/ttls4/ttls4.c
+✏️  Edits: 4 files modified
+
+```
+/*
+ * This program tests if a new thread's initial tls data
+ * is clean.
+ *
+ * David Xu <davidxu@freebsd.org>
+ */
+
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int __thread n;
+
+void
+*f1(void *arg)
+{
+	if (n != 0) {
+		printf("bug, n == %d \n", n);
+		exit(1);
+	}
+	n = 1;
+	return (0);
+}
+
+int
+main(void)
+{
+	pthread_t td;
+	int i;
+
+	for (i = 0; i < 1000; ++i) {
+		pthread_create(&td, NULL, f1, NULL);
+		pthread_join(td, NULL);
+	}
+	sleep(2);
+	for (i = 0; i < 1000; ++i) {
+		pthread_create(&td, NULL, f1, NULL);
+		pthread_join(td, NULL);
+	}
+	return (0);
+}
+
+```
+
+--- RESPONSE ---
+
+
+The Makefile needs to be updated to actually build the Rust binary. Let me update it to integrate the Rust build.
+
+ACTION: EDIT_FILE tools/regression/tls/ttls4/Makefile
+OLD:
+<<<
+PROG=	ttls4
+LIBADD=	pthread
+MAN=
+DEBUG_FLAGS= -g
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	ttls4
+LIBADD=	pthread
+MAN=
+DEBUG_FLAGS= -g
+
+# Rust replacement build
+RUSTPROG=	ttls4
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+rust-${RUSTPROG}:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	${INSTALL} -s ${CARGO_TARGET_DIR}/release/${RUSTPROG} ${.OBJDIR}/${RUSTPROG}-rust
+
+all: rust-${RUSTPROG}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} 2>/dev/null || true
+
+.include <bsd.prog.mk>
+>>>

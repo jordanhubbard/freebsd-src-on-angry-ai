@@ -1,0 +1,15 @@
+=== STEP 291 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: OLD text not found in /usr/home/jkh/Src/freebsd-src-on-angry-AI/tools/regression/tls/ttls4/Makefile
+
+HINT: The OLD block must be EXACTLY copied from the file.
+Re-read the file and copy the exact text you want to replace,
+including all whitespace and indentation. Do not paraphrase.
+
+--- RESPONSE ---
+
+
+Let me read the current Makefile state to understand what's there.
+
+ACTION: READ_FILE tools/regression/tls/ttls4/Makefile

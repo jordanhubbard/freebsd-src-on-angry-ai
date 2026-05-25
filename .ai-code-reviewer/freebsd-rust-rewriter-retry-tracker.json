@@ -180,8 +180,8 @@
     "last_attempt": "2026-05-24T06:36:22.530138"
   },
   "contrib/llvm-project/llvm/lib/Target/DirectX/TargetInfo": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T10:18:22.250262"
+    "attempts": 1,
+    "last_attempt": "2026-05-25T09:02:51.212219"
   },
   "contrib/llvm-project/llvm/lib/Target/Hexagon/TargetInfo": {
     "attempts": 3,
@@ -252,8 +252,8 @@
     "last_attempt": "2026-05-24T05:19:11.095157"
   },
   "crypto/krb5/src/lib/krb5/error_tables": {
-    "attempts": 3,
-    "last_attempt": "2026-05-25T10:04:59.611557"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T08:51:29.759908"
   },
   "crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd": {
     "attempts": 3,
@@ -314,6 +314,10 @@
   "share/examples/FreeBSD_version": {
     "attempts": 3,
     "last_attempt": "2026-05-23T22:19:33.641774"
+  },
+  "stand/libsa/x86": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T11:15:54.732915"
   },
   "sys/cddl/contrib/opensolaris/uts/arm/dtrace": {
     "attempts": 2,
