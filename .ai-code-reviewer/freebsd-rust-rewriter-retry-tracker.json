@@ -196,8 +196,8 @@
     "last_attempt": "2026-05-24T22:12:18.412267"
   },
   "contrib/llvm-project/llvm/lib/Target/LoongArch/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T05:27:59.793936"
+    "attempts": 2,
+    "last_attempt": "2026-05-26T05:37:36.950574"
   },
   "contrib/llvm-project/llvm/lib/Target/M68k/TargetInfo": {
     "attempts": 3,
@@ -276,8 +276,8 @@
     "last_attempt": "2026-05-25T17:40:39.306977"
   },
   "contrib/netbsd-tests/lib/libc/arch/or1k": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T05:33:05.737350"
+    "attempts": 2,
+    "last_attempt": "2026-05-26T05:36:33.968426"
   },
   "contrib/netbsd-tests/lib/libc/arch/powerpc64": {
     "attempts": 3,

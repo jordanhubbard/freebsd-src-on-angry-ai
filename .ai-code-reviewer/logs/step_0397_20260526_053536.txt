@@ -1,0 +1,11 @@
+=== STEP 397 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+My responses are being truncated. Let me try the absolute minimum:
+
+ACTION: WRITE_FILE contrib/netbsd-tests/lib/libc/arch/or1k/Cargo.toml
