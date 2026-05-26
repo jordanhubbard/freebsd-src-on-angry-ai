@@ -1,0 +1,80 @@
+=== STEP 2 ===
+
+--- REQUEST ---
+SET_SCOPE_OK: Now rewriting libexec/rtld-elf
+
+HIERARCHY:
+  Level 1: Source tree (8132 work units)
+  Level 2: libexec/rtld-elf ← YOU ARE HERE
+  Level 3: 19 candidate files
+  Level 4: Functions (auto-chunked for large files)
+
+WORK UNIT:
+  Kind: directory
+  Stage: unknown
+  Depends on: (none)
+  Related files:
+    - libexec/rtld-elf/Makefile
+    - libexec/rtld-elf/debug.c
+    - libexec/rtld-elf/debug.h
+    - libexec/rtld-elf/libmap.c
+    - libexec/rtld-elf/libmap.h
+    - libexec/rtld-elf/map_object.c
+    - libexec/rtld-elf/rtld.1
+    - libexec/rtld-elf/rtld.c
+    - libexec/rtld-elf/rtld.h
+    - libexec/rtld-elf/rtld_lock.c
+    - libexec/rtld-elf/rtld_lock.h
+    - libexec/rtld-elf/rtld_malloc.c
+    - libexec/rtld-elf/rtld_malloc.h
+    - libexec/rtld-elf/rtld_paths.h
+    - libexec/rtld-elf/rtld_printf.c
+    - libexec/rtld-elf/rtld_printf.h
+    - libexec/rtld-elf/rtld_tls.h
+    - libexec/rtld-elf/rtld_utrace.h
+    - libexec/rtld-elf/xmalloc.c
+
+✓ Directory has Makefile - valid source module
+
+FILES TO REWRITE:
+  - libexec/rtld-elf/Makefile
+  - libexec/rtld-elf/debug.c
+  - libexec/rtld-elf/debug.h
+  - libexec/rtld-elf/libmap.c
+  - libexec/rtld-elf/libmap.h
+  - libexec/rtld-elf/map_object.c
+  - libexec/rtld-elf/rtld.1
+  - libexec/rtld-elf/rtld.c
+  - libexec/rtld-elf/rtld.h
+  - libexec/rtld-elf/rtld_lock.c
+  - libexec/rtld-elf/rtld_lock.h
+  - libexec/rtld-elf/rtld_malloc.c
+  - libexec/rtld-elf/rtld_malloc.h
+  - libexec/rtld-elf/rtld_paths.h
+  - libexec/rtld-elf/rtld_printf.c
+  - libexec/rtld-elf/rtld_printf.h
+  - libexec/rtld-elf/rtld_tls.h
+  - libexec/rtld-elf/rtld_utrace.h
+  - libexec/rtld-elf/xmalloc.c
+
+📁 Directory: libexec/rtld-elf
+   Files: 0/19
+
+WORKFLOW:
+1. Rewrite each relevant file (READ_FILE, NEXT_CHUNK for large files)
+2. Make changes as needed (EDIT_FILE or WRITE_FILE)
+3. When ALL relevant files are rewritten: ACTION: BUILD
+4. If build succeeds: Changes committed for entire directory
+5. Move to next directory (SET_SCOPE)
+
+Attempts recorded for libexec/rtld-elf: 3/3.
+Next attempt will auto-skip this directory.
+
+--- RESPONSE ---
+
+
+The `libexec/rtld-elf` unit has already exhausted its 3 attempts and will auto-skip. This is the ELF runtime linker - an extremely complex, critical system component that is not a "small" unit. I should move to the next pending unit.
+
+Let me check the next unit in the queue: `bin/cat/tests`.
+
+ACTION: SET_SCOPE bin/cat/tests
