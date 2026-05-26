@@ -1,0 +1,46 @@
+=== STEP 104 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/librt/Makefile:
+PROGRESS:
+📁 Directory: lib/librt
+   Files: 0/7
+📄 File: lib/librt/Makefile
+
+```
+SHLIBDIR?=/lib
+
+.include <src.opts.mk>
+
+PACKAGE=clibs
+LIB=rt
+SHLIB_MAJOR= 1
+CFLAGS+=-I${SRCTOP}/lib/libc/include -I${.CURDIR}
+.ifndef NO_THREAD_STACK_UNWIND
+CFLAGS+=-fexceptions
+.endif
+CFLAGS+=-Wall
+LIBADD=	pthread
+
+WARNS?=	2
+
+SRCS+= aio.c mq.c sigev_thread.c timer.c
+
+PRECIOUSLIB=
+
+VERSION_DEF=${SRCTOP}/lib/libc/Versions.def
+SYMBOL_MAPS=${.CURDIR}/Symbol.map
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+MAN= mq_getfd_np.3
+
+.include <bsd.lib.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE lib/librt/aio.c

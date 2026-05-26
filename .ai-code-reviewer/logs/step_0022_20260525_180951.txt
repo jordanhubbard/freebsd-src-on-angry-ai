@@ -1,0 +1,14 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/apply is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/sparc
+
+--- RESPONSE ---
+
+
+Let me try finding a suitable unit with actual C source and a Makefile.
+
+ACTION: SET_SCOPE usr.bin/banner

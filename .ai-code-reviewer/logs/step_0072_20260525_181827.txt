@@ -1,0 +1,46 @@
+=== STEP 72 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+No `bsd.rust.mk` exists. I need to add explicit local Makefile rules for building the Rust binary.
+
+ACTION: EDIT_FILE usr.bin/tsort/Makefile
+OLD:
+.include <src.opts.mk>
+
+PROG=	tsort
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+.include <bsd.prog.mk>
+NEW:
+.include <src.opts.mk>
+
+PROG=	tsort
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+# Rust build integration
+RUSTC?=	rustc
+CARGO?=	cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.PHONY: rust-build
+rust-build:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	${INSTALL} -s ${CARGO_TARGET_DIR}/release/tsort ${.OBJDIR}/${PROG}
+
+.if defined(NOPATH)
+PROGNAME=	tsort
+.else
+PROGNAME=	tsort
+.endif
+
+.include <bsd.prog.mk>

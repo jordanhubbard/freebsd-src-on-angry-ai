@@ -1,0 +1,20 @@
+=== STEP 66 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/tsort/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "tsort"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tsort"
+path = "src/main.rs"
+<<<

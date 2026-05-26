@@ -1,0 +1,320 @@
+=== STEP 69 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/tsort/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The initial implementation has a bug - `find_cycle` takes `&self` but needs to mark nodes. Let me rewrite with a correct implementation.
+
+ACTION: WRITE_FILE usr.bin/tsort/src/main.rs
+CONTENT:
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1989, 1993, 1994
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::collections::{HashMap, HashSet};
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Write};
+use std::process;
+
+struct Node {
+    name: String,
+    arcs: Vec<String>,
+    refcnt: usize,
+    acyclic: bool,
+}
+
+struct Graph {
+    nodes: HashMap<String, Node>,
+}
+
+impl Graph {
+    fn new() -> Self {
+        Graph {
+            nodes: HashMap::new(),
+        }
+    }
+
+    fn add_arc(&mut self, s1: &str, s2: &str) {
+        if s1 == s2 {
+            return;
+        }
+
+        self.ensure_node(s1);
+        self.ensure_node(s2);
+
+        let n1 = self.nodes.get_mut(s1).unwrap();
+        if n1.arcs.contains(&s2.to_string()) {
+            return;
+        }
+
+        n1.arcs.push(s2.to_string());
+        let n2 = self.nodes.get_mut(s2).unwrap();
+        n2.refcnt += 1;
+    }
+
+    fn ensure_node(&mut self, name: &str) {
+        if !self.nodes.contains_key(name) {
+            self.nodes.insert(
+                name.to_string(),
+                Node {
+                    name: name.to_string(),
+                    arcs: Vec::new(),
+                    refcnt: 0,
+                    acyclic: false,
+                },
+            );
+        }
+    }
+
+    fn tsort(&mut self, debug: bool, longest: bool, quiet: bool) {
+        loop {
+            // Remove nodes with refcnt == 0
+            let mut removed = false;
+            let keys: Vec<String> = self.nodes.keys().cloned().collect();
+            for key in &keys {
+                if let Some(node) = self.nodes.get(key) {
+                    if node.refcnt == 0 {
+                        self.remove_node(key);
+                        removed = true;
+                    }
+                }
+            }
+            if !removed {
+                break;
+            }
+        }
+
+        if self.nodes.is_empty() {
+            return;
+        }
+
+        // There's a cycle - find and report it
+        let mut found_cycle = false;
+        let keys: Vec<String> = self.nodes.keys().cloned().collect();
+        for name in &keys {
+            if self.nodes.get(name).map_or(false, |n| n.acyclic) {
+                continue;
+            }
+            let mut marks: HashSet<String> = HashSet::new();
+            let mut nodest: HashSet<String> = HashSet::new();
+            let mut cycle_buf: Vec<String> = Vec::new();
+            let mut longest_cycle: Vec<String> = Vec::new();
+            let len = self.find_cycle(
+                name, name, 0, 0, &mut cycle_buf, &mut longest_cycle,
+                &mut marks, &mut nodest, debug, longest,
+            );
+            if len > 0 {
+                if !quiet {
+                    eprintln!("cycle in data");
+                    for i in 0..len {
+                        eprintln!("{}", longest_cycle[i]);
+                    }
+                }
+                self.remove_node(name);
+                // Clear nodest flags
+                for node in self.nodes.values_mut() {
+                    // nodest is tracked in the HashSet, not on the node
+                }
+                found_cycle = true;
+                break;
+            } else {
+                if let Some(node) = self.nodes.get_mut(name) {
+                    node.acyclic = true;
+                }
+            }
+        }
+
+        if !found_cycle {
+            eprintln!("internal error -- could not find cycle");
+            process::exit(1);
+        }
+    }
+
+    fn find_cycle(
+        &self,
+        from: &str,
+        to: &str,
+        longest_len: usize,
+        depth: usize,
+        cycle_buf: &mut Vec<String>,
+        longest_cycle: &mut Vec<String>,
+        marks: &mut HashSet<String>,
+        nodest: &mut HashSet<String>,
+        debug: bool,
+        longest: bool,
+    ) -> usize {
+        let from_node = match self.nodes.get(from) {
+            Some(n) => n,
+            None => return 0,
+        };
+
+        if marks.contains(from) || nodest.contains(from) || from_node.acyclic {
+            return 0;
+        }
+
+        marks.insert(from.to_string());
+
+        let mut result = longest_len;
+
+        for arc in &from_node.arcs {
+            if *arc == to {
+                if depth + 1 > result {
+                    result = depth + 1;
+                    // Build the cycle path
+                    longest_cycle.clear();
+                    for i in 0..depth {
+                        longest_cycle.push(cycle_buf[i].clone());
+                    }
+                    longest_cycle.push(arc.clone());
+                }
+            } else {
+                let arc_node = match self.nodes.get(arc.as_str()) {
+                    Some(n) => n,
+                    None => continue,
+                };
+                if marks.contains(arc) || arc_node.acyclic || nodest.contains(arc) {
+                    continue;
+                }
+                cycle_buf.push(arc.clone());
+                let len = self.find_cycle(
+                    arc, to, result, depth + 1, cycle_buf, longest_cycle,
+                    marks, nodest, debug, longest,
+                );
+                cycle_buf.pop();
+
+                if debug {
+                    let indent = " ".repeat(depth);
+                    eprintln!("{}{}->{} {}", indent, from, to, len);
+                }
+
+                if len == 0 {
+                    nodest.insert(arc.clone());
+                }
+
+                if len > result {
+                    result = len;
+                }
+
+                if len > 0 && !longest {
+                    break;
+                }
+            }
+        }
+
+        marks.remove(from);
+        result
+    }
+
+    fn remove_node(&mut self, name: &str) {
+        let node = self.nodes.remove(name).unwrap();
+        println!("{}", node.name);
+        for arc in &node.arcs {
+            if let Some(target) = self.nodes.get_mut(arc) {
+                target.refcnt = target.refcnt.saturating_sub(1);
+            }
+        }
+    }
+}
+
+fn usage() {
+    eprintln!("usage: tsort [-dlq] [file]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut debug = false;
+    let mut longest = false;
+    let mut quiet = false;
+    let mut file_name: Option<String> = None;
+
+    let mut i = 1;
+    while i < args.len() {
+        if args[i].starts_with('-') {
+            for ch in args[i][1..].chars() {
+                match ch {
+                    'd' => debug = true,
+                    'l' => longest = true,
+                    'q' => quiet = true,
+                    _ => usage(),
+                }
+            }
+        } else {
+            if file_name.is_some() {
+                usage();
+            }
+            file_name = Some(args[i].clone());
+        }
+        i += 1;
+    }
+
+    let reader: Box<dyn BufRead> = match file_name {
+        Some(name) => match File::open(&name) {
+            Ok(f) => Box::new(BufReader::new(f)),
+            Err(e) => {
+                eprintln!("{}: {}", name, e);
+                process::exit(1);
+            }
+        },
+        None => Box::new(BufReader::new(io::stdin())),
+    };
+
+    let mut graph = Graph::new();
+    let mut tokens: Vec<String> = Vec::new();
+
+    for line in reader.lines() {
+        let line = match line {
+            Ok(l) => l,
+            Err(_) => break,
+        };
+        for token in line.split_whitespace() {
+            tokens.push(token.to_string());
+        }
+    }
+
+    if tokens.len() % 2 != 0 {
+        eprintln!("odd data count");
+        process::exit(1);
+    }
+
+    for i in (0..tokens.len()).step_by(2) {
+        graph.add_arc(&tokens[i], &tokens[i + 1]);
+    }
+
+    graph.tsort(debug, longest, quiet);
+
+    if io::stdout().flush().is_err() {
+        eprintln!("stdout");
+        process::exit(1);
+    }
+}

@@ -252,8 +252,12 @@
     "last_attempt": "2026-05-25T18:02:06.693756"
   },
   "contrib/netbsd-tests/lib/libc/arch/sparc": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T18:02:13.800972"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:05:07.380753"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/vax": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T18:09:03.939339"
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
@@ -296,8 +300,8 @@
     "last_attempt": "2026-05-22T21:46:57.529904"
   },
   "lib/libmd": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T16:51:14.694436"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:11:16.422565"
   },
   "lib/libnv": {
     "attempts": 1,
@@ -822,6 +826,10 @@
   "usr.bin/truncate": {
     "attempts": 2,
     "last_attempt": "2026-05-25T15:39:53.662683"
+  },
+  "usr.bin/tsort": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T18:11:50.586711"
   },
   "usr.bin/ul": {
     "attempts": 3,

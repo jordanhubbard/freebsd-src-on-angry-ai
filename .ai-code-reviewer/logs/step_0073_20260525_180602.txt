@@ -1,0 +1,28 @@
+=== STEP 73 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/dpv/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/dpv
+   Files: 0/4
+📄 File: usr.bin/dpv/Makefile
+
+```
+PACKAGE=	dpv
+
+PROG=		dpv
+
+CFLAGS+=	-I${.CURDIR}
+
+LIBADD=		dpv dialog
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+This depends on external libraries `libdpv` and `libdialog`. Let me find a simpler unit.
+
+ACTION: SET_SCOPE usr.bin/du
