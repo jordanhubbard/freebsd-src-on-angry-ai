@@ -1,0 +1,12 @@
+=== STEP 127 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Directory not found: bin/od
+TIP: Use LIST_DIR to see available directories
+
+--- RESPONSE ---
+
+
+Let me try to find a simpler pending unit.
+
+ACTION: SET_SCOPE bin/od

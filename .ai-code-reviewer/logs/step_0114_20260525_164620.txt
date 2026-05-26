@@ -1,0 +1,439 @@
+=== STEP 114 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/proccontrol/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/proccontrol/src/main.rs
+CONTENT:
+<<<
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2016 The FreeBSD Foundation
+ *
+ * This software was developed by Konstantin Belousov <kib@FreeBSD.org>
+ * under sponsorship from the FreeBSD Foundation.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+use std::io::{self, Write};
+use std::os::raw::{c_char, c_int};
+use std::process;
+use std::ptr;
+
+// FreeBSD procctl constants
+const P_PID: c_int = 0;
+
+const PROC_TRACE_CTL: c_int = 7;
+const PROC_TRACE_STATUS: c_int = 8;
+const PROC_TRAPCAP_CTL: c_int = 9;
+const PROC_TRAPCAP_STATUS: c_int = 10;
+const PROC_ASLR_CTL: c_int = 13;
+const PROC_ASLR_STATUS: c_int = 14;
+const PROC_PROTMAX_CTL: c_int = 15;
+const PROC_PROTMAX_STATUS: c_int = 16;
+const PROC_STACKGAP_CTL: c_int = 17;
+const PROC_STACKGAP_STATUS: c_int = 18;
+const PROC_NO_NEW_PRIVS_CTL: c_int = 19;
+const PROC_NO_NEW_PRIVS_STATUS: c_int = 20;
+const PROC_WXMAP_CTL: c_int = 21;
+const PROC_WXMAP_STATUS: c_int = 22;
+const PROC_LOGSIGEXIT_CTL: c_int = 23;
+const PROC_LOGSIGEXIT_STATUS: c_int = 24;
+
+const PROC_TRACE_CTL_ENABLE: c_int = 1;
+const PROC_TRACE_CTL_DISABLE: c_int = 2;
+
+const PROC_TRAPCAP_CTL_ENABLE: c_int = 1;
+const PROC_TRAPCAP_CTL_DISABLE: c_int = 2;
+
+const PROC_ASLR_FORCE_ENABLE: c_int = 1;
+const PROC_ASLR_FORCE_DISABLE: c_int = 2;
+const PROC_ASLR_NOFORCE: c_int = 3;
+const PROC_ASLR_ACTIVE: c_int = 0x80000000;
+
+const PROC_PROTMAX_FORCE_ENABLE: c_int = 1;
+const PROC_PROTMAX_FORCE_DISABLE: c_int = 2;
+const PROC_PROTMAX_NOFORCE: c_int = 3;
+const PROC_PROTMAX_ACTIVE: c_int = 0x80000000;
+
+const PROC_STACKGAP_ENABLE: c_int = 0x0001;
+const PROC_STACKGAP_DISABLE: c_int = 0x0002;
+const PROC_STACKGAP_ENABLE_EXEC: c_int = 0x0004;
+const PROC_STACKGAP_DISABLE_EXEC: c_int = 0x0008;
+
+const PROC_NO_NEW_PRIVS_ENABLE: c_int = 1;
+const PROC_NO_NEW_PRIVS_DISABLE: c_int = 2;
+
+const PROC_WX_MAPPINGS_PERMIT: c_int = 0x0001;
+const PROC_WX_MAPPINGS_DISALLOW_EXEC: c_int = 0x0002;
+const PROC_WXORX_ENFORCE: c_int = 0x80000000;
+
+const PROC_LOGSIGEXIT_CTL_NOFORCE: c_int = 1;
+const PROC_LOGSIGEXIT_CTL_FORCE_ENABLE: c_int = 2;
+const PROC_LOGSIGEXIT_CTL_FORCE_DISABLE: c_int = 3;
+
+// Machine-dependent constants (x86)
+const PROC_PROCCTL_MD_MIN: c_int = 0x10000000;
+const PROC_KPTI_CTL: c_int = PROC_PROCCTL_MD_MIN + 0;
+const PROC_KPTI_STATUS: c_int = PROC_PROCCTL_MD_MIN + 1;
+const PROC_LA_CTL: c_int = PROC_PROCCTL_MD_MIN + 2;
+const PROC_LA_STATUS: c_int = PROC_PROCCTL_MD_MIN + 3;
+
+const PROC_KPTI_CTL_ENABLE_ON_EXEC: c_int = 1;
+const PROC_KPTI_CTL_DISABLE_ON_EXEC: c_int = 2;
+const PROC_KPTI_STATUS_ACTIVE: c_int = 0x80000000;
+
+const PROC_LA_CTL_LA48_ON_EXEC: c_int = 1;
+const PROC_LA_CTL_LA57_ON_EXEC: c_int = 2;
+const PROC_LA_CTL_DEFAULT_ON_EXEC: c_int = 3;
+
+const PROC_LA_STATUS_LA48: c_int = 0x01000000;
+const PROC_LA_STATUS_LA57: c_int = 0x02000000;
+
+#[derive(Clone, Copy, PartialEq)]
+enum Mode {
+    Aslr,
+    Trace,
+    Trapcap,
+    Protmax,
+    Stackgap,
+    NoNewPrivs,
+    Wxmap,
+    Kpti,
+    La57,
+    La48,
+    Logsigexit,
+}
+
+struct ModeEntry {
+    mode: Mode,
+    name: &'static str,
+}
+
+const MODES: &[ModeEntry] = &[
+    ModeEntry { mode: Mode::Aslr, name: "aslr" },
+    ModeEntry { mode: Mode::Trace, name: "trace" },
+    ModeEntry { mode: Mode::Trapcap, name: "trapcap" },
+    ModeEntry { mode: Mode::Protmax, name: "protmax" },
+    ModeEntry { mode: Mode::Stackgap, name: "stackgap" },
+    ModeEntry { mode: Mode::NoNewPrivs, name: "nonewprivs" },
+    ModeEntry { mode: Mode::Wxmap, name: "wxmap" },
+    ModeEntry { mode: Mode::Kpti, name: "kpti" },
+    ModeEntry { mode: Mode::La57, name: "la57" },
+    ModeEntry { mode: Mode::La48, name: "la48" },
+    ModeEntry { mode: Mode::Logsigexit, name: "logsigexit" },
+];
+
+extern "C" {
+    fn procctl(idtype: c_int, id: c_int, request: c_int, data: *mut c_int) -> c_int;
+    fn getpid() -> c_int;
+    fn execvp(prog: *const c_char, argv: *const *const c_char) -> c_int;
+    fn __error() -> *mut c_int;
+}
+
+fn get_errno() -> c_int {
+    unsafe { *__error() }
+}
+
+fn clear_errno() {
+    unsafe {
+        *__error() = 0;
+    }
+}
+
+fn warnx(msg: &str) {
+    let _ = io::stderr().write_all(format!("{}\n", msg).as_bytes());
+}
+
+fn err(code: c_int, msg: &str) -> ! {
+    let err = get_errno();
+    let err_str = io::Error::from_raw_os_error(err).to_string();
+    let _ = io::stderr().write_all(format!("{}: {}\n", msg, err_str).as_bytes());
+    process::exit(code);
+}
+
+fn str2pid(s: &str) -> Option<c_int> {
+    match s.parse::<i64>() {
+        Ok(v) => {
+            if v < i32::MIN as i64 || v > i32::MAX as i64 {
+                warnx("non-numeric pid");
+                None
+            } else {
+                Some(v as c_int)
+            }
+        }
+        Err(_) => {
+            warnx("non-numeric pid");
+            None
+        }
+    }
+}
+
+fn usage() -> ! {
+    let stderr = io::stderr();
+    let mut out = stderr.lock();
+    let _ = out.write_all(b"Usage:\n");
+    let _ = out.write_all(b"    proccontrol -m mode -s (enable|disable) ");
+    let _ = out.write_all(b"(-p pid | command)\n");
+    let _ = out.write_all(b"    proccontrol -m mode -q [-p pid]\n");
+    let _ = out.write_all(b"Modes: ");
+    for (i, m) in MODES.iter().enumerate() {
+        if i > 0 {
+            let _ = out.write_all(b"|");
+        }
+        let _ = out.write_all(m.name.as_bytes());
+    }
+    let _ = out.write_all(b"\n");
+    process::exit(1);
+}
+
+fn find_mode(name: &str) -> Option<Mode> {
+    for m in MODES {
+        if m.name == name {
+            return Some(m.mode);
+        }
+    }
+    None
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+
+    // Parse options manually since we can't use getopt
+    let mut mode: Option<Mode> = None;
+    let mut enable: bool = true;
+    let mut pid: c_int = -1;
+    let mut query: bool = false;
+    let mut pos = 1;
+
+    while pos < args.len() {
+        let arg = &args[pos];
+        if arg == "-m" {
+            pos += 1;
+            if pos >= args.len() {
+                usage();
+            }
+            if mode.is_some() {
+                usage();
+            }
+            mode = find_mode(&args[pos]).or_else(|| usage());
+        } else if arg == "-s" {
+            pos += 1;
+            if pos >= args.len() {
+                usage();
+            }
+            match args[pos].as_str() {
+                "enable" => enable = true,
+                "disable" => enable = false,
+                _ => usage(),
+            }
+        } else if arg == "-p" {
+            pos += 1;
+            if pos >= args.len() {
+                usage();
+            }
+            pid = str2pid(&args[pos]).unwrap_or_else(|| {
+                warnx("non-numeric pid");
+                process::exit(1);
+            });
+        } else if arg == "-q" {
+            query = true;
+        } else {
+            break;
+        }
+        pos += 1;
+    }
+
+    let do_command = pos < args.len();
+    let remaining: Vec<String> = args[pos..].to_vec();
+
+    if do_command {
+        if pid != -1 || query {
+            usage();
+        }
+        pid = unsafe { getpid() };
+    } else if pid == -1 {
+        if !query {
+            usage();
+        }
+        pid = unsafe { getpid() };
+    }
+
+    let mode = mode.unwrap_or_else(|| usage());
+
+    if query {
+        let mut arg: c_int = 0;
+        let verb = match mode {
+            Mode::Aslr => PROC_ASLR_STATUS,
+            Mode::Trace => PROC_TRACE_STATUS,
+            Mode::Trapcap => PROC_TRAPCAP_STATUS,
+            Mode::Protmax => PROC_PROTMAX_STATUS,
+            Mode::Stackgap => PROC_STACKGAP_STATUS,
+            Mode::NoNewPrivs => PROC_NO_NEW_PRIVS_STATUS,
+            Mode::Wxmap => PROC_WXMAP_STATUS,
+            Mode::Kpti => PROC_KPTI_STATUS,
+            Mode::La57 | Mode::La48 => PROC_LA_STATUS,
+            Mode::Logsigexit => PROC_LOGSIGEXIT_STATUS,
+        };
+
+        clear_errno();
+        let error = unsafe { procctl(P_PID, pid, verb, &mut arg) };
+        if error != 0 {
+            err(1, "procctl status");
+        }
+
+        match mode {
+            Mode::Aslr => {
+                let base = arg & !PROC_ASLR_ACTIVE;
+                match base {
+                    PROC_ASLR_FORCE_ENABLE => print!("force enabled"),
+                    PROC_ASLR_FORCE_DISABLE => print!("force disabled"),
+                    PROC_ASLR_NOFORCE => print!("not forced"),
+                    _ => print!("unknown"),
+                }
+                if (arg & PROC_ASLR_ACTIVE) != 0 {
+                    println!(", active");
+                } else {
+                    println!(", not active");
+                }
+            }
+            Mode::Trace => {
+                if arg == -1 {
+                    println!("disabled");
+                } else if arg == 0 {
+                    println!("enabled, no debugger");
+                } else {
+                    println!("enabled, traced by {}", arg);
+                }
+            }
+            Mode::Trapcap => {
+                match arg {
+                    PROC_TRAPCAP_CTL_ENABLE => println!("enabled"),
+                    PROC_TRAPCAP_CTL_DISABLE => println!("disabled"),
+                    _ => println!("unknown"),
+                }
+            }
+            Mode::Protmax => {
+                let base = arg & !PROC_PROTMAX_ACTIVE;
+                match base {
+                    PROC_PROTMAX_FORCE_ENABLE => print!("force enabled"),
+                    PROC_PROTMAX_FORCE_DISABLE => print!("force disabled"),
+                    PROC_PROTMAX_NOFORCE => print!("not forced"),
+                    _ => print!("unknown"),
+                }
+                if (arg & PROC_PROTMAX_ACTIVE) != 0 {
+                    println!(", active");
+                } else {
+                    println!(", not active");
+                }
+            }
+            Mode::Stackgap => {
+                let gap = arg & (PROC_STACKGAP_ENABLE | PROC_STACKGAP_DISABLE);
+                match gap {
+                    PROC_STACKGAP_ENABLE => println!("enabled"),
+                    PROC_STACKGAP_DISABLE => println!("disabled"),
+                    _ => println!("unknown"),
+                }
+                let gap_exec = arg & (PROC_STACKGAP_ENABLE_EXEC | PROC_STACKGAP_DISABLE_EXEC);
+                match gap_exec {
+                    PROC_STACKGAP_ENABLE_EXEC => println!("enabled after exec"),
+                    PROC_STACKGAP_DISABLE_EXEC => println!("disabled after exec"),
+                    _ => {}
+                }
+            }
+            Mode::NoNewPrivs => {
+                match arg {
+                    PROC_NO_NEW_PRIVS_ENABLE => println!("enabled"),
+                    PROC_NO_NEW_PRIVS_DISABLE => println!("disabled"),
+                    _ => println!("unknown"),
+                }
+            }
+            Mode::Wxmap => {
+                if (arg & PROC_WX_MAPPINGS_PERMIT) != 0 {
+                    print!("enabled");
+                } else {
+                    print!("disabled");
+                }
+                if (arg & PROC_WX_MAPPINGS_DISALLOW_EXEC) != 0 {
+                    print!(", disabled on exec");
+                }
+                if (arg & PROC_WXORX_ENFORCE) != 0 {
+                    print!(", wxorx enforced");
+                }
+                println!();
+            }
+            Mode::Kpti => {
+                let base = arg & !PROC_KPTI_STATUS_ACTIVE;
+                match base {
+                    PROC_KPTI_CTL_ENABLE_ON_EXEC => print!("enabled"),
+                    PROC_KPTI_CTL_DISABLE_ON_EXEC => print!("disabled"),
+                    _ => print!("unknown"),
+                }
+                if (arg & PROC_KPTI_STATUS_ACTIVE) != 0 {
+                    println!(", active");
+                } else {
+                    println!(", not active");
+                }
+            }
+            Mode::La57 | Mode::La48 => {
+                let base = arg & !(PROC_LA_STATUS_LA48 | PROC_LA_STATUS_LA57);
+                match base {
+                    PROC_LA_CTL_LA48_ON_EXEC => print!("la48 on exec"),
+                    PROC_LA_CTL_LA57_ON_EXEC => print!("la57 on exec"),
+                    PROC_LA_CTL_DEFAULT_ON_EXEC => print!("default on exec"),
+                    _ => print!("unknown"),
+                }
+                if (arg & PROC_LA_STATUS_LA48) != 0 {
+                    println!(", la48 active");
+                } else if (arg & PROC_LA_STATUS_LA57) != 0 {
+                    println!(", la57 active");
+                } else {
+                    println!();
+                }
+            }
+            Mode::Logsigexit => {
+                match arg {
+                    PROC_LOGSIGEXIT_CTL_NOFORCE => println!("not forced"),
+                    PROC_LOGSIGEXIT_CTL_FORCE_ENABLE => println!("force enabled"),
+                    PROC_LOGSIGEXIT_CTL_FORCE_DISABLE => println!("force disabled"),
+                    _ => println!("unknown"),
+                }
+            }
+        }
+    } else {
+        let mut arg: c_int = 0;
+        let verb = match mode {
+            Mode::Aslr => {
+                arg = if enable { PROC_ASLR_FORCE_ENABLE } else { PROC_ASLR_FORCE_DISABLE };
+                PROC_ASLR_CTL
+            }
+            Mode::Trace => {
+                arg = if enable { PROC_TRACE_CTL_ENABLE } else { PROC_TRACE_CTL_DISABLE };
+                PROC_TRACE_CTL
+            }
+            Mode::Trapcap => {

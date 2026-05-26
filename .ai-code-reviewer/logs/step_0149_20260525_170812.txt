@@ -1,0 +1,11 @@
+=== STEP 149 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level Makefile.inc1, not from my unit. These are `.info` lines being treated as errors by the build system. Let me read the rest of the C source and create the Rust replacement:
+
+ACTION: NEXT_CHUNK

@@ -224,8 +224,8 @@
     "last_attempt": "2026-05-24T00:24:56.720185"
   },
   "contrib/netbsd-tests/lib/libc/arch/alpha": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T16:30:12.767317"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T16:44:58.413131"
   },
   "contrib/netbsd-tests/lib/libc/arch/arm": {
     "attempts": 1,
@@ -236,8 +236,8 @@
     "last_attempt": "2026-05-25T16:23:10.886513"
   },
   "contrib/netbsd-tests/lib/libc/arch/m68k": {
-    "attempts": 1,
-    "last_attempt": "2026-05-25T16:34:32.974349"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T16:47:43.555699"
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
@@ -280,8 +280,8 @@
     "last_attempt": "2026-05-22T21:46:57.529904"
   },
   "lib/libmd": {
-    "attempts": 1,
-    "last_attempt": "2026-05-25T16:39:38.278452"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T16:51:14.694436"
   },
   "lib/libnv": {
     "attempts": 1,
@@ -323,6 +323,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-25T01:54:43.152171"
   },
+  "libexec/rtld-elf": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:52:40.938461"
+  },
   "libexec/ypxfr": {
     "attempts": 1,
     "last_attempt": "2026-05-24T21:44:49.304915"
@@ -330,6 +334,10 @@
   "sbin/adjkerntz": {
     "attempts": 3,
     "last_attempt": "2026-05-25T13:36:49.051207"
+  },
+  "sbin/bsdlabel": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:53:08.724834"
   },
   "sbin/clri": {
     "attempts": 1,
@@ -444,8 +452,8 @@
     "last_attempt": "2026-05-23T15:42:22.227998"
   },
   "usr.bin/bintrans": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T02:43:09.382535"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T16:49:09.988814"
   },
   "usr.bin/bluetooth/bthost": {
     "attempts": 3,
@@ -578,6 +586,10 @@
   "usr.bin/getconf": {
     "attempts": 3,
     "last_attempt": "2026-05-25T00:53:23.527148"
+  },
+  "usr.bin/getent": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:51:37.447862"
   },
   "usr.bin/head": {
     "attempts": 3,

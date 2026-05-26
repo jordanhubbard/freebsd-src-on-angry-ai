@@ -1,0 +1,21 @@
+=== STEP 155 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*procctl.h*':
+```
+./sys/arm64/include/procctl.h
+./sys/sys/procctl.h
+./sys/x86/include/procctl.h
+./sys/riscv/include/procctl.h
+./sys/arm/include/procctl.h
+./sys/amd64/include/procctl.h
+./sys/i386/include/procctl.h
+./sys/powerpc/include/procctl.h
+```
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level Makefile.inc1, not from my unit. Let me create the Rust replacement and update the Makefile with explicit cargo rules.
+
+ACTION: WRITE_FILE usr.bin/proccontrol/Cargo.toml

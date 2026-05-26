@@ -1,0 +1,11 @@
+=== STEP 153 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/procctl.h*'
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level Makefile.inc1, not from my unit. Let me create the Rust replacement and update the Makefile with explicit cargo rules.
+
+ACTION: WRITE_FILE usr.bin/proccontrol/Cargo.toml

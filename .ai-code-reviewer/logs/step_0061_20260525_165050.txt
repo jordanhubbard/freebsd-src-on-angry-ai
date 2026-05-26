@@ -1,0 +1,14 @@
+=== STEP 61 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory usr.bin/csplit skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/netbsd-tests/lib/libc/arch/alpha
+
+--- RESPONSE ---
+
+
+Let me try a different approach - find a unit that's actually pending.
+
+ACTION: SET_SCOPE usr.bin/cut

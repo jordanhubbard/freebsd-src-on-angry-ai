@@ -1,0 +1,11 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/arch/alpha/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit is architecture-specific test support code for Alpha with no Makefile. The C file trivially returns `NOTIMPL` and the `.S` file is a single `nop` instruction. This is not a userland command or library, and there's no build infrastructure to integrate with. Per the constraint "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite," I'll skip this and move to the next unit.
+
+ACTION: SET_SCOPE bin/cat/tests

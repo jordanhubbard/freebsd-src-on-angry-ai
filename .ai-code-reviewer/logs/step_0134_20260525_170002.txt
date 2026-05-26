@@ -1,0 +1,272 @@
+=== STEP 134 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/proccontrol
+   Files: 0/3
+📄 File: share/mk/bsd.init.mk
+✏️  Edits: 3 files modified
+
+```
+=== CHUNK 2/4: /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile === [line_chunk: chunk_2]
+=== Lines 251-500 (250 lines) ===
+
+    -f /dev/null -V MAKEOBJDIRPREFIX dummy
+.if !empty(_MAKEOBJDIRPREFIX) || !empty(.MAKEOVERRIDES:MMAKEOBJDIRPREFIX)
+.error MAKEOBJDIRPREFIX can only be set in environment or src-env.conf(5),\
+    not as a global (in make.conf(5) or src.conf(5)) or command-line variable.
+.endif
+
+# We often need to use the tree's version of make to build it.
+.if !empty(.MAKE.MODE:Mmeta)
+# 20160604 - support missing-meta,missing-filemon and performance improvements
+WANT_MAKE_VERSION= 20160604
+.else
+# 20160220 - support .dinclude for FAST_DEPEND.
+WANT_MAKE_VERSION= 20160220
+.endif
+.if defined(MYMAKE)
+.error MYMAKE cannot be overridden, use as command name instead
+.endif
+MYMAKE=		${OBJROOT}make.${MACHINE}/bmake
+.if defined(ALWAYS_BOOTSTRAP_MAKE) || \
+    (defined(WANT_MAKE_VERSION) && ${MAKE_VERSION} < ${WANT_MAKE_VERSION})
+NEED_MAKE_UPGRADE= t
+.endif
+.if defined(NEED_MAKE_UPGRADE)
+. if exists(${MYMAKE})
+SUB_MAKE:= ${MYMAKE} -m ${.CURDIR}/share/mk
+. else
+# It may not exist yet but we may cause it to.
+SUB_MAKE= `test -x ${MYMAKE} && echo ${MYMAKE} || echo ${MAKE}` \
+	-m ${.CURDIR}/share/mk
+. endif
+.else
+SUB_MAKE= ${MAKE} -m ${.CURDIR}/share/mk
+.endif
+
+_MAKE=	PATH=${PATH:Q} MAKE_CMD="${MAKE}" ${SUB_MAKE} -f Makefile.inc1 \
+	TARGET=${_TARGET} TARGET_ARCH=${_TARGET_ARCH} ${_MAKEARGS}
+
+.if defined(MK_META_MODE) && ${MK_META_MODE} == "yes"
+# Only allow meta mode for the whitelisted targets.  See META_TGT_WHITELIST
+# above.  If overridden as a make argument then don't bother trying to
+# disable it.
+.if empty(.MAKEOVERRIDES:MMK_META_MODE)
+.for _tgt in ${META_TGT_WHITELIST}
+.if make(${_tgt})
+_CAN_USE_META_MODE?= yes
+.endif
+.endfor
+.if !defined(_CAN_USE_META_MODE)
+_MAKE+=	MK_META_MODE=no
+MK_META_MODE= no
+.unexport META_MODE
+.endif	# !defined(_CAN_USE_META_MODE)
+.endif	# empty(.MAKEOVERRIDES:MMK_META_MODE)
+
+.if ${MK_META_MODE} == "yes"
+.if !exists(/dev/filemon) && !defined(NO_FILEMON) && !make(showconfig)
+# Require filemon be loaded to provide a working incremental build
+.error ${.newline}ERROR: The filemon module (/dev/filemon) is not loaded. \
+    ${.newline}ERROR: WITH_META_MODE is enabled but requires filemon for an incremental build. \
+    ${.newline}ERROR: 'kldload filemon' or pass -DNO_FILEMON to suppress this error.
+.endif	# !exists(/dev/filemon) && !defined(NO_FILEMON)
+.endif	# ${MK_META_MODE} == yes
+.endif	# defined(MK_META_MODE) && ${MK_META_MODE} == yes
+
+# Guess target architecture from target type, and vice versa, based on
+# historic FreeBSD practice of tending to have TARGET == TARGET_ARCH
+# expanding to TARGET == TARGET_CPUARCH in recent times, with known
+# exceptions.
+.if !defined(TARGET_ARCH) && defined(TARGET)
+# T->TA mapping is usually TARGET with arm64 the odd man out
+_TARGET_ARCH=	${TARGET:S/arm64/aarch64/:S/riscv/riscv64/:S/arm/armv7/}
+.elif !defined(TARGET) && defined(TARGET_ARCH) && \
+    ${TARGET_ARCH} != ${MACHINE_ARCH}
+# TA->T mapping is accidentally CPUARCH with aarch64 the odd man out
+_TARGET=	${TARGET_ARCH:${__TO_CPUARCH}:C/aarch64/arm64/}
+.endif
+.if defined(TARGET) && !defined(_TARGET)
+_TARGET=${TARGET}
+.endif
+.if defined(TARGET_ARCH) && !defined(_TARGET_ARCH)
+_TARGET_ARCH=${TARGET_ARCH}
+.endif
+# for historical compatibility for xdev targets
+.if defined(XDEV)
+_TARGET=	${XDEV}
+.endif
+.if defined(XDEV_ARCH)
+_TARGET_ARCH=	${XDEV_ARCH}
+.endif
+# Some targets require a set TARGET/TARGET_ARCH, check before the default
+# MACHINE and after the compatibility handling.
+.if !defined(_TARGET) || !defined(_TARGET_ARCH)
+${XTGTS}: _assert_target
+.endif
+# Otherwise, default to current machine type and architecture.
+_TARGET?=	${MACHINE}
+_TARGET_ARCH?=	${MACHINE_ARCH}
+
+.if make(native-xtools*)
+NXB_TARGET:=		${_TARGET}
+NXB_TARGET_ARCH:=	${_TARGET_ARCH}
+_TARGET=		${MACHINE}
+_TARGET_ARCH=		${MACHINE_ARCH}
+_MAKE+=			NXB_TARGET=${NXB_TARGET} \
+			NXB_TARGET_ARCH=${NXB_TARGET_ARCH}
+.endif
+
+.if make(print-dir)
+.SILENT:
+.endif
+
+_assert_target: .PHONY .MAKE
+.for _tgt in ${XTGTS}
+.if make(${_tgt})
+	@echo "*** Error: Both TARGET and TARGET_ARCH must be defined for \"${_tgt}\" target"
+	@false
+.endif
+.endfor
+
+#
+# Make sure we have an up-to-date make(1). Only world, buildworld and
+# kernel-toolchain should do this as those are the initial targets used
+# for upgrades. The user can define ALWAYS_CHECK_MAKE to have this check
+# performed for all targets.
+#
+.if defined(ALWAYS_CHECK_MAKE)
+${TGTS}: upgrade_checks
+.else
+buildworld: upgrade_checks
+kernel-toolchain: upgrade_checks
+.endif
+
+#
+# Handle the user-driven targets, using the source relative mk files.
+#
+
+tinderbox toolchains kernel-toolchains: .MAKE
+${TGTS}: .PHONY .MAKE
+	${_+_}@cd ${.CURDIR}; ${_MAKE} ${.TARGET}
+
+# The historic default "all" target creates files which may cause stale
+# or (in the cross build case) unlinkable results. Fail with an error
+# when no target is given. The users can explicitly specify "all"
+# if they want the historic behavior.
+.MAIN:	_guard
+
+_guard: .PHONY
+	@echo
+	@echo "Explicit target required.  Likely \"${SUBDIR_OVERRIDE:Dall:Ubuildworld}\" is wanted.  See build(7)."
+	@echo
+	@false
+
+STARTTIME!= LC_ALL=C date
+CHECK_TIME!= cmp=`mktemp`; find ${.CURDIR}/sys/sys/param.h -newer "$$cmp" && rm "$$cmp"; echo
+.if !empty(CHECK_TIME)
+.error check your date/time: ${STARTTIME}
+.endif
+
+.if defined(HISTORICAL_MAKE_WORLD) || defined(DESTDIR)
+#
+# world
+#
+# Attempt to rebuild and reinstall everything. This target is not to be
+# used for upgrading an existing FreeBSD system, because the kernel is
+# not included. One can argue that this target doesn't build everything
+# then.
+#
+world: upgrade_checks .PHONY
+	@echo "--------------------------------------------------------------"
+	@echo ">>> make world started on ${STARTTIME}"
+	@echo "--------------------------------------------------------------"
+.if target(pre-world)
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Making 'pre-world' target"
+	@echo "--------------------------------------------------------------"
+	${_+_}@cd ${.CURDIR}; ${_MAKE} pre-world
+.endif
+	${_+_}@cd ${.CURDIR}; ${_MAKE} buildworld
+	${_+_}@cd ${.CURDIR}; ${_MAKE} installworld MK_META_MODE=no
+.if target(post-world)
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Making 'post-world' target"
+	@echo "--------------------------------------------------------------"
+	${_+_}@cd ${.CURDIR}; ${_MAKE} post-world
+.endif
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> make world completed on `LC_ALL=C date`"
+	@echo "                   (started ${STARTTIME})"
+	@echo "--------------------------------------------------------------"
+.else
+world: .PHONY
+	@echo "WARNING: make world will overwrite your existing FreeBSD"
+	@echo "installation without also building and installing a new"
+	@echo "kernel.  This can be dangerous.  Please read the handbook,"
+	@echo "'Rebuilding world', for how to upgrade your system."
+	@echo "Define DESTDIR to where you want to install FreeBSD,"
+	@echo "including /, to override this warning and proceed as usual."
+	@echo ""
+	@echo "Bailing out now..."
+	@false
+.endif
+
+#
+# kernel
+#
+# Short hand for `make buildkernel installkernel'
+#
+kernel: buildkernel installkernel .PHONY
+
+#
+# Perform a few tests to determine if the installed tools are adequate
+# for building the world.
+#
+upgrade_checks: .PHONY
+.if defined(NEED_MAKE_UPGRADE)
+	@${_+_}(cd ${.CURDIR} && ${MAKE} bmake)
+.elif exists(${MYMAKE:H})
+	@echo "Removing stale bmake(1)"
+	rm -r ${MYMAKE:H}
+.endif
+
+#
+# Upgrade make(1) to the current version using the installed
+# headers, libraries and tools.  Also, allow the location of
+# the system bsdmake-like utility to be overridden.
+#
+MMAKEENV=	\
+		DESTDIR= \
+		INSTALL="sh ${.CURDIR}/tools/install.sh"
+MMAKE=		${MMAKEENV} ${MAKE} \
+		OBJTOP=${MYMAKE:H}/obj \
+		OBJROOT='$${OBJTOP}/' \
+		MAKEOBJDIRPREFIX= \
+		MK_MAN=no -DNO_SHARED \
+		-DNO_CPU_CFLAGS MK_WERROR=no \
+		-DNO_SUBDIR \
+		DESTDIR= PROGNAME=${MYMAKE:T}
+
+bmake: .PHONY
+	@echo
+	@echo "--------------------------------------------------------------"
+	@echo ">>> Building an up-to-date ${.TARGET}(1)"
+	@echo "--------------------------------------------------------------"
+	${_+_}@cd ${.CURDIR}/usr.bin/${.TARGET}; \
+		${MMAKE} obj; \
+		${MMAKE} depend; \
+		${MMAKE} all; \
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/proccontrol

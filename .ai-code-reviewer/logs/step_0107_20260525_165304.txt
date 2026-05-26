@@ -1,0 +1,14 @@
+=== STEP 107 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: lib/libutil is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/alpha
+
+--- RESPONSE ---
+
+
+Let me try a different approach and look at sbin/ units.
+
+ACTION: SET_SCOPE sbin/adjkerntz

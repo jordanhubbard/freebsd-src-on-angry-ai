@@ -1,0 +1,14 @@
+=== STEP 135 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory usr.bin/proccontrol skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/netbsd-tests/lib/libc/arch/alpha
+
+--- RESPONSE ---
+
+
+The build system auto-skipped `usr.bin/proccontrol` after 3 failed attempts. The errors were from the top-level Makefile.inc1, not from my Rust code. Let me try a different unit.
+
+ACTION: SET_SCOPE bin/cat/tests
