@@ -1,0 +1,32 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc/arch:
+```
+aarch64
+alpha
+arm
+hppa
+i386
+ia64
+m68k
+mips
+or1k
+powerpc
+powerpc64
+riscv
+sh3
+sparc
+sparc64
+vax
+x86_64
+```
+
+--- RESPONSE ---
+
+
+This unit contains architecture-specific test support files — a trivial C stub returning `NOTIMPL` and an assembly `.S` file. There's no Makefile, no standalone buildable target, and the assembly file cannot be meaningfully translated to Rust. This is not a suitable unit for the C/C++ to Rust rewrite objective.
+
+Let me move to the next pending unit from the queue.
+
+ACTION: SET_SCOPE bin/cat/tests
