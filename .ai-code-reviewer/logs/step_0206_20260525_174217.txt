@@ -1,0 +1,12 @@
+=== STEP 206 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/kenv is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/mips
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/ln

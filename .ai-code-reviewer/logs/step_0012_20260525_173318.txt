@@ -1,0 +1,11 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'contrib/netbsd-tests/*/Makefile'
+
+--- RESPONSE ---
+
+
+This unit has no Makefile and is not part of the FreeBSD build system — it's NetBSD test infrastructure code. Per the constraints, I should not fabricate a rewrite for a non-buildable unit. Let me move to a proper buildable unit.
+
+ACTION: SET_SCOPE bin/cat/tests

@@ -1,0 +1,14 @@
+=== STEP 183 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/mips
+
+--- RESPONSE ---
+
+
+Let me find a work unit with meaningful C code to rewrite.
+
+ACTION: FIND_FILE bin/*/

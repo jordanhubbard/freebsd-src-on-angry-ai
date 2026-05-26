@@ -240,8 +240,20 @@
     "last_attempt": "2026-05-25T17:11:41.112938"
   },
   "contrib/netbsd-tests/lib/libc/arch/mips": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T17:40:39.306977"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/powerpc64": {
     "attempts": 1,
-    "last_attempt": "2026-05-25T17:12:58.523877"
+    "last_attempt": "2026-05-25T17:33:24.489659"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/sh3": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T17:44:52.740795"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/sparc": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T17:45:08.362785"
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,

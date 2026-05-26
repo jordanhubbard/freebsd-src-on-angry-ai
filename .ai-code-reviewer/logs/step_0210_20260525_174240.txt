@@ -1,0 +1,14 @@
+=== STEP 210 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/apply is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/mips
+
+--- RESPONSE ---
+
+
+I'll work with usr.bin/ar which I already have set as scope. Let me read the Makefile first.
+
+ACTION: READ_FILE usr.bin/ar/Makefile

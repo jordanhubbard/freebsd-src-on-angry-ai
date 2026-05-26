@@ -1,0 +1,16 @@
+=== STEP 55 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mktemp:
+```
+Makefile
+Makefile.depend
+mktemp.1
+mktemp.c
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/mktemp

@@ -1,0 +1,18 @@
+=== STEP 52 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mkdep:
+```
+Makefile
+Makefile.depend
+Makefile.depend.host
+Makefile.depend.options
+mkdep.1
+mkdep.gcc.sh
+mkdep.sh
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/mkimg
