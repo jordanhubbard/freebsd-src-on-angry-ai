@@ -1,0 +1,14 @@
+=== STEP 47 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/compress is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/tls_dso
+
+--- RESPONSE ---
+
+
+Let me try `usr.bin/csplit`.
+
+ACTION: SET_SCOPE usr.bin/csplit

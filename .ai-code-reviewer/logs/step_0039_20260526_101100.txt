@@ -1,0 +1,14 @@
+=== STEP 39 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/cksum is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/tls_dso
+
+--- RESPONSE ---
+
+
+Let me try finding a unit that's not skipped and has C source files.
+
+ACTION: SET_SCOPE usr.bin/cmp

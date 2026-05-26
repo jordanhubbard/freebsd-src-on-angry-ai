@@ -1,0 +1,11 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'tls_dso'
+
+--- RESPONSE ---
+
+
+Let me check the broader build context for this test suite.
+
+ACTION: FIND_FILE usr.sbin/tests/Makefile

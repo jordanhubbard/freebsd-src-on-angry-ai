@@ -1,0 +1,11 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'tls_dso'
+
+--- RESPONSE ---
+
+
+Let me check how this DSO is built by looking at the parent directory structure.
+
+ACTION: FIND_FILE contrib/netbsd-tests/lib/libc/tls

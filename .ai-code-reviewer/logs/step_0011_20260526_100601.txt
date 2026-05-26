@@ -1,0 +1,11 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check how this test suite is built in the FreeBSD tree.
+
+ACTION: FIND_FILE contrib/netbsd-tests/Makefile

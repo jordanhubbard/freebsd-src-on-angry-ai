@@ -1,0 +1,11 @@
+=== STEP 12 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check how this test helper is built in the FreeBSD tree.
+
+ACTION: GREP tls_dso

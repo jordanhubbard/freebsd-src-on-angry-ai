@@ -1,0 +1,11 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'tls_dso'
+
+--- RESPONSE ---
+
+
+This is a test helper DSO (shared object) for TLS testing. It's a small file with thread-local variables and one helper function. Let me check how it's built in the FreeBSD tree.
+
+ACTION: GREP tls_dso

@@ -1,0 +1,13 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+GREP_RESULT for 'h_tls_dynamic':
+```
+./contrib/netbsd-tests/lib/libc/tls_dso/h_tls_dynamic.c:1:/*	$NetBSD: h_tls_dynamic.c,v 1.5 2013/10/21 19:11:17 joerg Exp $	*/
+./contrib/netbsd-tests/lib/libc/tls_dso/h_tls_dynamic.c:35:__RCSID("$NetBSD: h_tls_dynamic.c,v 1.5 2013/10/21 19:11:17 joerg Exp $");
+```
+
+--- RESPONSE ---
+
+
+ACTION: GREP h_tls_dynamic

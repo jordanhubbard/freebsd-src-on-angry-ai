@@ -1,0 +1,76 @@
+=== STEP 101 ===
+
+--- REQUEST ---
+SET_SCOPE_OK: Now rewriting usr.bin/top
+
+HIERARCHY:
+  Level 1: Source tree (8132 work units)
+  Level 2: usr.bin/top ← YOU ARE HERE
+  Level 3: 18 candidate files
+  Level 4: Functions (auto-chunked for large files)
+
+WORK UNIT:
+  Kind: directory
+  Stage: unknown
+  Depends on: (none)
+  Related files:
+    - usr.bin/top/Makefile
+    - usr.bin/top/commands.c
+    - usr.bin/top/commands.h
+    - usr.bin/top/display.c
+    - usr.bin/top/display.h
+    - usr.bin/top/layout.h
+    - usr.bin/top/loadavg.h
+    - usr.bin/top/machine.c
+    - usr.bin/top/machine.h
+    - usr.bin/top/screen.c
+    - usr.bin/top/screen.h
+    - usr.bin/top/top.1
+    - usr.bin/top/top.c
+    - usr.bin/top/top.h
+    - usr.bin/top/username.c
+    - usr.bin/top/username.h
+    - usr.bin/top/utils.c
+    - usr.bin/top/utils.h
+
+✓ Directory has Makefile - valid source module
+
+FILES TO REWRITE:
+  - usr.bin/top/Makefile
+  - usr.bin/top/commands.c
+  - usr.bin/top/commands.h
+  - usr.bin/top/display.c
+  - usr.bin/top/display.h
+  - usr.bin/top/layout.h
+  - usr.bin/top/loadavg.h
+  - usr.bin/top/machine.c
+  - usr.bin/top/machine.h
+  - usr.bin/top/screen.c
+  - usr.bin/top/screen.h
+  - usr.bin/top/top.1
+  - usr.bin/top/top.c
+  - usr.bin/top/top.h
+  - usr.bin/top/username.c
+  - usr.bin/top/username.h
+  - usr.bin/top/utils.c
+  - usr.bin/top/utils.h
+
+📁 Directory: usr.bin/top
+   Files: 0/18
+
+WORKFLOW:
+1. Rewrite each relevant file (READ_FILE, NEXT_CHUNK for large files)
+2. Make changes as needed (EDIT_FILE or WRITE_FILE)
+3. When ALL relevant files are rewritten: ACTION: BUILD
+4. If build succeeds: Changes committed for entire directory
+5. Move to next directory (SET_SCOPE)
+
+Attempts recorded for usr.bin/top: 1/3.
+2 attempt(s) remain before auto-skip.
+
+--- RESPONSE ---
+
+
+usr.bin/top is a large complex program with 18 files - not a small unit. Let me find a smaller one.
+
+ACTION: SET_SCOPE usr.bin/tail

@@ -1,0 +1,12 @@
+=== STEP 75 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Directory not found: usr.bin/lib
+TIP: Use LIST_DIR to see available directories
+
+--- RESPONSE ---
+
+
+Let me try finding a proper FreeBSD userland unit.
+
+ACTION: SET_SCOPE usr.bin/number

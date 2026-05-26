@@ -1,0 +1,14 @@
+=== STEP 83 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/who is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/SPIRV/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me try a different approach - find a unit that's pending with C source.
+
+ACTION: SET_SCOPE usr.bin/where

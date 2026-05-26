@@ -1,0 +1,11 @@
+=== STEP 23 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/tls*'
+
+--- RESPONSE ---
+
+
+Let me check the parent directory for build context.
+
+ACTION: LIST_DIR contrib/netbsd-tests/lib

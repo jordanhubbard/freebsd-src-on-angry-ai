@@ -1,0 +1,9 @@
+=== STEP 25 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/netbsd-tests/lib/libc/tls

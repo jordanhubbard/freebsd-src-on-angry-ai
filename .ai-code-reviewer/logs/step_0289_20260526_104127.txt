@@ -1,0 +1,17 @@
+=== STEP 289 ===
+
+--- REQUEST ---
+TIMEOUT: You have spent too many iterations on sbin/comcontrol. This directory is being skipped.
+
+SCOPE_ABANDONED: sbin/comcontrol was marked skipped.
+
+Reason: Exceeded 120 iterations without completing the scope
+Any tracked edits were reverted and untracked files created under the scope were removed.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/tls_dso
+
+--- RESPONSE ---
+
+
+I'll move to the next scope as instructed.
+
+ACTION: SET_SCOPE contrib/netbsd-tests/lib/libc/tls_dso

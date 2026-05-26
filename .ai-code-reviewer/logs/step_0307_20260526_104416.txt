@@ -1,0 +1,11 @@
+=== STEP 307 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to keep response very short. Here goes:
+
+ACTION: WRITE_FILE contrib/llvm-project/compiler-rt/lib/builtins/loongarch/Cargo.toml

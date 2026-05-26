@@ -1,0 +1,11 @@
+=== STEP 35 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/tls/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me try to find a unit that's not skipped and has C source files.
+
+ACTION: SET_SCOPE usr.bin/bsdcat

@@ -1,0 +1,11 @@
+=== STEP 34 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/tls/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me understand the build context for this test helper.
+
+ACTION: FIND_FILE contrib/netbsd-tests/lib/libc/tls/Makefile

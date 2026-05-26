@@ -1,0 +1,29 @@
+=== STEP 85 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/gcore/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/gcore
+   Files: 0/6
+📄 File: usr.bin/gcore/Makefile
+
+```
+PROG=	gcore
+SRCS=	elfcore.c gcore.c
+LIBADD=	sbuf util
+
+.if ${MACHINE_CPUARCH} == "aarch64" || ${MACHINE_ARCH} == "amd64" || \
+    ${MACHINE_ARCH} == "powerpc64"
+SRCS+=	elf32core.c
+.endif
+
+WARNS?=	1
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/gcore/gcore.c

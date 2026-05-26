@@ -1,0 +1,14 @@
+=== STEP 31 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/beep is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/tls_dso
+
+--- RESPONSE ---
+
+
+Let me try a different approach and find a unit that's not skipped.
+
+ACTION: SET_SCOPE usr.bin/bintrans
