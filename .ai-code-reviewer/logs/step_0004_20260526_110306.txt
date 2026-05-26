@@ -1,0 +1,14 @@
+=== STEP 4 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc/gen/execve:
+```
+t_execve.c
+```
+
+--- RESPONSE ---
+
+
+Let me check the parent directory for build context and understand how these tests are integrated.
+
+ACTION: LIST_DIR contrib/netbsd-tests/lib/libc/gen

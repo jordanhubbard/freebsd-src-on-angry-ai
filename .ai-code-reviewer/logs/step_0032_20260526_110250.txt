@@ -1,0 +1,12 @@
+=== STEP 32 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/units is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/compiler-rt/lib/builtins/loongarch
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/pr

@@ -1,0 +1,11 @@
+=== STEP 15 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+This is a simple test file with no Makefile. It tests that `execve(NULL, NULL, NULL)` returns -1 with errno EFAULT. I can create a standalone Rust replacement that performs the same test. Let me create the Rust crate with a local Makefile.
+
+ACTION: WRITE_FILE contrib/netbsd-tests/lib/libc/gen/execve/Cargo.toml

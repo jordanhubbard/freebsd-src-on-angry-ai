@@ -1,0 +1,38 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib:
+```
+csu
+libbluetooth
+libbpfjit
+libc
+libcrypt
+libcurses
+libdes
+libevent
+libexecinfo
+libm
+libobjc
+libposix
+libppath
+libprop
+libpthread
+libpthread_dbg
+librefuse
+librt
+librumpclient
+librumphijack
+libskey
+libsljit
+libusbhid
+libutil
+semaphore
+```
+
+--- RESPONSE ---
+
+
+Let me check if there's any Rust build infrastructure in the FreeBSD tree.
+
+ACTION: FIND_FILE bsd.rust.mk

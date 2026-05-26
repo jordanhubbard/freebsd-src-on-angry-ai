@@ -1,0 +1,18 @@
+=== STEP 63 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/sync:
+```
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+src
+sync.8
+sync.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/sync

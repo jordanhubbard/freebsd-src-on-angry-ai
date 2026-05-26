@@ -1,0 +1,23 @@
+=== STEP 61 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/stty:
+```
+Makefile
+Makefile.depend
+cchar.c
+extern.h
+gfmt.c
+key.c
+modes.c
+print.c
+stty.1
+stty.c
+stty.h
+util.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/stty

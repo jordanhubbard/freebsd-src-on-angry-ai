@@ -152,8 +152,8 @@
     "last_attempt": "2026-05-23T05:12:11.840100"
   },
   "contrib/llvm-project/compiler-rt/lib/builtins/loongarch": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T10:41:57.661545"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T11:07:27.659489"
   },
   "contrib/llvm-project/compiler-rt/lib/scudo/standalone/fuzz": {
     "attempts": 3,
@@ -318,6 +318,10 @@
   "contrib/netbsd-tests/lib/libc/arch/vax": {
     "attempts": 3,
     "last_attempt": "2026-05-25T18:48:52.530809"
+  },
+  "contrib/netbsd-tests/lib/libc/gen/execve": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T11:08:51.300134"
   },
   "contrib/netbsd-tests/lib/libc/tls_dso": {
     "attempts": 3,

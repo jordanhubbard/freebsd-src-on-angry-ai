@@ -1,0 +1,27 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+GREP_RESULT for 't_execve':
+```
+./sys/compat/freebsd32/freebsd32_misc.c:516:	post_execve(td, error, oldvmspace);
+./sys/compat/freebsd32/freebsd32_misc.c:536:	post_execve(td, error, oldvmspace);
+./sys/compat/linux/linux_emul.c:227:	post_execve(td, error, oldvmspace);
+./sys/sys/imgact.h:124:void	post_execve(struct thread *td, int error, struct vmspace *oldvmspace);
+./sys/kern/kern_exec.c:237:	post_execve(td, error, oldvmspace);
+./sys/kern/kern_exec.c:264:	post_execve(td, error, oldvmspace);
+./sys/kern/kern_exec.c:292:	post_execve(td, error, oldvmspace);
+./contrib/llvm-project/compiler-rt/include/sanitizer/netbsd_syscall_hooks.h:336:#define __sanitizer_syscall_post_execve(res, path, argp, envp)                 \
+./contrib/llvm-project/compiler-rt/include/sanitizer/linux_syscall_hooks.h:1956:#define __sanitizer_syscall_post_execve(res, ...)
+./contrib/netbsd-tests/lib/libc/gen/execve/t_execve.c:1:/*	$NetBSD: t_execve.c,v 1.2 2015/09/12 15:21:33 christos Exp $	*/
+./contrib/netbsd-tests/lib/libc/gen/execve/t_execve.c:36:ATF_TC(t_execve_null);
+./contrib/netbsd-tests/lib/libc/gen/execve/t_execve.c:38:ATF_TC_HEAD(t_execve_null, tc)
+```
+
+--- RESPONSE ---
+
+
+This is a test file from the NetBSD ATF test suite included in FreeBSD's contrib tree. It's a simple test that verifies `execve(NULL, NULL, NULL)` returns -1 with errno EFAULT. There's no Makefile in this directory - it's consumed by the broader test infrastructure.
+
+Let me check how other similar completed units handled this pattern, and look at the parent build structure.
+
+ACTION: LIST_DIR contrib/netbsd-tests/lib
