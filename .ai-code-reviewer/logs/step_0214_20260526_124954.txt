@@ -1,0 +1,11 @@
+=== STEP 214 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block with triple angle brackets. Let me write the Cargo.toml properly:
+
+ACTION: WRITE_FILE cddl/contrib/opensolaris/cmd/dtrace/test/cmd/jdtrace/Cargo.toml

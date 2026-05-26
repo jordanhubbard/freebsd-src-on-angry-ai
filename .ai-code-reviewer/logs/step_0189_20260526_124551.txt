@@ -1,0 +1,11 @@
+=== STEP 189 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/test/Makefile*'
+
+--- RESPONSE ---
+
+
+This is a test directory without its own Makefile - not suitable for standalone Rust rewrite. Let me find a better unit.
+
+ACTION: SET_SCOPE usr.bin/asa

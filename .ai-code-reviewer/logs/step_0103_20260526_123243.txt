@@ -1,0 +1,11 @@
+=== STEP 103 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block. Let me do this correctly:
+
+ACTION: WRITE_FILE usr.sbin/trim/Cargo.toml

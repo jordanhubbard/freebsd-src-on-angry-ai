@@ -1,0 +1,60 @@
+=== STEP 4 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/BPF/TargetInfo/BPFTargetInfo.cpp:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/BPF/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/BPF/TargetInfo/BPFTargetInfo.cpp
+
+```
+//===-- BPFTargetInfo.cpp - BPF Target Implementation ---------------------===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#include "TargetInfo/BPFTargetInfo.h"
+#include "llvm/MC/TargetRegistry.h"
+#include "llvm/Support/Compiler.h"
+
+using namespace llvm;
+
+Target &llvm::getTheBPFleTarget() {
+  static Target TheBPFleTarget;
+  return TheBPFleTarget;
+}
+Target &llvm::getTheBPFbeTarget() {
+  static Target TheBPFbeTarget;
+  return TheBPFbeTarget;
+}
+Target &llvm::getTheBPFTarget() {
+  static Target TheBPFTarget;
+  return TheBPFTarget;
+}
+
+extern "C" LLVM_ABI LLVM_EXTERNAL_VISIBILITY void
+LLVMInitializeBPFTargetInfo() {
+  TargetRegistry::RegisterTarget(getTheBPFTarget(), "bpf", "BPF (host endian)",
+                                 "BPF", [](Triple::ArchType) { return false; },
+                                 true);
+  RegisterTarget<Triple::bpfel, /*HasJIT=*/true> X(
+      getTheBPFleTarget(), "bpfel", "BPF (little endian)", "BPF");
+  RegisterTarget<Triple::bpfeb, /*HasJIT=*/true> Y(getTheBPFbeTarget(), "bpfeb",
+                                                   "BPF (big endian)", "BPF");
+}
+
+```
+
+--- RESPONSE ---
+
+
+This unit is part of `contrib/llvm-project` — vendor LLVM compiler infrastructure code, not FreeBSD userland. It's deeply tied to LLVM's C++ `Target` class, `TargetRegistry`, and `RegisterTarget` template. Rewriting this to Rust would require FFI into LLVM's C++ internals, which is outside the scope of "FreeBSD userland C/C++ libraries and commands."
+
+Per the constraint: *"If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite."*
+
+I'll skip this unit and move to the next pending unit.
+
+ACTION: SET_SCOPE bin/cat/tests

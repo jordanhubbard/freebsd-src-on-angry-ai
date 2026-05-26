@@ -111,6 +111,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-21T19:44:21.180208"
   },
+  "cddl/contrib/opensolaris/cmd/dtrace/test/cmd/jdtrace": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T12:44:52.462401"
+  },
   "cddl/contrib/opensolaris/cmd/dtrace/test/tst/amd64/arrays": {
     "attempts": 3,
     "last_attempt": "2026-05-24T22:42:21.132011"
@@ -188,8 +192,8 @@
     "last_attempt": "2026-05-24T13:06:16.014026"
   },
   "contrib/llvm-project/llvm/lib/Target/BPF/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T12:12:27.991524"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T12:43:44.919108"
   },
   "contrib/llvm-project/llvm/lib/Target/CSKY/TargetInfo": {
     "attempts": 3,
@@ -434,6 +438,10 @@
   "lib/libthr/arch/amd64/amd64": {
     "attempts": 3,
     "last_attempt": "2026-05-25T09:44:04.543006"
+  },
+  "lib/libthr/sys": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T12:23:04.496165"
   },
   "lib/libutil": {
     "attempts": 3,
@@ -1146,5 +1154,9 @@
   "usr.sbin/route6d/misc": {
     "attempts": 2,
     "last_attempt": "2026-05-26T00:41:43.755143"
+  },
+  "usr.sbin/trim": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T12:29:17.084043"
   }
 }
