@@ -219,6 +219,10 @@
     "attempts": 1,
     "last_attempt": "2026-05-25T23:16:08.416206"
   },
+  "contrib/llvm-project/llvm/lib/Target/Sparc/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T09:24:50.645546"
+  },
   "contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-25T01:01:37.147181"
@@ -311,6 +315,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-22T22:17:17.637990"
   },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_dso2": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T09:13:48.675523"
+  },
   "contrib/netbsd-tests/libexec/ld.elf_so/helper_ifunc_dso": {
     "attempts": 3,
     "last_attempt": "2026-05-26T00:11:10.765527"
@@ -362,6 +370,10 @@
   "lib/libc/gen": {
     "attempts": 1,
     "last_attempt": "2026-05-25T19:16:18.194734"
+  },
+  "lib/libc_nonshared": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T09:25:07.635573"
   },
   "lib/libmd": {
     "attempts": 3,

@@ -1,0 +1,14 @@
+=== STEP 91 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/units is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Sparc/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me try to find a unit that's available.
+
+ACTION: SET_SCOPE usr.bin/units

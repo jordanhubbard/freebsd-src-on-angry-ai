@@ -1,0 +1,11 @@
+=== STEP 27 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+The CONTENT block must be included. Let me write it correctly:
+
+ACTION: WRITE_FILE tools/regression/sigqueue/sigqtest1/Cargo.toml

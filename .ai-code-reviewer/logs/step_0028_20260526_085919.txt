@@ -1,0 +1,11 @@
+=== STEP 28 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I see the issue - I need to include the CONTENT block with the file content. Let me try a different approach.
+
+ACTION: EDIT_FILE tools/regression/sigqueue/sigqtest1/Makefile

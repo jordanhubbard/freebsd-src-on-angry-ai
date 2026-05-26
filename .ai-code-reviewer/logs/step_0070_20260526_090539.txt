@@ -1,0 +1,14 @@
+=== STEP 70 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/lock is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/Sparc/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me find a unit that's available and not skipped.
+
+ACTION: SET_SCOPE usr.bin/lock

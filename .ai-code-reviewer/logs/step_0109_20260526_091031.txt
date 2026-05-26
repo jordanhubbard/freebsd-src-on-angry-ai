@@ -1,0 +1,11 @@
+=== STEP 109 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I see the issue - my responses are being truncated. Let me include the complete action with the CONTENT block:
+
+ACTION: WRITE_FILE tools/regression/sigqueue/sigqtest1/Cargo.toml

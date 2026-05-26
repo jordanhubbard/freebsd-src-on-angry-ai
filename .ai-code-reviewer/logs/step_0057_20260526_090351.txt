@@ -1,0 +1,18 @@
+=== STEP 57 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/jot:
+```
+Makefile
+Makefile.depend
+jot.1
+jot.c
+tests
+```
+
+--- RESPONSE ---
+
+
+Good, usr.bin/jot has C source and no Rust yet. Let me try setting scope to it.
+
+ACTION: SET_SCOPE usr.bin/jot

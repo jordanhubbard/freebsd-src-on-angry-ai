@@ -1,0 +1,12 @@
+=== STEP 85 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/units is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE lib/libc_nonshared
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE lib/libc_nonshared

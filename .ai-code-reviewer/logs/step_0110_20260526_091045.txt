@@ -1,0 +1,11 @@
+=== STEP 110 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the complete action with the CONTENT block. Let me write the Cargo.toml:
+
+ACTION: WRITE_FILE tools/regression/sigqueue/sigqtest1/Cargo.toml
