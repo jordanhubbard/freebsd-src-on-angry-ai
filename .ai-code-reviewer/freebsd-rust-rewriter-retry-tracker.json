@@ -199,6 +199,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T20:56:42.109153"
   },
+  "contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T19:32:16.076387"
+  },
   "contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-25T01:01:37.147181"
@@ -299,6 +303,10 @@
     "attempts": 2,
     "last_attempt": "2026-05-22T21:46:57.529904"
   },
+  "lib/libc/gen": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:16:18.194734"
+  },
   "lib/libmd": {
     "attempts": 3,
     "last_attempt": "2026-05-25T18:11:16.422565"
@@ -363,9 +371,13 @@
     "attempts": 1,
     "last_attempt": "2026-05-25T16:38:17.880925"
   },
-  "sbin/md5": {
+  "sbin/dmesg": {
     "attempts": 1,
-    "last_attempt": "2026-05-22T23:06:35.707184"
+    "last_attempt": "2026-05-25T19:17:53.455595"
+  },
+  "sbin/md5": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T19:18:17.008680"
   },
   "share/examples/FreeBSD_version": {
     "attempts": 3,
@@ -376,8 +388,8 @@
     "last_attempt": "2026-05-25T18:50:28.911741"
   },
   "stand/ficl/x86": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T19:08:30.370443"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:17:29.721243"
   },
   "stand/libsa/x86": {
     "attempts": 3,
@@ -598,6 +610,10 @@
   "usr.bin/false": {
     "attempts": 3,
     "last_attempt": "2026-05-21T20:49:38.897585"
+  },
+  "usr.bin/fetch": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:14:42.052681"
   },
   "usr.bin/fmt": {
     "attempts": 3,

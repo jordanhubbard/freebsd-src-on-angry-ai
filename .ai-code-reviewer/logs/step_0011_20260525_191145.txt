@@ -1,0 +1,15 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/stand/ficl/i386:
+```
+sysdep.c
+sysdep.h
+```
+
+--- RESPONSE ---
+
+
+This unit is in `stand/ficl/x86` which is boot loader code, not userland. The rewrite objective targets FreeBSD userland C/C++ libraries and commands. The `stand/` tree is for boot loaders, which falls outside the objective scope. Let me move to the next pending unit.
+
+ACTION: SET_SCOPE bin/cat/tests

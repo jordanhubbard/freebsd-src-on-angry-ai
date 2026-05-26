@@ -1,0 +1,38 @@
+=== STEP 47 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/calendar/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/calendar
+   Files: 0/15
+📄 File: usr.bin/calendar/Makefile
+
+```
+.include <src.opts.mk>
+
+PROG=	calendar
+SRCS=	calendar.c locale.c events.c dates.c parsedata.c io.c day.c \
+	ostern.c paskha.c pom.c sunpos.c
+LIBADD=	m util
+
+.if ${MK_ICONV} == "yes"
+CFLAGS+=	-DWITH_ICONV
+.endif
+
+FILESGROUPS+=	CALS
+CALS=	calendars/calendar.freebsd
+CALSDIR=	${SHAREDIR}/calendar
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+This unit has 10 C source files - that's moderately large. Let me try to find a smaller unit first per the `small_first` strategy.
+
+ACTION: SET_SCOPE bin/echo

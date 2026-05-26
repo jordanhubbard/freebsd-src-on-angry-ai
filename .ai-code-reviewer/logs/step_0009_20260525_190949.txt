@@ -1,0 +1,400 @@
+=== STEP 9 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/stand/ficl/ficl.h:
+
+📋 CHUNKED FILE REWRITE MODE
+   File: /usr/home/jkh/Src/freebsd-src-on-angry-AI/stand/ficl/ficl.h
+   Total chunks: 95
+   Strategy: Function-by-function rewrite
+   Use ACTION: NEXT_CHUNK to continue
+   Use ACTION: SKIP_FILE to move to next file
+
+PROGRESS:
+📁 Directory: stand/ficl/x86
+   Files: 0/1
+📄 File: stand/ficl/ficl.h
+   Chunks: 1/95
+
+```
+=== CHUNK 1/95: /usr/home/jkh/Src/freebsd-src-on-angry-AI/stand/ficl/ficl.h === [header: file_header]
+=== Lines 1-369 (369 lines) ===
+
+/*******************************************************************
+** f i c l . h
+** Forth Inspired Command Language
+** Author: John Sadler (john_sadler@alum.mit.edu)
+** Created: 19 July 1997
+** Dedicated to RHS, in loving memory
+** $Id: ficl.h,v 1.18 2001/12/05 07:21:34 jsadler Exp $
+*******************************************************************/
+/*
+** Copyright (c) 1997-2001 John Sadler (john_sadler@alum.mit.edu)
+** All rights reserved.
+**
+** Get the latest Ficl release at http://ficl.sourceforge.net
+**
+** I am interested in hearing from anyone who uses ficl. If you have
+** a problem, a success story, a defect, an enhancement request, or
+** if you would like to contribute to the ficl release, please
+** contact me by email at the address above.
+**
+** L I C E N S E  and  D I S C L A I M E R
+** 
+** Redistribution and use in source and binary forms, with or without
+** modification, are permitted provided that the following conditions
+** are met:
+** 1. Redistributions of source code must retain the above copyright
+**    notice, this list of conditions and the following disclaimer.
+** 2. Redistributions in binary form must reproduce the above copyright
+**    notice, this list of conditions and the following disclaimer in the
+**    documentation and/or other materials provided with the distribution.
+**
+** THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+** ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+** IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+** ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+** FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+** DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+** OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+** HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+** LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+** OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+** SUCH DAMAGE.
+*/
+
+
+#if !defined (__FICL_H__)
+#define __FICL_H__
+/*
+** Ficl (Forth-inspired command language) is an ANS Forth
+** interpreter written in C. Unlike traditional Forths, this
+** interpreter is designed to be embedded into other systems
+** as a command/macro/development prototype language. 
+**
+** Where Forths usually view themselves as the center of the system
+** and expect the rest of the system to be coded in Forth, Ficl
+** acts as a component of the system. It is easy to export 
+** code written in C or ASM to Ficl in the style of TCL, or to invoke
+** Ficl code from a compiled module. This allows you to do incremental
+** development in a way that combines the best features of threaded 
+** languages (rapid development, quick code/test/debug cycle,
+** reasonably fast) with the best features of C (everyone knows it,
+** easier to support large blocks of code, efficient, type checking).
+**
+** Ficl provides facilities for interoperating
+** with programs written in C: C functions can be exported to Ficl,
+** and Ficl commands can be executed via a C calling interface. The
+** interpreter is re-entrant, so it can be used in multiple instances
+** in a multitasking system. Unlike Forth, Ficl's outer interpreter
+** expects a text block as input, and returns to the caller after each
+** text block, so the "data pump" is somewhere in external code. This
+** is more like TCL than Forth, which usually expcets to be at the center
+** of the system, requesting input at its convenience. Each Ficl virtual 
+** machine can be bound to a different I/O channel, and is independent
+** of all others in in the same address space except that all virtual
+** machines share a common dictionary (a sort or open symbol table that
+** defines all of the elements of the language).
+**
+** Code is written in ANSI C for portability. 
+**
+** Summary of Ficl features and constraints:
+** - Standard: Implements the ANSI Forth CORE word set and part 
+**   of the CORE EXT word-set, SEARCH and SEARCH EXT, TOOLS and
+**   TOOLS EXT, LOCAL and LOCAL ext and various extras.
+** - Extensible: you can export code written in Forth, C, 
+**   or asm in a straightforward way. Ficl provides open
+**   facilities for extending the language in an application
+**   specific way. You can even add new control structures!
+** - Ficl and C can interact in two ways: Ficl can encapsulate
+**   C code, or C code can invoke Ficl code.
+** - Thread-safe, re-entrant: The shared system dictionary 
+**   uses a locking mechanism that you can either supply
+**   or stub out to provide exclusive access. Each Ficl
+**   virtual machine has an otherwise complete state, and
+**   each can be bound to a separate I/O channel (or none at all).
+** - Simple encapsulation into existing systems: a basic implementation
+**   requires three function calls (see the example program in testmain.c).
+** - ROMable: Ficl is designed to work in RAM-based and ROM code / RAM data
+**   environments. It does require somewhat more memory than a pure
+**   ROM implementation because it builds its system dictionary in 
+**   RAM at startup time.
+** - Written an ANSI C to be as simple as I can make it to understand,
+**   support, debug, and port. Compiles without complaint at /Az /W4 
+**   (require ANSI C, max warnings) under Microsoft VC++ 5.
+** - Does full 32 bit math (but you need to implement
+**   two mixed precision math primitives (see sysdep.c))
+** - Indirect threaded interpreter is not the fastest kind of
+**   Forth there is (see pForth 68K for a really fast subroutine
+**   threaded interpreter), but it's the cleanest match to a
+**   pure C implementation.
+**
+** P O R T I N G   F i c l
+**
+** To install Ficl on your target system, you need an ANSI C compiler
+** and its runtime library. Inspect the system dependent macros and
+** functions in sysdep.h and sysdep.c and edit them to suit your
+** system. For example, INT16 is a short on some compilers and an
+** int on others. Check the default CELL alignment controlled by
+** FICL_ALIGN. If necessary, add new definitions of ficlMalloc, ficlFree,
+** ficlLockDictionary, and ficlTextOut to work with your operating system.
+** Finally, use testmain.c as a guide to installing the Ficl system and 
+** one or more virtual machines into your code. You do not need to include
+** testmain.c in your build.
+**
+** T o   D o   L i s t
+**
+** 1. Unimplemented system dependent CORE word: key
+** 2. Ficl uses the PAD in some CORE words - this violates the standard,
+**    but it's cleaner for a multithreaded system. I'll have to make a
+**    second pad for reference by the word PAD to fix this.
+**
+** F o r   M o r e   I n f o r m a t i o n
+**
+** Web home of ficl
+**   http://ficl.sourceforge.net
+** Check this website for Forth literature (including the ANSI standard)
+**   http://www.taygeta.com/forthlit.html
+** and here for software and more links
+**   http://www.taygeta.com/forth.html
+**
+** Obvious Performance enhancement opportunities
+** Compile speed
+** - work on interpret speed
+** - turn off locals (FICL_WANT_LOCALS)
+** Interpret speed 
+** - Change inner interpreter (and everything else)
+**   so that a definition is a list of pointers to functions
+**   and inline data rather than pointers to words. This gets
+**   rid of vm->runningWord and a level of indirection in the
+**   inner loop. I'll look at it for ficl 3.0
+** - Make the main hash table a bigger prime (HASHSIZE)
+** - FORGET about twiddling the hash function - my experience is
+**   that that is a waste of time.
+** - Eliminate the need to pass the pVM parameter on the stack
+**   by dedicating a register to it. Most words need access to the
+**   vm, but the parameter passing overhead can be reduced. One way
+**   requires that the host OS have a task switch callout. Create
+**   a global variable for the running VM and refer to it in words
+**   that need VM access. Alternative: use thread local storage. 
+**   For single threaded implementations, you can just use a global.
+**   The first two solutions create portability problems, so I
+**   haven't considered doing them. Another possibility is to
+**   declare the pVm parameter to be "register", and hope the compiler
+**   pays attention.
+**
+*/
+
+/*
+** Revision History:
+** 
+** 15 Apr 1999 (sadler) Merged FreeBSD changes for exception wordset and
+** counted strings in ficlExec. 
+** 12 Jan 1999 (sobral) Corrected EVALUATE behavior. Now TIB has an
+** "end" field, and all words respect this. ficlExec is passed a "size"
+** of TIB, as well as vmPushTib. This size is used to calculate the "end"
+** of the string, ie, base+size. If the size is not known, pass -1.
+**
+** 10 Jan 1999 (sobral) EXCEPTION word set has been added, and existing
+** words has been modified to conform to EXCEPTION EXT word set. 
+**
+** 27 Aug 1998 (sadler) testing and corrections for LOCALS, LOCALS EXT,
+**  SEARCH / SEARCH EXT, TOOLS / TOOLS EXT. 
+**  Added .X to display in hex, PARSE and PARSE-WORD to supplement WORD,
+**  EMPTY to clear stack.
+**
+** 29 jun 1998 (sadler) added variable sized hash table support
+**  and ANS Forth optional SEARCH & SEARCH EXT word set.
+** 26 May 1998 (sadler) 
+**  FICL_PROMPT macro
+** 14 April 1998 (sadler) V1.04
+**  Ficlwin: Windows version, Skip Carter's Linux port
+** 5 March 1998 (sadler) V1.03
+**  Bug fixes -- passes John Ryan's ANS test suite "core.fr"
+**
+** 24 February 1998 (sadler) V1.02
+** -Fixed bugs in <# # #>
+** -Changed FICL_WORD so that storage for the name characters
+**  can be allocated from the dictionary as needed rather than 
+**  reserving 32 bytes in each word whether needed or not - 
+**  this saved 50% of the dictionary storage requirement.
+** -Added words in testmain for Win32 functions system,chdir,cwd,
+**  also added a word that loads and evaluates a file.
+**
+** December 1997 (sadler)
+** -Added VM_RESTART exception handling in ficlExec -- this lets words
+**  that require additional text to succeed (like :, create, variable...)
+**  recover gracefully from an empty input buffer rather than emitting
+**  an error message. Definitions can span multiple input blocks with
+**  no restrictions.
+** -Changed #include order so that <assert.h> is included in sysdep.h,
+**  and sysdep is included in all other files. This lets you define
+**  NDEBUG in sysdep.h to disable assertions if you want to.
+** -Make PC specific system dependent code conditional on _M_IX86
+**  defined so that ports can coexist in sysdep.h/sysdep.c
+*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "sysdep.h"
+#include <limits.h> /* UCHAR_MAX */
+
+/*
+** Forward declarations... read on.
+*/
+struct ficl_word;
+typedef struct ficl_word FICL_WORD;
+struct vm;
+typedef struct vm FICL_VM;
+struct ficl_dict;
+typedef struct ficl_dict FICL_DICT;
+struct ficl_system;
+typedef struct ficl_system FICL_SYSTEM;
+struct ficl_system_info;
+typedef struct ficl_system_info FICL_SYSTEM_INFO;
+
+/* 
+** the Good Stuff starts here...
+*/
+#define FICL_VER        "3.03"
+#define FICL_VER_MAJOR  3
+#define FICL_VER_MINOR  3
+#if !defined (FICL_PROMPT)
+#define FICL_PROMPT "ok> "
+#endif
+
+/*
+** ANS Forth requires false to be zero, and true to be the ones
+** complement of false... that unifies logical and bitwise operations
+** nicely.
+*/
+#define FICL_TRUE  (~(FICL_UNS)0)
+#define FICL_FALSE (0)
+#define FICL_BOOL(x) ((x) ? FICL_TRUE : FICL_FALSE)
+
+
+/*
+** A CELL is the main storage type. It must be large enough
+** to contain a pointer or a scalar. In order to accommodate 
+** 32 bit and 64 bit processors, use abstract types for int, 
+** unsigned, and float.
+*/
+typedef union _cell
+{
+    FICL_INT i;
+    FICL_UNS u;
+#if (FICL_WANT_FLOAT)
+    FICL_FLOAT f;
+#endif
+    void *p;
+    void (*fn)(void);
+} CELL;
+
+/*
+** LVALUEtoCELL does a little pointer trickery to cast any CELL sized
+** lvalue (informal definition: an expression whose result has an
+** address) to CELL. Remember that constants and casts are NOT
+** themselves lvalues!
+*/
+#define LVALUEtoCELL(v) (*(CELL *)&v)
+
+/*
+** PTRtoCELL is a cast through void * intended to satisfy the
+** most outrageously pedantic compiler... (I won't mention 
+** its name)
+*/
+#define PTRtoCELL (CELL *)(void *)
+#define PTRtoSTRING (FICL_STRING *)(void *)
+
+/*
+** Strings in FICL are stored in Pascal style - with a count
+** preceding the text. We'll also NULL-terminate them so that 
+** they work with the usual C lib string functions. (Belt &
+** suspenders? You decide.)
+** STRINGINFO hides the implementation with a couple of
+** macros for use in internal routines.
+*/
+
+typedef unsigned char FICL_COUNT;
+#define FICL_STRING_MAX UCHAR_MAX
+typedef struct _ficl_string
+{
+    FICL_COUNT count;
+    char text[1];
+} FICL_STRING;
+
+typedef struct 
+{
+    FICL_UNS count;
+    char *cp;
+} STRINGINFO;
+
+#define SI_COUNT(si) (si.count)
+#define SI_PTR(si)   (si.cp)
+#define SI_SETLEN(si, len) (si.count = (FICL_UNS)(len))
+#define SI_SETPTR(si, ptr) (si.cp = (char *)(ptr))
+/* 
+** Init a STRINGINFO from a pointer to NULL-terminated string
+*/
+#define SI_PSZ(si, psz) \
+            {si.cp = psz; si.count = (FICL_COUNT)strlen(psz);}
+/* 
+** Init a STRINGINFO from a pointer to FICL_STRING
+*/
+#define SI_PFS(si, pfs) \
+            {si.cp = pfs->text; si.count = pfs->count;}
+
+/*
+** Ficl uses this little structure to hold the address of 
+** the block of text it's working on and an index to the next
+** unconsumed character in the string. Traditionally, this is
+** done by a Text Input Buffer, so I've called this struct TIB.
+**
+** Since this structure also holds the size of the input buffer,
+** and since evaluate requires that, let's put the size here.
+** The size is stored as an end-pointer because that is what the
+** null-terminated string aware functions find most easy to deal
+** with.
+** Notice, though, that nobody really uses this except evaluate,
+** so it might just be moved to FICL_VM instead. (sobral)
+*/
+typedef struct
+{
+    FICL_INT index;
+    char *end;
+    char *cp;
+} TIB;
+
+
+/*
+** Stacks get heavy use in Ficl and Forth...
+** Each virtual machine implements two of them:
+** one holds parameters (data), and the other holds return
+** addresses and control flow information for the virtual
+** machine. (Note: C's automatic stack is implicitly used,
+** but not modeled because it doesn't need to be...)
+** Here's an abstract type for a stack
+*/
+typedef struct _ficlStack
+{
+    FICL_UNS nCells;    /* size of the stack */
+    CELL *pFrame;       /* link reg for stack frame */
+    CELL *sp;           /* stack pointer */
+    CELL base[1];       /* Top of stack */
+} FICL_STACK;
+
+/*
+** Stack methods... many map closely to required Forth words.
+*/
+FICL_STACK *stackCreate   (unsigned nCells);
+
+```
+
+--- RESPONSE ---
+
+
+This is a very large header file. Let me skip it and focus on the key types needed for the rewrite.
+
+ACTION: SKIP_FILE

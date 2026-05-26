@@ -1,0 +1,12 @@
+=== STEP 55 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/env is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE stand/ficl/x86
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/factor

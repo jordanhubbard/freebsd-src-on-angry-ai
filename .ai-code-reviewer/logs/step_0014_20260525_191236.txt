@@ -1,0 +1,14 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+GREP_RESULT for 'FICL_COMPILE_SET':
+```
+./stand/ficl/gfx_loader.c:254:FICL_COMPILE_SET(ficlCompileGfx);
+./stand/ficl/ficl.h:1155:#define FICL_COMPILE_SET(func)	\
+./stand/ficl/x86/sysdep.c:48:FICL_COMPILE_SET(ficlCompileCpufunc);
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE stand/ficl/i386/sysdep.c

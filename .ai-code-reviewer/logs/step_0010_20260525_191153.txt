@@ -1,0 +1,9 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*stand/ficl/x86/sysdep.h*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR stand/ficl/amd64

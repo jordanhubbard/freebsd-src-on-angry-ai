@@ -1,0 +1,13 @@
+=== STEP 37 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/awk has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/X86/TargetInfo
+
+--- RESPONSE ---
+
+
+The queue keeps suggesting LLVM vendor code. Let me find a real FreeBSD userland unit that's pending.
+
+ACTION: SET_SCOPE usr.bin/banner

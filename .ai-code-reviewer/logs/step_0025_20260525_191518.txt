@@ -1,0 +1,14 @@
+=== STEP 25 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/date is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/X86/TargetInfo
+
+--- RESPONSE ---
+
+
+The queue is stuck on LLVM vendor code and skipped units. Let me find a real FreeBSD userland unit.
+
+ACTION: LIST_DIR bin

@@ -1,0 +1,14 @@
+=== STEP 131 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/last is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE stand/ficl/x86
+
+--- RESPONSE ---
+
+
+I keep hitting skipped units. Let me try a completely different area.
+
+ACTION: SET_SCOPE usr.bin/last

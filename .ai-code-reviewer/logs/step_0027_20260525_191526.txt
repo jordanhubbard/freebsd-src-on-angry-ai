@@ -1,0 +1,14 @@
+=== STEP 27 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/chio is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/X86/TargetInfo
+
+--- RESPONSE ---
+
+
+The queue keeps suggesting LLVM vendor code. Let me find a real FreeBSD userland unit that hasn't been skipped.
+
+ACTION: SET_SCOPE bin/cpuset

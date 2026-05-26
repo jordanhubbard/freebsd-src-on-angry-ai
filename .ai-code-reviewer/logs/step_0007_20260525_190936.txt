@@ -1,0 +1,12 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*ficl.mk*':
+```
+./stand/ficl.mk
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE stand/ficl.mk
