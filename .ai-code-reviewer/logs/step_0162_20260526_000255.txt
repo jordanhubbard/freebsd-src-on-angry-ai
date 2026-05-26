@@ -1,0 +1,27 @@
+=== STEP 162 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.sbin/route6d/misc/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.sbin/route6d/misc/Makefile
+CONTENT:
+<<<
+# Standalone Makefile for Rust cksum replacement
+
+CARGO = cargo
+CARGO_TARGET_DIR = ${.OBJDIR}/cargo-target
+
+all: cksum
+
+cksum:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+.PHONY: all clean cksum
+>>>

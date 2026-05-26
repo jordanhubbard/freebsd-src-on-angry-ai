@@ -1,0 +1,13 @@
+=== STEP 193 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat/tests has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/arm
+
+--- RESPONSE ---
+
+
+This unit contains IA64-specific assembly code and a trivial C stub that just returns `NOTIMPL`. The assembly file cannot be meaningfully rewritten in Rust, and the C file is architecture-specific test infrastructure. This unit is not suitable for Rust translation.
+
+ACTION: SET_SCOPE bin/chflags/tests

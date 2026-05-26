@@ -1,0 +1,12 @@
+=== STEP 29 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory contrib/llvm-project/llvm/lib/Target/X86/TargetInfo skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/netbsd-tests/fs/msdosfs
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE contrib/netbsd-tests/fs/msdosfs

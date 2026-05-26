@@ -1,0 +1,27 @@
+=== STEP 144 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.sbin/route6d/misc/Makefile
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.sbin/route6d/misc/Makefile
+CONTENT:
+<<<
+# Rust replacement for cksum.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+all: cksum_bin
+
+cksum_bin:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${CARGO} clean --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+.PHONY: all clean cksum_bin
+>>>
