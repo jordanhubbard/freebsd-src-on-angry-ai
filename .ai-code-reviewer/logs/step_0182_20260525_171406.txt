@@ -1,0 +1,9 @@
+=== STEP 182 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/common*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/netbsd-tests/lib/libc/common

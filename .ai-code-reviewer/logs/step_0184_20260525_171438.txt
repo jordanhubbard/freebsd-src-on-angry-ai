@@ -1,0 +1,11 @@
+=== STEP 184 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit has no Makefile and is a subdirectory of test support code. The C file is trivial (returns `NOTIMPL`) and the `.S` file is architecture-specific assembly. Per the constraint "If a unit has no source relevant to the configured objective, choose another unit instead of fabricating placeholder Rust," I should skip this and move to a better unit.
+
+ACTION: SET_SCOPE bin/cat/tests

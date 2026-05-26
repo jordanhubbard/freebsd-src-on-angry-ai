@@ -1,0 +1,9 @@
+=== STEP 177 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/arch/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE contrib/netbsd-tests/lib/libc/common/exec_prot.h

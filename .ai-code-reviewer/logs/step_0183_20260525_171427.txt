@@ -1,0 +1,16 @@
+=== STEP 183 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc/common:
+```
+exec_prot.h
+```
+
+--- RESPONSE ---
+
+
+This unit is test support code with no Makefile. The C file is trivial (returns `NOTIMPL`) and the `.S` file is architecture-specific assembly. This is not a good candidate for a Rust rewrite per the constraint: "If a unit has no source relevant to the configured objective, choose another unit instead of fabricating placeholder Rust."
+
+Let me check the parent Makefile to understand the build context:
+
+ACTION: FIND_FILE contrib/netbsd-tests/lib/libc/Makefile

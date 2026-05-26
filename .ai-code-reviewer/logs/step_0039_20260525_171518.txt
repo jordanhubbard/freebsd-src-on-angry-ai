@@ -1,0 +1,24 @@
+=== STEP 39 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ul/Makefile:
+PROGRESS:
+📁 Directory: contrib/netbsd-tests/lib/libc/arch/mips
+   Files: 1/2
+📄 File: usr.bin/ul/Makefile
+
+```
+PROG=	ul
+
+LIBADD=	tinfow
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+Let me try a different approach and look at what units are available.
+
+ACTION: READ_FILE usr.bin/ul/ul.c

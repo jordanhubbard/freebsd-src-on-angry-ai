@@ -1,0 +1,39 @@
+=== STEP 181 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc:
+```
+arch
+c063
+common
+db
+gen
+hash
+inet
+locale
+net
+regex
+rpc
+setjmp
+ssp
+stdio
+stdlib
+string
+sync
+sys
+t_cdb.c
+t_convfp.c
+t_gdtoa.c
+termios
+time
+tls
+tls_dso
+ttyio
+```
+
+--- RESPONSE ---
+
+
+This unit is test support code with no Makefile. The C file is trivial (returns `NOTIMPL`) and the `.S` file is assembly. Let me check the common header to understand the interface:
+
+ACTION: FIND_FILE contrib/netbsd-tests/lib/libc/common

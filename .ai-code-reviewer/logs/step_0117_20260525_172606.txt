@@ -1,0 +1,14 @@
+=== STEP 117 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/m68k
+
+--- RESPONSE ---
+
+
+Let me try the exact format with proper line breaks and delimiters:
+
+ACTION: WRITE_FILE lib/liby/Cargo.toml

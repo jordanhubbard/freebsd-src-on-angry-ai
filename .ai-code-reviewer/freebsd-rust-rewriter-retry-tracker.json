@@ -236,8 +236,12 @@
     "last_attempt": "2026-05-25T16:23:10.886513"
   },
   "contrib/netbsd-tests/lib/libc/arch/m68k": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T16:47:43.555699"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T17:11:41.112938"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/mips": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T17:12:58.523877"
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
@@ -308,8 +312,8 @@
     "last_attempt": "2026-05-24T11:31:47.260371"
   },
   "lib/liby": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T01:05:41.746633"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T17:18:07.507141"
   },
   "libexec/atrun": {
     "attempts": 1,

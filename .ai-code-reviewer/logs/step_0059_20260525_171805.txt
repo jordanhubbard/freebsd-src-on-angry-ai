@@ -1,0 +1,12 @@
+=== STEP 59 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/apply is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/m68k
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE lib/liby

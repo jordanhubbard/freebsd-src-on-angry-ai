@@ -1,0 +1,9 @@
+=== STEP 49 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/arch/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/apply
