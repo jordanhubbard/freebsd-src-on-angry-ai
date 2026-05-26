@@ -1,0 +1,211 @@
+=== STEP 434 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/clri/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+This approach with opaque pointers and non-existent libufs helper functions won't compile. Let me take a simpler approach - define the struct properly and use heap allocation.
+
+ACTION: WRITE_FILE sbin/clri/src/main.rs
+CONTENT:
+<<<
+use std::ffi::{c_char, c_int, c_long, c_longlong, c_uint, c_ushort, CString};
+use std::os::raw::{c_void, c_ulonglong};
+use std::process;
+
+const UFS_ROOTINO: u64 = 2;
+const FS_UFS1_MAGIC: u32 = 0x19540119;
+const FS_UFS2_MAGIC: u32 = 0x1954011a;
+const LIBUFS_BUFALIGN: usize = 128;
+const LIBUFS_MAXBSIZE: usize = 65536;
+const SBLOCKSIZE: usize = 16384;
+
+extern "C" {
+    fn ufs_disk_fillout(disk: *mut uufsd, fsname: *const c_char) -> c_int;
+    fn getinode(disk: *const uufsd, dp: *mut dinodep, ino: u64) -> c_int;
+    fn putinode(disk: *const uufsd) -> c_int;
+    fn ufs_disk_close(disk: *const uufsd) -> c_int;
+    fn fsync(fd: c_int) -> c_int;
+    fn malloc(size: usize) -> *mut c_void;
+    fn free(p: *mut c_void);
+}
+
+// Minimal fs struct - we only need fs_magic
+#[repr(C)]
+struct fs {
+    pub fs_magic: u32,
+    _rest: [u8; SBLOCKSIZE - 4],
+}
+
+#[repr(C)]
+union sbunion {
+    pub d_fs: fs,
+    _d_sb: [c_char; SBLOCKSIZE],
+}
+
+#[repr(C)]
+union cgunion {
+    _d_cg: [u8; 1],
+    pub d_buf: [c_char; LIBUFS_MAXBSIZE],
+}
+
+#[repr(C)]
+union dinodep {
+    pub dp1: *mut ufs1_dinode,
+    pub dp2: *mut ufs2_dinode,
+}
+
+#[repr(C)]
+union inosunion {
+    pub d_ino: [dinodep; 1],
+    pub d_inos: [c_char; LIBUFS_MAXBSIZE],
+}
+
+#[repr(C)]
+struct uufsd {
+    d_sbunion: sbunion,
+    d_cgunion: cgunion,
+    d_inosunion: inosunion,
+    d_name: *const c_char,
+    d_error: *const c_char,
+    d_sblock: c_ulonglong,
+    d_si: *mut c_void,
+    d_dp: dinodep,
+    d_inomin: u64,
+    d_inomax: u64,
+    d_sblockloc: c_longlong,
+    d_bsize: c_longlong,
+    d_lookupflags: c_longlong,
+    d_mine: c_longlong,
+    d_ccg: c_int,
+    d_ufs: c_int,
+    d_fd: c_int,
+    d_lcg: c_int,
+}
+
+#[repr(C)]
+struct ufs1_dinode {
+    pub di_gen: u32,
+    _rest: [u8; 128 - 4],
+}
+
+#[repr(C)]
+struct ufs2_dinode {
+    pub di_gen: u32,
+    _rest: [u8; 256 - 4],
+}
+
+fn usage() -> ! {
+    eprintln!("usage: clri special_device inode_number ...");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 3 {
+        usage();
+    }
+
+    let fsname = match CString::new(args[1].as_bytes()) {
+        Ok(s) => s,
+        Err(_) => {
+            eprintln!("Invalid device name");
+            process::exit(1);
+        }
+    };
+
+    let disk_ptr = unsafe {
+        let ptr = malloc(std::mem::size_of::<uufsd>());
+        if ptr.is_null() {
+            eprintln!("Failed to allocate memory");
+            process::exit(1);
+        }
+        std::ptr::write_bytes(ptr as *mut u8, 0, std::mem::size_of::<uufsd>());
+        ptr as *mut uufsd
+    };
+
+    if unsafe { ufs_disk_fillout(disk_ptr, fsname.as_ptr()) } == -1 {
+        let err = unsafe {
+            let err_ptr = (*disk_ptr).d_error;
+            if !err_ptr.is_null() {
+                std::ffi::CStr::from_ptr(err_ptr)
+                    .to_string_lossy()
+                    .into_owned()
+            } else {
+                "unknown error".to_string()
+            }
+        };
+        eprintln!("loading superblock: {}", err);
+        unsafe { free(disk_ptr as *mut c_void) };
+        process::exit(1);
+    }
+
+    let ufs_version = unsafe { (*disk_ptr).d_ufs };
+    let is_ufs1 = ufs_version == 1;
+
+    let mut exitval: i32 = 0;
+
+    for arg in &args[2..] {
+        let inonum: u64 = match arg.parse() {
+            Ok(n) => n,
+            Err(_) => {
+                eprintln!("{} is not a valid inode number", arg);
+                exitval = 1;
+                continue;
+            }
+        };
+
+        if inonum < UFS_ROOTINO {
+            eprintln!("{} is not a valid inode number", arg);
+            exitval = 1;
+            continue;
+        }
+
+        println!("clearing {}", inonum);
+
+        let mut dp: dinodep = unsafe { std::mem::zeroed() };
+
+        if unsafe { getinode(disk_ptr, &mut dp, inonum) } == -1 {
+            let err = unsafe {
+                let err_ptr = (*disk_ptr).d_error;
+                if !err_ptr.is_null() {
+                    std::ffi::CStr::from_ptr(err_ptr)
+                        .to_string_lossy()
+                        .into_owned()
+                } else {
+                    "unknown error".to_string()
+                }
+            };
+            eprintln!("getinode: {}", err);
+            exitval = 1;
+            continue;
+        }
+
+        let generation: u32;
+        if is_ufs1 {
+            generation = unsafe { (*dp.dp1).di_gen } + 1;
+            unsafe {
+                std::ptr::write_bytes(dp.dp1, 0, std::mem::size_of::<ufs1_dinode>());
+                (*dp.dp1).di_gen = generation;
+            }
+        } else {
+            generation = unsafe { (*dp.dp2).di_gen } + 1;
+            unsafe {
+                std::ptr::write_bytes(dp.dp2, 0, std::mem::size_of::<ufs2_dinode>());
+                (*dp.dp2).di_gen = generation;
+            }
+        }
+
+        unsafe { putinode(disk_ptr) };
+        let fd = unsafe { (*disk_ptr).d_fd };
+        unsafe { fsync(fd) };
+    }
+
+    unsafe { ufs_disk_close(disk_ptr) };
+    unsafe { free(disk_ptr as *mut c_void) };
+    process::exit(exitval);
+}
+>>>

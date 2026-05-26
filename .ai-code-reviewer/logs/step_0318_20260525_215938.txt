@@ -1,0 +1,13 @@
+=== STEP 318 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*bsd.prog.mk*':
+```
+./tools/build/mk/bsd.prog.mk
+./share/mk/bsd.prog.mk
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE share/mk/bsd.prog.mk

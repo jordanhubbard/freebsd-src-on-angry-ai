@@ -1,0 +1,22 @@
+=== STEP 157 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/iconv/src/main.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The Rust code uses `libc` crate which isn't available offline. I need to fix that and update the Makefile.
+
+ACTION: EDIT_FILE usr.bin/iconv/src/main.rs
+OLD:
+<<<
+            if ret == usize::MAX {
+                let err = unsafe { libc::__errno() };
+                if err != libc::E2BIG {
+                    if err != libc::EINVAL || inptr != inbuf.as_ptr() as *const i8 {
+                        eprintln!("iconv(): {}", io::Error::from_raw_os_error(err));
+                        process::exit(1);
+                    }
+<<<

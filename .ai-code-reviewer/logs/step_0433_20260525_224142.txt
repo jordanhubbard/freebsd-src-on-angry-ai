@@ -1,0 +1,391 @@
+=== STEP 433 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libufs/libufs.h:
+PROGRESS:
+📁 Directory: sbin/clri
+   Files: 0/3
+📄 File: lib/libufs/libufs.h
+✏️  Edits: 2 files modified
+
+```
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2002 Juli Mallett.  All rights reserved.
+ *
+ * This software was written by Juli Mallett <jmallett@FreeBSD.org> for the
+ * FreeBSD project.  Redistribution and use in source and binary forms, with
+ * or without modification, are permitted provided that the following
+ * conditions are met:
+ *
+ * 1. Redistribution of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistribution in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+ * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#ifndef	__LIBUFS_H__
+#define	__LIBUFS_H__
+
+#include <stdbool.h>
+
+/*
+ * Various disk controllers require their buffers to be aligned to the size
+ * of a cache line. The LIBUFS_BUFALIGN defines the required alignment size.
+ * The alignment must be a power of 2.
+ */
+#define LIBUFS_BUFALIGN	128
+
+#define LIBUFS_MAXBSIZE	65536
+
+/*
+ * userland ufs disk.
+ */
+struct uufsd {
+	union {
+		struct fs d_fs;		/* filesystem information */
+		char d_sb[SBLOCKSIZE];	/* superblock as buffer */
+	} d_sbunion __aligned(LIBUFS_BUFALIGN);
+	union {
+		struct cg d_cg;		/* cylinder group */
+		char d_buf[LIBUFS_MAXBSIZE]; /* cylinder group storage */
+	} d_cgunion __aligned(LIBUFS_BUFALIGN);
+	union {
+		union dinodep d_ino[1];	/* inode block */
+		char d_inos[LIBUFS_MAXBSIZE]; /* inode block as buffer */
+	} d_inosunion __aligned(LIBUFS_BUFALIGN);
+	const char *d_name;		/* disk name */
+	const char *d_error;		/* human readable disk error */
+	ufs2_daddr_t d_sblock;		/* superblock location */
+	struct fs_summary_info *d_si;	/* Superblock summary info */
+	union dinodep d_dp;		/* pointer to currently active inode */
+	ino_t d_inomin;			/* low ino */
+	ino_t d_inomax;			/* high ino */
+	off_t d_sblockloc;		/* where to look for the superblock */
+	int64_t d_bsize;		/* device bsize */
+	int64_t d_lookupflags;		/* flags to superblock lookup */
+	int64_t d_mine;			/* internal flags */
+	int32_t d_ccg;			/* current cylinder group */
+	int32_t d_ufs;			/* decimal UFS version */
+	int32_t d_fd;			/* raw device file descriptor */
+	int32_t d_lcg;			/* last cylinder group (in d_cg) */
+};
+#define	d_inos	d_inosunion.d_inos
+#define	d_fs	d_sbunion.d_fs
+#define	d_cg	d_cgunion.d_cg
+
+/*
+ * libufs macros (internal, non-exported).
+ */
+#ifdef	_LIBUFS
+/*
+ * Ensure that the buffer is aligned to the I/O subsystem requirements.
+ */
+#define BUF_MALLOC(newbufpp, data, size) {				     \
+	if (data != NULL && (((intptr_t)data) & (LIBUFS_BUFALIGN - 1)) == 0) \
+		*newbufpp = (void *)data;				     \
+	else								     \
+		*newbufpp = aligned_alloc(LIBUFS_BUFALIGN, size);	     \
+}
+/*
+ * Trace steps through libufs, to be used at entry and erroneous return.
+ */
+static inline void
+ERROR(struct uufsd *u, const char *str)
+{
+
+#ifdef	_LIBUFS_DEBUGGING
+	if (str != NULL) {
+		fprintf(stderr, "libufs: %s", str);
+		if (errno != 0)
+			fprintf(stderr, ": %s", strerror(errno));
+		fprintf(stderr, "\n");
+	}
+#endif
+	if (u != NULL)
+		u->d_error = str;
+}
+#endif	/* _LIBUFS */
+
+__BEGIN_DECLS
+
+/*
+ * libufs prototypes.
+ */
+
+/*
+ * ffs_subr.c
+ */
+void	ffs_clrblock(struct fs *, u_char *, ufs1_daddr_t);
+void	ffs_clusteracct(struct fs *, struct cg *, ufs1_daddr_t, int);
+void	ffs_fragacct(struct fs *, int, int32_t [], int);
+int	ffs_isblock(struct fs *, u_char *, ufs1_daddr_t);
+int	ffs_isfreeblock(struct fs *, u_char *, ufs1_daddr_t);
+bool	ffs_oldfscompat_inode_read(struct fs *, union dinodep, time_t);
+int	ffs_sbsearch(void *, struct fs **, int, char *,
+	    int (*)(void *, off_t, void **, int));
+void	ffs_setblock(struct fs *, u_char *, ufs1_daddr_t);
+int	ffs_sbget(void *, struct fs **, off_t, int, char *,
+	    int (*)(void *, off_t, void **, int));
+int	ffs_sbput(void *, struct fs *, off_t,
+	    int (*)(void *, off_t, void *, int));
+void	ffs_update_dinode_ckhash(struct fs *, struct ufs2_dinode *);
+int	ffs_verify_dinode_ckhash(struct fs *, struct ufs2_dinode *);
+
+/*
+ * block.c
+ */
+ssize_t bread(struct uufsd *, ufs2_daddr_t, void *, size_t);
+ssize_t bwrite(struct uufsd *, ufs2_daddr_t, const void *, size_t);
+int berase(struct uufsd *, ufs2_daddr_t, ufs2_daddr_t);
+
+/*
+ * cgroup.c
+ */
+ufs2_daddr_t cgballoc(struct uufsd *);
+int cgbfree(struct uufsd *, ufs2_daddr_t, long);
+ino_t cgialloc(struct uufsd *);
+int cgget(int, struct fs *, int, struct cg *);
+int cgput(int, struct fs *, struct cg *);
+int cgread(struct uufsd *);
+int cgread1(struct uufsd *, int);
+int cgwrite(struct uufsd *);
+int cgwrite1(struct uufsd *, int);
+
+/*
+ * inode.c
+ */
+int getinode(struct uufsd *, union dinodep *, ino_t);
+int putinode(struct uufsd *);
+
+/*
+ * sblock.c
+ */
+int sbread(struct uufsd *);
+int sbfind(struct uufsd *, int);
+int sbwrite(struct uufsd *, int);
+/* low level superblock read/write functions */
+int sbget(int, struct fs **, off_t, int);
+int sbsearch(int, struct fs **, int);
+int sbput(int, struct fs *, int);
+
+/*
+ * type.c
+ */
+int ufs_disk_close(struct uufsd *);
+int ufs_disk_fillout(struct uufsd *, const char *);
+int ufs_disk_fillout_blank(struct uufsd *, const char *);
+int ufs_disk_write(struct uufsd *);
+
+/*
+ * crc32c.c
+ */
+uint32_t calculate_crc32c(uint32_t, const void *, size_t);
+
+__END_DECLS
+
+#endif	/* __LIBUFS_H__ */
+
+```
+
+--- RESPONSE ---
+
+
+The `uufsd` struct is very complex with large aligned buffers. Let me use opaque pointers for FFI safety.
+
+ACTION: WRITE_FILE sbin/clri/src/main.rs
+CONTENT:
+<<<
+use std::ffi::{c_char, c_int, c_void, CString};
+use std::process;
+
+const UFS_ROOTINO: u64 = 2;
+const FS_UFS1_MAGIC: u32 = 0x19540119;
+
+// Opaque handle to libufs uufsd struct
+struct UufsdHandle(*mut c_void);
+
+extern "C" {
+    fn ufs_disk_fillout(disk: *mut c_void, fsname: *const c_char) -> c_int;
+    fn getinode(disk: *const c_void, dp: *mut c_void, ino: u64) -> c_int;
+    fn putinode(disk: *const c_void) -> c_int;
+    fn ufs_disk_close(disk: *const c_void) -> c_int;
+    fn ufs_disk_fd(disk: *const c_void) -> c_int;
+    fn ufs_disk_error(disk: *const c_void) -> *const c_char;
+    fn ufs_disk_ufs_version(disk: *const c_void) -> c_int;
+}
+
+extern "C" {
+    fn fsync(fd: c_int) -> c_int;
+}
+
+fn usage() -> ! {
+    eprintln!("usage: clri special_device inode_number ...");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 3 {
+        usage();
+    }
+
+    let fsname = match CString::new(args[1].as_bytes()) {
+        Ok(s) => s,
+        Err(_) => {
+            eprintln!("Invalid device name");
+            process::exit(1);
+        }
+    };
+
+    // Allocate uufsd struct via libc malloc
+    let disk_ptr: *mut c_void;
+    unsafe {
+        disk_ptr = libc::malloc(std::mem::size_of::<uufsd_layout>());
+        if disk_ptr.is_null() {
+            eprintln!("Failed to allocate memory");
+            process::exit(1);
+        }
+        std::ptr::write_bytes(disk_ptr, 0, std::mem::size_of::<uufsd_layout>());
+    }
+
+    if unsafe { ufs_disk_fillout(disk_ptr, fsname.as_ptr()) } == -1 {
+        let err = unsafe {
+            let err_ptr = ufs_disk_error(disk_ptr);
+            if !err_ptr.is_null() {
+                std::ffi::CStr::from_ptr(err_ptr)
+                    .to_string_lossy()
+                    .into_owned()
+            } else {
+                "unknown error".to_string()
+            }
+        };
+        eprintln!("loading superblock: {}", err);
+        unsafe { libc::free(disk_ptr) };
+        process::exit(1);
+    }
+
+    let ufs_version = unsafe { ufs_disk_ufs_version(disk_ptr) };
+    let is_ufs1 = ufs_version == 1;
+
+    let mut exitval: i32 = 0;
+
+    for arg in &args[2..] {
+        let inonum: u64 = match arg.parse() {
+            Ok(n) => n,
+            Err(_) => {
+                eprintln!("{} is not a valid inode number", arg);
+                exitval = 1;
+                continue;
+            }
+        };
+
+        if inonum < UFS_ROOTINO {
+            eprintln!("{} is not a valid inode number", arg);
+            exitval = 1;
+            continue;
+        }
+
+        println!("clearing {}", inonum);
+
+        // Allocate dinodep union
+        let dp_ptr: *mut c_void;
+        unsafe {
+            dp_ptr = libc::malloc(std::mem::size_of::<dinodep_layout>());
+            if dp_ptr.is_null() {
+                eprintln!("Failed to allocate memory");
+                exitval = 1;
+                continue;
+            }
+            std::ptr::write_bytes(dp_ptr, 0, std::mem::size_of::<dinodep_layout>());
+        }
+
+        if unsafe { getinode(disk_ptr, dp_ptr, inonum) } == -1 {
+            let err = unsafe {
+                let err_ptr = ufs_disk_error(disk_ptr);
+                if !err_ptr.is_null() {
+                    std::ffi::CStr::from_ptr(err_ptr)
+                        .to_string_lossy()
+                        .into_owned()
+                } else {
+                    "unknown error".to_string()
+                }
+            };
+            eprintln!("getinode: {}", err);
+            unsafe { libc::free(dp_ptr) };
+            exitval = 1;
+            continue;
+        }
+
+        let generation: u32;
+        if is_ufs1 {
+            generation = unsafe {
+                let dp1 = dp_ptr as *mut ufs1_dinode;
+                (*dp1).di_gen + 1
+            };
+            unsafe {
+                let dp1 = dp_ptr as *mut ufs1_dinode;
+                std::ptr::write_bytes(dp1, 0, std::mem::size_of::<ufs1_dinode>());
+                (*dp1).di_gen = generation;
+            }
+        } else {
+            generation = unsafe {
+                let dp2 = dp_ptr as *mut ufs2_dinode;
+                (*dp2).di_gen + 1
+            };
+            unsafe {
+                let dp2 = dp_ptr as *mut ufs2_dinode;
+                std::ptr::write_bytes(dp2, 0, std::mem::size_of::<ufs2_dinode>());
+                (*dp2).di_gen = generation;
+            }
+        }
+
+        unsafe { putinode(disk_ptr) };
+        let fd = unsafe { ufs_disk_fd(disk_ptr) };
+        unsafe { fsync(fd) };
+
+        unsafe { libc::free(dp_ptr) };
+    }
+
+    unsafe { ufs_disk_close(disk_ptr) };
+    unsafe { libc::free(disk_ptr) };
+    process::exit(exitval);
+}
+
+// Layout-compatible structs for FFI
+#[repr(C)]
+struct uufsd_layout {
+    _data: [u8; 0], // opaque placeholder
+}
+
+#[repr(C)]
+struct dinodep_layout {
+    _data: [u8; 0], // opaque placeholder
+}
+
+#[repr(C)]
+struct ufs1_dinode {
+    pub di_gen: u32,
+    _rest: [u8; 128 - 4],
+}
+
+#[repr(C)]
+struct ufs2_dinode {
+    pub di_gen: u32,
+    _rest: [u8; 256 - 4],
+}
+>>>

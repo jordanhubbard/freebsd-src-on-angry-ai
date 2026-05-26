@@ -1,0 +1,66 @@
+=== STEP 96 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Cannot change directory with uncommitted changes
+
+Current directory: usr.bin/iconv
+Pending source/build changes: 2 files modified
+Files: usr.bin/iconv/Cargo.toml, usr.bin/iconv/src/main.rs
+
+You MUST complete the current directory first:
+1. Rewrite all relevant files in usr.bin/iconv
+2. Run ACTION: BUILD to test changes
+3. If build fails: fix errors and BUILD again
+4. If build succeeds: changes will be committed automatically
+5. THEN you can move to: usr.bin/ln
+
+BUILD and COMMIT happen at directory level!
+Each directory is one logical unit.
+
+
+--- RESPONSE ---
+
+
+I need to complete the current scope. Let me update the Makefile to integrate the Rust build.
+
+ACTION: EDIT_FILE usr.bin/iconv/Makefile
+OLD:
+```
+# $NetBSD: Makefile,v 1.6 2009/04/14 22:15:21 lukem Exp $
+
+.include <bsd.own.mk>
+
+PROG=	iconv
+#SRCS=	iconv.c
+MAN=	iconv.1
+
+.include <bsd.prog.mk>
+```
+NEW:
+```
+# $NetBSD: Makefile,v 1.6 2009/04/14 22:15:21 lukem Exp $
+
+.include <bsd.own.mk>
+
+PROG=	iconv
+#SRCS=	iconv.c
+MAN=	iconv.1
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+```

@@ -1,0 +1,15 @@
+=== STEP 314 ===
+
+--- REQUEST ---
+GREP_RESULT for 'bsd.prog.mk':
+```
+./tools/regression/tmpfs/h_tools.c:35: * to the limitations of bsd.prog.mk to build a single program in a
+./contrib/netbsd-tests/fs/tmpfs/h_tools.c:31: * to the limitations of bsd.prog.mk to build a single program in a
+```
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors/0 warnings. Let me check what the actual build command is and how the build system works:
+
+ACTION: READ_FILE share/mk/src.opts.mk

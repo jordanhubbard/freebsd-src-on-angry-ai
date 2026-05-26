@@ -1,0 +1,40 @@
+=== STEP 385 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/RISCV/TargetInfo/RISCVTargetInfo.h:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/RISCV/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/RISCV/TargetInfo/RISCVTargetInfo.h
+
+```
+//===-- RISCVTargetInfo.h - RISC-V Target Implementation --------*- C++ -*-===//
+//
+// Part of the LLVM Project, under the Apache License v2.0 with LLVM Exceptions.
+// See https://llvm.org/LICENSE.txt for license information.
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+//
+//===----------------------------------------------------------------------===//
+
+#ifndef LLVM_LIB_TARGET_RISCV_TARGETINFO_RISCVTARGETINFO_H
+#define LLVM_LIB_TARGET_RISCV_TARGETINFO_RISCVTARGETINFO_H
+
+namespace llvm {
+
+class Target;
+
+Target &getTheRISCV32Target();
+Target &getTheRISCV64Target();
+
+} // namespace llvm
+
+#endif // LLVM_LIB_TARGET_RISCV_TARGETINFO_RISCVTARGETINFO_H
+
+```
+
+--- RESPONSE ---
+
+
+This is LLVM vendor code, not FreeBSD userland. The rewrite objective is to translate FreeBSD userland C/C++ libraries and commands. This unit is not relevant to the configured objective.
+
+ACTION: SET_SCOPE bin/cat

@@ -1,0 +1,49 @@
+=== STEP 97 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/iconv/Makefile
+OLD:
+<<<
+# $NetBSD: Makefile,v 1.6 2009/04/14 22:15:21 lukem Exp $
+
+.include <bsd.own.mk>
+
+PROG=	iconv
+#SRCS=	iconv.c
+MAN=	iconv.1
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+# $NetBSD: Makefile,v 1.6 2009/04/14 22:15:21 lukem Exp $
+
+.include <bsd.own.mk>
+
+PROG=	iconv
+#SRCS=	iconv.c
+MAN=	iconv.1
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>

@@ -1,0 +1,12 @@
+=== STEP 377 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Marked current file as skipped.
+Remaining files in contrib/netbsd-tests/fs/msdosfs:
+  - contrib/netbsd-tests/fs/msdosfs/t_snapshot.c
+Please READ_FILE another source file or SET_SCOPE to continue progress.
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/cat

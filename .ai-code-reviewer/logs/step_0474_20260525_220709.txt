@@ -1,0 +1,18 @@
+=== STEP 474 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc/arch/aarch64:
+```
+Cargo.toml
+Makefile
+exec_prot_support.c
+return_one.S
+src
+```
+
+--- RESPONSE ---
+
+
+Let me check the Cargo.toml to ensure the crate name matches the expected output.
+
+ACTION: READ_FILE contrib/netbsd-tests/lib/libc/arch/aarch64/Cargo.toml

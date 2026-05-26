@@ -1,0 +1,14 @@
+=== STEP 313 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*src.opts.mk*':
+```
+./share/mk/src.opts.mk
+```
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors/0 warnings. Let me check what the actual build command is and whether there's a broader build context:
+
+ACTION: GREP bsd.prog.mk

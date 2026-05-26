@@ -1,0 +1,17 @@
+=== STEP 86 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/iconv:
+```
+Makefile
+Makefile.depend
+iconv.1
+iconv.c
+```
+
+--- RESPONSE ---
+
+
+Let me check how other completed units integrate Rust into the build.
+
+ACTION: READ_FILE bin/echo/Makefile

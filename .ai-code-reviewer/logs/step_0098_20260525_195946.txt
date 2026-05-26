@@ -1,0 +1,47 @@
+=== STEP 98 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/iconv/Makefile
+Scope: usr.bin/iconv
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+I need to update Cargo.toml to link against libiconv for the FFI calls.
+
+ACTION: EDIT_FILE usr.bin/iconv/Cargo.toml
+OLD:
+<<<
+[package]
+name = "iconv"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "iconv"
+path = "src/main.rs"
+>>>
+NEW:
+<<<
+[package]
+name = "iconv"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "iconv"
+path = "src/main.rs"
+
+[dependencies]
+
+[build-dependencies]
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.release]
+opt-level = 3
+debug = false
+>>>

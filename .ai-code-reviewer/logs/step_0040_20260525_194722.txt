@@ -1,0 +1,14 @@
+=== STEP 40 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/look is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me try libexec units which might have pending work.
+
+ACTION: LIST_DIR libexec

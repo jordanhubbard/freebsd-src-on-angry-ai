@@ -1,0 +1,42 @@
+=== STEP 55 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libnv
+   Files: 0/4
+📄 File: lib/libnv/msgio.c
+   Chunks: 5/13
+
+```
+=== CHUNK 5/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv/msgio.c === [function: msg_send]
+=== Lines 125-144 (20 lines) ===
+
+static int
+msg_send(int sock, const struct msghdr *msg)
+{
+
+	PJDLOG_ASSERT(sock >= 0);
+
+	for (;;) {
+		fd_wait(sock, false);
+		if (sendmsg(sock, msg, 0) == -1) {
+			if (errno == EINTR)
+				continue;
+			return (-1);
+		}
+		break;
+	}
+
+	return (0);
+}
+
+#ifdef __FreeBSD__
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

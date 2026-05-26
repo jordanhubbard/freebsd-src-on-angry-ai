@@ -1,0 +1,62 @@
+=== STEP 56 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libnv
+   Files: 0/4
+📄 File: lib/libnv/msgio.c
+   Chunks: 6/13
+
+```
+=== CHUNK 6/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv/msgio.c === [function: cred_send]
+=== Lines 145-184 (40 lines) ===
+
+int
+cred_send(int sock)
+{
+	unsigned char credbuf[CMSG_SPACE(sizeof(struct cmsgcred))];
+	struct msghdr msg;
+	struct cmsghdr *cmsg;
+	struct iovec iov;
+	uint8_t dummy;
+
+	bzero(credbuf, sizeof(credbuf));
+	bzero(&msg, sizeof(msg));
+	bzero(&iov, sizeof(iov));
+
+	/*
+	 * XXX: We send one byte along with the control message, because
+	 *      setting msg_iov to NULL only works if this is the first
+	 *      packet send over the socket. Once we send some data we
+	 *      won't be able to send credentials anymore. This is most
+	 *      likely a kernel bug.
+	 */
+	dummy = 0;
+	iov.iov_base = &dummy;
+	iov.iov_len = sizeof(dummy);
+
+	msg.msg_iov = &iov;
+	msg.msg_iovlen = 1;
+	msg.msg_control = credbuf;
+	msg.msg_controllen = sizeof(credbuf);
+
+	cmsg = CMSG_FIRSTHDR(&msg);
+	cmsg->cmsg_len = CMSG_LEN(sizeof(struct cmsgcred));
+	cmsg->cmsg_level = SOL_SOCKET;
+	cmsg->cmsg_type = SCM_CREDS;
+
+	if (msg_send(sock, &msg) == -1)
+		return (-1);
+
+	return (0);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

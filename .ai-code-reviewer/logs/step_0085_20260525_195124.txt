@@ -1,0 +1,26 @@
+=== STEP 85 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/iconv/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/iconv
+   Files: 0/3
+📄 File: usr.bin/iconv/Makefile
+
+```
+# $NetBSD: Makefile,v 1.6 2009/04/14 22:15:21 lukem Exp $
+
+.include <bsd.own.mk>
+
+PROG=	iconv
+#SRCS=	iconv.c
+MAN=	iconv.1
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/iconv

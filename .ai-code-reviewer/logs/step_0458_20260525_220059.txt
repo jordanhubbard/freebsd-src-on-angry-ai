@@ -1,0 +1,11 @@
+=== STEP 458 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me try a different approach - find a small, buildable unit.
+
+ACTION: FIND_FILE bin/*/Makefile

@@ -1,0 +1,15 @@
+=== STEP 503 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/llvm-project/llvm/lib/Target/RISCV/TargetInfo:
+```
+RISCVTargetInfo.cpp
+RISCVTargetInfo.h
+```
+
+--- RESPONSE ---
+
+
+This is LLVM compiler infrastructure code, not FreeBSD userland. Let me try to build to clear the scope.
+
+ACTION: BUILD

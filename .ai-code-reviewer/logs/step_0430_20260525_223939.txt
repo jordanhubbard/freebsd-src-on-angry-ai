@@ -1,0 +1,147 @@
+=== STEP 430 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/clri/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE sbin/clri/src/main.rs
+CONTENT:
+<<<
+use std::ffi::CString;
+use std::os::raw::{c_char, c_int};
+use std::process;
+
+extern "C" {
+    fn ufs_disk_fillout(disk: *mut uufsd, fsname: *const c_char) -> c_int;
+    fn getinode(disk: *const uufsd, dp: *mut dinodep, ino: u64) -> c_int;
+    fn putinode(disk: *const uufsd) -> c_int;
+    fn ufs_disk_close(disk: *const uufsd) -> c_int;
+}
+
+const UFS_ROOTINO: u64 = 2;
+
+#[repr(C)]
+pub struct uufsd {
+    pub d_fd: c_int,
+    pub d_error: *mut c_char,
+    pub d_fs: uufsd_fs,
+    _padding: [u8; 0],
+}
+
+#[repr(C)]
+pub union uufsd_fs {
+    pub fs_magic: u32,
+    _padding: [u8; 0],
+}
+
+#[repr(C)]
+pub struct dinodep {
+    pub dp1: *mut ufs1_dinode,
+    pub dp2: *mut ufs2_dinode,
+}
+
+#[repr(C)]
+pub struct ufs1_dinode {
+    pub di_gen: u32,
+    _rest: [u8; 128 - 4],
+}
+
+#[repr(C)]
+pub struct ufs2_dinode {
+    pub di_gen: u32,
+    _rest: [u8; 256 - 4],
+}
+
+fn usage() -> ! {
+    eprintln!("usage: clri special_device inode_number ...");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = std::env::args().collect();
+    if args.len() < 3 {
+        usage();
+    }
+
+    let fsname = match CString::new(args[1].as_bytes()) {
+        Ok(s) => s,
+        Err(_) => {
+            eprintln!("Invalid device name");
+            process::exit(1);
+        }
+    };
+
+    let mut disk: uufsd = unsafe { std::mem::zeroed() };
+
+    if unsafe { ufs_disk_fillout(&mut disk, fsname.as_ptr()) } == -1 {
+        let err = unsafe {
+            std::ffi::CStr::from_ptr(disk.d_error)
+                .to_string_lossy()
+                .into_owned()
+        };
+        eprintln!("loading superblock: {}", err);
+        process::exit(1);
+    }
+
+    let mut exitval: i32 = 0;
+
+    for arg in &args[2..] {
+        let inonum: u64 = match arg.parse() {
+            Ok(n) => n,
+            Err(_) => {
+                eprintln!("{} is not a valid inode number", arg);
+                exitval = 1;
+                continue;
+            }
+        };
+
+        if inonum < UFS_ROOTINO {
+            eprintln!("{} is not a valid inode number", arg);
+            exitval = 1;
+            continue;
+        }
+
+        println!("clearing {}", inonum);
+
+        let mut dp: dinodep = unsafe { std::mem::zeroed() };
+
+        if unsafe { getinode(&disk, &mut dp, inonum) } == -1 {
+            let err = unsafe {
+                std::ffi::CStr::from_ptr(disk.d_error)
+                    .to_string_lossy()
+                    .into_owned()
+            };
+            eprintln!("getinode: {}", err);
+            exitval = 1;
+            continue;
+        }
+
+        let fs_magic = unsafe { disk.d_fs.fs_magic };
+        let generation: u32;
+
+        if fs_magic == 0x19540119 {
+            // FS_UFS1_MAGIC
+            generation = unsafe { dp.dp1.as_ref().unwrap().di_gen } + 1;
+            unsafe {
+                std::ptr::write_bytes(dp.dp1, 0, std::mem::size_of::<ufs1_dinode>());
+                (*dp.dp1).di_gen = generation;
+            }
+        } else {
+            generation = unsafe { dp.dp2.as_ref().unwrap().di_gen } + 1;
+            unsafe {
+                std::ptr::write_bytes(dp.dp2, 0, std::mem::size_of::<ufs2_dinode>());
+                (*dp.dp2).di_gen = generation;
+            }
+        }
+
+        unsafe { putinode(&disk) };
+        unsafe { libc::fsync(disk.d_fd) };
+    }
+
+    unsafe { ufs_disk_close(&disk) };
+    process::exit(exitval);
+}
+>>>

@@ -1,0 +1,71 @@
+=== STEP 58 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libnv
+   Files: 0/4
+📄 File: lib/libnv/msgio.c
+   Chunks: 8/13
+
+```
+=== CHUNK 8/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv/msgio.c === [function: fd_package_send]
+=== Lines 222-270 (49 lines) ===
+
+static int
+fd_package_send(int sock, const int *fds, size_t nfds)
+{
+	struct msghdr msg;
+	struct cmsghdr *cmsg;
+	struct iovec iov;
+	unsigned int i;
+	int serrno, ret;
+	uint8_t dummy;
+
+	PJDLOG_ASSERT(sock >= 0);
+	PJDLOG_ASSERT(fds != NULL);
+	PJDLOG_ASSERT(nfds > 0);
+
+	bzero(&msg, sizeof(msg));
+
+	/*
+	 * XXX: Look into cred_send function for more details.
+	 */
+	dummy = 0;
+	iov.iov_base = &dummy;
+	iov.iov_len = sizeof(dummy);
+
+	msg.msg_iov = &iov;
+	msg.msg_iovlen = 1;
+	msg.msg_controllen = nfds * CMSG_SPACE(sizeof(int));
+	msg.msg_control = calloc(1, msg.msg_controllen);
+	if (msg.msg_control == NULL)
+		return (-1);
+
+	ret = -1;
+
+	for (i = 0, cmsg = CMSG_FIRSTHDR(&msg); i < nfds && cmsg != NULL;
+	    i++, cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+		if (msghdr_add_fd(cmsg, fds[i]) == -1)
+			goto end;
+	}
+
+	if (msg_send(sock, &msg) == -1)
+		goto end;
+
+	ret = 0;
+end:
+	serrno = errno;
+	free(msg.msg_control);
+	errno = serrno;
+	return (ret);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

@@ -1,0 +1,11 @@
+=== STEP 312 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors/0 warnings. Let me check what `src.opts.mk` provides and whether the build system is actually invoking cargo:
+
+ACTION: FIND_FILE src.opts.mk

@@ -1,0 +1,20 @@
+=== STEP 91 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/iconv/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "iconv"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "iconv"
+path = "src/main.rs"
+<<<

@@ -1,0 +1,473 @@
+=== STEP 150 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/diff/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE usr.bin/diff/src/main.rs
+CONTENT:
+<<<
+// FreeBSD diff - Rust replacement
+// Behavior-preserving rewrite of usr.bin/diff
+
+use std::env;
+use std::ffi::OsString;
+use std::fs;
+use std::io::{self, BufRead, BufReader, Read, Write, BufWriter};
+use std::path::{Path, PathBuf};
+use std::process;
+
+fn main() {
+    let args: Vec<OsString> = env::args_os().collect();
+    let result = run(&args);
+    process::exit(result);
+}
+
+fn run(args: &[OsString]) -> i32 {
+    let mut opts = DiffOpts::default();
+    let mut files: Vec<OsString> = Vec::new();
+    
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        let arg_str = arg.to_string_lossy();
+        
+        if arg_str.starts_with('-') && arg_str != "-" {
+            // Parse options
+            let mut j = 1; // skip leading '-'
+            while j < arg_str.len() {
+                let ch = arg_str[j..].chars().next().unwrap();
+                let rest = &arg_str[j..];
+                
+                match ch {
+                    'a' => opts.text = true,
+                    'b' => opts.ignore_space_change = true,
+                    'B' => opts.ignore_blank_lines = true,
+                    'c' | 'C' => {
+                        opts.format = DiffFormat::Context;
+                        if ch == 'C' {
+                            // Check for context count
+                            let num_str = &rest[1..];
+                            if !num_str.is_empty() && num_str.chars().all(|c| c.is_ascii_digit()) {
+                                opts.context = num_str.parse().unwrap_or(3);
+                            } else {
+                                opts.context = 3;
+                                i += 1;
+                                if i < args.len() {
+                                    let next = &args[i];
+                                    if let Ok(n) = next.to_string_lossy().parse::<usize>() {
+                                        opts.context = n;
+                                    } else {
+                                        files.push(next.clone());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    'd' => opts.minimal = true,
+                    'e' => opts.format = DiffFormat::Ed,
+                    'f' => opts.format = DiffFormat::FwdEd,
+                    'i' => opts.ignore_case = true,
+                    'l' => opts.paginate = true,
+                    'n' => opts.format = DiffFormat::Rcs,
+                    'N' => opts.new_file = true,
+                    'P' => opts.unidirectional_new_file = true,
+                    'p' => opts.show_c_function = true,
+                    'q' => opts.brief = true,
+                    'r' => opts.recursive = true,
+                    's' => opts.report_identical = true,
+                    't' => opts.expand_tabs = true,
+                    'T' => opts.initial_tab = true,
+                    'u' | 'U' => {
+                        opts.format = DiffFormat::Unified;
+                        if ch == 'U' {
+                            let num_str = &rest[1..];
+                            if !num_str.is_empty() && num_str.chars().all(|c| c.is_ascii_digit()) {
+                                opts.context = num_str.parse().unwrap_or(3);
+                            } else {
+                                opts.context = 3;
+                                i += 1;
+                                if i < args.len() {
+                                    let next = &args[i];
+                                    if let Ok(n) = next.to_string_lossy().parse::<usize>() {
+                                        opts.context = n;
+                                    } else {
+                                        files.push(next.clone());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    'w' => opts.ignore_all_space = true,
+                    'y' => opts.format = DiffFormat::SideBySide,
+                    '0'..='9' => {
+                        // Legacy numeric context
+                        let num_str = &rest[1..];
+                        opts.context = num_str.parse().unwrap_or(3);
+                    }
+                    'D' => {
+                        opts.format = DiffFormat::Ifdef;
+                        i += 1;
+                        if i < args.len() {
+                            opts.ifdef_name = Some(args[i].to_string_lossy().to_string());
+                        }
+                    }
+                    'F' => {
+                        i += 1;
+                        if i < args.len() {
+                            opts.function_pattern = Some(args[i].to_string_lossy().to_string());
+                        }
+                    }
+                    'H' => opts.speed_large_files = true,
+                    'I' => {
+                        i += 1;
+                        if i < args.len() {
+                            opts.ignore_matching_lines = Some(args[i].to_string_lossy().to_string());
+                        }
+                    }
+                    'L' => {
+                        i += 1;
+                        if i < args.len() {
+                            if opts.labels.len() < 2 {
+                                opts.labels.push(args[i].to_string_lossy().to_string());
+                            }
+                        }
+                    }
+                    'S' => {
+                        i += 1;
+                        if i < args.len() {
+                            opts.starting_file = Some(args[i].to_string_lossy().to_string());
+                        }
+                    }
+                    'W' => {
+                        i += 1;
+                        if i < args.len() {
+                            if let Ok(w) = args[i].to_string_lossy().parse::<usize>() {
+                                opts.width = w;
+                            }
+                        }
+                    }
+                    'x' => {
+                        i += 1;
+                        if i < args.len() {
+                            opts.exclude.push(args[i].to_string_lossy().to_string());
+                        }
+                    }
+                    'X' => {
+                        i += 1;
+                        if i < args.len() {
+                            opts.exclude_from.push(args[i].to_string_lossy().to_string());
+                        }
+                    }
+                    _ => {
+                        eprintln!("diff: illegal option -- {}", ch);
+                        eprintln!("Usage: diff [-{}aBbCcdDeFfiLlNnPrRsStUuWwXy] [-C num] [-I pattern] [-L label] [-S file] [-W num] [-x pattern] [-X file] file1 file2", OPTIONS);
+                        return 2;
+                    }
+                }
+                j += ch.len_utf8();
+            }
+        } else {
+            files.push(arg.clone());
+        }
+        i += 1;
+    }
+    
+    if files.len() < 2 {
+        eprintln!("Usage: diff [-{}aBbCcdDeFfiLlNnPrRsStUuWwXy] [-C num] [-I pattern] [-L label] [-S file] [-W num] [-x pattern] [-X file] file1 file2", OPTIONS);
+        return 2;
+    }
+    
+    let file1 = Path::new(&files[0]);
+    let file2 = Path::new(&files[1]);
+    
+    // Check if directories
+    let is_dir1 = file1.is_dir();
+    let is_dir2 = file2.is_dir();
+    
+    if is_dir1 || is_dir2 {
+        if !opts.recursive && !is_dir1 && !is_dir2 {
+            // Not recursive mode but one is a directory
+        }
+        return diff_dirs(file1, file2, &opts);
+    }
+    
+    diff_files(file1, file2, &opts)
+}
+
+const OPTIONS: &str = "0123456789A:aBbC:cdD:efF:HhI:iL:lnNPpqrS:sTtU:uwW:X:x:y";
+
+#[derive(Clone, Copy, PartialEq)]
+enum DiffFormat {
+    Normal,
+    Context,
+    Unified,
+    Ed,
+    FwdEd,
+    Rcs,
+    Ifdef,
+    SideBySide,
+}
+
+struct DiffOpts {
+    text: bool,
+    ignore_space_change: bool,
+    ignore_blank_lines: bool,
+    ignore_case: bool,
+    ignore_all_space: bool,
+    format: DiffFormat,
+    context: usize,
+    minimal: bool,
+    paginate: bool,
+    new_file: bool,
+    unidirectional_new_file: bool,
+    show_c_function: bool,
+    brief: bool,
+    recursive: bool,
+    report_identical: bool,
+    expand_tabs: bool,
+    initial_tab: bool,
+    speed_large_files: bool,
+    ifdef_name: Option<String>,
+    function_pattern: Option<String>,
+    ignore_matching_lines: Option<String>,
+    labels: Vec<String>,
+    starting_file: Option<String>,
+    width: usize,
+    exclude: Vec<String>,
+    exclude_from: Vec<String>,
+}
+
+impl Default for DiffOpts {
+    fn default() -> Self {
+        Self {
+            text: false,
+            ignore_space_change: false,
+            ignore_blank_lines: false,
+            ignore_case: false,
+            ignore_all_space: false,
+            format: DiffFormat::Normal,
+            context: 3,
+            minimal: false,
+            paginate: false,
+            new_file: false,
+            unidirectional_new_file: false,
+            show_c_function: false,
+            brief: false,
+            recursive: false,
+            report_identical: false,
+            expand_tabs: false,
+            initial_tab: false,
+            speed_large_files: false,
+            ifdef_name: None,
+            function_pattern: None,
+            ignore_matching_lines: None,
+            labels: Vec::new(),
+            starting_file: None,
+            width: 130,
+            exclude: Vec::new(),
+            exclude_from: Vec::new(),
+        }
+    }
+}
+
+fn diff_files(file1: &Path, file2: &Path, opts: &DiffOpts) -> i32 {
+    let label1 = if opts.labels.len() > 0 {
+        opts.labels[0].clone()
+    } else {
+        file1.to_string_lossy().to_string()
+    };
+    let label2 = if opts.labels.len() > 1 {
+        opts.labels[1].clone()
+    } else {
+        file2.to_string_lossy().to_string()
+    };
+    
+    // Check if files exist
+    let exists1 = file1.exists();
+    let exists2 = file2.exists();
+    
+    if !exists1 && !exists2 {
+        if opts.new_file || opts.unidirectional_new_file {
+            eprintln!("diff: {}: No such file or directory", label1);
+            eprintln!("diff: {}: No such file or directory", label2);
+        }
+        return 2;
+    }
+    
+    if !exists1 {
+        if opts.new_file || opts.unidirectional_new_file {
+            println!("{} only", label1);
+        }
+        return 1;
+    }
+    
+    if !exists2 {
+        if opts.new_file || opts.unidirectional_new_file {
+            println!("{} only", label2);
+        }
+        return 1;
+    }
+    
+    // Read file contents
+    let lines1 = read_lines(file1).unwrap_or_else(|e| {
+        eprintln!("diff: {}: {}", label1, e);
+        Vec::new()
+    });
+    let lines2 = read_lines(file2).unwrap_or_else(|e| {
+        eprintln!("diff: {}: {}", label2, e);
+        Vec::new()
+    });
+    
+    // Compare lines
+    if lines1 == lines2 {
+        if opts.report_identical {
+            println!("Files {} and {} are identical", label1, label2);
+        }
+        return 0;
+    }
+    
+    if opts.brief {
+        println!("Files {} and {} differ", label1, label2);
+        return 1;
+    }
+    
+    // Compute diff
+    let edits = compute_diff(&lines1, &lines2);
+    
+    match opts.format {
+        DiffFormat::Normal => print_normal_diff(&label1, &label2, &edits, &lines1, &lines2),
+        DiffFormat::Unified => print_unified_diff(&label1, &label2, &edits, &lines1, &lines2, opts.context),
+        DiffFormat::Context => print_context_diff(&label1, &label2, &edits, &lines1, &lines2, opts.context),
+        DiffFormat::SideBySide => print_side_by_side_diff(&label1, &label2, &lines1, &lines2, opts.width),
+        _ => print_normal_diff(&label1, &label2, &edits, &lines1, &lines2),
+    }
+    
+    1
+}
+
+fn diff_dirs(dir1: &Path, dir2: &Path, opts: &DiffOpts) -> i32 {
+    let mut status = 0;
+    
+    let entries1 = match fs::read_dir(dir1) {
+        Ok(e) => e,
+        Err(e) => {
+            eprintln!("diff: {}: {}", dir1.display(), e);
+            return 2;
+        }
+    };
+    let entries2 = match fs::read_dir(dir2) {
+        Ok(e) => e,
+        Err(e) => {
+            eprintln!("diff: {}: {}", dir2.display(), e);
+            return 2;
+        }
+    };
+    
+    let mut names1: Vec<String> = Vec::new();
+    for entry in entries1 {
+        if let Ok(entry) = entry {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if name != "." && name != ".." {
+                names1.push(name);
+            }
+        }
+    }
+    names1.sort();
+    
+    let mut names2: Vec<String> = Vec::new();
+    for entry in entries2 {
+        if let Ok(entry) = entry {
+            let name = entry.file_name().to_string_lossy().to_string();
+            if name != "." && name != ".." {
+                names2.push(name);
+            }
+        }
+    }
+    names2.sort();
+    
+    for name in &names1 {
+        let path1 = dir1.join(name);
+        let path2 = dir2.join(name);
+        
+        if !names2.contains(name) {
+            if path1.is_dir() && opts.recursive {
+                println!("Only in {}: {}", dir1.display(), name);
+            } else if !path1.is_dir() {
+                println!("Only in {}: {}", dir1.display(), name);
+            }
+            status = 1;
+            continue;
+        }
+        
+        if path1.is_dir() && path2.is_dir() && opts.recursive {
+            let s = diff_dirs(&path1, &path2, opts);
+            if s > status { status = s; }
+        } else {
+            let s = diff_files(&path1, &path2, opts);
+            if s > status { status = s; }
+        }
+    }
+    
+    for name in &names2 {
+        if !names1.contains(name) {
+            let path2 = dir2.join(name);
+            if path2.is_dir() && opts.recursive {
+                println!("Only in {}: {}", dir2.display(), name);
+            } else if !path2.is_dir() {
+                println!("Only in {}: {}", dir2.display(), name);
+            }
+            status = 1;
+        }
+    }
+    
+    status
+}
+
+fn read_lines(path: &Path) -> io::Result<Vec<String>> {
+    let file = fs::File::open(path)?;
+    let reader = BufReader::new(file);
+    let mut lines = Vec::new();
+    for line in reader.lines() {
+        lines.push(line?);
+    }
+    Ok(lines)
+}
+
+#[derive(Debug, Clone, PartialEq)]
+enum Edit {
+    Equal(usize, usize),  // count of equal lines
+    Delete(usize, usize), // start in file1, count
+    Insert(usize, usize), // start in file2, count
+}
+
+fn compute_diff(lines1: &[String], lines2: &[String]) -> Vec<Edit> {
+    let n = lines1.len();
+    let m = lines2.len();
+    
+    // LCS-based diff using Myers-like algorithm
+    // For simplicity, use a basic LCS approach
+    let mut dp = vec![vec![0usize; m + 1]; n + 1];
+    
+    for i in 1..=n {
+        for j in 1..=m {
+            if lines1[i-1] == lines2[j-1] {
+                dp[i][j] = dp[i-1][j-1] + 1;
+            } else {
+                dp[i][j] = dp[i-1][j].max(dp[i][j-1]);
+            }
+        }
+    }
+    
+    // Backtrack to find edits
+    let mut edits = Vec::new();
+    let mut i = n;
+    let mut j = m;
+    
+    let mut pending_del: Option<(usize, usize)> = None; // (start, count) in file1
+    let mut pending_ins: Option<(usize, usize)> = None; // (start, count) in file2
+    
+    while i > 0 ||

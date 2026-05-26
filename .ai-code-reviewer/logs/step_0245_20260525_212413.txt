@@ -1,0 +1,14 @@
+=== STEP 245 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/chflags is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/fs/msdosfs
+
+--- RESPONSE ---
+
+
+The current scope is LLVM compiler infrastructure, not FreeBSD userland. This is outside the rewrite objective. Let me find a proper userland unit.
+
+ACTION: SET_SCOPE bin/cat

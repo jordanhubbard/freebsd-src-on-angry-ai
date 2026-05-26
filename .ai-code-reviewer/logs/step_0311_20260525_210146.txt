@@ -1,0 +1,11 @@
+=== STEP 311 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I see the issue - I need to provide the CONTENT block. Let me write the file properly.
+
+ACTION: WRITE_FILE contrib/netbsd-tests/fs/msdosfs/Cargo.toml

@@ -1,0 +1,48 @@
+=== STEP 54 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libnv
+   Files: 0/4
+📄 File: lib/libnv/msgio.c
+   Chunks: 4/13
+
+```
+=== CHUNK 4/13: /usr/home/jkh/Src/freebsd-src-on-angry-AI/lib/libnv/msgio.c === [function: msg_recv]
+=== Lines 99-124 (26 lines) ===
+
+static int
+msg_recv(int sock, struct msghdr *msg)
+{
+	int flags;
+
+	PJDLOG_ASSERT(sock >= 0);
+
+#ifdef MSG_CMSG_CLOEXEC
+	flags = MSG_CMSG_CLOEXEC;
+#else
+	flags = 0;
+#endif
+
+	for (;;) {
+		fd_wait(sock, true);
+		if (recvmsg(sock, msg, flags) == -1) {
+			if (errno == EINTR)
+				continue;
+			return (-1);
+		}
+		break;
+	}
+
+	return (0);
+}
+
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: NEXT_CHUNK

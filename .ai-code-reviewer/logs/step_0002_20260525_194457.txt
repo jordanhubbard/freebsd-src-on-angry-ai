@@ -1,0 +1,48 @@
+=== STEP 2 ===
+
+--- REQUEST ---
+SET_SCOPE_OK: Now rewriting contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo
+
+HIERARCHY:
+  Level 1: Source tree (8132 work units)
+  Level 2: contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo ← YOU ARE HERE
+  Level 3: 2 candidate files
+  Level 4: Functions (auto-chunked for large files)
+
+WORK UNIT:
+  Kind: directory
+  Stage: unknown
+  Depends on: (none)
+  Related files:
+    - contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo/NVPTXTargetInfo.cpp
+    - contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo/NVPTXTargetInfo.h
+
+⚠ No Makefile - may be subdirectory
+
+FILES TO REWRITE:
+  - contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo/NVPTXTargetInfo.cpp
+  - contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo/NVPTXTargetInfo.h
+
+📁 Directory: contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo
+   Files: 0/2
+
+WORKFLOW:
+1. Rewrite each relevant file (READ_FILE, NEXT_CHUNK for large files)
+2. Make changes as needed (EDIT_FILE or WRITE_FILE)
+3. When ALL relevant files are rewritten: ACTION: BUILD
+4. If build succeeds: Changes committed for entire directory
+5. Move to next directory (SET_SCOPE)
+
+Attempts recorded for contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo: 3/3.
+Next attempt will auto-skip this directory.
+
+--- RESPONSE ---
+
+
+This is `contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo` - vendored LLVM compiler infrastructure, not FreeBSD userland code. The rewrite objective specifically targets FreeBSD userland C/C++ libraries and commands. This unit is outside scope.
+
+Per the rules: "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite."
+
+I'll move to the next pending unit from the queue: `bin/cat/tests`.
+
+ACTION: SET_SCOPE bin/cat/tests

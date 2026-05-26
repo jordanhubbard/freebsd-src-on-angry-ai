@@ -1,0 +1,14 @@
+=== STEP 374 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Marked current file as skipped.
+Remaining files in contrib/llvm-project/llvm/lib/Target/X86/TargetInfo:
+  - contrib/llvm-project/llvm/lib/Target/X86/TargetInfo/X86TargetInfo.h
+Please READ_FILE another source file or SET_SCOPE to continue progress.
+
+--- RESPONSE ---
+
+
+The remaining file is a header (.h), not a C/C++ source file matching the required suffixes. This LLVM unit is compiler infrastructure, not FreeBSD userland. Moving to the next unit from the rewrite index.
+
+ACTION: SET_SCOPE bin/cat/tests

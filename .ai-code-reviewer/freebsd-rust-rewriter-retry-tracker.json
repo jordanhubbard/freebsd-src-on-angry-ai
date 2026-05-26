@@ -200,8 +200,8 @@
     "last_attempt": "2026-05-24T20:56:42.109153"
   },
   "contrib/llvm-project/llvm/lib/Target/NVPTX/TargetInfo": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T19:32:16.076387"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:45:18.053369"
   },
   "contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo": {
     "attempts": 3,
@@ -210,6 +210,10 @@
   "contrib/llvm-project/llvm/lib/Target/VE/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-24T21:37:29.427066"
+  },
+  "contrib/llvm-project/llvm/lib/Target/X86/TargetInfo": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T22:28:45.044188"
   },
   "contrib/llvm-project/llvm/lib/Target/XCore/TargetInfo": {
     "attempts": 1,
@@ -222,6 +226,10 @@
   "contrib/llvm-project/llvm/lib/Telemetry": {
     "attempts": 3,
     "last_attempt": "2026-05-24T15:46:59.847502"
+  },
+  "contrib/netbsd-tests/fs/msdosfs": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T22:30:12.706976"
   },
   "contrib/netbsd-tests/lib/csu/dso": {
     "attempts": 3,
@@ -347,9 +355,13 @@
     "attempts": 2,
     "last_attempt": "2026-05-25T18:40:52.255122"
   },
+  "libexec/mknetid": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:50:20.078189"
+  },
   "libexec/revnetgroup": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T01:54:43.152171"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:50:14.362657"
   },
   "libexec/rtld-elf": {
     "attempts": 1,
@@ -368,8 +380,8 @@
     "last_attempt": "2026-05-25T16:53:08.724834"
   },
   "sbin/clri": {
-    "attempts": 1,
-    "last_attempt": "2026-05-25T16:38:17.880925"
+    "attempts": 2,
+    "last_attempt": "2026-05-25T22:37:41.419260"
   },
   "sbin/dmesg": {
     "attempts": 1,
@@ -511,6 +523,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-23T17:53:36.147455"
   },
+  "usr.bin/chat": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T21:27:19.881602"
+  },
   "usr.bin/cksum": {
     "attempts": 1,
     "last_attempt": "2026-05-21T23:26:14.041313"
@@ -572,12 +588,12 @@
     "last_attempt": "2026-05-24T12:48:33.015005"
   },
   "usr.bin/diff": {
-    "attempts": 1,
-    "last_attempt": "2026-05-24T22:24:23.833327"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T20:09:17.238517"
   },
   "usr.bin/dpv": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T22:24:29.772423"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:49:56.506413"
   },
   "usr.bin/du": {
     "attempts": 3,
@@ -627,6 +643,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-25T00:44:24.154937"
   },
+  "usr.bin/gencat": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:50:51.731351"
+  },
   "usr.bin/getconf": {
     "attempts": 3,
     "last_attempt": "2026-05-25T00:53:23.527148"
@@ -642,6 +662,10 @@
   "usr.bin/hexdump": {
     "attempts": 1,
     "last_attempt": "2026-05-25T00:22:27.458930"
+  },
+  "usr.bin/iconv": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:51:05.072667"
   },
   "usr.bin/id": {
     "attempts": 3,
