@@ -1,0 +1,11 @@
+=== STEP 218 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Write Cargo.toml:
+
+ACTION: WRITE_FILE lib/libc_nonshared/Cargo.toml

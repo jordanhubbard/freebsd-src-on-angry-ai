@@ -1,0 +1,14 @@
+=== STEP 21 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/libexec:
+```
+ld.elf_so
+```
+
+--- RESPONSE ---
+
+
+This unit is a test helper DSO with no Makefile - it's built as part of a larger test suite and isn't independently buildable. Per the constraints, I should choose another unit rather than fabricating a rewrite.
+
+ACTION: SET_SCOPE bin/cat/tests

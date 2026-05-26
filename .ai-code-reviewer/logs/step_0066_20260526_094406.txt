@@ -1,0 +1,13 @@
+=== STEP 66 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/compile_et:
+```
+Makefile
+Makefile.depend
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/compile_et

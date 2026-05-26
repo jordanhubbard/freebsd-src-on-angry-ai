@@ -1,0 +1,9 @@
+=== STEP 42 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/vis/*.c'
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/vis

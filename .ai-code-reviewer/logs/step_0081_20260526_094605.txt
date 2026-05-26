@@ -1,0 +1,274 @@
+=== STEP 81 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/Sparc/TargetInfo
+   Files: 0/2
+📄 File: .ai-code-reviewer/freebsd-rust-rewriter-retry-tracker.json
+   Chunks: 2/5
+
+```
+=== CHUNK 2/5: /usr/home/jkh/Src/freebsd-src-on-angry-AI/.ai-code-reviewer/freebsd-rust-rewriter-retry-tracker.json === [line_chunk: chunk_2]
+=== Lines 251-500 (250 lines) ===
+
+    "attempts": 3,
+    "last_attempt": "2026-05-25T23:10:48.658379"
+  },
+  "contrib/netbsd-tests/lib/csu/dso": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T00:24:56.720185"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/aarch64": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T23:33:47.598181"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/alpha": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T16:44:58.413131"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/arm": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T01:49:53.959478"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/hppa": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:23:10.886513"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/ia64": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T02:36:35.801916"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/m68k": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T17:11:41.112938"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/mips": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T17:40:39.306977"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/or1k": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T05:49:03.781728"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/powerpc64": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:01:05.075456"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/riscv": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T04:44:55.971940"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/sh3": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:02:06.693756"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/sparc": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:05:07.380753"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/sparc64": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T07:37:24.124489"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/vax": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:48:52.530809"
+  },
+  "contrib/netbsd-tests/lib/semaphore/pthread": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T22:17:17.637990"
+  },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_dso2": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T09:13:48.675523"
+  },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_ifunc_dso": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T00:11:10.765527"
+  },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T01:21:40.006142"
+  },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso1": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T04:06:57.818534"
+  },
+  "contrib/ntp/libntp/lib/isc/nothreads": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T05:17:13.205982"
+  },
+  "contrib/vis": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T07:52:44.557290"
+  },
+  "crypto/heimdal/lib/heimdal": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T06:35:39.641040"
+  },
+  "crypto/krb5/src/ccapi/lib/unix": {
+    "attempts": 3,
+    "last_attempt": "2026-05-22T19:37:35.699854"
+  },
+  "crypto/krb5/src/lib/crypto/openssl/des": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T05:19:11.095157"
+  },
+  "crypto/krb5/src/lib/krb5/error_tables": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T13:30:32.603009"
+  },
+  "crypto/krb5/src/plugins/kdb/db2/libdb2/test/hash2.tests/passwd": {
+    "attempts": 3,
+    "last_attempt": "2026-05-23T13:46:27.200382"
+  },
+  "crypto/openssl/crypto/kdf": {
+    "attempts": 2,
+    "last_attempt": "2026-05-22T21:46:57.529904"
+  },
+  "lib/lib80211": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T07:10:28.361451"
+  },
+  "lib/libc/gen": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:16:18.194734"
+  },
+  "lib/libc_nonshared": {
+    "attempts": 2,
+    "last_attempt": "2026-05-26T09:42:04.255200"
+  },
+  "lib/libmd": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:11:16.422565"
+  },
+  "lib/libnv": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T12:23:01.284030"
+  },
+  "lib/librt": {
+    "attempts": 1,
+    "last_attempt": "2026-05-24T22:23:33.270569"
+  },
+  "lib/libssp_nonshared": {
+    "attempts": 3,
+    "last_attempt": "2026-05-23T13:51:49.358239"
+  },
+  "lib/libthr/arch/amd64/amd64": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T09:44:04.543006"
+  },
+  "lib/libutil": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T00:45:13.498198"
+  },
+  "lib/libwrap": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T11:31:47.260371"
+  },
+  "lib/liby": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T17:18:07.507141"
+  },
+  "libexec/atrun": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:02:48.967174"
+  },
+  "libexec/comsat": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T07:17:06.082686"
+  },
+  "libexec/getty": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T18:40:52.255122"
+  },
+  "libexec/mknetid": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:50:20.078189"
+  },
+  "libexec/revnetgroup": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:50:14.362657"
+  },
+  "libexec/rtld-elf": {
+    "attempts": 2,
+    "last_attempt": "2026-05-26T02:01:54.372302"
+  },
+  "libexec/ypxfr": {
+    "attempts": 2,
+    "last_attempt": "2026-05-26T06:53:03.584103"
+  },
+  "sbin/adjkerntz": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T13:36:49.051207"
+  },
+  "sbin/bsdlabel": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T16:53:08.724834"
+  },
+  "sbin/clri": {
+    "attempts": 3,
+    "last_attempt": "2026-05-26T02:07:08.750533"
+  },
+  "sbin/comcontrol": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T06:54:26.675937"
+  },
+  "sbin/dmesg": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T19:17:53.455595"
+  },
+  "sbin/md5": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T19:18:17.008680"
+  },
+  "sbin/mknod": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T02:07:56.679886"
+  },
+  "share/examples/FreeBSD_version": {
+    "attempts": 3,
+    "last_attempt": "2026-05-23T22:19:33.641774"
+  },
+  "stand/ficl": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:50:28.911741"
+  },
+  "stand/ficl/x86": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:17:29.721243"
+  },
+  "stand/libsa/x86": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T15:03:38.106057"
+  },
+  "sys/cddl/contrib/opensolaris/uts/arm/dtrace": {
+    "attempts": 2,
+    "last_attempt": "2026-05-23T18:29:25.724113"
+  },
+  "sys/cddl/contrib/opensolaris/uts/riscv/dtrace": {
+    "attempts": 1,
+    "last_attempt": "2026-05-23T16:20:47.305794"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_auth": {
+    "attempts": 3,
+    "last_attempt": "2026-05-24T08:05:09.423005"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_core/hsalsa20": {
+    "attempts": 3,
+    "last_attempt": "2026-05-23T07:15:26.124832"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_generichash/blake2b": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T08:49:53.066790"
+
+```
+
+--- RESPONSE ---
+
+
+Let me find a unit not in the retry tracker.
+
+ACTION: SET_SCOPE usr.bin/cxxfilt

@@ -1,0 +1,21 @@
+=== STEP 28 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/hostname:
+```
+Cargo.lock
+Cargo.toml
+Makefile
+Makefile.depend
+hostname.1
+hostname.c
+src
+tests
+```
+
+--- RESPONSE ---
+
+
+bin/hostname is already rewritten. Let me find a unit that still needs rewriting.
+
+ACTION: LIST_DIR bin/kenv

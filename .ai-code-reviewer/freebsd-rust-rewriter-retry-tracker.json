@@ -220,8 +220,8 @@
     "last_attempt": "2026-05-25T23:16:08.416206"
   },
   "contrib/llvm-project/llvm/lib/Target/Sparc/TargetInfo": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T09:24:50.645546"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T09:57:16.100352"
   },
   "contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo": {
     "attempts": 3,
@@ -372,8 +372,8 @@
     "last_attempt": "2026-05-25T19:16:18.194734"
   },
   "lib/libc_nonshared": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T09:25:07.635573"
+    "attempts": 2,
+    "last_attempt": "2026-05-26T09:42:04.255200"
   },
   "lib/libmd": {
     "attempts": 3,

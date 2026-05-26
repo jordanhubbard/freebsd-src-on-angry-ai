@@ -1,0 +1,11 @@
+=== STEP 315 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to write the Cargo.toml file. Let me try with the absolute minimum:
+
+ACTION: WRITE_FILE lib/libc_nonshared/Cargo.toml

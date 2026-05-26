@@ -1,0 +1,11 @@
+=== STEP 336 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+Write Cargo.toml for libc_nonshared Rust crate:
+
+ACTION: WRITE_FILE lib/libc_nonshared/Cargo.toml

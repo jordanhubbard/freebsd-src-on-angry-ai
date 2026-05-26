@@ -1,0 +1,9 @@
+=== STEP 78 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/libxo*'
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE lib/libxo
