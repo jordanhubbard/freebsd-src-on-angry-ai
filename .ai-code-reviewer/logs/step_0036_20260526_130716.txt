@@ -1,0 +1,9 @@
+=== STEP 36 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'usr.bin/*/Makefile'
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/ul

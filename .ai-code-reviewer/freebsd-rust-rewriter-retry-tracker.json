@@ -263,6 +263,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T15:46:59.847502"
   },
+  "contrib/netbsd-tests/fs/lfs": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T13:04:23.484415"
+  },
   "contrib/netbsd-tests/fs/msdosfs": {
     "attempts": 3,
     "last_attempt": "2026-05-25T23:10:48.658379"
@@ -326,6 +330,10 @@
   "contrib/netbsd-tests/lib/libc/arch/vax": {
     "attempts": 3,
     "last_attempt": "2026-05-25T18:48:52.530809"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/x86_64": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T13:05:21.322455"
   },
   "contrib/netbsd-tests/lib/libc/gen/execve": {
     "attempts": 3,
