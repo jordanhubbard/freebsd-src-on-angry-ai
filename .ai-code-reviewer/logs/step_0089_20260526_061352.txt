@@ -1,0 +1,9 @@
+=== STEP 89 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/lib/libc/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/cat/tests

@@ -143,6 +143,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-24T15:19:00.013865"
   },
+  "contrib/llvm-project/clang/lib/Analysis/plugins/SampleAnalyzer": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T06:29:09.365657"
+  },
   "contrib/llvm-project/clang/lib/DirectoryWatcher/default": {
     "attempts": 3,
     "last_attempt": "2026-05-23T05:12:11.840100"
@@ -196,8 +200,8 @@
     "last_attempt": "2026-05-24T22:12:18.412267"
   },
   "contrib/llvm-project/llvm/lib/Target/LoongArch/TargetInfo": {
-    "attempts": 2,
-    "last_attempt": "2026-05-26T05:37:36.950574"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T06:19:13.499048"
   },
   "contrib/llvm-project/llvm/lib/Target/M68k/TargetInfo": {
     "attempts": 3,
@@ -276,8 +280,8 @@
     "last_attempt": "2026-05-25T17:40:39.306977"
   },
   "contrib/netbsd-tests/lib/libc/arch/or1k": {
-    "attempts": 2,
-    "last_attempt": "2026-05-26T05:36:33.968426"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T05:49:03.781728"
   },
   "contrib/netbsd-tests/lib/libc/arch/powerpc64": {
     "attempts": 3,
@@ -294,6 +298,10 @@
   "contrib/netbsd-tests/lib/libc/arch/sparc": {
     "attempts": 3,
     "last_attempt": "2026-05-25T18:05:07.380753"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/sparc64": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T06:20:25.552930"
   },
   "contrib/netbsd-tests/lib/libc/arch/vax": {
     "attempts": 3,

@@ -1,0 +1,12 @@
+=== STEP 70 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory contrib/llvm-project/llvm/lib/Target/LoongArch/TargetInfo skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/llvm-project/clang/lib/Analysis/plugins/SampleAnalyzer
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/beep

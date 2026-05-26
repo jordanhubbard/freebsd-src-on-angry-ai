@@ -1,0 +1,20 @@
+=== STEP 91 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: Missing OLD or NEW block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/netbsd-tests/lib/libc/arch/or1k/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "exec_prot_support"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+name = "exec_prot_support"
+>>>

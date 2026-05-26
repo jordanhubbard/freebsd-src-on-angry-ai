@@ -1,0 +1,11 @@
+=== STEP 95 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/Makefile*'
+
+--- RESPONSE ---
+
+
+The build is failing due to FreeBSD root build system cross-compilation requirements. Let me check what build command is being used.
+
+ACTION: GREP bsd\.sys\.mk

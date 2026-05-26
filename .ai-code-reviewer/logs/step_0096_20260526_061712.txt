@@ -1,0 +1,9 @@
+=== STEP 96 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'bsd\.sys\.mk'
+
+--- RESPONSE ---
+
+
+Let me check the parent Makefile structure for this test directory.

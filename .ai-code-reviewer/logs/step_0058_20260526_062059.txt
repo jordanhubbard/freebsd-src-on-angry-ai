@@ -1,0 +1,14 @@
+=== STEP 58 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/chflags is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/LoongArch/TargetInfo
+
+--- RESPONSE ---
+
+
+Let me find a suitable pending work unit with C source files.
+
+ACTION: LIST_DIR bin/chmod
