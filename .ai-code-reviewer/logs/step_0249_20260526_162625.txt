@@ -1,0 +1,338 @@
+=== STEP 249 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/asa/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/random
+   Files: 0/5
+📄 File: usr.bin/asa/Makefile
+✏️  Edits: 2 files modified
+
+```
+.include <src.opts.mk>
+
+PROG=	asa
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+```
+
+--- RESPONSE ---
+
+
+I see the pattern from `usr.bin/asa`. Let me create the proper Rust source and update the Makefile accordingly.
+
+ACTION: WRITE_FILE usr.bin/random/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-2-Clause
+//
+// Copyright (c) 1994 The Regents of the University of California.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufReader, Read, Write};
+use std::process;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum RandomType {
+    Unset,
+    Lines,
+    Words,
+}
+
+fn usage() -> ! {
+    eprintln!("usage: random [-elrUuw] [-f filename] [denominator]");
+    process::exit(1);
+}
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    let mut random_exit = false;
+    let mut randomize_lines = false;
+    let mut random_type = RandomType::Unset;
+    let mut unique_output = true;
+    let mut unbuffer_output = false;
+    let mut filename = String::from("/dev/fd/0");
+    let mut denom: Option<f64> = None;
+
+    let mut i = 1;
+    while i < args.len() {
+        let arg = &args[i];
+        if arg == "-e" {
+            random_exit = true;
+            i += 1;
+        } else if arg == "-f" {
+            randomize_lines = true;
+            i += 1;
+            if i < args.len() {
+                filename = args[i].clone();
+            }
+            i += 1;
+        } else if arg == "-l" {
+            randomize_lines = true;
+            random_type = RandomType::Lines;
+            i += 1;
+        } else if arg == "-r" {
+            unbuffer_output = true;
+            i += 1;
+        } else if arg == "-u" {
+            randomize_lines = true;
+            unique_output = true;
+            i += 1;
+        } else if arg == "-U" {
+            randomize_lines = true;
+            unique_output = false;
+            i += 1;
+        } else if arg == "-w" {
+            randomize_lines = true;
+            random_type = RandomType::Words;
+            i += 1;
+        } else if arg.starts_with('-') {
+            for ch in arg[1..].chars() {
+                match ch {
+                    'e' => random_exit = true,
+                    'l' => {
+                        randomize_lines = true;
+                        random_type = RandomType::Lines;
+                    }
+                    'r' => unbuffer_output = true,
+                    'u' => {
+                        randomize_lines = true;
+                        unique_output = true;
+                    }
+                    'U' => {
+                        randomize_lines = true;
+                        unique_output = false;
+                    }
+                    'w' => {
+                        randomize_lines = true;
+                        random_type = RandomType::Words;
+                    }
+                    'f' => {
+                        randomize_lines = true;
+                        i += 1;
+                        if i < args.len() {
+                            filename = args[i].clone();
+                        }
+                        break;
+                    }
+                    _ => usage(),
+                }
+            }
+            i += 1;
+        } else {
+            break;
+        }
+    }
+
+    let remaining = &args[i..];
+    let denom = match remaining.len() {
+        0 => {
+            if randomize_lines {
+                1.0
+            } else {
+                2.0
+            }
+        }
+        1 => {
+            let d: f64 = remaining[0].parse().unwrap_or_else(|_| {
+                eprintln!("random: {}: invalid denominator", remaining[0]);
+                process::exit(1);
+            });
+            if d < 1.0 {
+                eprintln!("random: denominator is not valid.");
+                process::exit(1);
+            }
+            if random_exit && d > 256.0 {
+                eprintln!("random: denominator must be <= 256 for random exit.");
+                process::exit(1);
+            }
+            d
+        }
+        _ => usage(),
+    };
+
+    if unbuffer_output {
+        let _ = io::stdout().lock();
+    }
+
+    if randomize_lines {
+        let file = File::open(&filename).unwrap_or_else(|e| {
+            eprintln!("random: {}: {}", filename, e);
+            process::exit(1);
+        });
+        let reader = BufReader::new(file);
+        let rt = if random_type == RandomType::Unset {
+            RandomType::Lines
+        } else {
+            random_type
+        };
+        let ret = randomize_reader(reader, rt, unique_output, denom);
+        if !random_exit {
+            process::exit(ret);
+        }
+    }
+
+    if random_exit {
+        let exit_code = random_uniform_denom_exit(denom);
+        process::exit(exit_code);
+    }
+
+    let stdin = io::stdin();
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+    for line in stdin.lock().lines() {
+        let line = match line {
+            Ok(l) => l,
+            Err(_) => break,
+        };
+        if random_uniform_denom(denom) {
+            if writeln!(out, "{}", line).is_err() {
+                eprintln!("random: stdout: write error");
+                process::exit(2);
+            }
+        }
+    }
+    process::exit(0);
+}
+
+fn random_uniform_denom(denom: f64) -> bool {
+    let d = denom as u64;
+    if d < 2 {
+        return true;
+    }
+    getrandom_u64() % d == 0
+}
+
+fn random_uniform_denom_exit(denom: f64) -> i32 {
+    let d = denom as u64;
+    (getrandom_u64() % d) as i32
+}
+
+fn getrandom_u64() -> u64 {
+    let mut buf: [u8; 8] = [0; 8];
+    let file = File::open("/dev/urandom").unwrap_or_else(|_| {
+        eprintln!("random: /dev/urandom: cannot open");
+        process::exit(1);
+    });
+    let mut reader = BufReader::new(file);
+    reader
+        .read_exact(&mut buf)
+        .unwrap_or_else(|_| {
+            eprintln!("random: /dev/urandom: read error");
+            process::exit(1);
+        });
+    u64::from_le_bytes(buf)
+}
+
+fn randomize_reader(
+    mut reader: BufReader<File>,
+    _type: RandomType,
+    unique: bool,
+    denom: f64,
+) -> i32 {
+    let mut tokens: Vec<String> = Vec::new();
+
+    let mut buf = String::new();
+    loop {
+        let bytes_read = match reader.read_line(&mut buf) {
+            Ok(0) => break,
+            Ok(n) => n,
+            Err(_) => {
+                eprintln!("random: read: error");
+                process::exit(1);
+            }
+        };
+        if bytes_read == 0 {
+            break;
+        }
+
+        match _type {
+            RandomType::Lines => {
+                if !buf.is_empty() {
+                    tokens.push(buf.clone());
+                    buf.clear();
+                }
+            }
+            RandomType::Words => {
+                for word in buf.split_whitespace() {
+                    tokens.push(format!("{}\n", word));
+                }
+                buf.clear();
+            }
+            RandomType::Unset => {}
+        }
+    }
+
+    let stdout = io::stdout();
+    let mut out = stdout.lock();
+
+    let mut remaining = tokens;
+    while !remaining.is_empty() {
+        let idx = (getrandom_u64() % remaining.len() as u64) as usize;
+        let token = remaining.remove(idx);
+        if random_uniform_denom(denom) {
+            if write!(out, "{}", token).is_err() {
+                eprintln!("random: printf: write error");
+                process::exit(1);
+            }
+        }
+        if unique {
+            // Token already removed from remaining
+        }
+    }
+
+    if out.flush().is_err() {
+        eprintln!("random: fflush: write error");
+        process::exit(1);
+    }
+
+    0
+}
+>>>

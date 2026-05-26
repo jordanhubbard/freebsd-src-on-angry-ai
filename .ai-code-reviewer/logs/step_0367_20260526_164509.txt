@@ -1,0 +1,23 @@
+=== STEP 367 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/hexdump:
+```
+Makefile
+Makefile.depend
+conv.c
+display.c
+hexdump.1
+hexdump.c
+hexdump.h
+hexsyntax.c
+od.1
+odsyntax.c
+parse.c
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/hexdump

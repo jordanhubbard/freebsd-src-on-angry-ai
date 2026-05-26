@@ -1,0 +1,14 @@
+=== STEP 167 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/time is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/CodeGenTypes
+
+--- RESPONSE ---
+
+
+Let me try to find a unit that is actually pending and not skipped by looking at the rewrite index.
+
+ACTION: LIST_DIR usr.bin/tftp

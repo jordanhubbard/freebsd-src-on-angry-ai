@@ -1,0 +1,25 @@
+=== STEP 126 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/mknetid/Makefile:
+PROGRESS:
+📁 Directory: libexec/mknetid
+   Files: 0/7
+📄 File: libexec/mknetid/Makefile
+
+```
+PROG=	mknetid
+SRCS=	mknetid.c hash.c parse_group.c
+
+MAN=	netid.5 mknetid.8
+
+WARNS?=	2
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE libexec/mknetid/hash.h

@@ -1,0 +1,18 @@
+=== STEP 190 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/cp:
+```
+Makefile
+Makefile.depend
+cp.1
+cp.c
+extern.h
+tests
+utils.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/cp

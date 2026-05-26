@@ -1,0 +1,11 @@
+=== STEP 10 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'bsd.rust*'
+
+--- RESPONSE ---
+
+
+Let me check how recently completed units handled Rust build integration.
+
+ACTION: FIND_FILE usr.bin/basename/Cargo.toml

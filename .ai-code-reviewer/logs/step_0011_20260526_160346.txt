@@ -1,0 +1,11 @@
+=== STEP 11 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*usr.bin/basename/Cargo.toml*'
+
+--- RESPONSE ---
+
+
+Let me check what the recently completed units actually contain.
+
+ACTION: LIST_DIR usr.bin/basename

@@ -1,0 +1,38 @@
+=== STEP 194 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/bin/dd:
+```
+Makefile
+Makefile.depend
+args.c
+conv.c
+conv_tab.c
+dd.1
+dd.c
+dd.h
+extern.h
+gen.c
+misc.c
+position.c
+ref.ascii
+ref.ebcdic
+ref.ibm
+ref.lcase
+ref.obs_zeroes
+ref.oldascii
+ref.oldebcdic
+ref.oldibm
+ref.pareven
+ref.parnone
+ref.parodd
+ref.parset
+ref.swab
+ref.ucase
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE bin/dd

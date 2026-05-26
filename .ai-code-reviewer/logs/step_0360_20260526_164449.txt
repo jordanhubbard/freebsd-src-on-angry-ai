@@ -1,0 +1,16 @@
+=== STEP 360 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/split:
+```
+Makefile
+Makefile.depend
+split.1
+split.c
+tests
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/split

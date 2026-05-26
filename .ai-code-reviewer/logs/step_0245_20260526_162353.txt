@@ -1,0 +1,55 @@
+=== STEP 245 ===
+
+--- REQUEST ---
+
+⚠️  INCOMPLETE RESPONSE DETECTED
+
+Problem: Mismatched <<< >>> delimiters (incomplete EDIT_FILE)
+Response length: 8590 chars
+Last 100 chars: ...r() {
+        eprintln!("random: fflush: write error");
+        process::exit(1);
+    }
+
+    0
+}
+<<<
+
+Your response appears to have been cut off before completion.
+Please provide a COMPLETE response including:
+1. Your analysis
+2. A SINGLE, COMPLETE ACTION directive
+3. For EDIT_FILE: both complete OLD and NEW blocks
+
+If you're working with a large file causing timeouts:
+- Focus on ONE specific issue at a time
+- Use smaller OLD/NEW blocks
+- Consider SKIP_FILE if the file is too complex
+
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE usr.bin/random/Makefile
+OLD:
+<<<
+PROG=	random
+MAN=	random.6
+SRCS=	random.c randomize_fd.c
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	random
+MAN=	random.6
+SRCS=	random.c randomize_fd.c
+
+.if defined(WITH_RUST)
+PROG=	random
+RUSTPROG=	${PROG}
+RUSTSRCS=	src/main.rs
+.endif
+
+.include <bsd.prog.mk>
+>>>

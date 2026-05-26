@@ -1,0 +1,12 @@
+=== STEP 78 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory share/examples/kld/syscall/test skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE contrib/llvm-project/llvm/lib/CodeGenTypes
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR usr.bin/jot

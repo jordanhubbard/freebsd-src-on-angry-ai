@@ -1,0 +1,11 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'bsd.rust.mk'
+
+--- RESPONSE ---
+
+
+No `bsd.rust.mk` exists. Let me check what Rust build infrastructure is available.
+
+ACTION: GREP rust

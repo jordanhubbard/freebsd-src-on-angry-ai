@@ -1,0 +1,20 @@
+=== STEP 122 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/libexec/ypxfr:
+```
+Makefile
+Makefile.depend
+yp_dbwrite.c
+ypxfr.8
+ypxfr_extern.h
+ypxfr_getmap.c
+ypxfr_main.c
+ypxfr_misc.c
+ypxfrd_getmap.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR libexec/rpc

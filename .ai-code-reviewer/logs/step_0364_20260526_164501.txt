@@ -1,0 +1,14 @@
+=== STEP 364 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/strings:
+```
+Makefile
+Makefile.depend
+Makefile.depend.options
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/strings

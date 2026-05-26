@@ -1,0 +1,15 @@
+=== STEP 143 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/whois:
+```
+Makefile
+Makefile.depend
+whois.1
+whois.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/whois
