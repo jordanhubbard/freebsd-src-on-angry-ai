@@ -1,0 +1,11 @@
+=== STEP 142 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'test-system'
+
+--- RESPONSE ---
+
+
+I need to understand the build system better. The errors are from Makefile.inc1 at the top level, not from my unit. Let me check how the build is actually invoked.
+
+ACTION: READ_FILE Makefile.inc1

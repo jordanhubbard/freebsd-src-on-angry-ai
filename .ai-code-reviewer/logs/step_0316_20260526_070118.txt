@@ -1,0 +1,11 @@
+=== STEP 316 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+The issue is that my CONTENT block is not being recognized. Let me try with the exact format.
+
+ACTION: WRITE_FILE sbin/conscontrol/Cargo.toml

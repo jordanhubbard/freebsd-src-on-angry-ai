@@ -1,0 +1,51 @@
+=== STEP 13 ===
+
+--- REQUEST ---
+GREP_RESULT for 'sparc64':
+```
+./tests/sys/audit/miscellaneous.c:107:	struct sparc_utrap_install_args sparc64arg = {
+./tests/sys/audit/miscellaneous.c:124:	ATF_REQUIRE_EQ(0, sysarch(SPARC_UTRAP_INSTALL, &sparc64arg));
+./stand/common/modinfo.c:26: *	from: FreeBSD: src/sys/boot/sparc64/loader/metadata.c,v 1.6
+./stand/common/metadata.c:26: *	from: FreeBSD: src/sys/boot/sparc64/loader/metadata.c,v 1.6
+./sys/arm64/include/signal.h:29: *	from: FreeBSD: src/sys/sparc64/include/signal.h,v 1.6 2001/09/30 18:52:17
+./sys/arm64/include/ieeefp.h:2: * Based on sys/sparc64/include/ieeefp.h
+./sys/dev/ofw/ofw_subr.c:30: * The powerpc OF_decode_addr() in turn was based on the sparc64 counterpart
+./sys/contrib/zstd/programs/platform.h:34:  || (defined __sparc && (defined __sparcv9 || defined __sparc_v9__ || defined __arch64__)) || defined __sparc64__  /* SPARC 64-bit */  \
+./sys/contrib/openzfs/include/os/freebsd/spl/sys/atomic.h:101:#ifndef __sparc64__
+./sys/contrib/openzfs/include/os/freebsd/spl/sys/atomic.h:134:#ifndef __sparc64__
+./sys/riscv/include/signal.h:29: *	from: FreeBSD: src/sys/sparc64/include/signal.h,v 1.6 2001/09/30 18:52:17
+./sys/arm/include/signal.h:31: *	from: FreeBSD: src/sys/sparc64/include/signal.h,v 1.6 2001/09/30 18:52:17
+./libexec/rtld-elf/rtld_lock.c:27: *	from: FreeBSD: src/libexec/rtld-elf/sparc64/lockdflt.c,v 1.3 2002/10/09
+./crypto/krb5/src/include/k5-platform.h:497:# if defined(__hppa__) || defined(__rs6000__) || defined(__sparc__) || defined(_MIPSEB) || defined(__m68k__) || defined(__sparc64__) || defined(__ppc__) || defined(__ppc64__) || (defined(__hpux) && defined(__ia64__))
+./contrib/llvm-project/openmp/runtime/src/kmp_platform.h:257:#if defined(__sparcv9) || defined(__sparc64__)
+./contrib/llvm-project/openmp/runtime/src/kmp_platform.h:260:#if defined(__sparc) && !defined(__sparcv9) && !defined(__sparc64__)
+./contrib/llvm-project/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.h:730:  // To maintain ABI compatibility on sparc64 when switching to an int,
+./contrib/llvm-project/compiler-rt/lib/sanitizer_common/sanitizer_platform_limits_posix.h:953:  // PTRACE_GETFPREGS requests on Linux/sparc64.
+./contrib/llvm-project/compiler-rt/lib/asan/asan_mapping_sparc64.h:1://===-- asan_mapping_sparc64.h ----------------------------------*- C++ -*-===//
+./contrib/llvm-project/compiler-rt/lib/asan/asan_mapping.h:274:#    include "asan_mapping_sparc64.h"
+./contrib/libarchive/libarchive/test/test_read_format_7zip.c:1535:	assertEqualString("hw-sparc64", archive_entry_pathname(ae));
+./contrib/ntp/libntp/snprintf.c:1466:	 * At least on NetBSD/sparc64 3.0.2 and 4.99.30, casting long double to
+./contrib/bearssl/src/inner.h:113:#elif defined(__sparc64__)
+./contrib/netbsd-tests/lib/libc/sys/t_getcontext.c:55:#if defined(__amd64__) || defined(__sparc64__)
+./contrib/netbsd-tests/lib/libc/sys/t_getcontext.c:122:#if defined(__amd64__) || defined(__sparc64__)
+./contrib/netbsd-tests/lib/libc/sys/t_getcontext.c:124:		 * FreeBSD/amd64 and FreeBSD/sparc64 only permit up to
+./contrib/mandoc/mandocdb.c:1143:	 * on amd64, i386, and sparc64.
+./contrib/mandoc/cgi.c:129:    "powerpc64",   "riscv64",     "sparc64",
+./contrib/mandoc/arch.c:29:		"octeon", "powerpc64", "riscv64", "sparc64", NULL
+./contrib/mandoc/arch.c:42:		"sparc", "sparc64", "sun2", "sun3",
+./contrib/jemalloc/include/jemalloc/internal/quantum.h:18:#  if (defined(__sparc64__) || defined(__sparcv9) || defined(__sparc_v9__))
+./lib/libc/stdlib/malloc/jemalloc/include/jemalloc/jemalloc_FreeBSD.h:38:#ifdef __sparc64__
+./lib/msun/ld128/s_logl.c:537:	 * the old sparc64 and unknown on the newer aarch64 and riscv
+./lib/msun/ld128/k_expl.h:265: * multiplication was very slow on sparc64 and no new evaluation has
+./lib/msun/ld128/s_expl.c:91:	 * XXX sparc64 multiplication was so slow that scalbnl() is faster,
+./usr.sbin/bsnmpd/modules/snmp_hostres/hostres_partition_tbl.c:479:		/* no problem on sparc64 */
+```
+
+--- RESPONSE ---
+
+
+This unit has no Makefile, contains architecture-specific assembly (`.S`) that cannot be translated to Rust, and is trivial test support code with no FreeBSD build integration. This is not a suitable unit for a meaningful Rust rewrite.
+
+Let me find a better unit with actual C source and build infrastructure.
+
+ACTION: LIST_DIR bin/cat

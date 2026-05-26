@@ -1,0 +1,11 @@
+=== STEP 468 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block in my response.
+
+ACTION: WRITE_FILE sbin/etherswitchcfg/Cargo.toml

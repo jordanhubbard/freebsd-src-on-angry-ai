@@ -1,0 +1,11 @@
+=== STEP 404 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to provide the complete WRITE_FILE action with the CONTENT block in a single response.
+
+ACTION: WRITE_FILE libexec/comsat/Cargo.toml

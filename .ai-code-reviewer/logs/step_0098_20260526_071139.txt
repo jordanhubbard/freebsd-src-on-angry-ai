@@ -1,0 +1,13 @@
+=== STEP 98 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/cxxfilt has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/sparc64
+
+--- RESPONSE ---
+
+
+This unit is not suitable for a Rust rewrite. It has no Makefile, contains architecture-specific assembly (`.S`) that cannot be translated to Rust, and is trivially simple test support code with no FreeBSD build integration. Let me find a better unit.
+
+ACTION: SET_SCOPE usr.bin/dc

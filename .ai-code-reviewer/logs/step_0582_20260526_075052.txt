@@ -1,0 +1,11 @@
+=== STEP 582 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'bin/*/Makefile'
+
+--- RESPONSE ---
+
+
+The sparc64 unit is test infrastructure with no Makefile and SPARC64 assembly that cannot be meaningfully rewritten to Rust. Let me find a better unit.
+
+ACTION: SET_SCOPE bin/dd

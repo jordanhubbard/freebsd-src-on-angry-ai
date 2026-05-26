@@ -1,0 +1,477 @@
+=== STEP 128 ===
+
+--- REQUEST ---
+
+⚠️  INCOMPLETE RESPONSE DETECTED
+
+Problem: Mismatched <<< >>> delimiters (incomplete EDIT_FILE)
+Response length: 170 chars
+Last 100 chars: ...name = "comsat"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "comsat"
+path = "src/main.rs"
+<<<
+
+Your response appears to have been cut off before completion.
+Please provide a COMPLETE response including:
+1. Your analysis
+2. A SINGLE, COMPLETE ACTION directive
+3. For EDIT_FILE: both complete OLD and NEW blocks
+
+If you're working with a large file causing timeouts:
+- Focus on ONE specific issue at a time
+- Use smaller OLD/NEW blocks
+- Consider SKIP_FILE if the file is too complex
+
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source. Let me create the directory and main.rs file.
+
+ACTION: WRITE_FILE libexec/comsat/src/main.rs
+CONTENT:
+<<<
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 1980, 1993
+//	The Regents of the University of California.  All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. Neither the name of the University nor the names of its contributors
+//    may be used to endorse or promote products derived from this software
+//    without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+// HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+// OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+// SUCH DAMAGE.
+
+use std::ffi::CString;
+use std::io::{self, Read, Write};
+use std::os::unix::io::AsRawFd;
+use std::path::Path;
+use std::process;
+use std::time::Duration;
+
+const MAXHOSTNAMELEN: usize = 256;
+const MAXPATHLEN: usize = 1024;
+const BUFSIZ: usize = 1024;
+const MAXIDLE: i32 = 120;
+
+const PATH_MAILDIR: &str = "/var/mail";
+const PATH_DEV: &str = "/dev";
+
+static mut HOSTNAME: [u8; MAXHOSTNAMELEN] = [0; MAXHOSTNAMELEN];
+static mut DEBUG: bool = false;
+
+macro_rules! dsyslog {
+    ($($arg:tt)*) => {
+        if unsafe { DEBUG } {
+            syslog!($($arg)*);
+        }
+    };
+}
+
+fn main() {
+    unsafe {
+        // Get hostname
+        let mut hostname_len = MAXHOSTNAMELEN;
+        let ret = libc::gethostname(GLOBAL_HOSTNAME.as_mut_ptr(), hostname_len);
+        if ret != 0 {
+            eprintln!("gethostname failed");
+            process::exit(1);
+        }
+    }
+
+    // Open syslog
+    unsafe {
+        libc::openlog(b"comsat\0".as_ptr() as *const i8,
+                      libc::LOG_PID | libc::LOG_CONS,
+                      libc::LOG_DAEMON);
+    }
+
+    // Change to mail directory
+    if let Err(e) = std::env::set_current_dir(PATH_MAILDIR) {
+        unsafe {
+            libc::syslog(libc::LOG_ERR,
+                         b"chdir: %s: %m\0".as_ptr() as *const i8,
+                         PATH_MAILDIR.as_ptr() as *const c_char);
+        }
+        // Read and discard the message
+        let mut buf = [0u8; 256];
+        let _ = recv_from_stdin(&mut buf);
+        process::exit(1);
+    }
+
+    // Ignore SIGTTOU
+    unsafe {
+        libc::signal(libc::SIGTTOU, libc::SIG_IGN as usize);
+    }
+
+    // Set up child reaping
+    unsafe {
+        libc::signal(libc::SIGCHLD, Some(reap_children));
+    }
+
+    // Main loop: receive messages from inetd
+    loop {
+        let mut msgbuf = [0u8; 256];
+        match recv_from_stdin(&mut msgbuf) {
+            Ok(cc) if cc <= 0 => {
+                if io::Error::last_os_error().raw_os_error() != Some(libc::EINTR) {
+                    std::thread::sleep(Duration::from_secs(1));
+                }
+                continue;
+            }
+            Ok(cc) => {
+                // Null-terminate
+                msgbuf[cc] = b'\0';
+                mailfor(&msgbuf[..cc]);
+                // Reset signal mask
+                unsafe {
+                    libc::sigsetmask(0);
+                }
+            }
+            Err(_) => {
+                if io::Error::last_os_error().raw_os_error() != Some(libc::EINTR) {
+                    std::thread::sleep(Duration::from_secs(1));
+                }
+                continue;
+            }
+        }
+    }
+}
+
+extern "C" fn reap_children(_signo: i32) {
+    loop {
+        unsafe {
+            let ret = libc::waitpid(-1, std::ptr::null_mut(), libc::WNOHANG);
+            if ret <= 0 {
+                break;
+            }
+        }
+    }
+}
+
+fn recv_from_stdin(buf: &mut [u8]) -> io::Result<usize> {
+    let mut stdin = io::stdin();
+    let mut remaining = buf;
+    let mut total = 0;
+    while !remaining.is_empty() {
+        match stdin.read(remaining) {
+            Ok(0) => return Ok(total),
+            Ok(n) => {
+                total += n;
+                remaining = &mut remaining[n..];
+            }
+            Err(e) if e.kind() == io::ErrorKind::Interrupted => continue,
+            Err(e) => return Err(e),
+        }
+    }
+    Ok(total)
+}
+
+fn mailfor(name: &[u8]) {
+    // Find '@' to split username from offset
+    let at_pos = match name.iter().position(|&b| b == b'@') {
+        Some(pos) => pos,
+        None => return,
+    };
+
+    let username = &name[..at_pos];
+    let rest = &name[at_pos + 1..];
+
+    // Parse offset
+    let offset_str: String = rest.iter()
+        .take_while(|&&b| b != b':')
+        .map(|&b| b as char)
+        .collect();
+    let offset: i64 = offset_str.parse().unwrap_or(0);
+
+    // Determine file path
+    let colon_pos = rest.iter().position(|&b| b == b':');
+    let mut file_path = String::with_capacity(MAXPATHLEN);
+    let mut folder = false;
+
+    if let Some(cp) = colon_pos {
+        let file_part = &rest[cp + 1..];
+        if !file_part.contains('/') {
+            file_path = format!("{}/{}/{}", PATH_MAILDIR, file_part, "");
+            folder = true;
+        } else {
+            file_path = format!("{}/{}", PATH_MAILDIR, String::from_utf8_lossy(username));
+        }
+    } else {
+        file_path = format!("{}/{}", PATH_MAILDIR, String::from_utf8_lossy(username));
+    }
+
+    // Look up user in utmpx
+    unsafe {
+        libc::setutxent();
+    }
+    loop {
+        let utp = unsafe { libc::getutxent() };
+        if utp.is_null() {
+            break;
+        }
+        let ut_type = unsafe { (*utp).ut_type };
+        if ut_type == libc::USER_PROCESS {
+            let ut_user = unsafe { std::ffi::CStr::from_ptr((*utp).ut_user.as_ptr()) };
+            if ut_user.to_bytes() == username {
+                notify(utp, &file_path, offset, folder);
+            }
+        }
+    }
+    unsafe {
+        libc::endutxent();
+    }
+}
+
+fn notify(utp: *mut libc::utmpx, file: &str, offset: i64, folder: bool) {
+    unsafe {
+        let ut_line = (*utp).ut_line;
+        let mut s = std::ffi::CStr::from_ptr(ut_line.as_ptr()).to_bytes();
+
+        // Skip "pts/" prefix
+        if s.starts_with(b"pts/") {
+            s = &s[4..];
+        }
+
+        // Security check: no slashes allowed
+        if s.contains(&b'/') {
+            libc::syslog(libc::LOG_AUTH | libc::LOG_NOTICE,
+                         b"Unexpected `/' in `%s'\0".as_ptr() as *const i8,
+                         ut_line.as_ptr() as *const i8);
+            return;
+        }
+
+        // Build tty path
+        let mut tty = [0u8; 20];
+        let dev_len = PATH_DEV.len();
+        let line_len = s.len();
+        if dev_len + line_len >= tty.len() {
+            return;
+        }
+        tty[..dev_len].copy_from_slice(PATH_DEV.as_bytes());
+        tty[dev_len..dev_len + line_len].copy_from_slice(s);
+
+        // Stat the tty
+        let tty_cstr = CString::new(&tty[..dev_len + line_len]).unwrap();
+        let mut stb: libc::stat = std::mem::zeroed();
+        if libc::stat(tty_cstr.as_ptr(), &mut stb) == -1 {
+            dsyslog!(libc::LOG_DEBUG,
+                     b"%s: wrong mode on %s\0".as_ptr() as *const i8,
+                     (*utp).ut_user.as_ptr() as *const i8,
+                     tty_cstr.as_ptr());
+            return;
+        }
+
+        dsyslog!(libc::LOG_DEBUG,
+                 b"notify %s on %s\0".as_ptr() as *const i8,
+                 (*utp).ut_user.as_ptr() as *const i8,
+                 tty_cstr.as_ptr());
+
+        // Fork
+        match libc::fork() {
+            -1 => {
+                libc::syslog(libc::LOG_NOTICE, b"fork failed (%m)\0".as_ptr() as *const i8);
+                return;
+            }
+            0 => {
+                // Child process
+            }
+            _ => {
+                // Parent returns
+                return;
+            }
+        }
+
+        // Open tty for writing
+        let tp = match std::fs::File::create(&tty[..dev_len + line_len]) {
+            Ok(f) => f,
+            Err(e) => {
+                dsyslog!(libc::LOG_ERR,
+                         b"%s: %s\0".as_ptr() as *const i8,
+                         tty_cstr.as_ptr(),
+                         e.to_string().as_bytes().as_ptr() as *const i8);
+                libc::_exit(1);
+            }
+        };
+
+        // Get terminal attributes to determine CR/LF behavior
+        let mut tio: libc::termios = std::mem::zeroed();
+        let cr = if libc::tcgetattr(tp.as_raw_fd(), &mut tio) == 0
+            && (tio.c_oflag & (libc::OPOST | libc::ONLCR)) == (libc::OPOST | libc::ONLCR) {
+            "\n"
+        } else {
+            "\n\r"
+        };
+
+        // Get user info and set credentials
+        let username = std::ffi::CStr::from_ptr((*utp).ut_user.as_ptr())
+            .to_string_lossy()
+            .into_owned();
+
+        // Use libc to get passwd and set credentials
+        let pw = libc::getpwnam(username.as_ptr() as *const i8);
+        if pw.is_null()
+            || libc::initgroups(username.as_ptr() as *const i8, (*pw).pw_gid) == -1
+            || libc::setgid((*pw).pw_gid) == -1
+            || libc::setuid((*pw).pw_uid) == -1
+        {
+            libc::_exit(1);
+        }
+
+        let mut tp = io::BufWriter::new(tp);
+
+        if stb.st_mode & (libc::S_IXUSR as mode_t) != 0 {
+            let hostname = std::ffi::CStr::from_ptr(GLOBAL_HOSTNAME.as_ptr() as *const i8)
+                .to_string_lossy();
+            let folder_str = if folder { cr } else { "" };
+            let to_str = if folder { "to " } else { "" };
+            let _ = writeln!(tp,
+                "{}\x07New mail for {}@{}.\x07 has arrived{}{}{}:{}{}",
+                cr, username, hostname, folder_str, to_str, file, cr, cr);
+            jkfprintf(&mut tp, file, offset, cr);
+        } else if stb.st_mode & (libc::S_IXGRP as mode_t) != 0 {
+            let _ = tp.write_all(b"\x07");
+            let _ = tp.flush();
+            std::thread::sleep(Duration::from_secs(1));
+            let _ = tp.write_all(b"\x07");
+        }
+
+        let _ = tp.flush();
+        libc::_exit(0);
+    }
+}
+
+fn jkfprintf(tp: &mut dyn Write, file: &str, offset: i64, cr: &str) {
+    let mut fi = match std::fs::File::open(file) {
+        Ok(f) => f,
+        Err(_) => return,
+    };
+
+    // Seek to offset
+    if let Err(_) = fi.seek(io::SeekFrom::Current(offset)) {
+        return;
+    }
+
+    let mut linecnt = 7;
+    let mut charcnt = 560;
+    let mut inheader = true;
+    let mut line = [0u8; BUFSIZ];
+
+    loop {
+        // Read a line
+        let mut bytes_read = 0;
+        let mut found_newline = false;
+        loop {
+            let mut buf = [0u8; 1];
+            match fi.read(&mut buf) {
+                Ok(0) => break,
+                Ok(_) => {
+                    if bytes_read < BUFSIZ - 1 {
+                        line[bytes_read] = buf[0];
+                        bytes_read += 1;
+                    }
+                    if buf[0] == b'\n' {
+                        found_newline = true;
+                        break;
+                    }
+                }
+                Err(_) => break,
+            }
+        }
+        if bytes_read == 0 && !found_newline {
+            break;
+        }
+        line[bytes_read] = b'\0';
+
+        let line_slice = &line[..bytes_read];
+
+        if inheader {
+            if line_slice.first() == Some(&b'\n') {
+                inheader = false;
+                continue;
+            }
+            if line_slice.first() == Some(&b' ') || line_slice.first() == Some(&b'\t') {
+                continue;
+            }
+            if !line_slice.starts_with(b"From:") && !line_slice.starts_with(b"Subject:") {
+                continue;
+            }
+        }
+
+        if linecnt <= 0 || charcnt <= 0 {
+            let _ = tp.write_all(b"...more...");
+            let _ = tp.write_all(cr.as_bytes());
+            return;
+        }
+
+        // Strip weird characters
+        for &ch in line_slice {
+            if charcnt <= 0 {
+                break;
+            }
+
+            let mut out_ch = ch;
+            let mut prefix = "";
+
+            if (ch & 0x80) != 0 && ch < 0xA0 {
+                prefix = "M-";
+                out_ch &= !0x80;
+            }
+
+            if (ch & 0x80) == 0 && !is_printable(ch) && !is_space(ch) && ch != b'\a' && ch != b'\b' {
+                if is_ctrl(out_ch) {
+                    out_ch ^= 0x40;
+                    let _ = tp.write_all(b"^");
+                }
+            }
+
+            if !prefix.is_empty() {
+                let _ = tp.write_all(prefix.as_bytes());
+            }
+            let _ = tp.write_all(&[out_ch]);
+            charcnt -= 1;
+        }
+
+        let _ = tp.write_all(cr.as_bytes());
+        linecnt -= 1;
+    }
+
+    let _ = tp.write_all(b"----");
+    let _ = tp.write_all(cr.as_bytes());
+    let _ = tp.write_all(b"\n");
+}
+
+fn is_printable(ch: u8) -> bool {
+    ch >= 0x20 && ch < 0x7F
+}
+
+fn is_space(ch: u8) -> bool {
+    matches!(ch, b' ' | b'\t' | b'\n' | b'\r' | b'\x0C' | b'\x0B')
+}
+
+fn is_ctrl(ch: u8) -> bool {
+    ch < 0x20 || ch == 0x7F
+}
+<<<

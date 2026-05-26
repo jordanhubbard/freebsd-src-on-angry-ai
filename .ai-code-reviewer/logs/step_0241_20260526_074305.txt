@@ -1,0 +1,12 @@
+=== STEP 241 ===
+
+--- REQUEST ---
+AUTO_SKIP: Directory contrib/netbsd-tests/lib/libc/arch/sparc64 skipped automatically after 3 failed attempts.
+
+To retry it later, remove or edit freebsd-rust-rewriter-retry-tracker.json.
+Please choose a different directory, e.g., ACTION: SET_SCOPE sys/security/mac_none
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/ul

@@ -1,0 +1,27 @@
+=== STEP 345 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/mididump/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/mididump
+   Files: 0/3
+📄 File: usr.bin/mididump/Makefile
+
+```
+.include <src.opts.mk>
+
+PACKAGE=	sound
+
+PROG=		mididump
+SRCS=		${PROG}.c
+MAN=		${PROG}.1
+LIBADD+=	m
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE bsd.rust.mk

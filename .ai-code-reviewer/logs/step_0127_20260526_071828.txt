@@ -1,0 +1,20 @@
+=== STEP 127 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE libexec/comsat/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "comsat"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "comsat"
+path = "src/main.rs"
+<<<

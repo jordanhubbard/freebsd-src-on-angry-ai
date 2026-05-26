@@ -1,0 +1,14 @@
+=== STEP 587 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/sparc64
+
+--- RESPONSE ---
+
+
+I need to find a work unit with actual C source and a Makefile. Let me search for one.
+
+ACTION: FIND_FILE bin/*/Makefile

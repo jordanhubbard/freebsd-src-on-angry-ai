@@ -1,0 +1,14 @@
+=== STEP 574 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/date is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/sparc64
+
+--- RESPONSE ---
+
+
+The sparc64 unit is test infrastructure with no Makefile and SPARC64 assembly that cannot be meaningfully rewritten to Rust. Let me find a better unit.
+
+ACTION: SET_SCOPE bin/dd

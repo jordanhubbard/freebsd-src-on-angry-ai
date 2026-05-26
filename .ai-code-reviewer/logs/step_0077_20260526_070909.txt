@@ -1,0 +1,14 @@
+=== STEP 77 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/cksum is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/sparc64
+
+--- RESPONSE ---
+
+
+Let me try a simpler usr.bin command.
+
+ACTION: SET_SCOPE usr.bin/cmp

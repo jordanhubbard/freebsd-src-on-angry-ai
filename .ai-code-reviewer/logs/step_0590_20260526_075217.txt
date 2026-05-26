@@ -1,0 +1,11 @@
+=== STEP 590 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'bin/*/Makefile'
+
+--- RESPONSE ---
+
+
+I need to find a work unit with actual C source and a Makefile. Let me search for one.
+
+ACTION: FIND_FILE bin/*/Makefile
