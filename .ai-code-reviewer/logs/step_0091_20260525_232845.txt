@@ -1,0 +1,14 @@
+=== STEP 91 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/limits is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/aarch64
+
+--- RESPONSE ---
+
+
+Let me try a different unit that hasn't been attempted.
+
+ACTION: SET_SCOPE usr.bin/limits

@@ -1,0 +1,29 @@
+=== STEP 485 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/clri/Makefile
+Scope: sbin/clri
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The Makefile approach needs refinement. Let me change Cargo.toml to produce a staticlib and fix the linking.
+
+ACTION: WRITE_FILE sbin/clri/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "clri"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "clri"
+path = "src/main.rs"
+crate-type = ["staticlib"]
+
+[[bin]]
+name = "clri"
+path = "src/main.rs"
+>>>

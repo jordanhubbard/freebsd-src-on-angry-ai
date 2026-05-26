@@ -147,6 +147,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-23T05:12:11.840100"
   },
+  "contrib/llvm-project/compiler-rt/lib/scudo/standalone/fuzz": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T23:28:32.873108"
+  },
   "contrib/llvm-project/libcxx/src/pstl": {
     "attempts": 3,
     "last_attempt": "2026-05-23T20:13:55.015565"
@@ -203,6 +207,10 @@
     "attempts": 3,
     "last_attempt": "2026-05-25T19:45:18.053369"
   },
+  "contrib/llvm-project/llvm/lib/Target/RISCV/TargetInfo": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T23:16:08.416206"
+  },
   "contrib/llvm-project/llvm/lib/Target/SystemZ/TargetInfo": {
     "attempts": 3,
     "last_attempt": "2026-05-25T01:01:37.147181"
@@ -228,12 +236,16 @@
     "last_attempt": "2026-05-24T15:46:59.847502"
   },
   "contrib/netbsd-tests/fs/msdosfs": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T22:30:12.706976"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T23:10:48.658379"
   },
   "contrib/netbsd-tests/lib/csu/dso": {
     "attempts": 3,
     "last_attempt": "2026-05-24T00:24:56.720185"
+  },
+  "contrib/netbsd-tests/lib/libc/arch/aarch64": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T23:33:47.598181"
   },
   "contrib/netbsd-tests/lib/libc/arch/alpha": {
     "attempts": 3,
@@ -274,6 +286,10 @@
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
     "last_attempt": "2026-05-22T22:17:17.637990"
+  },
+  "contrib/netbsd-tests/libexec/ld.elf_so/helper_ifunc_dso": {
+    "attempts": 2,
+    "last_attempt": "2026-05-25T23:47:12.465940"
   },
   "contrib/netbsd-tests/libexec/ld.elf_so/helper_symver_dso0": {
     "attempts": 3,
@@ -438,6 +454,10 @@
   "sys/contrib/libsodium/src/libsodium/crypto_kdf": {
     "attempts": 3,
     "last_attempt": "2026-05-25T15:01:06.974767"
+  },
+  "sys/contrib/libsodium/src/libsodium/crypto_kdf/blake2b": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T23:39:59.379379"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_scalarmult": {
     "attempts": 2,
@@ -954,5 +974,9 @@
   "usr.sbin/lastlogin": {
     "attempts": 2,
     "last_attempt": "2026-05-25T07:55:22.483504"
+  },
+  "usr.sbin/route6d/misc": {
+    "attempts": 1,
+    "last_attempt": "2026-05-25T23:47:35.278948"
   }
 }

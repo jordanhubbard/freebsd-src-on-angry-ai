@@ -1,0 +1,14 @@
+=== STEP 492 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/freebsd-src-on-angry-AI/Makefile.inc1.
+Remaining files in sbin/clri:
+  - sbin/clri/clri.8
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+The build errors are in top-level Makefile.inc1, not in my unit. Let me check how the build system invokes the build and try building the unit directly.
+
+ACTION: READ_FILE sbin/clri/clri.c

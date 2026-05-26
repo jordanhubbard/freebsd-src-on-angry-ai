@@ -1,0 +1,23 @@
+=== STEP 29 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/clri:
+```
+Cargo.toml
+Makefile
+Makefile.depend
+build.rs
+clri.8
+clri.c
+src
+```
+
+--- RESPONSE ---
+
+
+I need to clean up the leftover uncommitted files from `sbin/clri` to unblock scope changes.
+
+ACTION: WRITE_FILE sbin/clri/Cargo.toml
+CONTENT:
+<<<
+>>>

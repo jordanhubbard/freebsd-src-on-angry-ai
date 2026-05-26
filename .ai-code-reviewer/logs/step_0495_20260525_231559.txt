@@ -1,0 +1,85 @@
+=== STEP 495 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/clri/build.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Let me simplify the Makefile to use `rustc` directly instead of cargo, since we need to link against libufs.
+
+ACTION: EDIT_FILE sbin/clri/Makefile
+OLD:
+<<<
+.include <src.opts.mk>
+
+PROG=	clri
+MAN=	clri.8
+LIBADD=	ufs
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+# C glue sources compiled separately
+GLUE_OBJS=	src/clri_glue.o
+
+${GLUE_OBJS}: ${.CURDIR}/src/clri_glue.c
+	${CC} ${CFLAGS} -c ${.ALLSRC} -o ${.TARGET}
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs ${GLUE_OBJS}
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${LD} -o ${.TARGET} ${CARGO_TARGET_DIR}/debug/deps/libclri-*.rlib ${GLUE_OBJS} -L${LIBDIR} -lufs -lc
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG} ${GLUE_OBJS}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${GLUE_OBJS} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+.include <src.opts.mk>
+
+PROG=	clri
+MAN=	clri.8
+LIBADD=	ufs
+
+RUSTC?=		rustc
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+# C glue sources compiled separately
+GLUE_OBJS=	src/clri_glue.o
+
+${GLUE_OBJS}: ${.CURDIR}/src/clri_glue.c
+	${CC} ${CFLAGS} -c ${.ALLSRC} -o ${.TARGET}
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs ${GLUE_OBJS}
+	${RUSTC} --crate-type bin -o ${.TARGET} ${.CURDIR}/src/main.rs \
+		-L ${.CURDIR}/src -l static=clri_glue -l ufs -l c
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG} ${GLUE_OBJS}
+
+CLEANFILES+=	${PROG} ${GLUE_OBJS}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+.include <bsd.prog.mk>
+>>>

@@ -1,0 +1,11 @@
+=== STEP 482 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+Let me check how recently completed units integrated Rust builds.
+
+ACTION: READ_FILE usr.bin/basename/Makefile

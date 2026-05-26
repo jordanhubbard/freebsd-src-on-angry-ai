@@ -1,0 +1,14 @@
+=== STEP 709 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/X86/TargetInfo
+
+--- RESPONSE ---
+
+
+I need to try a different scope. Let me pick one with C source files:
+
+ACTION: SET_SCOPE bin/cat

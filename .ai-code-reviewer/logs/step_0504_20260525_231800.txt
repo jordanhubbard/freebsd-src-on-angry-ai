@@ -1,0 +1,18 @@
+=== STEP 504 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/clri:
+```
+Cargo.toml
+Makefile
+Makefile.depend
+build.rs
+clri.8
+clri.c
+src
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR sbin/clri/src
