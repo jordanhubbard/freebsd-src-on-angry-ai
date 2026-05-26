@@ -1,0 +1,14 @@
+=== STEP 85 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/genl/genl.c.
+Remaining files in usr.bin/genl:
+  - usr.bin/genl/genl.1
+  - usr.bin/genl/genl.h
+  - usr.bin/genl/parser_rpc.c
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/hash

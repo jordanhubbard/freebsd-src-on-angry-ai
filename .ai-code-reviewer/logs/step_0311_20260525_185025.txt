@@ -1,0 +1,74 @@
+=== STEP 311 ===
+
+--- REQUEST ---
+SET_SCOPE_OK: Now rewriting stand/ficl
+
+HIERARCHY:
+  Level 1: Source tree (8132 work units)
+  Level 2: stand/ficl ← YOU ARE HERE
+  Level 3: 18 candidate files
+  Level 4: Functions (auto-chunked for large files)
+
+WORK UNIT:
+  Kind: directory
+  Stage: unknown
+  Depends on: (none)
+  Related files:
+    - stand/ficl/Makefile
+    - stand/ficl/dict.c
+    - stand/ficl/ficl.c
+    - stand/ficl/ficl.h
+    - stand/ficl/fileaccess.c
+    - stand/ficl/float.c
+    - stand/ficl/gfx_loader.c
+    - stand/ficl/loader.c
+    - stand/ficl/math64.c
+    - stand/ficl/math64.h
+    - stand/ficl/prefix.c
+    - stand/ficl/search.c
+    - stand/ficl/stack.c
+    - stand/ficl/testmain.c
+    - stand/ficl/tools.c
+    - stand/ficl/unix.c
+    - stand/ficl/vm.c
+    - stand/ficl/words.c
+
+✓ Directory has Makefile - valid source module
+
+FILES TO REWRITE:
+  - stand/ficl/Makefile
+  - stand/ficl/dict.c
+  - stand/ficl/ficl.c
+  - stand/ficl/ficl.h
+  - stand/ficl/fileaccess.c
+  - stand/ficl/float.c
+  - stand/ficl/gfx_loader.c
+  - stand/ficl/loader.c
+  - stand/ficl/math64.c
+  - stand/ficl/math64.h
+  - stand/ficl/prefix.c
+  - stand/ficl/search.c
+  - stand/ficl/stack.c
+  - stand/ficl/testmain.c
+  - stand/ficl/tools.c
+  - stand/ficl/unix.c
+  - stand/ficl/vm.c
+  - stand/ficl/words.c
+
+📁 Directory: stand/ficl
+   Files: 0/18
+
+WORKFLOW:
+1. Rewrite each relevant file (READ_FILE, NEXT_CHUNK for large files)
+2. Make changes as needed (EDIT_FILE or WRITE_FILE)
+3. When ALL relevant files are rewritten: ACTION: BUILD
+4. If build succeeds: Changes committed for entire directory
+5. Move to next directory (SET_SCOPE)
+
+Attempts recorded for stand/ficl: 2/3.
+1 attempt(s) remain before auto-skip.
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE stand/ficl

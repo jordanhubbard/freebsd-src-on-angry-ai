@@ -256,8 +256,8 @@
     "last_attempt": "2026-05-25T18:05:07.380753"
   },
   "contrib/netbsd-tests/lib/libc/arch/vax": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T18:33:05.491178"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:48:52.530809"
   },
   "contrib/netbsd-tests/lib/semaphore/pthread": {
     "attempts": 3,
@@ -332,8 +332,8 @@
     "last_attempt": "2026-05-25T17:18:07.507141"
   },
   "libexec/atrun": {
-    "attempts": 2,
-    "last_attempt": "2026-05-25T18:40:01.077319"
+    "attempts": 3,
+    "last_attempt": "2026-05-25T19:02:48.967174"
   },
   "libexec/getty": {
     "attempts": 2,
@@ -370,6 +370,10 @@
   "share/examples/FreeBSD_version": {
     "attempts": 3,
     "last_attempt": "2026-05-23T22:19:33.641774"
+  },
+  "stand/ficl": {
+    "attempts": 3,
+    "last_attempt": "2026-05-25T18:50:28.911741"
   },
   "stand/ficl/x86": {
     "attempts": 1,

@@ -1,0 +1,13 @@
+=== STEP 26 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/date/tests has no source files matching the configured rewrite suffix filter (.c, .cc, .cpp, .cxx).
+Do not create placeholder files for this unit; choose a source-backed work unit.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/lib/libc/arch/vax
+
+--- RESPONSE ---
+
+
+Let me find a workable unit with C source and a Makefile.
+
+ACTION: LIST_DIR usr.bin/asa

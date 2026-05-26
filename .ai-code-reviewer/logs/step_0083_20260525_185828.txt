@@ -1,0 +1,21 @@
+=== STEP 83 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/genl/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/genl
+   Files: 0/5
+📄 File: usr.bin/genl/Makefile
+
+```
+PROG=	genl
+SRCS=	genl.c parser_rpc.c
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/genl/genl.c
