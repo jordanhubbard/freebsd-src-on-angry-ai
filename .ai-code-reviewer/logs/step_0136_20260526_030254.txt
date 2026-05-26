@@ -1,0 +1,12 @@
+=== STEP 136 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/ntp/libntp/lib/isc/Makefile
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+This scope is not a proper FreeBSD build unit. I need to abandon it and move to the correct current unit from the rewrite index.
+
+ACTION: SET_SCOPE usr.bin/getent

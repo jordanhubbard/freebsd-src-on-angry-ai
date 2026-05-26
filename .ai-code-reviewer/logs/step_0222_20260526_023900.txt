@@ -1,0 +1,30 @@
+=== STEP 222 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc/arch:
+```
+aarch64
+alpha
+arm
+hppa
+i386
+ia64
+m68k
+mips
+or1k
+powerpc
+powerpc64
+riscv
+sh3
+sparc
+sparc64
+vax
+x86_64
+```
+
+--- RESPONSE ---
+
+
+This is test infrastructure for IA64 architecture. The C file is trivial (returns `NOTIMPL`) and the assembly is IA64-specific. There's no Makefile in this directory. Let me create a minimal Rust replacement for the C file.
+
+ACTION: WRITE_FILE contrib/netbsd-tests/lib/libc/arch/ia64/Cargo.toml

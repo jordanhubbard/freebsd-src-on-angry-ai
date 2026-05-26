@@ -1,0 +1,11 @@
+=== STEP 109 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sbin/ntpd/Makefile*'
+
+--- RESPONSE ---
+
+
+This is a contrib/ntp subdirectory using autotools, not a standalone FreeBSD build unit. The two files are trivial stubs with no Makefile. I should skip this and find a proper FreeBSD build unit.
+
+ACTION: SET_SCOPE usr.bin/yes

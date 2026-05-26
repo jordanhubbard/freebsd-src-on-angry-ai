@@ -1,0 +1,47 @@
+=== STEP 187 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/mknod/src/main.rs
+Scope: sbin/mknod
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE sbin/mknod/src/main.rs
+NEW:
+<<<
+    let dev = unsafe { makedev(major as c_ulong, minor as c_ulong) };
+    let result = unsafe { mknod(c_name.as_ptr(), mode, dev) };
+    if result != 0 {
+        err_sys(name, io::Error::last_os_error());
+    }
+    if args.len() == 6 {
+        let result = unsafe {
+            chown(c_name.as_ptr(), uid, gid as c_uint)
+        };
+        if result != 0 {
+            err_sys(&format!("setting ownership on {}", name), io::Error::last_os_error());
+        }
+    }
+    process::exit(0);
+}
+>>>
+OLD:
+<<<
+    let dev = unsafe { libc::makedev(major, minor) };
+    let result = unsafe { libc::mknod(c_name.as_ptr(), mode, dev) };
+    if result != 0 {
+        err_sys(name, io::Error::last_os_error());
+    }
+    if args.len() == 6 {
+        let result = unsafe {
+            libc::chown(c_name.as_ptr(), uid, gid as libc::uid_t)
+        };
+        if result != 0 {
+            err_sys(&format!("setting ownership on {}", name), io::Error::last_os_error());
+        }
+    }
+    process::exit(0);
+}
+>>>

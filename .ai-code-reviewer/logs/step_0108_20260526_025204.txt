@@ -1,0 +1,11 @@
+=== STEP 108 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/ntp/Makefile*'
+
+--- RESPONSE ---
+
+
+This is a contrib directory using autotools, not a standalone FreeBSD build unit. The `nothreads` subdirectory has two tiny stub files with no Makefile of its own. Let me check how FreeBSD builds NTP.
+
+ACTION: FIND_FILE sbin/ntpd/Makefile

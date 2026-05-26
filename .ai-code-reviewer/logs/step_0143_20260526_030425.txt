@@ -1,0 +1,11 @@
+=== STEP 143 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/ntp/libntp/lib/isc/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me understand the build structure better.
+
+ACTION: LIST_DIR contrib/ntp/libntp/lib

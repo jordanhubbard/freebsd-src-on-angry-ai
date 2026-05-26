@@ -1,0 +1,26 @@
+=== STEP 92 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc/arch/ia64/return_one.S:
+PROGRESS:
+📄 File: contrib/netbsd-tests/lib/libc/arch/ia64/return_one.S
+
+```
+/*	$NetBSD: return_one.S,v 1.2 2016/08/05 15:02:29 scole Exp $ */
+
+#include <machine/asm.h>
+
+.globl	return_one_end	
+
+ENTRY(return_one,0)
+	mov	ret0=1
+	br.ret.sptk.few  rp
+return_one_end:	
+END(return_one)
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/true

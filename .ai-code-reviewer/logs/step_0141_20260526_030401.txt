@@ -1,0 +1,9 @@
+=== STEP 141 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/ntp/libntp/lib/isc/nothreads/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE contrib/ntp/libntp/lib/isc/nothreads/Makefile

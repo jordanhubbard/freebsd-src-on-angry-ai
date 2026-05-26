@@ -1,0 +1,30 @@
+=== STEP 220 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/netbsd-tests/lib/libc/arch/ia64/return_one.S:
+PROGRESS:
+📁 Directory: contrib/netbsd-tests/lib/libc/arch/ia64
+   Files: 0/2
+📄 File: contrib/netbsd-tests/lib/libc/arch/ia64/return_one.S
+
+```
+/*	$NetBSD: return_one.S,v 1.2 2016/08/05 15:02:29 scole Exp $ */
+
+#include <machine/asm.h>
+
+.globl	return_one_end	
+
+ENTRY(return_one,0)
+	mov	ret0=1
+	br.ret.sptk.few  rp
+return_one_end:	
+END(return_one)
+
+```
+
+--- RESPONSE ---
+
+
+This is a test support directory for IA64 architecture. The C file is trivial (returns `NOTIMPL`) and the assembly file is IA64-specific. Let me check the parent directory structure for build context.
+
+ACTION: READ_FILE contrib/netbsd-tests/lib/libc/arch/ia64/../../common/exec_prot.h

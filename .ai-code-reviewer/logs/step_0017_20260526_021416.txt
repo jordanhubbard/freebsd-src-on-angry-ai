@@ -1,0 +1,22 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/yes/Makefile:
+PROGRESS:
+📄 File: usr.bin/yes/Makefile
+
+```
+.include <src.opts.mk>
+
+PROG=	yes
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR bin/false

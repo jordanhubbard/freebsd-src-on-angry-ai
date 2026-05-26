@@ -1,0 +1,28 @@
+=== STEP 138 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/ntp/libntp/lib/isc/nothreads/Cargo.toml:
+PROGRESS:
+📁 Directory: contrib/ntp/libntp/lib/isc/nothreads
+   Files: 0/2
+📄 File: contrib/ntp/libntp/lib/isc/nothreads/Cargo.toml
+✏️  Edits: 4 files modified
+
+```
+[package]
+name = "isc_nothreads"
+version = "0.0.0"
+edition = "2021"
+
+[lib]
+name = "isc_nothreads"
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+```
+
+--- RESPONSE ---
+
+
+Let me check the Rust source and fix the Makefile properly.
+
+ACTION: READ_FILE contrib/ntp/libntp/lib/isc/nothreads/src/lib.rs

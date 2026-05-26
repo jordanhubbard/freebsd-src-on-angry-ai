@@ -1,0 +1,56 @@
+=== STEP 182 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*libc/Cargo.toml*'
+
+--- RESPONSE ---
+
+
+The `libc` crate is not vendored. I need to use raw FFI declarations instead to avoid external crate dependencies.
+
+ACTION: EDIT_FILE sbin/mknod/src/main.rs
+OLD:
+<<<
+use std::ffi::CString;
+use std::io::{self, Write};
+use std::process;
+>>>
+NEW:
+<<<
+use std::ffi::CString;
+use std::io::{self, Write};
+use std::os::raw::{c_char, c_int, c_long, c_uint, c_ulong};
+use std::process;
+
+#[repr(C)]
+struct passwd {
+    pw_name: *mut c_char,
+    pw_passwd: *mut c_char,
+    pw_uid: c_uint,
+    pw_gid: c_uint,
+    pw_gecos: *mut c_char,
+    pw_dir: *mut c_char,
+    pw_shell: *mut c_char,
+}
+
+#[repr(C)]
+struct group {
+    gr_name: *mut c_char,
+    gr_passwd: *mut c_char,
+    gr_gid: c_uint,
+    gr_mem: *mut *mut c_char,
+}
+
+extern "C" {
+    fn getpwnam(name: *const c_char) -> *mut passwd;
+    fn getgrnam(name: *const c_char) -> *mut group;
+    fn makedev(major: c_ulong, minor: c_ulong) -> c_ulong;
+    fn major(dev: c_ulong) -> c_ulong;
+    fn minor(dev: c_ulong) -> c_ulong;
+    fn mknod(path: *const c_char, mode: c_uint, dev: c_ulong) -> c_int;
+    fn chown(path: *const c_char, uid: c_uint, gid: c_uint) -> c_int;
+}
+
+const S_IFCHR: c_uint = 0o020000;
+const S_IFBLK: c_uint = 0o060000;
+>>>

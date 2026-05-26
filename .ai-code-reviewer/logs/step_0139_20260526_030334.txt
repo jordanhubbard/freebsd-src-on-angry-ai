@@ -1,0 +1,31 @@
+=== STEP 139 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/contrib/ntp/libntp/lib/isc/nothreads/src/lib.rs:
+PROGRESS:
+📁 Directory: contrib/ntp/libntp/lib/isc/nothreads
+   Files: 0/2
+📄 File: contrib/ntp/libntp/lib/isc/nothreads/src/lib.rs
+✏️  Edits: 4 files modified
+
+```
+#![no_std]
+
+extern "C" {
+}
+
+/// Stub implementation for the nothreads build configuration.
+/// This replaces the C implementation in thread.c which simply
+/// ignores the `level` parameter.
+#[no_mangle]
+pub unsafe extern "C" fn isc_thread_setconcurrency(level: u32) {
+    let _ = level;
+}
+```
+
+--- RESPONSE ---
+
+
+Let me check the original C source files to understand the full interface.
+
+ACTION: READ_FILE contrib/ntp/libntp/lib/isc/nothreads/thread.c
