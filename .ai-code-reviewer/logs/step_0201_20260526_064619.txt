@@ -1,0 +1,62 @@
+=== STEP 201 ===
+
+--- REQUEST ---
+GREP_RESULT for 'pending':
+```
+./tests/sys/kqueue/libkqueue/read.c:181:    /* Re-add the watch and make sure no events are pending */
+./tests/sys/kqueue/libkqueue/read.c:217:    /* Re-add the watch and make sure no events are pending */
+./tests/sys/kqueue/libkqueue/read.c:251:    /* Re-add the watch and make sure no events are pending */
+./tests/sys/kqueue/libkqueue/common.h:72:/* Checks if any events are pending, which is an error. */
+./tests/sys/kqueue/libkqueue/main.c:26:/* Checks if any events are pending, which is an error. */
+./tests/sys/kqueue/libkqueue/main.c:35:    puts("confirming that there are no events pending");
+./tests/sys/kqueue/libkqueue/main.c:43:        errx(1, "%d event(s) pending, but none expected:", nfds);
+./tests/sys/kqueue/libkqueue/timer.c:717:    /* Enable the knote and make sure no events are pending */
+./tests/sys/kern/inotify_test.c:69: * Make sure that no other events are pending, and close the inotify descriptor.
+./tests/sys/kern/inotify_test.c:506: * Make sure that exceeding max_events pending events results in an overflow
+./tests/sys/kern/ptrace_test.c:2268:	int max_pending_per_proc;
+./tests/sys/kern/ptrace_test.c:2286:	len = sizeof(max_pending_per_proc);
+./tests/sys/kern/ptrace_test.c:2287:	ATF_REQUIRE(sysctlbyname("kern.sigqueue.max_pending_per_proc",
+./tests/sys/vm/mmap_test.c:60:		int	ok[2];	/* Depending on security.bsd.map_at_zero {0, !=0}. */
+./tests/sys/aio/aio_kqueue_test.c:68:	int failed = 0, fd, kq, pending, result, run;
+./tests/sys/aio/aio_kqueue_test.c:111:		pending = 0;
+./tests/sys/aio/aio_kqueue_test.c:113:			pending++;
+./tests/sys/aio/aio_test.c:1294: * Verify that listen(2) fails if a socket has pending AIO requests.
+./tests/sys/aio/aio_test.c:1296:ATF_TC_WITHOUT_HEAD(aio_socket_listen_pending);
+./tests/sys/aio/aio_test.c:1297:ATF_TC_BODY(aio_socket_listen_pending, tc)
+./tests/sys/geom/class/eli/unaligned_io.c:92:	 * Limit the number of offsets we test with, to avoid spending too much
+./stand/efi/libefi/efi_console.c:99:static int key_pending;
+./stand/efi/libefi/efi_console.c:1344:	key_pending = 0;
+./stand/efi/libefi/efi_console.c:1362:	if (keybuf_ischar() || key_pending)
+./stand/efi/loader/main.c:991:	bool pci_pending;
+./stand/efi/loader/main.c:1026:			if (pci_pending && vid_seen == 0)
+./stand/efi/loader/main.c:1029:		pci_pending = false;
+./stand/kshim/bsd_kernel.h:359:int	callout_pending(struct callout *);
+./stand/kshim/bsd_kernel.c:538:callout_pending(struct callout *c)
+./stand/ficl/amd64/sysdep.h:364:** either 1 or 2, depending on the memory architecture
+./stand/ficl/arm/sysdep.h:363:** either 1 or 2, depending on the memory architecture
+./stand/ficl/aarch64/sysdep.h:352:** either 1 or 2, depending on the memory architecture
+./stand/ficl/words.c:503:** terminates a word under compilation by appending code for "(;)" to
+./stand/ficl/fileaccess.c:270:    ** any pending REFILLs (as required by FILE wordset)
+./stand/ficl/loader.c:451:    ** any pending REFILLs (as required by FILE wordset)
+./stand/ficl/i386/sysdep.h:362:** either 1 or 2, depending on the memory architecture
+./stand/ficl/riscv/sysdep.h:352:** either 1 or 2, depending on the memory architecture
+./stand/ficl/powerpc/sysdep.h:363:** either 1 or 2, depending on the memory architecture
+./stand/ficl/testmain.c:194:    ** any pending REFILLs (as required by FILE wordset)
+./stand/uboot/glue.c:71: * returns 1/0 depending on found/not found result
+./stand/uboot/glue.c:105: * returns 1/0 depending on found/not found result
+./stand/common/interp_forth.c:169: * differently depending on whether they have been compiled or they
+./stand/common/bootstrap.h:222: * Preloaded file information. Depending on type, file can contain
+./stand/i386/libi386/pxe.c:436:	static bool data_pending;
+./stand/i386/libi386/pxe.c:447:	if (data_pending) {
+./stand/i386/libi386/pxe.c:448:		data_pending = false;
+./stand/libsa/pkgfs.c:619:        /* Pad with 1 or 0 bits, depending on sign. */
+./stand/libsa/zfs/zfsimpl.c:1090:	 * The top level vdev can appear in random order, depending how
+./stand/libsa/zfs/zfsimpl.c:3954:			 * the root or at the parent depending whether or
+./stand/libsa/zalloc.c:57: *	aligned to an 8 or 16 byte boundry depending on the cpu so if you
+... [5860 more matches]
+```
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/fetch

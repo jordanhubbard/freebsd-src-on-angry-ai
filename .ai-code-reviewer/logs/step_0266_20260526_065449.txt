@@ -1,0 +1,22 @@
+=== STEP 266 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/sbin/comcontrol/Makefile:
+PROGRESS:
+📁 Directory: sbin/comcontrol
+   Files: 0/3
+📄 File: sbin/comcontrol/Makefile
+
+```
+PACKAGE=runtime
+PROG=	comcontrol
+MAN=	comcontrol.8
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/asa/Makefile
