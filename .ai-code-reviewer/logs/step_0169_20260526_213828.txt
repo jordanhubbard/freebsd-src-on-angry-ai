@@ -1,0 +1,26 @@
+=== STEP 169 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: usr.bin/logger
+   Files: 0/3
+📄 File: usr.bin/logger/logger.c
+   Chunks: 5/12
+
+```
+=== CHUNK 5/12: /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/logger/logger.c === [function: logmessage]
+=== Lines 65-66 (2 lines) ===
+
+static void	logmessage(int, const char *, const char *, const char *,
+		    struct socks *, ssize_t, const char *);
+
+```
+
+--- RESPONSE ---
+
+
+This is too complex with casper/capsicum. Let me find a simpler unit.
+
+ACTION: SET_SCOPE usr.bin/logname

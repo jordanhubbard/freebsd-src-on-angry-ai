@@ -1,0 +1,15 @@
+=== STEP 14 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/test/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit is a dtrace test directory with no Makefile and no standalone buildable component. The C file is a test helper tightly coupled to dtrace's USDT infrastructure. There's no build integration possible here.
+
+According to the constraints: "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite."
+
+Let me move to the next unit.
+
+ACTION: SET_SCOPE bin/cat/tests

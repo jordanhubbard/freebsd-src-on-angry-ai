@@ -1,0 +1,20 @@
+=== STEP 20 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/false/Makefile:
+PROGRESS:
+📁 Directory: sys/crypto/libsodium
+   Files: 0/8
+📄 File: usr.bin/false/Makefile
+
+```
+PROG=	false
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/false/false.c

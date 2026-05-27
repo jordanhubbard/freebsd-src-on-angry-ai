@@ -1,0 +1,19 @@
+=== STEP 131 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ipcs:
+```
+Makefile
+Makefile.depend
+ipc.c
+ipc.h
+ipcs.1
+ipcs.c
+```
+
+--- RESPONSE ---
+
+
+This has cross-unit dependencies. Let me find a simpler standalone unit.
+
+ACTION: SET_SCOPE usr.bin/ipcs

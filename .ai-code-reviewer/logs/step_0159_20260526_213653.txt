@@ -1,0 +1,12 @@
+=== STEP 159 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/lockf is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE usr.bin/logger

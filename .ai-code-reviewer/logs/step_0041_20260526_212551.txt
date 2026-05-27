@@ -1,0 +1,13 @@
+=== STEP 41 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/Makefile*'
+
+--- RESPONSE ---
+
+
+This unit has no Makefile and is a dtrace test directory with no standalone buildable component. The C file is a test helper tightly coupled to dtrace's USDT infrastructure. There's no build integration possible here.
+
+Let me try to find an available unit. Let me check some bin/ directories.
+
+ACTION: SET_SCOPE bin/chflags

@@ -1,0 +1,10 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/test/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/cmd/dtrace/Makefile
+ACTION: LIST_DIR cddl/contrib/opensolaris/cmd/dtrace

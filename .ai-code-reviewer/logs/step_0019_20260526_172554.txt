@@ -1,0 +1,26 @@
+=== STEP 19 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/basename/Cargo.toml:
+PROGRESS:
+📁 Directory: cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/json
+   Files: 0/1
+📄 File: usr.bin/basename/Cargo.toml
+
+```
+[package]
+name = "basename"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "basename"
+path = "src/main.rs"
+```
+
+--- RESPONSE ---
+
+
+Now I understand the pattern. Let me set scope to `usr.bin/false` and create the Rust replacement.
+
+ACTION: SET_SCOPE usr.bin/false

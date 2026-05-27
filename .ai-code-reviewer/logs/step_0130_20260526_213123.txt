@@ -1,0 +1,28 @@
+=== STEP 130 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ipcrm/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/ipcrm
+   Files: 0/3
+📄 File: usr.bin/ipcrm/Makefile
+
+```
+PROG=	ipcrm
+SRCS=	ipcrm.c ipc.c
+LIBADD=	kvm
+CFLAGS+=-I${SRCTOP}/usr.bin/ipcs
+.PATH:  ${SRCTOP}/usr.bin/ipcs
+
+WARNS?=	0
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+This depends on shared source from usr.bin/ipcs. Let me examine that.
+
+ACTION: LIST_DIR usr.bin/ipcs

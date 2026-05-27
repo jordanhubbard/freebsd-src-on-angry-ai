@@ -1,0 +1,11 @@
+=== STEP 22 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk/bsd.rust.mk*'
+
+--- RESPONSE ---
+
+
+I need to change scope to a proper userland unit. `sys/crypto/libsodium` is kernel-adjacent crypto code, not userland. Let me switch to `usr.bin/false` which is a simple, buildable userland command.
+
+ACTION: SET_SCOPE usr.bin/false

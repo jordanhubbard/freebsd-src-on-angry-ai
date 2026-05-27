@@ -1,0 +1,12 @@
+=== STEP 40 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check the parent test infrastructure for build files.
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/json/Makefile
+ACTION: FIND_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/Makefile

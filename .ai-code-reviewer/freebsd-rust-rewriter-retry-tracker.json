@@ -120,8 +120,8 @@
     "last_attempt": "2026-05-24T22:42:21.132011"
   },
   "cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/json": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T15:29:23.002207"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T21:24:23.817388"
   },
   "cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/probes": {
     "attempts": 3,
@@ -644,8 +644,8 @@
     "last_attempt": "2026-05-23T13:38:12.689367"
   },
   "sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T15:39:07.887222"
+    "attempts": 2,
+    "last_attempt": "2026-05-26T21:26:53.054482"
   },
   "sys/contrib/libsodium/src/libsodium/randombytes/nativeclient": {
     "attempts": 3,
@@ -656,8 +656,8 @@
     "last_attempt": "2026-05-23T20:22:15.931538"
   },
   "sys/crypto/libsodium": {
-    "attempts": 1,
-    "last_attempt": "2026-05-26T14:49:47.592257"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T21:21:53.363968"
   },
   "sys/security/mac_none": {
     "attempts": 3,
@@ -804,8 +804,8 @@
     "last_attempt": "2026-05-25T19:49:56.506413"
   },
   "usr.bin/dtc": {
-    "attempts": 2,
-    "last_attempt": "2026-05-26T17:01:30.242673"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T21:28:06.887063"
   },
   "usr.bin/du": {
     "attempts": 3,
@@ -888,8 +888,20 @@
     "last_attempt": "2026-05-26T01:59:41.088062"
   },
   "usr.bin/gprof": {
+    "attempts": 2,
+    "last_attempt": "2026-05-26T21:29:53.262693"
+  },
+  "usr.bin/grdc": {
     "attempts": 1,
-    "last_attempt": "2026-05-26T17:08:52.601260"
+    "last_attempt": "2026-05-26T21:29:58.932889"
+  },
+  "usr.bin/grep": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T21:30:08.341395"
+  },
+  "usr.bin/gzip": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T21:30:14.874321"
   },
   "usr.bin/head": {
     "attempts": 3,
@@ -916,12 +928,12 @@
     "last_attempt": "2026-05-26T07:51:26.909578"
   },
   "usr.bin/ipcrm": {
-    "attempts": 2,
-    "last_attempt": "2026-05-26T17:09:37.511652"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T21:31:02.297325"
   },
   "usr.bin/ipcs": {
-    "attempts": 2,
-    "last_attempt": "2026-05-26T17:10:24.737298"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T21:31:37.310562"
   },
   "usr.bin/join": {
     "attempts": 2,
@@ -930,6 +942,10 @@
   "usr.bin/jot": {
     "attempts": 1,
     "last_attempt": "2026-05-22T18:13:07.386524"
+  },
+  "usr.bin/kdump": {
+    "attempts": 1,
+    "last_attempt": "2026-05-26T21:32:49.780945"
   },
   "usr.bin/killall": {
     "attempts": 1,
@@ -968,8 +984,8 @@
     "last_attempt": "2026-05-24T06:38:33.426702"
   },
   "usr.bin/logger": {
-    "attempts": 2,
-    "last_attempt": "2026-05-24T21:25:34.474839"
+    "attempts": 3,
+    "last_attempt": "2026-05-26T21:36:54.192060"
   },
   "usr.bin/login": {
     "attempts": 1,

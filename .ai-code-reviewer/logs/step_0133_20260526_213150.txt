@@ -1,0 +1,22 @@
+=== STEP 133 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/usr.bin/ipcs/Makefile:
+PROGRESS:
+📁 Directory: usr.bin/ipcs
+   Files: 0/5
+📄 File: usr.bin/ipcs/Makefile
+
+```
+PROG=	ipcs
+SRCS=	ipcs.c ipc.c
+LIBADD=	kvm
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE usr.bin/ipcs/ipcs.c

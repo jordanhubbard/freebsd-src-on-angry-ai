@@ -1,0 +1,18 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/freebsd-src-on-angry-AI/cddl/contrib/opensolaris/cmd:
+```
+dtrace
+lockstat
+mdb
+plockstat
+pyzfs
+stat
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/Makefile
+ACTION: LIST_DIR cddl/contrib/opensolaris
