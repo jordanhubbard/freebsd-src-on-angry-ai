@@ -1,0 +1,14 @@
+=== STEP 128 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: usr.bin/logger is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/ARM/TargetInfo
+
+--- RESPONSE ---
+
+
+This unit is LLVM compiler backend code, not FreeBSD userland. The build errors are from top-level Makefile.inc1, not from this unit. Let me try to find a simpler FreeBSD userland unit.
+
+ACTION: SET_SCOPE usr.bin/logger

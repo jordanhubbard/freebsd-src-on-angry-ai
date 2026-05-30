@@ -1,0 +1,10 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20.h
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE crypto_stream_xsalsa20.h

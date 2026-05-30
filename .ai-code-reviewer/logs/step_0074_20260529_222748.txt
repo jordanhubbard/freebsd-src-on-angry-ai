@@ -1,0 +1,14 @@
+=== STEP 74 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20:
+```
+stream_xsalsa20.c
+```
+
+--- RESPONSE ---
+
+
+Let me read the C source file to understand what needs to be implemented.
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20/stream_xsalsa20.c

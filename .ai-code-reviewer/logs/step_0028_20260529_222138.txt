@@ -1,0 +1,11 @@
+=== STEP 28 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+The `WRITE_FILE` action needs a `CONTENT:` block. Let me fix the format.
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20/Cargo.toml

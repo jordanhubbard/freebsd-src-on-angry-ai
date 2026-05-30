@@ -1,0 +1,14 @@
+=== STEP 3 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20
+
+--- RESPONSE ---
+
+
+The `bin/cat` is also skipped. Let me try the suggested alternative path.
+
+ACTION: SET_SCOPE sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20

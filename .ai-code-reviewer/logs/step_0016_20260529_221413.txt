@@ -1,0 +1,32 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium:
+```
+Makefile.am
+crypto_aead
+crypto_auth
+crypto_box
+crypto_core
+crypto_generichash
+crypto_hash
+crypto_kdf
+crypto_kx
+crypto_onetimeauth
+crypto_pwhash
+crypto_scalarmult
+crypto_secretbox
+crypto_secretstream
+crypto_shorthash
+crypto_sign
+crypto_stream
+crypto_verify
+include
+randombytes
+sodium
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/contrib/libsodium/src/libsodium/Makefile.am

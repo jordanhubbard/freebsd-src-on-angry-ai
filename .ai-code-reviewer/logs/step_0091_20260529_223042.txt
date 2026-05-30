@@ -1,0 +1,11 @@
+=== STEP 91 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'sys/contrib/libsodium/*/Makefile'
+
+--- RESPONSE ---
+
+
+This is a third-party crypto library without FreeBSD Makefiles. The build errors are from top-level infrastructure. Let me try to create a Rust replacement for this unit.
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20/Cargo.toml

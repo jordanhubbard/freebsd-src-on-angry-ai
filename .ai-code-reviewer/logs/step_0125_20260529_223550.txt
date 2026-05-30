@@ -1,0 +1,15 @@
+=== STEP 125 ===
+
+--- REQUEST ---
+TIMEOUT: You have spent too many iterations on sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20. This directory is being skipped.
+
+SCOPE_ABANDONED: sys/contrib/libsodium/src/libsodium/crypto_stream/xsalsa20 was marked skipped.
+
+Reason: Exceeded 120 iterations without completing the scope
+Any tracked edits were reverted and untracked files created under the scope were removed.
+NEXT: Use SET_SCOPE contrib/llvm-project/llvm/lib/Target/AMDGPU/TargetInfo
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE contrib/llvm-project/llvm/lib/Target/AMDGPU/TargetInfo
