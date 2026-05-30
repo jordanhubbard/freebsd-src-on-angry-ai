@@ -1,0 +1,12 @@
+=== STEP 767 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/stand/efi/acpica/include:
+```
+acpi_detect.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR stand/efi

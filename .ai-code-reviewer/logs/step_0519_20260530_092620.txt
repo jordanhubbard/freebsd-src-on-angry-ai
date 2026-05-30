@@ -1,0 +1,15 @@
+=== STEP 519 ===
+
+--- REQUEST ---
+TIMEOUT: You have spent too many iterations on tools/tools/shlib-compat/test/libtest1. This directory is being skipped.
+
+SCOPE_ABANDONED: tools/tools/shlib-compat/test/libtest1 was marked skipped.
+
+Reason: Exceeded 120 iterations without completing the scope
+Any tracked edits were reverted and untracked files created under the scope were removed.
+NEXT: Use SET_SCOPE contrib/llvm-project/libc/src/__support/OSUtil/windows
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE contrib/llvm-project/libc/src/__support/OSUtil/windows

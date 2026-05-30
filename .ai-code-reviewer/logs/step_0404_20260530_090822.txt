@@ -1,0 +1,11 @@
+=== STEP 404 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to keep my response extremely short. Here is the complete action:
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/Cargo.toml

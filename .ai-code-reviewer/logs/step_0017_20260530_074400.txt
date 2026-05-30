@@ -1,0 +1,11 @@
+=== STEP 17 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/dev/syscons/Makefile*'
+
+--- RESPONSE ---
+
+
+Let me check how this directory is built in the kernel tree.
+
+ACTION: GREP green_saver

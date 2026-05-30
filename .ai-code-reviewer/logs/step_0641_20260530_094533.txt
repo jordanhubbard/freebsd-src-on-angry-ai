@@ -1,0 +1,15 @@
+=== STEP 641 ===
+
+--- REQUEST ---
+TIMEOUT: You have spent too many iterations on contrib/llvm-project/libc/src/__support/OSUtil/windows. This directory is being skipped.
+
+SCOPE_ABANDONED: contrib/llvm-project/libc/src/__support/OSUtil/windows was marked skipped.
+
+Reason: Exceeded 120 iterations without completing the scope
+Any tracked edits were reverted and untracked files created under the scope were removed.
+NEXT: Use SET_SCOPE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1

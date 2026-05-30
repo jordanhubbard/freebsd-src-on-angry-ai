@@ -1,0 +1,30 @@
+=== STEP 124 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/tools/test/auxinfo/Makefile:
+PROGRESS:
+📁 Directory: tools/test/auxinfo
+   Files: 0/2
+📄 File: tools/test/auxinfo/Makefile
+
+```
+PROG=	auxinfo
+MAN=
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/test/auxinfo/Cargo.toml
+CONTENT:
+[package]
+name = "auxinfo"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "auxinfo"
+path = "src/main.rs"

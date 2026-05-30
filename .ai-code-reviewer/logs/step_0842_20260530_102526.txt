@@ -1,0 +1,12 @@
+=== STEP 842 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/frustbsd/Makefile.inc1.
+Remaining files in cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop:
+  (All tracked files rewritten or skipped in this directory)
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

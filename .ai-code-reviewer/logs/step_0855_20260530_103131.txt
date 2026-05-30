@@ -1,0 +1,28 @@
+=== STEP 855 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Makefile:
+PROGRESS:
+📁 Directory: cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop
+   Files: 0/2
+📄 File: cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Makefile
+✏️  Edits: 5 files modified
+
+```
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+all:
+	@cd ${.CURDIR} && \
+		CARGO_TARGET_DIR=${CARGO_TARGET_DIR} \
+		cargo build --release --manifest-path ${.CURDIR}/Cargo.toml
+
+clean:
+	@rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Cargo.toml

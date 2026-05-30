@@ -1,0 +1,41 @@
+=== STEP 16 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/sys/dev/syscons:
+```
+blank
+daemon
+dragon
+fade
+fire
+fonts
+green
+logo
+plasma
+rain
+scgfbrndr.c
+schistory.c
+scmouse.c
+scterm-dumb.c
+scterm-sc.c
+scterm-teken.c
+scterm.c
+sctermvar.h
+scvesactl.c
+scvgarndr.c
+scvidctl.c
+scvtb.c
+snake
+star
+syscons.c
+syscons.h
+sysmouse.c
+warp
+```
+
+--- RESPONSE ---
+
+
+Let me check for a Makefile in the parent syscons directory.
+
+ACTION: FIND_FILE sys/dev/syscons/Makefile

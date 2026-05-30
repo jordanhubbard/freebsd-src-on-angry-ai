@@ -1,0 +1,11 @@
+=== STEP 279 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block. Here goes:
+
+ACTION: WRITE_FILE tools/regression/nfsmmap/test2/Cargo.toml

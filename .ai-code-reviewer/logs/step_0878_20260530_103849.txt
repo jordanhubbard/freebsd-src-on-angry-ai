@@ -1,0 +1,61 @@
+=== STEP 878 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*Makefile*':
+```
+./tests/include/Makefile
+./tests/oclo/Makefile
+./tests/sys/acl/Makefile
+./tests/sys/acl/Makefile.depend
+./tests/sys/devrandom/Makefile
+./tests/sys/common/Makefile
+./tests/sys/netinet/Makefile
+./tests/sys/netinet/Makefile.depend
+./tests/sys/netinet/libalias/Makefile
+./tests/sys/net/bpf/Makefile
+./tests/sys/net/routing/Makefile
+./tests/sys/net/Makefile
+./tests/sys/net/if_ovpn/ccd/Makefile
+./tests/sys/net/if_ovpn/Makefile
+./tests/sys/netgraph/Makefile
+./tests/sys/vfs/Makefile
+./tests/sys/vfs/Makefile.depend
+./tests/sys/capsicum/Makefile
+./tests/sys/compat32/Makefile.inc
+./tests/sys/compat32/aarch64/Makefile
+```
+
+--- RESPONSE ---
+
+
+This directory lacks proper FreeBSD build infrastructure. Let me try a different approach - make the Makefile self-contained.
+
+ACTION: EDIT_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Makefile
+OLD:
+<<<
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+all:
+	@cd ${.CURDIR} && \
+		CARGO_TARGET_DIR=${CARGO_TARGET_DIR} \
+		cargo build --release --manifest-path ${.CURDIR}/Cargo.toml
+
+clean:
+	@rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean
+>>>
+NEW:
+<<<
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+all:
+	@cd ${.CURDIR} && \
+		CARGO_TARGET_DIR=${CARGO_TARGET_DIR} \
+		cargo build --release --manifest-path ${.CURDIR}/Cargo.toml 2>&1
+
+clean:
+	@rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean
+>>>

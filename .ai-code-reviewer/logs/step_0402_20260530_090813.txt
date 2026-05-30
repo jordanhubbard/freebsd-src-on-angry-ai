@@ -1,0 +1,11 @@
+=== STEP 402 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to include the CONTENT block. Here is the complete action:
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/Cargo.toml

@@ -1,0 +1,14 @@
+=== STEP 872 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/cddl/contrib/opensolaris/cmd/dtrace:
+```
+dtrace.1
+dtrace.c
+test
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/cmd/dtrace/Makefile

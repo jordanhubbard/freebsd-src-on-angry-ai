@@ -1,0 +1,11 @@
+=== STEP 717 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+This is a critical issue - my responses are being truncated before the CONTENT block. Let me try EDIT_FILE with a minimal change to the existing C file:
+
+ACTION: EDIT_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/h_helper_dso1.c

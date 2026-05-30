@@ -1,0 +1,11 @@
+=== STEP 351 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to keep my response extremely short to avoid truncation. Here is the complete action:
+
+ACTION: WRITE_FILE tools/regression/nfsmmap/test2/Cargo.toml

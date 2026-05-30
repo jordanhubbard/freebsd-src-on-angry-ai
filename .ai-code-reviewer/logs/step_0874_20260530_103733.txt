@@ -1,0 +1,9 @@
+=== STEP 874 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'cddl/contrib/opensolaris/cmd/dtrace/*/Makefile'
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE cddl/contrib/opensolaris/*/Makefile

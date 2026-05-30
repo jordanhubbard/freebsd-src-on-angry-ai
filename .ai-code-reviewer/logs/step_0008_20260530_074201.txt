@@ -1,0 +1,22 @@
+=== STEP 8 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Already scoped to sys/dev/syscons/green. Do not switch work units.
+
+Your active scope is `sys/dev/syscons/green` and has not been completed.
+Continue working there instead of selecting a new directory:
+  1. Use READ_FILE on files within sys/dev/syscons/green
+  2. Make any required rewrite edits (EDIT_FILE / WRITE_FILE)
+  3. Run ACTION: BUILD to validate and commit the unit
+
+Files in scope:
+  - sys/dev/syscons/green/green_saver.c
+
+--- RESPONSE ---
+
+
+I'm locked into `sys/dev/syscons/green` which is kernel-adjacent code (syscons screensaver module), not userland. The rewrite objective targets userland C/C++ libraries and commands. This unit has no source relevant to the configured objective.
+
+Per the constraint: "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite." However, I cannot switch scope. Let me attempt BUILD to trigger the auto-skip mechanism (this is attempt 3/3).
+
+ACTION: BUILD

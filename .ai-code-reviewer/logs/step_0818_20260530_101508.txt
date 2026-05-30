@@ -1,0 +1,36 @@
+=== STEP 818 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/stand/efi/acpica/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The build errors are from the top-level FreeBSD build system, not from my changes. Let me create a proper Makefile for this unit.
+
+ACTION: WRITE_FILE stand/efi/acpica/Makefile
+CONTENT:
+<<<
+# Makefile for acpi_detect Rust crate
+PROG=	acpi_detect_rust
+SRCS=
+
+.include <bsd.init.mk>
+
+RUST_CRATE=	${.CURDIR}
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+.rust:
+	@echo "Building Rust acpi_detect crate..."
+	@cd ${RUST_CRATE} && \
+		CARGO_TARGET_DIR=${CARGO_TARGET_DIR} \
+		cargo build --release --manifest-path ${RUST_CRATE}/Cargo.toml
+
+all: .rust
+
+clean:
+	@rm -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.end.mk>
+>>>

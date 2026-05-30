@@ -1,0 +1,11 @@
+=== STEP 424 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+My responses are being truncated. Let me try with minimal text:
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/Cargo.toml

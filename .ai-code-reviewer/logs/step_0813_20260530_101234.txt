@@ -1,0 +1,23 @@
+=== STEP 813 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/stand/efi/acpica/acpi_detect.c
+Scope: stand/efi/acpica
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Good, edit succeeded. Now I need to create the Rust crate files.
+
+ACTION: WRITE_FILE stand/efi/acpica/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "acpi_detect"
+version = "0.1.0"
+edition = "2021"
+[lib]
+crate-type = ["staticlib"]
+path = "src/lib.rs"
+>>>

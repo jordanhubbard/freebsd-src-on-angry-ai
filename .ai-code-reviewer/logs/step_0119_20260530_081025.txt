@@ -1,0 +1,11 @@
+=== STEP 119 ===
+
+--- REQUEST ---
+HALT_REJECTED: You have uncommitted changes in sys/dev/syscons/green.
+Changed files: sys/dev/syscons/green/Cargo.toml, sys/dev/syscons/green/src/lib.rs, sys/dev/syscons/green/Makefile
+Run BUILD to validate and commit these changes first.
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

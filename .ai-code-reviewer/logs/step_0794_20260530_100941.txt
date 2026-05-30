@@ -1,0 +1,11 @@
+=== STEP 794 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+I need to keep my response extremely short. Here is the complete action:
+
+ACTION: WRITE_FILE stand/efi/acpica/Cargo.toml

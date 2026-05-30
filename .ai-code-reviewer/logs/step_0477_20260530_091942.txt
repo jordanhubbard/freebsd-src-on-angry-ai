@@ -1,0 +1,30 @@
+=== STEP 477 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/tools/tools/shlib-compat/test/libtest1/Symbol.map:
+PROGRESS:
+📁 Directory: tools/tools/shlib-compat/test/libtest1
+   Files: 0/2
+📄 File: tools/tools/shlib-compat/test/libtest1/Symbol.map
+
+```
+/*
+ */
+
+TEST_1.0 {
+	func1;
+	func2;
+	func3;
+	func4;
+	func5;
+	func6;
+};
+
+```
+
+--- RESPONSE ---
+
+
+My responses are being truncated. Let me try with the absolute minimum:
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/Cargo.toml

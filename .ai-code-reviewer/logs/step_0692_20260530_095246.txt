@@ -1,0 +1,9 @@
+=== STEP 692 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/h_helper_dso1.c

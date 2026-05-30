@@ -1,0 +1,33 @@
+=== STEP 147 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/tools:
+```
+LibraryReport
+README
+boot
+bsdbox
+build
+bus_space
+cam
+coccinelle
+debugscripts
+diag
+ifnet
+install.sh
+kerneldoc
+lua
+make_libdeps.sh
+pkgbase
+regression
+sched
+test
+tinder.sh
+tools
+uma
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE tools/test/Makefile

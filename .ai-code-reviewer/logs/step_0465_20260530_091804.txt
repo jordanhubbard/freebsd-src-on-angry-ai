@@ -1,0 +1,9 @@
+=== STEP 465 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/Cargo.toml

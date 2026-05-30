@@ -1,0 +1,62 @@
+=== STEP 46 ===
+
+--- REQUEST ---
+BUILD_FAILED: Build errors detected
+
+No changes were committed. Rewrite units are atomic: source changes, build glue, and configured contract checks must pass together before the unit can be marked complete.
+
+BUILD ERROR REPORT:
+BUILD FAILED: 2 errors, 0 warnings
+Duration: 9.5 seconds
+
+============================================================
+ERRORS (fix these first):
+============================================================
+
+[1] /usr/home/jkh/Src/frustbsd/Makefile.inc1:371: error: SYSTEM_COMPILER: libclang will be built for bootstrapping a cross-compiler.
+
+[2] /usr/home/jkh/Src/frustbsd/Makefile.inc1:376: error: SYSTEM_LINKER: libclang will be built for bootstrapping a cross-linker.
+
+
+NEXT STEPS:
+1. Keep the active scope.
+2. Fix the source/build integration that caused this failure.
+3. BUILD again when the complete rewrite unit is ready.
+
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE sys/dev/syscons/green/Makefile
+OLD:
+<<<
+# SPDX-License-Identifier: BSD-3-Clause
+#
+# Makefile for green_saver Rust replacement
+
+CARGO = cargo
+TARGET_DIR = ${.CURDIR}/cargo-target
+
+all:
+	${CARGO} build --target-dir ${TARGET_DIR} --manifest-path ${.CURDIR}/Cargo.toml
+
+clean:
+	${CARGO} clean --target-dir ${TARGET_DIR} --manifest-path ${.CURDIR}/Cargo.toml
+	@rm -rf ${TARGET_DIR}
+>>>
+NEW:
+<<<
+# SPDX-License-Identifier: BSD-3-Clause
+#
+# Makefile for green_saver Rust replacement
+
+CARGO = cargo
+TARGET_DIR = ${.CURDIR}/cargo-target
+
+all:
+	${CARGO} build --target-dir ${TARGET_DIR} --manifest-path ${.CURDIR}/Cargo.toml
+
+clean:
+	${CARGO} clean --target-dir ${TARGET_DIR} --manifest-path ${.CURDIR}/Cargo.toml
+	@rm -rf ${TARGET_DIR}
+>>>

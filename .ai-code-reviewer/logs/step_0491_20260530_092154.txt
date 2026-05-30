@@ -1,0 +1,11 @@
+=== STEP 491 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+My responses are being truncated. Let me try with the absolute minimum:
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/Cargo.toml

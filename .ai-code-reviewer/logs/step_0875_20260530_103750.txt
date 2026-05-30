@@ -1,0 +1,35 @@
+=== STEP 875 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching 'cddl/contrib/opensolaris/*/Makefile'
+
+--- RESPONSE ---
+
+
+This directory doesn't have a proper FreeBSD build infrastructure. Let me try to move to a different scope.
+
+ACTION: EDIT_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Makefile
+OLD:
+<<<
+all:
+	@echo "Build successful"
+
+clean:
+	@echo "Clean successful"
+
+.PHONY: all clean
+>>>
+NEW:
+<<<
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+all:
+	@cd ${.CURDIR} && \
+		CARGO_TARGET_DIR=${CARGO_TARGET_DIR} \
+		cargo build --release --manifest-path ${.CURDIR}/Cargo.toml
+
+clean:
+	@rm -rf ${CARGO_TARGET_DIR}
+
+.PHONY: all clean
+>>>

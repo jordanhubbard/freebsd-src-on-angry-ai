@@ -1,0 +1,18 @@
+=== STEP 6 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/bin/cat:
+```
+Makefile
+Makefile.depend
+cat.1
+cat.c
+tests
+```
+
+--- RESPONSE ---
+
+
+The `bin/cat` directory contains `cat.c`, a userland command. This is a good candidate for the rewrite objective.
+
+ACTION: SET_SCOPE bin/cat

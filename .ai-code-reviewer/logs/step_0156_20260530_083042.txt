@@ -1,0 +1,15 @@
+=== STEP 156 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20:
+```
+Makefile
+stream_xchacha20.c
+```
+
+--- RESPONSE ---
+
+
+This unit is in `sys/contrib/libsodium` - kernel-adjacent vendor/third-party crypto code. The objective explicitly says to "Prefer small userland commands and libraries before large bootstrap or kernel-adjacent components." This is neither userland nor a small command. I should skip this unit.
+
+ACTION: SKIP_FILE

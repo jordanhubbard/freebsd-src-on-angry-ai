@@ -1,0 +1,11 @@
+=== STEP 37 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/sys/dev/syscons/green/Makefile
+Scope: sys/dev/syscons/green
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

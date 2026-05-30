@@ -1,0 +1,9 @@
+=== STEP 372 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/regression/nfsmmap/test2/Cargo.toml

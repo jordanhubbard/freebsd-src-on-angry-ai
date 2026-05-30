@@ -1,0 +1,14 @@
+=== STEP 7 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: bin/cat is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE tools/test/auxinfo
+
+--- RESPONSE ---
+
+
+Let me try the next suggested unit.
+
+ACTION: SET_SCOPE tools/test/auxinfo

@@ -1,0 +1,10 @@
+=== STEP 830 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/src/tst.stop2.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: BUILD

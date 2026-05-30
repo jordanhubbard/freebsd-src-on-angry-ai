@@ -1,0 +1,18 @@
+=== STEP 853 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop:
+```
+Cargo.toml
+Makefile
+src
+tst.stop1.c
+tst.stop1.d
+tst.stop2.c
+tst.stop2.d
+```
+
+--- RESPONSE ---
+
+
+ACTION: SKIP_FILE

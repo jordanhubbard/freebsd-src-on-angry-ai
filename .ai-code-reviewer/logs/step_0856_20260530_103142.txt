@@ -1,0 +1,29 @@
+=== STEP 856 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Cargo.toml:
+PROGRESS:
+📁 Directory: cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop
+   Files: 0/2
+📄 File: cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Cargo.toml
+✏️  Edits: 5 files modified
+
+```
+[package]
+name = "tst-stop"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tst.stop1"
+path = "src/tst.stop1.rs"
+
+[[bin]]
+name = "tst.stop2"
+path = "src/tst.stop2.rs"
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/src/tst.stop1.rs

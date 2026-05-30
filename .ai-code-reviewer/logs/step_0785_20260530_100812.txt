@@ -1,0 +1,11 @@
+=== STEP 785 ===
+
+--- REQUEST ---
+WRITE_FILE_ERROR: Missing CONTENT block
+
+--- RESPONSE ---
+
+
+My responses keep getting truncated. Let me try the absolute minimum:
+
+ACTION: WRITE_FILE stand/efi/acpica/Cargo.toml

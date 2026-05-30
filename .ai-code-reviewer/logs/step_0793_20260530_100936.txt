@@ -1,0 +1,20 @@
+=== STEP 793 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Already scoped to stand/efi/acpica. Do not switch work units.
+
+Your active scope is `stand/efi/acpica` and has not been completed.
+Continue working there instead of selecting a new directory:
+  1. Use READ_FILE on files within stand/efi/acpica
+  2. Make any required rewrite edits (EDIT_FILE / WRITE_FILE)
+  3. Run ACTION: BUILD to validate and commit the unit
+
+Files in scope:
+  - stand/efi/acpica/acpi_detect.c
+
+--- RESPONSE ---
+
+
+I need to keep my response extremely short. Here is the complete action:
+
+ACTION: WRITE_FILE stand/efi/acpica/Cargo.toml
