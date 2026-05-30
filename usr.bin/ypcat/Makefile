@@ -1,24 +1,22 @@
 PACKAGE=	yp
-PROG=	ypcat
-BINDIR?=	/usr/bin
-BINOWN?=	root
-BINGRP?=	wheel
-BINMODE?=	555
 
-CARGO?=		cargo
-CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+WARNS?=	3
+MAN=	ypcat.1
 
-${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
-	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
-	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+RUSTPROG=	ypcat
+SCRIPTS=	${RUSTPROG}
+SCRIPTSNAME_${RUSTPROG}=	${RUSTPROG}
 
-all: ${PROG}
+CARGO?=	cargo
+CARGO_BIN?=	${RUSTPROG}
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
 
-install: ${PROG}
-	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+${RUSTPROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/Cargo.lock ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${CARGO_BIN} ${.TARGET}
 
-clean:
-	${RM} ${PROG}
-	${RM} -rf ${CARGO_TARGET_DIR}
+CLEANFILES+=	${RUSTPROG}
+CLEANDIRS+=	${CARGO_TARGET_DIR}
 
-CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+.include <bsd.prog.mk>

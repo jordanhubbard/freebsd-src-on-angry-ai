@@ -1,23 +1,21 @@
-PROG=	enigma
-BINDIR?=	/usr/bin
-BINOWN?=	root
-BINGRP?=	wheel
-BINMODE?=	555
+RUSTPROG=	enigma
+SCRIPTS=	${RUSTPROG}
+SCRIPTSNAME_${RUSTPROG}=	${RUSTPROG}
+MAN=	enigma.1
 
-CARGO?=		cargo
-CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+LINKS=	${BINDIR}/enigma ${BINDIR}/crypt
+MLINKS=	enigma.1 crypt.1
 
-${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs ${.CURDIR}/build.rs
-	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
-	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+CARGO?=	cargo
+CARGO_BIN?=	${RUSTPROG}
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
 
-all: ${PROG}
+${RUSTPROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/Cargo.lock ${.CURDIR}/build.rs ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${CARGO_BIN} ${.TARGET}
 
-install: ${PROG}
-	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+CLEANFILES+=	${RUSTPROG}
+CLEANDIRS+=	${CARGO_TARGET_DIR}
 
-clean:
-	${RM} ${PROG}
-	${RM} -rf ${CARGO_TARGET_DIR}
-
-CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+.include <bsd.prog.mk>

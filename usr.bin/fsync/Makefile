@@ -1,20 +1,19 @@
 PACKAGE=	runtime
-PROG=	fsync
+MAN=	fsync.1
 
-CARGO?=		cargo
+RUSTPROG=	fsync
+SCRIPTS=	${RUSTPROG}
+SCRIPTSNAME_${RUSTPROG}=	${RUSTPROG}
+
+CARGO?=	cargo
+CARGO_BIN?=	${RUSTPROG}
 CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
 
-${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+${RUSTPROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/Cargo.lock ${.CURDIR}/src/main.rs
 	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
-	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+	${CP} ${CARGO_TARGET_DIR}/debug/${CARGO_BIN} ${.TARGET}
 
-all: ${PROG}
+CLEANFILES+=	${RUSTPROG}
+CLEANDIRS+=	${CARGO_TARGET_DIR}
 
-install: ${PROG}
-	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
-
-clean:
-	${RM} ${PROG}
-	${RM} -rf ${CARGO_TARGET_DIR}
-
-CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+.include <bsd.prog.mk>

@@ -1,30 +1,18 @@
-PROG=	pathchk
-BINDIR?=	/usr/bin
-BINOWN?=	root
-BINGRP?=	wheel
-BINMODE?=	555
+MAN=	pathchk.1
 
-CARGO?=		cargo
-CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+RUSTPROG=	pathchk
+SCRIPTS=	${RUSTPROG}
+SCRIPTSNAME_${RUSTPROG}=	${RUSTPROG}
 
-SRCS=	${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+CARGO?=	cargo
+CARGO_BIN?=	${RUSTPROG}
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
 
-${PROG}: ${SRCS}
+${RUSTPROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/Cargo.lock ${.CURDIR}/src/main.rs
 	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
-	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+	${CP} ${CARGO_TARGET_DIR}/debug/${CARGO_BIN} ${.TARGET}
 
-all: ${PROG}
+CLEANFILES+=	${RUSTPROG}
+CLEANDIRS+=	${CARGO_TARGET_DIR}
 
-install: ${PROG}
-	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
-
-clean:
-	${RM} ${PROG}
-	${RM} -rf ${CARGO_TARGET_DIR}
-
-CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
-
-.PHONY: all install clean
-
-${PROG}: .FORCE
-.FORCE:
+.include <bsd.prog.mk>

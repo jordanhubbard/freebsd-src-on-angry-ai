@@ -1,31 +1,24 @@
-PROG=	dirname
-BINDIR?=	/usr/bin
-BINOWN?=	root
-BINGRP?=	wheel
-BINMODE?=	555
+.include <src.opts.mk>
 
-CARGO?=		cargo
-CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+MAN=
 
 HAS_TESTS=
-SUBDIR.${MK_TESTS:Uyes}+= tests
+SUBDIR.${MK_TESTS}+= tests
 
-# Build the Rust binary
-${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
-	@${ECHO} "=== Building ${PROG} (Rust) ==="
+RUSTPROG=	dirname
+SCRIPTS=	${RUSTPROG}
+SCRIPTSNAME_${RUSTPROG}=	${RUSTPROG}
+
+CARGO?=	cargo
+CARGO_BIN?=	${RUSTPROG}
+CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
+
+${RUSTPROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/Cargo.lock ${.CURDIR}/src/main.rs
 	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
-	    --target-dir ${CARGO_TARGET_DIR}
-	@${ECHO} "=== Done building ${PROG} (Rust) ==="
-	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+	    --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${CARGO_BIN} ${.TARGET}
 
-all: ${PROG}
+CLEANFILES+=	${RUSTPROG}
+CLEANDIRS+=	${CARGO_TARGET_DIR}
 
-install: ${PROG}
-	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} \
-	    ${PROG} ${DESTDIR}${BINDIR}/${PROG}
-
-clean:
-	${RM} ${PROG}
-	${RM} -rf ${CARGO_TARGET_DIR}
-
-CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+.include <bsd.prog.mk>

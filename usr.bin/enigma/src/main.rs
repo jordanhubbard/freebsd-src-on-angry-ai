@@ -13,6 +13,7 @@
 use std::env;
 use std::ffi::{CStr, CString};
 use std::os::raw::{c_char, c_int};
+use std::io::{Read, Write};
 use std::process;
 
 const MINUSKVAR: &str = "CrYpTkEy";
@@ -57,7 +58,7 @@ unsafe fn setup(pw: &str) {
 
     let mut seed: i32 = 123;
     for i in 0..13 {
-        seed = seed * BUF[i] as i32 + i;
+        seed = seed * BUF[i] as i32 + i as i32;
     }
 
     for i in 0..ROTORSZ {
@@ -170,7 +171,7 @@ fn main() {
                 nr1 = (DECK[n1] & MASK as u8) as i32;
                 nr2 = (DECK[nr1 as usize] & MASK as u8) as i32;
             } else {
-                nr1 = i;
+                nr1 = n1 as i32;
             }
 
             // i = t2[(t3[(t1[(i+nr1)&MASK]+nr2)&MASK]-nr2)&MASK]-nr1;
@@ -179,7 +180,7 @@ fn main() {
             let step3 = step2 as usize;
             let step4 = (T3[step3] as i32 - nr2) & MASK as i32;
             let step5 = step4 as usize;
-            let step6 = (T2[step5] as i32 - nr1);
+            let step6 = T2[step5] as i32 - nr1;
             i = step6;
         }
 

@@ -1,27 +1,24 @@
-PROG=	mkdir
-BINDIR?=	/usr/bin
-BINOWN?=	root
-BINGRP?=	wheel
-BINMODE?=	555
+.include <src.opts.mk>
 
-CARGO?=		cargo
+PACKAGE=runtime
+RUSTPROG=	mkdir
+SCRIPTS=	${RUSTPROG}
+SCRIPTSNAME_${RUSTPROG}=	${RUSTPROG}
+MAN=	mkdir.1
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+=	tests
+
+CARGO?=	cargo
+CARGO_BIN?=	${RUSTPROG}
 CARGO_TARGET_DIR?=	${.OBJDIR}/cargo-target
 
-SRCDIR?=	${.CURDIR}
+${RUSTPROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/Cargo.lock ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${CARGO_BIN} ${.TARGET}
 
-.PHONY: all ${PROG}
+CLEANFILES+=	${RUSTPROG}
+CLEANDIRS+=	${CARGO_TARGET_DIR}
 
-${PROG}: ${SRCDIR}/Cargo.toml ${SRCDIR}/src/main.rs
-	${CARGO} build --manifest-path ${SRCDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
-	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
-
-all: ${PROG}
-
-install: ${PROG}
-	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
-
-clean:
-	${RM} ${PROG}
-	${RM} -rf ${CARGO_TARGET_DIR}
-
-CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+.include <bsd.prog.mk>
