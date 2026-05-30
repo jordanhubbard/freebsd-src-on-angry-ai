@@ -1,0 +1,67 @@
+=== STEP 419 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/tools/test/auxinfo/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/test/auxinfo/src/main.rs
+CONTENT:
+<<<
+use std::ffi::c_int;
+
+extern "C" {
+    fn getpagesizes(buf: *mut usize, buf_len: c_int) -> c_int;
+    fn getpagesize() -> c_int;
+    fn getosreldate() -> c_int;
+    fn sysconf(name: c_int) -> i64;
+}
+
+const _SC_NPROCESSORS_CONF: c_int = 840;
+
+fn test_pagesizes() {
+    let nelem = unsafe { getpagesizes(std::ptr::null_mut(), 0) };
+    if nelem == -1 {
+        eprintln!("getpagesizes(NULL, 0) failed");
+        std::process::exit(1);
+    }
+    let mut ps: Vec<usize> = Vec::with_capacity(nelem as usize);
+    unsafe {
+        ps.set_len(nelem as usize);
+    }
+    let nelem = unsafe { getpagesizes(ps.as_mut_ptr(), nelem) };
+    if nelem == -1 {
+        eprintln!("getpagesizes failed");
+        std::process::exit(1);
+    }
+    print!("Supported page sizes:");
+    for i in 0..nelem as usize {
+        print!(" {}", ps[i] as i64);
+    }
+    println!();
+}
+
+fn test_pagesize() {
+    let ps = unsafe { getpagesize() };
+    println!("Pagesize: {}", ps);
+}
+
+fn test_osreldate() {
+    let date = unsafe { getosreldate() };
+    println!("OSRELDATE: {}", date);
+}
+
+fn test_ncpus() {
+    let ncpus = unsafe { sysconf(_SC_NPROCESSORS_CONF) };
+    println!("NCPUs: {}", ncpus);
+}
+
+fn main() {
+    test_pagesizes();
+    test_pagesize();
+    test_osreldate();
+    test_ncpus();
+}
+>>>

@@ -1,0 +1,15 @@
+=== STEP 472 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/tools/test/auxinfo:
+```
+Cargo.toml
+Makefile
+auxinfo.c
+src
+```
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR tools/test/auxinfo/src

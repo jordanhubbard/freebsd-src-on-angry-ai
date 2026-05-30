@@ -1,0 +1,14 @@
+=== STEP 207 ===
+
+--- REQUEST ---
+GREP_RESULT for 'PowerPCTargetInfo':
+```
+./contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo/PowerPCTargetInfo.h:1://===-- PowerPCTargetInfo.h - PowerPC Target Implementation -----*- C++ -*-===//
+```
+
+--- RESPONSE ---
+
+
+This unit is LLVM compiler infrastructure, not FreeBSD userland. I need to mark it as skipped in the rewrite index.
+
+ACTION: GREP PowerPC

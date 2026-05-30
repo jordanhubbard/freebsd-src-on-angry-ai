@@ -1,0 +1,12 @@
+=== STEP 575 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/src/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The `std::fs::File` and `std::io::Read` are from the Rust standard library, not `libc`. That's fine. Let me now build:
+
+ACTION: BUILD

@@ -1,0 +1,16 @@
+=== STEP 150 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*libc_private.h*':
+```
+./libexec/rtld-elf/rtld-libc/libc_private.h
+./tools/build/libc-bootstrap/libc_private.h
+./lib/libc/include/libc_private.h
+```
+
+--- RESPONSE ---
+
+
+Let me understand the build environment and dependencies better.
+
+ACTION: READ_FILE lib/libsys/clock_gettime.c

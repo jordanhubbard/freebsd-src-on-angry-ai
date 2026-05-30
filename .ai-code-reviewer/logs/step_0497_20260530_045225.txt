@@ -1,0 +1,12 @@
+=== STEP 497 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/frustbsd/tools/Makefile
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+Let me understand the build infrastructure for this project.
+
+ACTION: FIND_FILE share/mk

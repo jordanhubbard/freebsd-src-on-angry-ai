@@ -1,0 +1,12 @@
+=== STEP 531 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/include/s
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+This unit depends on multiple internal libsodium primitives (`crypto_core_hchacha20`, `crypto_stream_chacha20`, `randombytes`) and internal headers. It's not a self-contained small unit suitable for standalone Rust translation. Let me skip it and pick a simpler unit.
+
+ACTION: SET_SCOPE bin/cat/tests

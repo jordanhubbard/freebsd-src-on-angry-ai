@@ -1,0 +1,35 @@
+=== STEP 495 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/tools/test:
+```
+README
+arc4random
+auxinfo
+bsnmp
+buf_ring
+callout_free
+devrandom
+gpioevents
+hwpmc
+iconv
+malloc
+net
+netfibs
+popss
+ppsapi
+pthread_vfork
+ptrace
+sort
+stress2
+upsdl
+vm86
+xregs_sig
+```
+
+--- RESPONSE ---
+
+
+The build is failing with "0 errors, 0 warnings" which is unusual. Let me check the parent Makefile structure.
+
+ACTION: READ_FILE tools/test/Makefile

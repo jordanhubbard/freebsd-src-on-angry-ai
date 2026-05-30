@@ -1,0 +1,131 @@
+=== STEP 706 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The build is failing silently. Let me simplify the Rust code - the `use std::arch::asm;` is unused and the init/fini array approach may not work correctly:
+
+ACTION: EDIT_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/src/lib.rs
+OLD:
+<<<
+// Rust replacement for h_helper_dso1.c
+// Provides the same symbols and constructor/destructor behavior as the original C DSO.
+
+use std::arch::asm;
+
+// External variables referenced from the test harness
+extern "C" {
+    static mut sleep_init: i32;
+    static mut sleep_fini: i32;
+    static mut dlopen_cookie: i32;
+    static mut dlclose_cookie: i32;
+}
+
+// Constructor: called when the DSO is loaded (dlopen)
+#[used]
+#[link_section = ".init_array"]
+pub static INIT1: unsafe extern "C" fn() = init1;
+
+unsafe extern "C" fn init1() {
+    dlopen_cookie = 1;
+    if sleep_init != 0 {
+        loop {
+            // poll(NULL, 0, -1) equivalent - infinite sleep
+            libc_poll(0 as *mut _, 0, -1);
+        }
+    }
+}
+
+// Destructor: called when the DSO is unloaded (dlclose)
+#[used]
+#[link_section = ".fini_array"]
+pub static FINI1: unsafe extern "C" fn() = fini1;
+
+unsafe extern "C" fn fini1() {
+    dlclose_cookie = 1;
+    if sleep_fini != 0 {
+        loop {
+            // poll(NULL, 0, -1) equivalent - infinite sleep
+            libc_poll(0 as *mut _, 0, -1);
+        }
+    }
+}
+
+// TLS callback: called when TLS is destroyed
+#[used]
+#[link_section = ".tls_callback"]
+pub static TLS_CALLBACK: unsafe extern "C" fn() = tls_callback;
+
+unsafe extern "C" fn tls_callback() {
+    // In the original C, this sets a thread-local variable to 1
+    // For the Rust version, we just provide the symbol
+}
+
+// Minimal poll wrapper to avoid depending on libc crate
+extern "C" {
+    fn poll(fds: *mut _, nfds: _, timeout: _) -> i32;
+}
+
+unsafe fn libc_poll(fds: *mut _, nfds: _, timeout: _) -> i32 {
+    poll(fds, nfds, timeout)
+}
+>>>
+NEW:
+<<<
+// Rust replacement for h_helper_dso1.c
+// Provides the same symbols and constructor/destructor behavior as the original C DSO.
+
+// External variables referenced from the test harness
+extern "C" {
+    static mut sleep_init: i32;
+    static mut sleep_fini: i32;
+    static mut dlopen_cookie: i32;
+    static mut dlclose_cookie: i32;
+}
+
+extern "C" {
+    fn poll(fds: *mut libc::pollfd, nfds: libc::nfds_t, timeout: i32) -> i32;
+}
+
+// Constructor: called when the DSO is loaded (dlopen)
+#[used]
+#[link_section = ".init_array"]
+pub static INIT1: unsafe extern "C" fn() = init1;
+
+unsafe extern "C" fn init1() {
+    dlopen_cookie = 1;
+    if sleep_init != 0 {
+        loop {
+            poll(std::ptr::null_mut(), 0, -1);
+        }
+    }
+}
+
+// Destructor: called when the DSO is unloaded (dlclose)
+#[used]
+#[link_section = ".fini_array"]
+pub static FINI1: unsafe extern "C" fn() = fini1;
+
+unsafe extern "C" fn fini1() {
+    dlclose_cookie = 1;
+    if sleep_fini != 0 {
+        loop {
+            poll(std::ptr::null_mut(), 0, -1);
+        }
+    }
+}
+
+// TLS callback: called when TLS is destroyed
+#[used]
+#[link_section = ".tls_callback"]
+pub static TLS_CALLBACK: unsafe extern "C" fn() = tls_callback;
+
+unsafe extern "C" fn tls_callback() {
+    // In the original C, this sets a thread-local variable to 1
+    // For the Rust version, we just provide the symbol
+}
+>>>

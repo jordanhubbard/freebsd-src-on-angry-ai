@@ -1,0 +1,25 @@
+=== STEP 165 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Already scoped to contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo. Do not switch work units.
+
+Your active scope is `contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo` and has not been completed.
+Continue working there instead of selecting a new directory:
+  1. Use READ_FILE on files within contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo
+  2. Make any required rewrite edits (EDIT_FILE / WRITE_FILE)
+  3. Run ACTION: BUILD to validate and commit the unit
+
+Files in scope:
+  - contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo/PowerPCTargetInfo.cpp
+  - contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo/PowerPCTargetInfo.h
+
+--- RESPONSE ---
+
+
+This unit is LLVM compiler infrastructure code (PowerPC target info), not FreeBSD userland. The rewrite objective is to translate FreeBSD userland C/C++ libraries and commands to Rust. This LLVM C++ code is third-party compiler infrastructure that should not be rewritten to Rust.
+
+Per the constraint: "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite"
+
+I cannot switch scopes while scoped here, so let me attempt BUILD to see if the system can handle this skip case.
+
+ACTION: BUILD

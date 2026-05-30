@@ -1,0 +1,11 @@
+=== STEP 498 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk*'
+
+--- RESPONSE ---
+
+
+Let me understand the build infrastructure for this project.
+
+ACTION: FIND_FILE bsd

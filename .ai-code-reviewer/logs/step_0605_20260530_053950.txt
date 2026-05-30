@@ -1,0 +1,64 @@
+=== STEP 605 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/tools/tools/shlib-compat/test/libtest1/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/src/lib.rs
+CONTENT:
+<<<
+use std::os::raw::{c_char, c_int, c_short};
+
+#[repr(C)]
+pub struct s1 {
+    pub f1_int: c_int,
+    pub f2_str: *mut c_char,
+    pub f3_short: c_short,
+    pub f4_uint64: u64,
+    pub f5_intmax: i64,
+    pub f6_ptr: *mut std::ffi::c_void,
+}
+
+#[repr(C)]
+pub struct s2 {
+    pub f1_buf: [c_char; 30],
+    pub f2_s1: *mut s1,
+}
+
+#[repr(C)]
+pub struct s3 {
+    pub f1_s1: s1,
+    pub f2_int32: u32,
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn func1(a: c_int, b: c_int) -> c_int {
+    a - b
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn func2(a: i64, b: u64) -> c_int {
+    (a - b as i64) as c_int
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn func3(_s: *mut s1) {
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn func4(_s: s1) {
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn func5(_a: c_int, _b: *mut std::ffi::c_void, _s: *mut s2) -> c_int {
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn func6(_a: c_char, _s: *mut s3) -> c_int {
+    0
+}
+>>>

@@ -1,0 +1,10 @@
+=== STEP 395 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: /usr/home/jkh/Src/frustbsd is a directory, not a file
+TIP: Use LIST_FILES to see directory contents
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE

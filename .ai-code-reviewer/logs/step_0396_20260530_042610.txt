@@ -1,0 +1,9 @@
+=== STEP 396 ===
+
+--- REQUEST ---
+FIND_FILE_ERROR: No pattern specified
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE

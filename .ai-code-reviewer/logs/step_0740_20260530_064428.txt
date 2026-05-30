@@ -1,0 +1,60 @@
+=== STEP 740 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk*'
+
+--- RESPONSE ---
+
+
+The build reports 0 errors but still fails. This likely means `cargo` is not available. Let me check what's available and use `rustc` directly:
+
+ACTION: EDIT_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/Makefile
+OLD:
+<<<
+# Rust replacement for h_helper_dso1.c
+# Builds a shared library (DSO) for the ld.elf_so test suite.
+
+PROG=	h_helper_dso1
+SRCS=	h_helper_dso1.c
+
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust replacement for h_helper_dso1"
+	cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	@true
+>>>
+NEW:
+<<<
+# Rust replacement for h_helper_dso1.c
+# Builds a shared library (DSO) for the ld.elf_so test suite.
+
+PROG=	h_helper_dso1
+SRCS=	h_helper_dso1.c
+
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust replacement for h_helper_dso1"
+	@if command -v cargo >/dev/null 2>&1; then \
+		cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}; \
+	elif command -v rustc >/dev/null 2>&1; then \
+		rustc --crate-type cdylib -o ${CARGO_TARGET_DIR}/libhelper_dso1.so ${.CURDIR}/src/lib.rs; \
+	else \
+		echo "Neither cargo nor rustc found"; \
+		exit 1; \
+	fi
+
+clean:
+	@true
+>>>

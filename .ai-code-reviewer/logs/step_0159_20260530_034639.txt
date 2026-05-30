@@ -1,0 +1,11 @@
+=== STEP 159 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/auxv.h*'
+
+--- RESPONSE ---
+
+
+lib/libsys is complex but I need to find the smallest possible rewrite increment. Let me check the header files for type definitions.
+
+ACTION: FIND_FILE sys/auxv.h

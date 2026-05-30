@@ -1,0 +1,11 @@
+=== STEP 177 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'PowerPC/TargetInfo'
+
+--- RESPONSE ---
+
+
+This unit contains LLVM compiler infrastructure code (PowerPC target registration), not FreeBSD userland C/C++ code. Per the rewrite objective constraints, this should be skipped. Let me mark it as skipped in the rewrite index and move on.
+
+ACTION: SKIP_FILE

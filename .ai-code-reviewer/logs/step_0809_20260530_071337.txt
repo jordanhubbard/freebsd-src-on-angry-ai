@@ -1,0 +1,36 @@
+=== STEP 809 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/Makefile*'
+
+--- RESPONSE ---
+
+
+The DTrace test directory has no Makefile - it's not part of the FreeBSD build system. I'll create a standalone Makefile that builds the Rust replacements.
+
+ACTION: WRITE_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Makefile
+CONTENT:
+<<<
+# Makefile for DTrace stop test helpers (Rust replacement)
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+PROGS=	tst.stop1 tst.stop2
+
+.PHONY: all clean
+
+all: ${PROGS}
+
+tst.stop1: Cargo.toml src/tst_stop1.rs
+	${CARGO} build --bin tst.stop1 --offline --target-dir ${CARGO_TARGET_DIR}
+	cp ${CARGO_TARGET_DIR}/debug/tst.stop1 ${.TARGET}
+	chmod +x ${.TARGET}
+
+tst.stop2: Cargo.toml src/tst_stop2.rs
+	${CARGO} build --bin tst.stop2 --offline --target-dir ${CARGO_TARGET_DIR}
+	cp ${CARGO_TARGET_DIR}/debug/tst.stop2 ${.TARGET}
+	chmod +x ${.TARGET}
+
+clean:
+	rm -rf ${CARGO_TARGET_DIR} ${PROGS}
+>>>

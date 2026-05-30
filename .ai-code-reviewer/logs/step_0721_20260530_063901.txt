@@ -1,0 +1,9 @@
+=== STEP 721 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests/libexec/ld.elf_so/h_helper_dso1.c*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1

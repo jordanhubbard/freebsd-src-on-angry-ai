@@ -1,0 +1,77 @@
+=== STEP 593 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/tools/regression/nfsmmap/test2/Makefile:
+PROGRESS:
+📁 Directory: tools/regression
+📄 File: tools/regression/nfsmmap/test2/Makefile
+
+```
+PROG= test2
+MAN=
+NFSSERVER?= herring.nlsystems.com
+CLEANFILES= test2.zeros test2.good test2.data test2.scratch
+
+all: test2 test2.zeros test2.good
+	@cp ${.OBJDIR}/test2.zeros ${.OBJDIR}/test2.data
+	@if [ `hostname` != ${NFSSERVER} ] ; then \
+		ssh ${NFSSERVER} touch ${.OBJDIR}/test2.data; \
+	fi
+	@cd ${.OBJDIR}; ${.OBJDIR}/test2
+	@if cmp -s ${.OBJDIR}/test2.data ${.OBJDIR}/test2.good && \
+	   cmp -s ${.OBJDIR}/test2.scratch ${.OBJDIR}/test2.good ; then \
+		echo passed; \
+	else \
+		echo failed; \
+	fi
+
+test2.zeros: test2.zeros.uu
+	uudecode $?
+
+test2.good: test2.good.uu
+	uudecode $?
+
+.include <bsd.prog.mk>
+
+```
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/regression/nfsmmap/test2/Makefile
+CONTENT:
+<<<
+PROG=	test2
+NFSSERVER?=	herring.nlsystems.com
+CLEANFILES=	test2.zeros test2.good test2.data test2.scratch cargo-target
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+all: ${PROG} test2.zeros test2.good
+	@cp ${.CURDIR}/test2.zeros ${.CURDIR}/test2.data
+	@if [ `hostname` != ${NFSSERVER} ] ; then \
+		ssh ${NFSSERVER} touch ${.CURDIR}/test2.data; \
+	fi
+	@cd ${.CURDIR}; ${.CURDIR}/${PROG}
+	@if cmp -s ${.CURDIR}/test2.data ${.CURDIR}/test2.good && \
+	   cmp -s ${.CURDIR}/test2.scratch ${.CURDIR}/test2.good ; then \
+		echo passed; \
+	else \
+		echo failed; \
+	fi
+
+test2.zeros: test2.zeros.uu
+	uudecode $?
+
+test2.good: test2.good.uu
+	uudecode $?
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+>>>

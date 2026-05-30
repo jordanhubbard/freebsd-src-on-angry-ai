@@ -1,0 +1,11 @@
+=== STEP 745 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*tests/libexec*'
+
+--- RESPONSE ---
+
+
+Let me check a recently completed unit to understand the working pattern:
+
+ACTION: LIST_DIR usr.bin/basename

@@ -1,0 +1,22 @@
+=== STEP 818 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/lib/libthr/arch/arm/Makefile.inc:
+PROGRESS:
+📁 Directory: lib/libthr/arch/arm
+   Files: 0/2
+📄 File: lib/libthr/arch/arm/Makefile.inc
+
+```
+.PATH: ${.CURDIR}/arch/arm
+SRCS+= \
+ thr_rtld_arm.c
+
+```
+
+--- RESPONSE ---
+
+
+This is ARM-specific machine-dependent code for libthr that provides AEABI compatibility symbols. It's a small, architecture-specific glue file. Let me check the parent build structure:
+
+ACTION: READ_FILE lib/libthr/Makefile

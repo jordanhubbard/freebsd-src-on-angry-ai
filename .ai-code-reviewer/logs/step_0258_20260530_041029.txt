@@ -1,0 +1,12 @@
+=== STEP 258 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: /usr/home/jkh/Src/frustbsd is a directory, not a file
+TIP: Use LIST_FILES to see directory contents
+
+--- RESPONSE ---
+
+
+I need to update the rewrite index to mark this LLVM unit as skipped since it's not FreeBSD userland code.
+
+ACTION: READ_FILE

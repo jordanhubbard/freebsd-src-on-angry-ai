@@ -1,0 +1,80 @@
+=== STEP 748 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/usr.bin/basename/Cargo.toml:
+PROGRESS:
+📁 Directory: contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1
+   Files: 0/1
+📄 File: usr.bin/basename/Cargo.toml
+✏️  Edits: 4 files modified
+
+```
+[package]
+name = "basename"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "basename"
+path = "src/main.rs"
+```
+
+--- RESPONSE ---
+
+
+I see the pattern from the successful `basename` unit. Let me update the Makefile to follow the same pattern:
+
+ACTION: EDIT_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/Makefile
+OLD:
+<<<
+# Rust replacement for h_helper_dso1.c
+# Builds a shared library (DSO) for the ld.elf_so test suite.
+
+PROG=	h_helper_dso1
+SRCS=	h_helper_dso1.c
+
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust replacement for h_helper_dso1"
+	@if command -v cargo >/dev/null 2>&1; then \
+		cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}; \
+	elif command -v rustc >/dev/null 2>&1; then \
+		rustc --crate-type cdylib -o ${CARGO_TARGET_DIR}/libhelper_dso1.so ${.CURDIR}/src/lib.rs; \
+	else \
+		echo "Neither cargo nor rustc found"; \
+		exit 1; \
+	fi
+
+clean:
+	@true
+>>>
+NEW:
+<<<
+# Rust replacement for h_helper_dso1.c
+# Builds a shared library (DSO) for the ld.elf_so test suite.
+
+.include <src.opts.mk>
+
+PROG=	h_helper_dso1
+SRCS=	h_helper_dso1.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/libhelper_dso1.so ${.TARGET}
+
+all: ${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>

@@ -1,0 +1,14 @@
+=== STEP 95 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*libc_private.h*':
+```
+./libexec/rtld-elf/rtld-libc/libc_private.h
+./tools/build/libc-bootstrap/libc_private.h
+./lib/libc/include/libc_private.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: GREP _elf_aux_info

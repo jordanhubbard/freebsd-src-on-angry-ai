@@ -1,0 +1,31 @@
+=== STEP 129 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*elf.h*':
+```
+./sys/compat/linuxkpi/dummy/include/linux/elf.h
+./sys/compat/linux/linux_elf.h
+./sys/arm64/include/elf.h
+./sys/cddl/compat/opensolaris/sys/elf.h
+./sys/sys/link_elf.h
+./sys/sys/elf.h
+./sys/sys/imgact_elf.h
+./sys/dev/hptrr/amd64-elf.hptrr_lib.o
+./sys/dev/hptrr/i386-elf.hptrr_lib.o
+./sys/dev/hpt27xx/amd64-elf.hpt27xx_lib.o
+./sys/dev/hpt27xx/i386-elf.hpt27xx_lib.o
+./sys/dev/hptmv/amd64-elf.hptmvraid.o
+./sys/dev/hptmv/i386-elf.hptmvraid.o
+./sys/dev/hptnr/i386-elf.hptnr_lib.o
+./sys/dev/hptnr/amd64-elf.hptnr_lib.o
+./sys/x86/include/elf.h
+./sys/riscv/include/elf.h
+./sys/arm/include/elf.h
+./sys/amd64/include/elf.h
+./sys/i386/include/elf.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/sys/link_elf.h

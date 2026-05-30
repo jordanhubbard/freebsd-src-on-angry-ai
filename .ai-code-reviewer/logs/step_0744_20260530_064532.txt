@@ -1,0 +1,11 @@
+=== STEP 744 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/netbsd-tests*'
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors. Let me check if there's a parent Makefile that builds these test helpers:
+
+ACTION: FIND_FILE tests/libexec

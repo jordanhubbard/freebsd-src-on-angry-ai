@@ -1,0 +1,14 @@
+=== STEP 527 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*crypto_stream_xchacha20*':
+```
+./sys/contrib/libsodium/src/libsodium/include/sodium/crypto_stream_xchacha20.h
+```
+
+--- RESPONSE ---
+
+
+The "0 errors, 0 warnings" failure is suspicious. Let me check the build configuration to understand what command is being run.
+
+ACTION: FIND_FILE .ai

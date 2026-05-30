@@ -1,0 +1,19 @@
+=== STEP 80 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/frustbsd/lib/libsys/_libsys.h.
+Remaining files in lib/libsys:
+  - lib/libsys/_exit.2
+  - lib/libsys/_umtx_op.2
+  - lib/libsys/_umtx_op_err.c
+  - lib/libsys/abort2.2
+  - lib/libsys/accept.2
+  ... plus 234 more
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+Let me examine the internal header that the simple files depend on.
+
+ACTION: READ_FILE lib/libc/include/libc_private.h

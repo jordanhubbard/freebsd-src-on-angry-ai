@@ -1,0 +1,19 @@
+=== STEP 106 ===
+
+--- REQUEST ---
+READ_FILE_SKIPPED: /usr/home/jkh/Src/frustbsd/lib/libsys/getpid.2 is documentation (suffix .2).
+No code changes required. Marked as rewritten.
+Remaining files in lib/libsys you can work on:
+  - lib/libsys/_exit.2
+  - lib/libsys/_umtx_op.2
+  - lib/libsys/_umtx_op_err.c
+  - lib/libsys/abort2.2
+  - lib/libsys/accept.2
+  ... plus 232 more
+
+Please choose another source file or SET_SCOPE to a new directory.
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE lib/libsys/__getosreldate.c

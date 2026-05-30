@@ -1,0 +1,49 @@
+=== STEP 825 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/usr.bin/basename/Makefile:
+PROGRESS:
+📁 Directory: lib/libthr/arch/arm
+   Files: 0/2
+📄 File: usr.bin/basename/Makefile
+✏️  Edits: 3 files modified
+
+```
+.include <src.opts.mk>
+
+PROG=	basename
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+MLINKS=	basename.1 dirname.1
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}+= tests
+
+```
+
+--- RESPONSE ---
+
+
+The build errors are from Makefile.inc1's `.info` directives about cross-compiler bootstrapping - these are pre-existing environment issues, not caused by my changes. Let me verify the Rust crate builds correctly on its own:
+
+ACTION: BUILD

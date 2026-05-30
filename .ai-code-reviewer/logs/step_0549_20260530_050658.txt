@@ -1,0 +1,13 @@
+=== STEP 549 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/src/lib.rs
+Scope: sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The `std::fs::File` and `std::io::Read` are from the standard library, not `libc`. That's fine. Let me build now.
+
+ACTION: BUILD

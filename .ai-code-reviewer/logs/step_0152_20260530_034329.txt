@@ -1,0 +1,64 @@
+=== STEP 152 ===
+
+--- REQUEST ---
+GREP_RESULT for 'PAGE_SIZE':
+```
+./tests/sys/file/closefrom_test.c:68:	fp = fmemopen(shared_page, PAGE_SIZE - 1, "w");
+./tests/sys/file/closefrom_test.c:84:	shared_page = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_ANON |
+./tests/sys/kern/subr_physmem_test.c:41:	physmem_hardware_region(2 * PAGE_SIZE, PAGE_SIZE);
+./tests/sys/kern/subr_physmem_test.c:45:	ATF_CHECK_EQ(avail[0], 2 * PAGE_SIZE);
+./tests/sys/kern/subr_physmem_test.c:46:	ATF_CHECK_EQ(avail[1], 3 * PAGE_SIZE);
+./tests/sys/kern/kern_copyin.c:147:		munmap(addr, PAGE_SIZE);
+./tests/sys/kern/pdrfork.c:111:	unmapped = mmap(NULL, PAGE_SIZE, PROT_NONE, MAP_GUARD, -1, 0);
+./tests/sys/kern/pdrfork.c:164:#define STACK_SZ	(PAGE_SIZE * 10)
+./tests/sys/kern/pdwait.c:45:	unmapped = mmap(NULL, PAGE_SIZE, PROT_NONE, MAP_GUARD, -1, 0);
+./tests/sys/posixshm/posixshm_test.c:1650:		 * PAGE_SIZE-sized requests succeed.
+./tests/sys/posixshm/posixshm_test.c:2008:		error = x86_pkru_protect_range(addr, PAGE_SIZE, KEY_RW, 0);
+./tests/sys/posixshm/posixshm_test.c:2010:		error = x86_pkru_protect_range(addr, ps[i] - PAGE_SIZE, KEY_RW,
+./tests/sys/vm/mmap_test.c:99:		p = mmap((void *)map_at_zero_tests[i].addr, PAGE_SIZE,
+./tests/sys/aio/aio_test.c:1678:	unmapped = mmap(NULL, PAGE_SIZE, PROT_NONE, MAP_GUARD, -1, 0);
+./stand/libofw/ofw_copy.c:37:#define	PAGE_SIZE	0x1000
+./stand/libofw/ofw_copy.c:80:	if ((nlen + resid) < PAGE_SIZE*MAPMEM_PAGE_INC) {
+./stand/libofw/ofw_copy.c:81:		dlen = PAGE_SIZE*MAPMEM_PAGE_INC;
+./stand/efi/loader/copy.c:130:		end = start + p->NumberOfPages * EFI_PAGE_SIZE;
+./stand/efi/loader/copy.c:157:		end = p->PhysicalStart + p->NumberOfPages * EFI_PAGE_SIZE;
+./stand/efi/loader/copy.c:199:	    EFI_PAGE_SIZE);
+./stand/efi/loader/bootinfo.c:280:			sz = (EFI_PAGE_SIZE * pages) - efisz;
+./stand/efi/loader/arch/amd64/multiboot2.c:232:	 * f_addr is already aligned to PAGE_SIZE, make sure
+./stand/efi/loader/arch/amd64/multiboot2.c:234:	 * they are aligned to PAGE_SIZE.
+./stand/efi/loader/arch/amd64/multiboot2.c:236:	(*result)->f_size = roundup((*result)->f_size, PAGE_SIZE);
+./stand/efi/loader/arch/amd64/trap.c:390:	exc_rsp = exc_stack_pa + EFI_PAGE_SIZE -
+./stand/efi/loader/arch/amd64/trap.c:410:	(&(tss->tss_ist1))[ist - 1] = exc_stack_pa + EFI_PAGE_SIZE;
+./stand/efi/loader/arch/amd64/elf64_freebsd.c:113:	bzero((void *)trampcode, EFI_PAGE_SIZE);
+./stand/efi/loader/arch/amd64/elf64_freebsd.c:114:	trampstack = trampcode + EFI_PAGE_SIZE - 8;
+./stand/efi/loader/arch/amd64/elf64_freebsd.c:129:		bzero(PT4, 3 * EFI_PAGE_SIZE);
+./stand/kshim/bsd_kernel.h:121:#undef PAGE_SIZE
+./stand/kshim/bsd_kernel.h:122:#define	PAGE_SIZE 4096
+./stand/uboot/copy.c:44:#define	KERN_ALIGN	PAGE_SIZE
+./stand/userboot/userboot/elf64_freebsd.c:99:	bzero(PT4, PAGE_SIZE);
+./stand/userboot/userboot/elf64_freebsd.c:100:	bzero(PT3, PAGE_SIZE);
+./stand/userboot/userboot/elf64_freebsd.c:101:	bzero(PT2, PAGE_SIZE);
+./stand/common/load_elf.c:276:	ef->firstpage = malloc(PAGE_SIZE);
+./stand/common/load_elf.c:296:	bytes_read = VECTX_READ(VECTX_HANDLE(ef), ef->firstpage, PAGE_SIZE);
+./stand/common/modinfo.c:206: * XXX For the moment, it's just PAGE_SIZE to make the refactoring go faster,
+./stand/common/modinfo.c:219:	return (roundup(addr, PAGE_SIZE));
+./stand/i386/gptboot/gptboot.c:417:		fs_off = PAGE_SIZE;
+./stand/i386/gptboot/gptboot.c:420:		p += roundup2(hdr.ex.a_text, PAGE_SIZE);
+./stand/i386/gptboot/gptboot.c:423:		p += hdr.ex.a_data + roundup2(hdr.ex.a_bss, PAGE_SIZE);
+./stand/i386/boot2/boot2.c:304:		fs_off = PAGE_SIZE;
+./stand/i386/boot2/boot2.c:307:		p += roundup2(hdr.ex.a_text, PAGE_SIZE);
+./stand/i386/boot2/boot2.c:324:		p += roundup2(ep[1].p_memsz, PAGE_SIZE);
+./stand/i386/gptzfsboot/zfsboot.c:375:		lseek(fd, PAGE_SIZE, SEEK_SET);
+./stand/i386/gptzfsboot/zfsboot.c:381:		p += roundup2(hdr.ex.a_text, PAGE_SIZE);
+./stand/i386/gptzfsboot/zfsboot.c:387:		p += hdr.ex.a_data + roundup2(hdr.ex.a_bss, PAGE_SIZE);
+./stand/i386/isoboot/isoboot.c:356:		fs_off = PAGE_SIZE;
+./stand/i386/isoboot/isoboot.c:359:		p += roundup2(hdr.ex.a_text, PAGE_SIZE);
+... [2220 more matches]
+```
+
+--- RESPONSE ---
+
+
+lib/libsys is a complex library with tight integration to libc, architecture-dependent assembly, and no Rust build infrastructure. Let me look at the simplest possible rewrite increment.
+
+ACTION: FIND_FILE Cargo.toml

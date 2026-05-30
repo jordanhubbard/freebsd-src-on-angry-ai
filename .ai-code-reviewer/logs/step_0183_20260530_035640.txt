@@ -1,0 +1,13 @@
+=== STEP 183 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo'
+
+--- RESPONSE ---
+
+
+This unit contains LLVM compiler infrastructure code, not FreeBSD userland C/C++ code. Per the rewrite constraint: "If the selected unit has no source relevant to the configured objective, choose another scope instead of fabricating a rewrite."
+
+Since I cannot switch scopes while stuck here, I need to mark this unit as skipped in the rewrite index. Let me find its entry.
+
+ACTION: GREP PowerPC

@@ -1,0 +1,29 @@
+=== STEP 824 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/usr.bin/basename/Cargo.toml:
+PROGRESS:
+📁 Directory: lib/libthr/arch/arm
+   Files: 0/2
+📄 File: usr.bin/basename/Cargo.toml
+✏️  Edits: 3 files modified
+
+```
+[package]
+name = "basename"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name = "basename"
+path = "src/main.rs"
+```
+
+--- RESPONSE ---
+
+
+The build errors come from Makefile.inc1's `.info` directives about cross-compiler bootstrapping - these are pre-existing environment issues, not caused by my changes. The build harness runs `make` from the source root which triggers the full FreeBSD build system.
+
+Let me check how the previously completed units were built successfully:
+
+ACTION: READ_FILE usr.bin/basename/Makefile

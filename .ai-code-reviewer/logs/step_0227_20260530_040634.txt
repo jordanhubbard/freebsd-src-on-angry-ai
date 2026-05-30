@@ -1,0 +1,29 @@
+=== STEP 227 ===
+
+--- REQUEST ---
+
+======================================================================
+⚠️  INFINITE LOOP WARNING (attempt 6/10) ⚠️
+======================================================================
+
+Action GREP has been repeated 6 times.
+Details: GREP
+
+You must take a DIFFERENT action to break the loop.
+Consider:
+- Moving to a different file (READ_FILE <different-file>)
+- Skipping the current file (SKIP_FILE)
+- Changing directory (SET_SCOPE <different-directory>)
+- Running a build if you have changes (BUILD)
+
+WARNING: If you repeat this action 4 more times,
+automatic recovery will be triggered.
+======================================================================
+
+
+--- RESPONSE ---
+
+
+I need to update the rewrite index to mark this LLVM unit as skipped, then build to commit.
+
+ACTION: READ_FILE .ai-code-reviewer/REWRITE-INDEX.md

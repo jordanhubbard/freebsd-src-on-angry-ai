@@ -1,0 +1,15 @@
+=== STEP 119 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*bsd.lib.mk*':
+```
+./tools/build/mk/bsd.lib.mk
+./share/mk/bsd.lib.mk
+```
+
+--- RESPONSE ---
+
+
+Let me understand the ELF constants needed.
+
+ACTION: FIND_FILE machine/elf.h

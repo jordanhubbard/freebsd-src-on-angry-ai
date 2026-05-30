@@ -1,0 +1,35 @@
+=== STEP 96 ===
+
+--- REQUEST ---
+GREP_RESULT for '_elf_aux_info':
+```
+./contrib/jemalloc/src/pages.c:598:	if (_elf_aux_info(AT_BSDFLAGS, &bsdflags, sizeof(bsdflags)) == 0)
+./lib/libc/include/libc_private.h:360:int _elf_aux_info(int aux, void *buf, int buflen);
+./lib/libc/gen/elf_utils.c:84:	if (_elf_aux_info(AT_USRSTACKBASE, &usrstack, sizeof(usrstack)) != 0) {
+./lib/libc/gen/elf_utils.c:91:	if (_elf_aux_info(AT_USRSTACKLIM, &stacksz, sizeof(stacksz)) != 0) {
+./lib/libc/gen/arc4random.h:83:	error = _elf_aux_info(AT_FXRNG, &fxrngp, sizeof(fxrngp));
+./lib/libc/gen/sysconf.c:600:		if (_elf_aux_info(AT_NCPUS, &value, sizeof(value)) == 0)
+./lib/libc/gen/setproctitle.c:122:		(void)_elf_aux_info(AT_PS_STRINGS, &ps_strings,
+./lib/libc/secure/libc_stack_protector.c:77:	error = _elf_aux_info(AT_CANARY,
+./lib/libsys/__vdso_gettimeofday.c:163:		error = _elf_aux_info(AT_TIMEKEEP, &tk, sizeof(tk));
+./lib/libsys/__getosreldate.c:51:	(void)_elf_aux_info(AT_OSRELDATE, &osreldate, sizeof(osreldate));
+./lib/libsys/powerpc/__vdso_gettc.c:64:	return (_elf_aux_info(AT_TIMEKEEP, tk, sizeof(*tk)));
+./lib/libsys/getpagesizes.c:60:		if (_elf_aux_info(AT_PAGESIZES, ps, sizeof(ps)) != 0)
+./lib/libsys/riscv/__vdso_gettc.c:52:	return (_elf_aux_info(AT_TIMEKEEP, tk, sizeof(*tk)));
+./lib/libsys/arm/__vdso_gettc.c:76:	return (_elf_aux_info(AT_TIMEKEEP, tk, sizeof(*tk)));
+./lib/libsys/x86/__vdso_gettc.c:387:	if (_elf_aux_info(AT_NCPUS, &ncpus, sizeof(ncpus)) != 0 ||
+./lib/libsys/x86/__vdso_gettc.c:452:	return (_elf_aux_info(AT_TIMEKEEP, tk, sizeof(*tk)));
+./lib/libsys/getpagesize.c:47:	if (_elf_aux_info(AT_PAGESZ, &value, sizeof(value)) != 0)
+./lib/libsys/auxv.c:82:int _powerpc_elf_aux_info(int, void *, int);
+./lib/libsys/auxv.c:235:_powerpc_elf_aux_info(int aux, void *buf, int buflen)
+./lib/libsys/auxv.c:242:	 * directly call _elf_aux_info instead of using the weak symbol.
+./lib/libsys/aarch64/__vdso_gettc.c:72:	return (_elf_aux_info(AT_TIMEKEEP, tk, sizeof(*tk)));
+./lib/libsys/powerpc64/__vdso_gettc.c:61:	return (_elf_aux_info(AT_TIMEKEEP, tk, sizeof(*tk)));
+```
+
+--- RESPONSE ---
+
+
+Let me understand the build infrastructure and find the simplest approach for this library.
+
+ACTION: FIND_FILE bsd.rust.mk

@@ -1,0 +1,10 @@
+=== STEP 149 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/frustbsd/lib/libsys/include/libc_private.h
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE libc_private.h

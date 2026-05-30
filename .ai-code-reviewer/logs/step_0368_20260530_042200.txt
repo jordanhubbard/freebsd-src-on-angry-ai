@@ -1,0 +1,12 @@
+=== STEP 368 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: /usr/home/jkh/Src/frustbsd is a directory, not a file
+TIP: Use LIST_FILES to see directory contents
+
+--- RESPONSE ---
+
+
+I need to mark this kernel unit as skipped in the rewrite index. Let me read the index file first.
+
+ACTION: READ_FILE

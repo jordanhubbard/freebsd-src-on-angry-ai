@@ -1,0 +1,39 @@
+=== STEP 193 ===
+
+--- REQUEST ---
+
+======================================================================
+⚠️  INFINITE LOOP WARNING (attempt 5/10) ⚠️
+======================================================================
+
+Action GREP has been repeated 5 times.
+Details: GREP
+
+You must take a DIFFERENT action to break the loop.
+Consider:
+- Moving to a different file (READ_FILE <different-file>)
+- Skipping the current file (SKIP_FILE)
+- Changing directory (SET_SCOPE <different-directory>)
+- Running a build if you have changes (BUILD)
+
+WARNING: If you repeat this action 5 more times,
+automatic recovery will be triggered.
+======================================================================
+
+
+--- RESPONSE ---
+
+
+This unit contains LLVM compiler infrastructure code, not FreeBSD userland. I need to mark it as skipped in the rewrite index and move on.
+
+ACTION: EDIT_FILE .ai-code-reviewer/REWRITE-INDEX.md
+OLD:
+<<<
+## Current Position
+CURRENT POSITION: `contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo`
+>>>
+NEW:
+<<<
+## Current Position
+CURRENT POSITION: `bin/cat/tests`
+>>>

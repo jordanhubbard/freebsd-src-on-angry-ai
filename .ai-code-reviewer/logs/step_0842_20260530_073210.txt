@@ -1,0 +1,31 @@
+=== STEP 842 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/lib/libthr/arch/arm/Makefile
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE lib/libthr/arch/arm/Makefile
+CONTENT:
+<<<
+#
+# SPDX-License-Identifier: BSD-2-Clause
+#
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+THR_RTLD_ARM_RUST=	${CARGO_TARGET_DIR}/debug/libthr_rtld_arm.a
+
+all: ${THR_RTLD_ARM_RUST}
+
+${THR_RTLD_ARM_RUST}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>

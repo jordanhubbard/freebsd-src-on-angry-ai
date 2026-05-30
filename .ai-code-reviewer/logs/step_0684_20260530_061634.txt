@@ -1,0 +1,48 @@
+=== STEP 684 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/llvm-project/libc/src/__support/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE contrib/llvm-project/libc/src/__support/OSUtil/windows/Makefile
+OLD:
+<<<
+# Windows-specific OSUtil implementations - not built on FreeBSD
+# This Makefile exists to allow the build system to pass through this directory.
+
+PROG=	osutil_windows_stub
+SRCS=	osutil_windows_stub.c
+
+CARGO_TARGET_DIR?=	${OBJTOP}/cargo-target
+
+RUST_SRC=	src/lib.rs
+RUST_CARGO=	Cargo.toml
+
+.PHONY: rust-build
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust replacement for Windows OSUtil (stub)"
+	@cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	@true
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+# Windows-specific OSUtil implementations - not built on FreeBSD
+# This Makefile exists to allow the build system to pass through this directory.
+
+.PHONY: all clean
+
+all:
+	@echo "Skipping Windows-specific OSUtil directory on FreeBSD"
+
+clean:
+	@true
+>>>

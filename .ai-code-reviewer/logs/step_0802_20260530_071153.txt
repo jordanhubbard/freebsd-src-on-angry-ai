@@ -1,0 +1,11 @@
+=== STEP 802 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*cddl/contrib/opensolaris/cmd/dtrace/test/tst/Makefile*'
+
+--- RESPONSE ---
+
+
+These are DTrace test helper programs with no Makefile in the directory tree. They're built by the test framework, not the FreeBSD build system. This unit is not suitable for a standalone rewrite since there's no build integration to modify.
+
+ACTION: SET_SCOPE bin/cat/tests

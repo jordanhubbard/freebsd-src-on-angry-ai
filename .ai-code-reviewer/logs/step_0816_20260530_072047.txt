@@ -1,0 +1,14 @@
+=== STEP 816 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/lib/libthr/arch/arm:
+```
+Makefile.inc
+include
+thr_rtld_arm.c
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE lib/libthr/arch/arm/thr_rtld_arm.c

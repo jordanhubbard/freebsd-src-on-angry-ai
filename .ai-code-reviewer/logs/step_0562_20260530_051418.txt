@@ -1,0 +1,11 @@
+=== STEP 562 ===
+
+--- REQUEST ---
+LIST_DIR_ERROR: Directory not found: /usr/home/jkh/Src/frustbsd/sys/contrib/libs
+
+--- RESPONSE ---
+
+
+The build errors are from the FreeBSD top-level build system (`Makefile.inc1`), not from the Rust code. The `sys/contrib/` tree is part of the kernel build and has complex dependencies. Let me check the parent Makefile structure:
+
+ACTION: LIST_DIR sys/contrib/libs

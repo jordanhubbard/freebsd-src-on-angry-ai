@@ -1,0 +1,477 @@
+=== STEP 141 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/lib/libsys/_libsys.h:
+
+📋 CHUNKED FILE REWRITE MODE
+   File: /usr/home/jkh/Src/frustbsd/lib/libsys/_libsys.h
+   Total chunks: 409
+   Strategy: Function-by-function rewrite
+   Use ACTION: NEXT_CHUNK to continue
+   Use ACTION: SKIP_FILE to move to next file
+
+PROGRESS:
+📁 Directory: lib/libsys
+   Files: 1/248
+📄 File: lib/libsys/_libsys.h
+   Chunks: 1/409
+
+```
+=== CHUNK 1/409: /usr/home/jkh/Src/frustbsd/lib/libsys/_libsys.h === [header: file_header]
+=== Lines 1-479 (479 lines) ===
+
+/*
+ * Public system call stubs provided by libsys.
+ *
+ * Do not use directly, include <libsys.h> instead.
+ *
+ * DO NOT EDIT-- this file is automatically @generated.
+ */
+
+#ifndef __LIBSYS_H_
+#define __LIBSYS_H_
+
+#include <sys/_cpuset.h>
+#include <sys/_domainset.h>
+#include <sys/_ffcounter.h>
+#include <sys/_semaphore.h>
+#include <sys/_sigaltstack.h>
+#include <machine/ucontext.h>   /* for mcontext_t */
+#include <sys/_ucontext.h>
+#include <sys/wait.h>
+
+struct __siginfo;
+struct __ucontext;
+struct __wrusage;
+struct acl;
+struct aiocb;
+struct auditinfo;
+struct auditinfo_addr;
+struct ffclock_estimate;
+struct fhandle;
+struct iovec;
+struct itimerspec;
+struct itimerval;
+struct jail;
+struct kevent;
+struct kexec_segment;
+struct kld_file_stat;
+struct mac;
+struct module_stat;
+struct mq_attr;
+struct msghdr;
+struct msqid_ds;
+struct ntptimeval;
+struct pollfd;
+struct rlimit;
+struct rtprio;
+struct rusage;
+struct sched_param;
+struct sctp_sndrcvinfo;
+struct sembuf;
+struct setcred;
+struct sf_hdtr;
+struct shmid_ds;
+struct sigaction;
+struct sigaltstack;
+struct sigevent;
+struct sockaddr;
+struct spacectl_range;
+struct stat;
+struct statfs;
+struct thr_param;
+struct timespec;
+struct timeval;
+struct timex;
+struct timezone;
+struct uuid;
+union semun;
+
+__BEGIN_DECLS
+typedef void (__sys__exit_t)(int);
+typedef int (__sys_fork_t)(void);
+typedef ssize_t (__sys_read_t)(int, void *, size_t);
+typedef ssize_t (__sys_write_t)(int, const void *, size_t);
+typedef int (__sys_open_t)(const char *, int, mode_t);
+typedef int (__sys_close_t)(int);
+typedef int (__sys_wait4_t)(int, int *, int, struct rusage *);
+typedef int (__sys_link_t)(const char *, const char *);
+typedef int (__sys_unlink_t)(const char *);
+typedef int (__sys_chdir_t)(const char *);
+typedef int (__sys_fchdir_t)(int);
+typedef int (__sys_chmod_t)(const char *, mode_t);
+typedef int (__sys_chown_t)(const char *, int, int);
+typedef void * (__sys_break_t)(char *);
+typedef pid_t (__sys_getpid_t)(void);
+typedef int (__sys_mount_t)(const char *, const char *, int, void *);
+typedef int (__sys_unmount_t)(const char *, int);
+typedef int (__sys_setuid_t)(uid_t);
+typedef uid_t (__sys_getuid_t)(void);
+typedef uid_t (__sys_geteuid_t)(void);
+typedef int (__sys_ptrace_t)(int, pid_t, caddr_t, int);
+typedef ssize_t (__sys_recvmsg_t)(int, struct msghdr *, int);
+typedef ssize_t (__sys_sendmsg_t)(int, const struct msghdr *, int);
+typedef ssize_t (__sys_recvfrom_t)(int, void *, size_t, int, struct sockaddr *, __socklen_t *);
+typedef int (__sys_accept_t)(int, struct sockaddr *, __socklen_t *);
+typedef int (__sys_getpeername_t)(int, struct sockaddr *, __socklen_t *);
+typedef int (__sys_getsockname_t)(int, struct sockaddr *, __socklen_t *);
+typedef int (__sys_access_t)(const char *, int);
+typedef int (__sys_chflags_t)(const char *, u_long);
+typedef int (__sys_fchflags_t)(int, u_long);
+typedef int (__sys_sync_t)(void);
+typedef int (__sys_kill_t)(int, int);
+typedef pid_t (__sys_getppid_t)(void);
+typedef int (__sys_dup_t)(u_int);
+typedef gid_t (__sys_getegid_t)(void);
+typedef int (__sys_profil_t)(char *, size_t, size_t, u_int);
+typedef int (__sys_ktrace_t)(const char *, int, int, int);
+typedef gid_t (__sys_getgid_t)(void);
+typedef int (__sys_getlogin_t)(char *, u_int);
+typedef int (__sys_setlogin_t)(const char *);
+typedef int (__sys_acct_t)(const char *);
+typedef int (__sys_sigaltstack_t)(const struct sigaltstack *, struct sigaltstack *);
+typedef int (__sys_ioctl_t)(int, u_long, char *);
+typedef int (__sys_reboot_t)(int);
+typedef int (__sys_revoke_t)(const char *);
+typedef int (__sys_symlink_t)(const char *, const char *);
+typedef ssize_t (__sys_readlink_t)(const char *, char *, size_t);
+typedef int (__sys_execve_t)(const char *, char **, char **);
+typedef mode_t (__sys_umask_t)(mode_t);
+typedef int (__sys_chroot_t)(const char *);
+typedef int (__sys_msync_t)(void *, size_t, int);
+typedef int (__sys_vfork_t)(void);
+typedef int (__sys_munmap_t)(void *, size_t);
+typedef int (__sys_mprotect_t)(void *, size_t, int);
+typedef int (__sys_madvise_t)(void *, size_t, int);
+typedef int (__sys_mincore_t)(const void *, size_t, char *);
+typedef int (__sys_getpgrp_t)(void);
+typedef int (__sys_setpgid_t)(int, int);
+typedef int (__sys_setitimer_t)(int, const struct itimerval *, struct itimerval *);
+typedef int (__sys_swapon_t)(const char *);
+typedef int (__sys_getitimer_t)(int, struct itimerval *);
+typedef int (__sys_getdtablesize_t)(void);
+typedef int (__sys_dup2_t)(u_int, u_int);
+typedef int (__sys_fcntl_t)(int, int, intptr_t);
+typedef int (__sys_select_t)(int, fd_set *, fd_set *, fd_set *, struct timeval *);
+typedef int (__sys_fsync_t)(int);
+typedef int (__sys_setpriority_t)(int, int, int);
+typedef int (__sys_socket_t)(int, int, int);
+typedef int (__sys_connect_t)(int, const struct sockaddr *, __socklen_t);
+typedef int (__sys_getpriority_t)(int, int);
+typedef int (__sys_bind_t)(int, const struct sockaddr *, __socklen_t);
+typedef int (__sys_setsockopt_t)(int, int, int, const void *, __socklen_t);
+typedef int (__sys_listen_t)(int, int);
+typedef int (__sys_gettimeofday_t)(struct timeval *, struct timezone *);
+typedef int (__sys_getrusage_t)(int, struct rusage *);
+typedef int (__sys_getsockopt_t)(int, int, int, void *, __socklen_t *);
+typedef ssize_t (__sys_readv_t)(int, const struct iovec *, u_int);
+typedef ssize_t (__sys_writev_t)(int, const struct iovec *, u_int);
+typedef int (__sys_settimeofday_t)(const struct timeval *, const struct timezone *);
+typedef int (__sys_fchown_t)(int, int, int);
+typedef int (__sys_fchmod_t)(int, mode_t);
+typedef int (__sys_setreuid_t)(int, int);
+typedef int (__sys_setregid_t)(int, int);
+typedef int (__sys_rename_t)(const char *, const char *);
+typedef int (__sys_flock_t)(int, int);
+typedef int (__sys_mkfifo_t)(const char *, mode_t);
+typedef ssize_t (__sys_sendto_t)(int, const void *, size_t, int, const struct sockaddr *, __socklen_t);
+typedef int (__sys_shutdown_t)(int, int);
+typedef int (__sys_socketpair_t)(int, int, int, int *);
+typedef int (__sys_mkdir_t)(const char *, mode_t);
+typedef int (__sys_rmdir_t)(const char *);
+typedef int (__sys_utimes_t)(const char *, const struct timeval *);
+typedef int (__sys_adjtime_t)(const struct timeval *, struct timeval *);
+typedef int (__sys_setsid_t)(void);
+typedef int (__sys_quotactl_t)(const char *, int, int, void *);
+typedef int (__sys_nlm_syscall_t)(int, int, int, char **);
+typedef int (__sys_nfssvc_t)(int, void *);
+typedef int (__sys_lgetfh_t)(const char *, struct fhandle *);
+typedef int (__sys_getfh_t)(const char *, struct fhandle *);
+typedef int (__sys_sysarch_t)(int, char *);
+typedef int (__sys_rtprio_t)(int, pid_t, struct rtprio *);
+typedef int (__sys_semsys_t)(int, int, int, int, int);
+typedef int (__sys_msgsys_t)(int, int, int, int, int, int);
+typedef int (__sys_shmsys_t)(int, int, int, int);
+typedef int (__sys_setfib_t)(int);
+typedef int (__sys_ntp_adjtime_t)(struct timex *);
+typedef int (__sys_setgid_t)(gid_t);
+typedef int (__sys_setegid_t)(gid_t);
+typedef int (__sys_seteuid_t)(uid_t);
+typedef int (__sys_pathconf_t)(const char *, int);
+typedef int (__sys_fpathconf_t)(int, int);
+typedef int (__sys_getrlimit_t)(u_int, struct rlimit *);
+typedef int (__sys_setrlimit_t)(u_int, struct rlimit *);
+typedef int (__sys___sysctl_t)(const int *, u_int, void *, size_t *, const void *, size_t);
+typedef int (__sys_mlock_t)(const void *, size_t);
+typedef int (__sys_munlock_t)(const void *, size_t);
+typedef int (__sys_undelete_t)(const char *);
+typedef int (__sys_futimes_t)(int, const struct timeval *);
+typedef int (__sys_getpgid_t)(pid_t);
+typedef int (__sys_poll_t)(struct pollfd *, u_int, int);
+typedef int (__sys_semget_t)(key_t, int, int);
+typedef int (__sys_semop_t)(int, struct sembuf *, size_t);
+typedef int (__sys_msgget_t)(key_t, int);
+typedef int (__sys_msgsnd_t)(int, const void *, size_t, int);
+typedef ssize_t (__sys_msgrcv_t)(int, void *, size_t, long, int);
+typedef void * (__sys_shmat_t)(int, const void *, int);
+typedef int (__sys_shmdt_t)(const void *);
+typedef int (__sys_shmget_t)(key_t, size_t, int);
+typedef int (__sys_clock_gettime_t)(clockid_t, struct timespec *);
+typedef int (__sys_clock_settime_t)(clockid_t, const struct timespec *);
+typedef int (__sys_clock_getres_t)(clockid_t, struct timespec *);
+typedef int (__sys_ktimer_create_t)(clockid_t, struct sigevent *, int *);
+typedef int (__sys_ktimer_delete_t)(int);
+typedef int (__sys_ktimer_settime_t)(int, int, const struct itimerspec *, struct itimerspec *);
+typedef int (__sys_ktimer_gettime_t)(int, struct itimerspec *);
+typedef int (__sys_ktimer_getoverrun_t)(int);
+typedef int (__sys_nanosleep_t)(const struct timespec *, struct timespec *);
+typedef int (__sys_ffclock_getcounter_t)(ffcounter *);
+typedef int (__sys_ffclock_setestimate_t)(struct ffclock_estimate *);
+typedef int (__sys_ffclock_getestimate_t)(struct ffclock_estimate *);
+typedef int (__sys_clock_nanosleep_t)(clockid_t, int, const struct timespec *, struct timespec *);
+typedef int (__sys_clock_getcpuclockid2_t)(id_t, int, clockid_t *);
+typedef int (__sys_ntp_gettime_t)(struct ntptimeval *);
+typedef int (__sys_minherit_t)(void *, size_t, int);
+typedef int (__sys_rfork_t)(int);
+typedef int (__sys_issetugid_t)(void);
+typedef int (__sys_lchown_t)(const char *, int, int);
+typedef int (__sys_aio_read_t)(struct aiocb *);
+typedef int (__sys_aio_write_t)(struct aiocb *);
+typedef int (__sys_lio_listio_t)(int, struct aiocb * const *, int, struct sigevent *);
+typedef int (__sys_lchmod_t)(const char *, mode_t);
+typedef int (__sys_lutimes_t)(const char *, const struct timeval *);
+typedef ssize_t (__sys_preadv_t)(int, struct iovec *, u_int, off_t);
+typedef ssize_t (__sys_pwritev_t)(int, struct iovec *, u_int, off_t);
+typedef int (__sys_fhopen_t)(const struct fhandle *, int);
+typedef int (__sys_modnext_t)(int);
+typedef int (__sys_modstat_t)(int, struct module_stat *);
+typedef int (__sys_modfnext_t)(int);
+typedef int (__sys_modfind_t)(const char *);
+typedef int (__sys_kldload_t)(const char *);
+typedef int (__sys_kldunload_t)(int);
+typedef int (__sys_kldfind_t)(const char *);
+typedef int (__sys_kldnext_t)(int);
+typedef int (__sys_kldstat_t)(int, struct kld_file_stat *);
+typedef int (__sys_kldfirstmod_t)(int);
+typedef int (__sys_getsid_t)(pid_t);
+typedef int (__sys_setresuid_t)(uid_t, uid_t, uid_t);
+typedef int (__sys_setresgid_t)(gid_t, gid_t, gid_t);
+typedef ssize_t (__sys_aio_return_t)(struct aiocb *);
+typedef int (__sys_aio_suspend_t)(const struct aiocb * const *, int, const struct timespec *);
+typedef int (__sys_aio_cancel_t)(int, struct aiocb *);
+typedef int (__sys_aio_error_t)(struct aiocb *);
+typedef int (__sys_mlockall_t)(int);
+typedef int (__sys_munlockall_t)(void);
+typedef int (__sys___getcwd_t)(char *, size_t);
+typedef int (__sys_sched_setparam_t)(pid_t, const struct sched_param *);
+typedef int (__sys_sched_getparam_t)(pid_t, struct sched_param *);
+typedef int (__sys_sched_setscheduler_t)(pid_t, int, const struct sched_param *);
+typedef int (__sys_sched_getscheduler_t)(pid_t);
+typedef int (__sys_sched_yield_t)(void);
+typedef int (__sys_sched_get_priority_max_t)(int);
+typedef int (__sys_sched_get_priority_min_t)(int);
+typedef int (__sys_sched_rr_get_interval_t)(pid_t, struct timespec *);
+typedef int (__sys_utrace_t)(const void *, size_t);
+typedef int (__sys_kldsym_t)(int, int, void *);
+typedef int (__sys_jail_t)(struct jail *);
+typedef int (__sys_nnpfs_syscall_t)(int, char *, int, void *, int);
+typedef int (__sys_sigprocmask_t)(int, const sigset_t *, sigset_t *);
+typedef int (__sys_sigsuspend_t)(co
+
+... [history compacted: omitted 2508 chars] ...
+
+*, int, void *);
+typedef int (__sys_ksem_close_t)(semid_t);
+typedef int (__sys_ksem_post_t)(semid_t);
+typedef int (__sys_ksem_wait_t)(semid_t);
+typedef int (__sys_ksem_trywait_t)(semid_t);
+typedef int (__sys_ksem_init_t)(semid_t *, unsigned int);
+typedef int (__sys_ksem_open_t)(semid_t *, const char *, int, mode_t, unsigned int);
+typedef int (__sys_ksem_unlink_t)(const char *);
+typedef int (__sys_ksem_getvalue_t)(semid_t, int *);
+typedef int (__sys_ksem_destroy_t)(semid_t);
+typedef int (__sys___mac_get_pid_t)(pid_t, struct mac *);
+typedef int (__sys___mac_get_link_t)(const char *, struct mac *);
+typedef int (__sys___mac_set_link_t)(const char *, struct mac *);
+typedef ssize_t (__sys_extattr_set_link_t)(const char *, int, const char *, void *, size_t);
+typedef ssize_t (__sys_extattr_get_link_t)(const char *, int, const char *, void *, size_t);
+typedef int (__sys_extattr_delete_link_t)(const char *, int, const char *);
+typedef int (__sys___mac_execve_t)(const char *, char **, char **, struct mac *);
+typedef int (__sys_sigaction_t)(int, const struct sigaction *, struct sigaction *);
+typedef int (__sys_sigreturn_t)(const struct __ucontext *);
+typedef int (__sys_getcontext_t)(struct __ucontext *);
+typedef int (__sys_setcontext_t)(const struct __ucontext *);
+typedef int (__sys_swapcontext_t)(struct __ucontext *, const struct __ucontext *);
+typedef int (__sys___acl_get_link_t)(const char *, __acl_type_t, struct acl *);
+typedef int (__sys___acl_set_link_t)(const char *, __acl_type_t, struct acl *);
+typedef int (__sys___acl_delete_link_t)(const char *, __acl_type_t);
+typedef int (__sys___acl_aclcheck_link_t)(const char *, __acl_type_t, struct acl *);
+typedef int (__sys_sigwait_t)(const sigset_t *, int *);
+typedef int (__sys_thr_create_t)(ucontext_t *, long *, int);
+typedef void (__sys_thr_exit_t)(long *);
+typedef int (__sys_thr_self_t)(long *);
+typedef int (__sys_thr_kill_t)(long, int);
+typedef int (__sys_jail_attach_t)(int);
+typedef ssize_t (__sys_extattr_list_fd_t)(int, int, void *, size_t);
+typedef ssize_t (__sys_extattr_list_file_t)(const char *, int, void *, size_t);
+typedef ssize_t (__sys_extattr_list_link_t)(const char *, int, void *, size_t);
+typedef int (__sys_ksem_timedwait_t)(semid_t, const struct timespec *);
+typedef int (__sys_thr_suspend_t)(const struct timespec *);
+typedef int (__sys_thr_wake_t)(long);
+typedef int (__sys_kldunloadf_t)(int, int);
+typedef int (__sys_audit_t)(const void *, u_int);
+typedef int (__sys_auditon_t)(int, void *, u_int);
+typedef int (__sys_getauid_t)(uid_t *);
+typedef int (__sys_setauid_t)(uid_t *);
+typedef int (__sys_getaudit_t)(struct auditinfo *);
+typedef int (__sys_setaudit_t)(struct auditinfo *);
+typedef int (__sys_getaudit_addr_t)(struct auditinfo_addr *, u_int);
+typedef int (__sys_setaudit_addr_t)(struct auditinfo_addr *, u_int);
+typedef int (__sys_auditctl_t)(const char *);
+typedef int (__sys__umtx_op_t)(void *, int, u_long, void *, void *);
+typedef int (__sys_thr_new_t)(struct thr_param *, int);
+typedef int (__sys_sigqueue_t)(pid_t, int, void *);
+typedef int (__sys_kmq_open_t)(const char *, int, mode_t, const struct mq_attr *);
+typedef int (__sys_kmq_setattr_t)(int, const struct mq_attr *, struct mq_attr *);
+typedef int (__sys_kmq_timedreceive_t)(int, char *, size_t, unsigned *, const struct timespec *);
+typedef int (__sys_kmq_timedsend_t)(int, const char *, size_t, unsigned, const struct timespec *);
+typedef int (__sys_kmq_notify_t)(int, const struct sigevent *);
+typedef int (__sys_kmq_unlink_t)(const char *);
+typedef void (__sys_abort2_t)(const char *, int, void **);
+typedef int (__sys_thr_set_name_t)(long, const char *);
+typedef int (__sys_aio_fsync_t)(int, struct aiocb *);
+typedef int (__sys_rtprio_thread_t)(int, lwpid_t, struct rtprio *);
+typedef int (__sys_sctp_peeloff_t)(int, uint32_t);
+typedef int (__sys_sctp_generic_sendmsg_t)(int, void *, int, const struct sockaddr *, __socklen_t, struct sctp_sndrcvinfo *, int);
+typedef int (__sys_sctp_generic_sendmsg_iov_t)(int, struct iovec *, int, const struct sockaddr *, __socklen_t, struct sctp_sndrcvinfo *, int);
+typedef int (__sys_sctp_generic_recvmsg_t)(int, struct iovec *, int, struct sockaddr *, __socklen_t *, struct sctp_sndrcvinfo *, int *);
+typedef ssize_t (__sys_pread_t)(int, void *, size_t, off_t);
+typedef ssize_t (__sys_pwrite_t)(int, const void *, size_t, off_t);
+typedef void * (__sys_mmap_t)(void *, size_t, int, int, int, off_t);
+typedef off_t (__sys_lseek_t)(int, off_t, int);
+typedef int (__sys_truncate_t)(const char *, off_t);
+typedef int (__sys_ftruncate_t)(int, off_t);
+typedef int (__sys_thr_kill2_t)(pid_t, long, int);
+typedef int (__sys_shm_unlink_t)(const char *);
+typedef int (__sys_cpuset_t)(cpusetid_t *);
+typedef int (__sys_cpuset_setid_t)(cpuwhich_t, id_t, cpusetid_t);
+typedef int (__sys_cpuset_getid_t)(cpulevel_t, cpuwhich_t, id_t, cpusetid_t *);
+typedef int (__sys_cpuset_getaffinity_t)(cpulevel_t, cpuwhich_t, id_t, size_t, cpuset_t *);
+typedef int (__sys_cpuset_setaffinity_t)(cpulevel_t, cpuwhich_t, id_t, size_t, const cpuset_t *);
+typedef int (__sys_faccessat_t)(int, const char *, int, int);
+typedef int (__sys_fchmodat_t)(int, const char *, mode_t, int);
+typedef int (__sys_fchownat_t)(int, const char *, uid_t, gid_t, int);
+typedef int (__sys_fexecve_t)(int, char **, char **);
+typedef int (__sys_futimesat_t)(int, const char *, const struct timeval *);
+typedef int (__sys_linkat_t)(int, const char *, int, const char *, int);
+typedef int (__sys_mkdirat_t)(int, const char *, mode_t);
+typedef int (__sys_mkfifoat_t)(int, const char *, mode_t);
+typedef int (__sys_openat_t)(int, const char *, int, mode_t);
+typedef ssize_t (__sys_readlinkat_t)(int, const char *, char *, size_t);
+typedef int (__sys_renameat_t)(int, const char *, int, const char *);
+typedef int (__sys_symlinkat_t)(const char *, int, const char *);
+typedef int (__sys_unlinkat_t)(int, const char *, int);
+typedef int (__sys_posix_openpt_t)(int);
+typedef int (__sys_jail_get_t)(struct iovec *, unsigned int, int);
+typedef int (__sys_jail_set_t)(struct iovec *, unsigned int, int);
+typedef int (__sys_jail_remove_t)(int);
+typedef int (__sys___semctl_t)(int, int, int, union semun *);
+typedef int (__sys_msgctl_t)(int, int, struct msqid_ds *);
+typedef int (__sys_shmctl_t)(int, int, struct shmid_ds *);
+typedef int (__sys_lpathconf_t)(const char *, int);
+typedef int (__sys___cap_rights_get_t)(int, int, cap_rights_t *);
+typedef int (__sys_cap_enter_t)(void);
+typedef int (__sys_cap_getmode_t)(u_int *);
+typedef int (__sys_pdfork_t)(int *, int);
+typedef int (__sys_pdkill_t)(int, int);
+typedef int (__sys_pdgetpid_t)(int, pid_t *);
+typedef int (__sys_pselect_t)(int, fd_set *, fd_set *, fd_set *, const struct timespec *, const sigset_t *);
+typedef int (__sys_getloginclass_t)(char *, size_t);
+typedef int (__sys_setloginclass_t)(const char *);
+typedef int (__sys_rctl_get_racct_t)(const void *, size_t, void *, size_t);
+typedef int (__sys_rctl_get_rules_t)(const void *, size_t, void *, size_t);
+typedef int (__sys_rctl_get_limits_t)(const void *, size_t, void *, size_t);
+typedef int (__sys_rctl_add_rule_t)(const void *, size_t, void *, size_t);
+typedef int (__sys_rctl_remove_rule_t)(const void *, size_t, void *, size_t);
+typedef int (__sys_posix_fallocate_t)(int, off_t, off_t);
+typedef int (__sys_posix_fadvise_t)(int, off_t, off_t, int);
+typedef int (__sys_wait6_t)(idtype_t, id_t, int *, int, struct __wrusage *, struct __siginfo *);
+typedef int (__sys_cap_rights_limit_t)(int, cap_rights_t *);
+typedef int (__sys_cap_ioctls_limit_t)(int, const u_long *, size_t);
+typedef ssize_t (__sys_cap_ioctls_get_t)(int, u_long *, size_t);
+typedef int (__sys_cap_fcntls_limit_t)(int, uint32_t);
+typedef int (__sys_cap_fcntls_get_t)(int, uint32_t *);
+typedef int (__sys_bindat_t)(int, int, const struct sockaddr *, __socklen_t);
+typedef int (__sys_connectat_t)(int, int, const struct sockaddr *, __socklen_t);
+typedef int (__sys_chflagsat_t)(int, const char *, u_long, int);
+typedef int (__sys_accept4_t)(int, struct sockaddr *, __socklen_t *, int);
+typedef int (__sys_pipe2_t)(int *, int);
+typedef int (__sys_aio_mlock_t)(struct aiocb *);
+typedef int (__sys_procctl_t)(idtype_t, id_t, int, void *);
+typedef int (__sys_ppoll_t)(struct pollfd *, u_int, const struct timespec *, const sigset_t *);
+typedef int (__sys_futimens_t)(int, const struct timespec *);
+typedef int (__sys_utimensat_t)(int, const char *, const struct timespec *, int);
+typedef int (__sys_fdatasync_t)(int);
+typedef int (__sys_fstat_t)(int, struct stat *);
+typedef int (__sys_fstatat_t)(int, const char *, struct stat *, int);
+typedef int (__sys_fhstat_t)(const struct fhandle *, struct stat *);
+typedef ssize_t (__sys_getdirentries_t)(int, char *, size_t, off_t *);
+typedef int (__sys_statfs_t)(const char *, struct statfs *);
+typedef int (__sys_fstatfs_t)(int, struct statfs *);
+typedef int (__sys_getfsstat_t)(struct statfs *, long, int);
+typedef int (__sys_fhstatfs_t)(const struct fhandle *, struct statfs *);
+typedef int (__sys_mknodat_t)(int, const char *, mode_t, dev_t);
+typedef int (__sys_kevent_t)(int, const struct kevent *, int, struct kevent *, int, const struct timespec *);
+typedef int (__sys_cpuset_getdomain_t)(cpulevel_t, cpuwhich_t, id_t, size_t, domainset_t *, int *);
+typedef int (__sys_cpuset_setdomain_t)(cpulevel_t, cpuwhich_t, id_t, size_t, domainset_t *, int);
+typedef int (__sys_getrandom_t)(void *, size_t, unsigned int);
+typedef int (__sys_getfhat_t)(int, char *, struct fhandle *, int);
+typedef int (__sys_fhlink_t)(struct fhandle *, const char *);
+typedef int (__sys_fhlinkat_t)(struct fhandle *, int, const char *);
+typedef int (__sys_fhreadlink_t)(struct fhandle *, char *, size_t);
+typedef int (__sys_funlinkat_t)(int, const char *, int, int);
+typedef ssize_t (__sys_copy_file_range_t)(int, off_t *, int, off_t *, size_t, unsigned int);
+typedef int (__sys___sysctlbyname_t)(const char *, size_t, void *, size_t *, void *, size_t);
+typedef int (__sys_shm_open2_t)(const char *, int, mode_t, int, const char *);
+typedef int (__sys_shm_rename_t)(const char *, const char *, int);
+typedef int (__sys_sigfastblock_t)(int, void *);
+typedef int (__sys___realpathat_t)(int, const char *, char *, size_t, int);
+typedef int (__sys_close_range_t)(u_int, u_int, int);
+typedef int (__sys_rpctls_syscall_t)(uint64_t);
+typedef int (__sys___specialfd_t)(int, const void *, size_t);
+typedef int (__sys_aio_writev_t)(struct aiocb *);
+typedef int (__sys_aio_readv_t)(struct aiocb *);
+typedef int (__sys_fspacectl_t)(int, int, const struct spacectl_range *, int, struct spacectl_range *);
+typedef int (__sys_sched_getcpu_t)(void);
+typedef int (__sys_swapoff_t)(const char *, u_int);
+typedef int (__sys_kqueuex_t)(u_int);
+typedef int (__sys_membarrier_t)(int, unsigned, int);
+typedef int (__sys_timerfd_create_t)(int, int);
+typedef int (__sys_timerfd_gettime_t)(int, struct itimerspec *);
+typedef int (__sys_timerfd_settime_t)(int, int, const struct itimerspec *, struct itimerspec *);
+typedef int (__sys_kcmp_t)(pid_t, pid_t, int, uintptr_t, uintptr_t);
+typedef int (__sys_getrlimitusage_t)(u_int, int, rlim_t *);
+typedef int (__sys_fchroot_t)(int);
+typedef int (__sys_setcred_t)(u_int, const struct setcred *, size_t);
+typedef int (__sys_exterrctl_t)(u_int, u_int, void *);
+typedef int (__sys_inotify_add_watch_at_t)(int, int, const char *, uint32_t);
+typedef int (__sys_inotify_rm_watch_t)(int, int);
+typedef int (__sys_getgroups_t)(int, gid_t *);
+typedef int (__sys_setgroups_t)(int, const gid_t *);
+typedef int (__sys_jail_attach_jd_t)(int);
+typedef int (__sys_jail_remove_jd_t)(int);
+typedef int (__sys_kexec_load_t)(uint64_t, u_long, struct kexec_segment *, u_long);
+typedef int (__sys_pdrfork_t)(int *, int, int);
+typedef int (__sys_pdwait_t)(int, int *, int, struct __wrusage *, struct __siginfo *);
+typedef int (__sys_renameat2_t)(int, const char *, int, const char *, int);
+
+_Noreturn void __sys__exit(int rval);
+
+```
+
+--- RESPONSE ---
+
+
+lib/libsys is a complex syscall library with architecture-dependent assembly and tight libc integration. Let me check if there's any Rust build infrastructure available in the tree.
+
+ACTION: FIND_FILE bsd.rust.mk

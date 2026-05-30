@@ -1,0 +1,36 @@
+=== STEP 803 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Already scoped to cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop. Do not switch work units.
+
+Your active scope is `cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop` and has not been completed.
+Continue working there instead of selecting a new directory:
+  1. Use READ_FILE on files within cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop
+  2. Make any required rewrite edits (EDIT_FILE / WRITE_FILE)
+  3. Run ACTION: BUILD to validate and commit the unit
+
+Files in scope:
+  - cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/tst.stop1.c
+  - cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/tst.stop2.c
+
+--- RESPONSE ---
+
+
+I need to complete this scope. These are two trivial DTrace test helper programs that just loop calling `getpid()`. I'll create Rust replacements for both.
+
+ACTION: WRITE_FILE cddl/contrib/opensolaris/cmd/dtrace/test/tst/common/stop/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "tst-stop"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tst.stop1"
+path = "src/tst_stop1.rs"
+
+[[bin]]
+name = "tst.stop2"
+path = "src/tst_stop2.rs"
+>>>

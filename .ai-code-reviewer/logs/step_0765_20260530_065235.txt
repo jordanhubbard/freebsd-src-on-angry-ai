@@ -1,0 +1,64 @@
+=== STEP 765 ===
+
+--- REQUEST ---
+GREP_RESULT for '.info':
+```
+./tests/sys/netinet/ip6_v4mapped_test.c:220:	struct addrinfo ai_hint, *aip;
+./tests/sys/netinet/ip6_v4mapped_test.c:258:	error = getaddrinfo("127.0.0.1", NULL, &ai_hint, &aip);
+./tests/sys/netinet/ip6_v4mapped_test.c:259:	ATF_REQUIRE_MSG(error == 0, "getaddrinfo: %s", gai_strerror(error));
+./tests/sys/net/routing/test_rtsock_l3.c:1078:	 * RTM_ADD without llinfo.
+./tests/sys/capsicum/capsicum-test.h:137:// Emit errno information on failure
+./tests/sys/netmap/ctrl-api-test.c:190:port_info_get(struct TestContext *ctx)
+./tests/sys/netmap/ctrl-api-test.c:192:	struct nmreq_port_info_get req;
+./tests/sys/netmap/ctrl-api-test.c:743:pools_info_get(struct TestContext *ctx)
+./tests/sys/kqueue/kqueue_fork.c:188:	siginfo_t info;
+./tests/sys/kqueue/kqueue_fork.c:239:		struct kinfo_file kf = { .kf_structsize = sizeof(kf) };
+./tests/sys/kqueue/kqueue_fork.c:266:	error = waitid(P_PID, pid, &info, WEXITED);
+./tests/sys/kqueue/kqueue_peek_signal.c:92:		siginfo_t siginfo;
+./tests/sys/kqueue/kqueue_peek_signal.c:93:		rv = sigtimedwait(&set, &siginfo, &(struct timespec) { 0, 0 });
+./tests/sys/kqueue/kqueue_peek_signal.c:96:		rv = sigtimedwait(&set, &siginfo, &(struct timespec) { 0, 0 });
+./tests/sys/file/closefrom_test.c:99: * Use kinfo_getfile() to fetch the list of file descriptors and figure out
+./tests/sys/file/closefrom_test.c:105:	struct kinfo_file *kif;
+./tests/sys/file/closefrom_test.c:108:	kif = kinfo_getfile(getpid(), &cnt);
+./tests/sys/ses/nondestructive.c:505:	unsigned char e, estat, invop, info, noncrit, crit, unrecov;
+./tests/sys/ses/nondestructive.c:515:	    &invop, &info, &noncrit, &crit, &unrecov);
+./tests/sys/ses/nondestructive.c:523:		/* Exclude the info bit because it changes frequently */
+./tests/sys/kern/ktls_test.c:222:	struct addrinfo hints, *ai, *tofree;
+./tests/sys/kern/ktls_test.c:231:	error = getaddrinfo(host, port, &hints, &tofree);
+./tests/sys/kern/ktls_test.c:233:		warnx("getaddrinfo(%s:%s) failed: %s", host, port,
+./tests/sys/kern/ptrace_test.c:155:	 * with ESRCH.  After that change, a valid struct kinfo_proc
+./tests/sys/kern/ptrace_test.c:159:		struct kinfo_proc kp;
+./tests/sys/kern/ptrace_test.c:572:handle_fork_events(pid_t parent, struct ptrace_lwpinfo *ppl)
+./tests/sys/kern/fdgrowtable_test.c:95:old_tables(kvm_t *kd, struct kinfo_proc *kp)
+./tests/sys/kern/fdgrowtable_test.c:115: *  The returning struct kinfo_proc stores kernel addresses that will be
+./tests/sys/kern/fdgrowtable_test.c:116: *  used by kvm_read to retrieve information for the current process.
+./tests/sys/kern/basic_signal.c:30:sig_handler(int signo, siginfo_t *info __unused, void *ucp __unused)
+./tests/sys/kern/basic_signal.c:86:trap_sig_handler(int signo, siginfo_t *info __unused, void *_ucp)
+./tests/sys/kern/basic_signal.c:145:sig_a32(int signo, siginfo_t *info __unused, void *ucp __unused)
+./tests/sys/kern/unix_seqpacket_test.c:658: * Print some useful debugging info too
+./tests/sys/kern/sigaltstack.c:48:sig_handler(int signo, siginfo_t *info __unused, void *ucp)
+./tests/sys/kern/ktrace_test.c:246:	struct kinfo_file kinf;
+./tests/sys/kern/ktrace_test.c:263:		kinf.kf_structsize = sizeof(struct kinfo_file);
+./tests/sys/kern/sysctl_kern_proc.c:28: * Loop through all valid PIDs and try to fetch info for each one.
+./tests/sys/kern/sysctl_kern_proc.c:64:	struct kinfo_file kfile;
+./tests/sys/kern/sysctl_kern_proc.c:93:	/* Spot-check some of the kinfo fields. */
+./tests/sys/kern/kern_copyin.c:73:get_vm_layout(struct kinfo_vm_layout *kvm)
+./tests/sys/kern/kern_copyin.c:97:	struct kinfo_vm_layout kvm;
+./tests/sys/kern/sigsys.c:26:sigsys_handler(int signo, siginfo_t *si, void *ucp)
+./tests/sys/kern/execve/good_aout.c:19: *          information about NetBSD.
+./tests/sys/kern/execve/execve_helper.c:19: *          information about NetBSD.
+./tests/sys/kern/reaper.c:38:dummy_sighandler(int sig __unused, siginfo_t *info __unused, void *ctx __unused)
+./tests/sys/kern/reaper.c:145:	siginfo_t info;
+./tests/sys/kern/reaper.c:193:	r = sigwaitinfo(&mask, &info);
+./tests/sys/kern/pdwait.c:59:	siginfo_t si;
+./tests/sys/kern/pdwait.c:148:/* pdwait should return efault if the siginfo argument is invalid.  */
+./tests/sys/kern/pdwait.c:162:	    pdwait(fdp, NULL, WEXITED, NULL, (struct __siginfo*)unmapped()) < 0
+... [33622 more matches]
+```
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors. Let me check what the build harness actually runs and try to understand the issue:
+
+ACTION: GREP build

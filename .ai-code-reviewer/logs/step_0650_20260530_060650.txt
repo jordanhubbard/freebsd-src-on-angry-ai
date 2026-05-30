@@ -1,0 +1,13 @@
+=== STEP 650 ===
+
+--- REQUEST ---
+GREP_RESULT for '"\.info"':
+```
+./crypto/krb5/src/util/ss/help.c:59:        (void) strncat(buffer, ".info", sizeof(buffer) - 1 - strlen(buffer));
+./cddl/contrib/opensolaris/lib/libdtrace/common/dt_module.c:1235:		} else if (strcmp(s, ".info") == 0 &&
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE Makefile.inc1

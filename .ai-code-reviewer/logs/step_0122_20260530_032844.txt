@@ -1,0 +1,11 @@
+=== STEP 122 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*sys/param.h*'
+
+--- RESPONSE ---
+
+
+Let me understand the ELF aux vector constants needed.
+
+ACTION: READ_FILE sys/sys/elf_common.h

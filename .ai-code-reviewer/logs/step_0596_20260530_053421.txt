@@ -1,0 +1,71 @@
+=== STEP 596 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/tools/regression/nfsmmap/test2/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/regression/nfsmmap/test2/src/main.rs
+CONTENT:
+<<<
+use std::fs::OpenOptions;
+use std::io::{Read, Seek, SeekFrom, Write};
+
+fn main() {
+    let zeros = [0u8; 4096];
+    let ones = [1u8; 200];
+
+    let mut fd = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .open("test2.data")
+        .unwrap_or_else(|e| {
+            eprintln!("opening file: {}", e);
+            std::process::exit(1);
+        });
+
+    fd.seek(SeekFrom::Start(600))
+        .unwrap_or_else(|e| {
+            eprintln!("seeking: {}", e);
+            std::process::exit(1);
+        });
+
+    fd.write_all(&ones)
+        .unwrap_or_else(|e| {
+            eprintln!("writing ones: {}", e);
+            std::process::exit(1);
+        });
+
+    fd.seek(SeekFrom::Start(0))
+        .unwrap_or_else(|e| {
+            eprintln!("seeking to start: {}", e);
+            std::process::exit(1);
+        });
+
+    let mut buf = zeros;
+    fd.read_exact(&mut buf)
+        .unwrap_or_else(|e| {
+            eprintln!("reading file: {}", e);
+            std::process::exit(1);
+        });
+
+    let mut fd2 = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open("test2.scratch")
+        .unwrap_or_else(|e| {
+            eprintln!("creating scratch: {}", e);
+            std::process::exit(1);
+        });
+
+    fd2.write_all(&buf)
+        .unwrap_or_else(|e| {
+            eprintln!("writing scratch: {}", e);
+            std::process::exit(1);
+        });
+}
+>>>

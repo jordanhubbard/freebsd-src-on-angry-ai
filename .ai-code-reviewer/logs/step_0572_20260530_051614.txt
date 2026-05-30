@@ -1,0 +1,17 @@
+=== STEP 572 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20:
+```
+Makefile
+stream_xchacha20.c
+```
+
+--- RESPONSE ---
+
+
+The automatic recovery reverted all changes. The build errors are from the FreeBSD top-level build system (`Makefile.inc1`), not from the Rust code. This `sys/contrib/libsodium` unit is kernel-adjacent and has complex build dependencies that make it unsuitable for the current approach.
+
+Per the strategy: "Prefer small userland commands and libraries before large bootstrap or kernel-adjacent components." Let me move to a simpler unit.
+
+ACTION: SET_SCOPE bin/cat/tests

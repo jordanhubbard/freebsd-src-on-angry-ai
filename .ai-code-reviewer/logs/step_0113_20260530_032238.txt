@@ -1,0 +1,26 @@
+=== STEP 113 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/lib/libsys/Symbol.map:
+PROGRESS:
+📁 Directory: lib/libsys
+   Files: 1/248
+📄 File: lib/libsys/Symbol.map
+
+```
+FBSDprivate_1.0 {
+	__elf_aux_vector;
+	__libsys_errno;
+	__getosreldate;
+	__libsys_interposing_slot;
+	_elf_aux_info;
+};
+
+```
+
+--- RESPONSE ---
+
+
+Let me understand the constants needed for the simplest functions.
+
+ACTION: FIND_FILE sys/auxv.h

@@ -1,0 +1,44 @@
+=== STEP 272 ===
+
+--- REQUEST ---
+
+======================================================================
+⚠️  INFINITE LOOP WARNING (attempt 5/10) ⚠️
+======================================================================
+
+You have READ the same file 5 times in a row:
+  
+
+This suggests you are:
+1. Detecting a problem in the file
+2. Saying you'll fix it
+3. But then just reading it again instead of fixing it
+
+BREAKING THE LOOP:
+
+If there's a merge conflict or error in the file:
+  ACTION: EDIT_FILE 
+  OLD:
+  <<<
+  [copy the EXACT problematic section including context]
+  >>>
+  NEW:
+  <<<
+  [corrected version]
+  >>>
+
+If the file is beyond repair:
+  ACTION: SKIP_FILE
+
+If the directory is problematic:
+  ACTION: SET_SCOPE <different-directory>
+
+WARNING: If you repeat this action 5 more times,
+automatic recovery will be triggered and progress will be lost.
+======================================================================
+
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE

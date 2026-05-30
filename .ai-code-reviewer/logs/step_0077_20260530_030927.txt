@@ -1,0 +1,17 @@
+=== STEP 77 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/frustbsd/lib/libsys/auxv.c.
+Remaining files in lib/libsys:
+  - lib/libsys/__vdso_gettimeofday.c
+  - lib/libsys/_exit.2
+  - lib/libsys/_libsys.h
+  - lib/libsys/_umtx_op.2
+  - lib/libsys/_umtx_op_err.c
+  ... plus 236 more
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE lib/libsys/__vdso_gettimeofday.c

@@ -1,0 +1,322 @@
+=== STEP 543 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+Now I need to create the Rust source file with the xchacha20 implementation.
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/src/lib.rs
+CONTENT:
+<<<
+//! Rust implementation of XChaCha20 stream cipher for libsodium compatibility.
+//!
+//! This provides C-ABI compatible exports matching the libsodium
+//! `crypto_stream_xchacha20` API.
+
+use std::arch::asm;
+use std::mem;
+
+// Constants from libsodium headers
+const KEYBYTES: usize = 32;
+const NONCEBYTES: usize = 24;
+const HCHACHA20_INPUTBYTES: usize = 16;
+const HCHACHA20_OUTPUTBYTES: usize = 32;
+const CHACHA20_NONCEBYTES: usize = 8;
+
+// ChaCha20 constants
+const CHACHA20_CONSTANT: [u32; 4] = [0x61707865, 0x3320646e, 0x79622d32, 0x6b206574];
+
+fn chacha20_quarter_round(state: &mut [u32; 16], a: usize, b: usize, c: usize, d: usize) {
+    state[a] = state[a].wrapping_add(state[b]);
+    state[d] ^= state[a];
+    state[d] = state[d].rotate_left(16);
+
+    state[c] = state[c].wrapping_add(state[d]);
+    state[b] ^= state[c];
+    state[b] = state[b].rotate_left(12);
+
+    state[a] = state[a].wrapping_add(state[b]);
+    state[d] ^= state[a];
+    state[d] = state[d].rotate_left(8);
+
+    state[c] = state[c].wrapping_add(state[d]);
+    state[b] ^= state[c];
+    state[b] = state[b].rotate_left(7);
+}
+
+fn chacha20_block(key: &[u8; 32], counter: u64, nonce: &[u8; 8]) -> [u8; 64] {
+    let key_words: [u32; 8] = [
+        u32::from_le_bytes(key[0..4].try_into().unwrap()),
+        u32::from_le_bytes(key[4..8].try_into().unwrap()),
+        u32::from_le_bytes(key[8..12].try_into().unwrap()),
+        u32::from_le_bytes(key[12..16].try_into().unwrap()),
+        u32::from_le_bytes(key[16..20].try_into().unwrap()),
+        u32::from_le_bytes(key[20..24].try_into().unwrap()),
+        u32::from_le_bytes(key[24..28].try_into().unwrap()),
+        u32::from_le_bytes(key[28..32].try_into().unwrap()),
+    ];
+
+    let nonce_words: [u32; 3] = [
+        u32::from_le_bytes(nonce[0..4].try_into().unwrap()),
+        u32::from_le_bytes(nonce[4..8].try_into().unwrap()),
+        0,
+    ];
+
+    let mut state: [u32; 16] = [0; 16];
+    state[0] = CHACHA20_CONSTANT[0];
+    state[1] = CHACHA20_CONSTANT[1];
+    state[2] = CHACHA20_CONSTANT[2];
+    state[3] = CHACHA20_CONSTANT[3];
+    state[4] = key_words[0];
+    state[5] = key_words[1];
+    state[6] = key_words[2];
+    state[7] = key_words[3];
+    state[8] = key_words[4];
+    state[9] = key_words[5];
+    state[10] = key_words[6];
+    state[11] = key_words[7];
+    state[12] = (counter & 0xFFFFFFFF) as u32;
+    state[13] = (counter >> 32) as u32;
+    state[14] = nonce_words[0];
+    state[15] = nonce_words[1];
+
+    let mut working = state;
+
+    for _ in 0..10 {
+        chacha20_quarter_round(&mut working, 0, 4, 8, 12);
+        chacha20_quarter_round(&mut working, 1, 5, 9, 13);
+        chacha20_quarter_round(&mut working, 2, 6, 10, 14);
+        chacha20_quarter_round(&mut working, 3, 7, 11, 15);
+        chacha20_quarter_round(&mut working, 0, 5, 10, 15);
+        chacha20_quarter_round(&mut working, 1, 6, 11, 12);
+        chacha20_quarter_round(&mut working, 2, 7, 8, 13);
+        chacha20_quarter_round(&mut working, 3, 4, 9, 14);
+    }
+
+    let mut output = [0u8; 64];
+    for i in 0..16 {
+        let val = working[i].wrapping_add(state[i]);
+        let bytes = val.to_le_bytes();
+        output[i * 4..(i + 1) * 4].copy_from_slice(&bytes);
+    }
+    output
+}
+
+fn hchacha20(key: &[u8; 32], nonce: &[u8; 16]) -> [u8; 32] {
+    let key_words: [u32; 8] = [
+        u32::from_le_bytes(key[0..4].try_into().unwrap()),
+        u32::from_le_bytes(key[4..8].try_into().unwrap()),
+        u32::from_le_bytes(key[8..12].try_into().unwrap()),
+        u32::from_le_bytes(key[12..16].try_into().unwrap()),
+        u32::from_le_bytes(key[16..20].try_into().unwrap()),
+        u32::from_le_bytes(key[20..24].try_into().unwrap()),
+        u32::from_le_bytes(key[24..28].try_into().unwrap()),
+        u32::from_le_bytes(key[28..32].try_into().unwrap()),
+    ];
+
+    let nonce_words: [u32; 4] = [
+        u32::from_le_bytes(nonce[0..4].try_into().unwrap()),
+        u32::from_le_bytes(nonce[4..8].try_into().unwrap()),
+        u32::from_le_bytes(nonce[8..12].try_into().unwrap()),
+        u32::from_le_bytes(nonce[12..16].try_into().unwrap()),
+    ];
+
+    let mut state: [u32; 16] = [0; 16];
+    state[0] = CHACHA20_CONSTANT[0];
+    state[1] = CHACHA20_CONSTANT[1];
+    state[2] = CHACHA20_CONSTANT[2];
+    state[3] = CHACHA20_CONSTANT[3];
+    state[4] = key_words[0];
+    state[5] = key_words[1];
+    state[6] = key_words[2];
+    state[7] = key_words[3];
+    state[8] = key_words[4];
+    state[9] = key_words[5];
+    state[10] = key_words[6];
+    state[11] = key_words[7];
+    state[12] = nonce_words[0];
+    state[13] = nonce_words[1];
+    state[14] = nonce_words[2];
+    state[15] = nonce_words[3];
+
+    let mut working = state;
+
+    for _ in 0..10 {
+        chacha20_quarter_round(&mut working, 0, 4, 8, 12);
+        chacha20_quarter_round(&mut working, 1, 5, 9, 13);
+        chacha20_quarter_round(&mut working, 2, 6, 10, 14);
+        chacha20_quarter_round(&mut working, 3, 7, 11, 15);
+        chacha20_quarter_round(&mut working, 0, 5, 10, 15);
+        chacha20_quarter_round(&mut working, 1, 6, 11, 12);
+        chacha20_quarter_round(&mut working, 2, 7, 8, 13);
+        chacha20_quarter_round(&mut working, 3, 4, 9, 14);
+    }
+
+    let mut output = [0u8; 32];
+    output[0..4].copy_from_slice(&working[16].to_le_bytes());
+    output[4..8].copy_from_slice(&working[17].to_le_bytes());
+    output[8..12].copy_from_slice(&working[18].to_le_bytes());
+    output[12..16].copy_from_slice(&working[19].to_le_bytes());
+    output[16..20].copy_from_slice(&working[20].to_le_bytes());
+    output[20..24].copy_from_slice(&working[21].to_le_bytes());
+    output[24..28].copy_from_slice(&working[22].to_le_bytes());
+    output[28..32].copy_from_slice(&working[23].to_le_bytes());
+    output
+}
+
+fn chacha20_stream(key: &[u8; 32], counter: u64, nonce: &[u8; 8], out: &mut [u8]) {
+    let mut pos = 0;
+    let mut ctr = counter;
+    while pos < out.len() {
+        let block = chacha20_block(key, ctr, nonce);
+        let remaining = out.len() - pos;
+        let to_copy = remaining.min(64);
+        out[pos..pos + to_copy].copy_from_slice(&block[..to_copy]);
+        pos += to_copy;
+        ctr = ctr.wrapping_add(1);
+    }
+}
+
+fn chacha20_xor_ic(key: &[u8; 32], counter: u64, nonce: &[u8; 8], msg: &[u8], out: &mut [u8]) {
+    let mut pos = 0;
+    let mut ctr = counter;
+    while pos < msg.len() {
+        let block = chacha20_block(key, ctr, nonce);
+        let remaining = msg.len() - pos;
+        let to_copy = remaining.min(64);
+        for i in 0..to_copy {
+            out[pos + i] = msg[pos + i] ^ block[i];
+        }
+        pos += to_copy;
+        ctr = ctr.wrapping_add(1);
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn crypto_stream_xchacha20_keybytes() -> usize {
+    KEYBYTES
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn crypto_stream_xchacha20_noncebytes() -> usize {
+    NONCEBYTES
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn crypto_stream_xchacha20_messagebytes_max() -> usize {
+    usize::MAX
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn crypto_stream_xchacha20(
+    c: *mut u8,
+    clen: usize,
+    n: *const u8,
+    k: *const u8,
+) -> i32 {
+    if c.is_null() || n.is_null() || k.is_null() {
+        return -1;
+    }
+
+    let nonce = std::slice::from_raw_parts(n, NONCEBYTES);
+    let key = std::slice::from_raw_parts(k, KEYBYTES);
+    let out = std::slice::from_raw_parts_mut(c, clen);
+
+    let mut key_bytes = [0u8; 32];
+    key_bytes.copy_from_slice(key);
+
+    let mut nonce_bytes = [0u8; 16];
+    nonce_bytes.copy_from_slice(&nonce[..HCHACHA20_INPUTBYTES]);
+
+    let subkey = hchacha20(&key_bytes, &nonce_bytes);
+
+    let mut sub_nonce = [0u8; 8];
+    sub_nonce.copy_from_slice(&nonce[HCHACHA20_INPUTBYTES..]);
+
+    chacha20_stream(&subkey, 0, &sub_nonce, out);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn crypto_stream_xchacha20_xor_ic(
+    c: *mut u8,
+    m: *const u8,
+    mlen: usize,
+    n: *const u8,
+    ic: u64,
+    k: *const u8,
+) -> i32 {
+    if c.is_null() || m.is_null() || n.is_null() || k.is_null() {
+        return -1;
+    }
+
+    let nonce = std::slice::from_raw_parts(n, NONCEBYTES);
+    let key = std::slice::from_raw_parts(k, KEYBYTES);
+    let msg = std::slice::from_raw_parts(m, mlen);
+    let out = std::slice::from_raw_parts_mut(c, mlen);
+
+    let mut key_bytes = [0u8; 32];
+    key_bytes.copy_from_slice(key);
+
+    let mut nonce_bytes = [0u8; 16];
+    nonce_bytes.copy_from_slice(&nonce[..HCHACHA20_INPUTBYTES]);
+
+    let subkey = hchacha20(&key_bytes, &nonce_bytes);
+
+    let mut sub_nonce = [0u8; 8];
+    sub_nonce.copy_from_slice(&nonce[HCHACHA20_INPUTBYTES..]);
+
+    chacha20_xor_ic(&subkey, ic, &sub_nonce, msg, out);
+    0
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn crypto_stream_xchacha20_xor(
+    c: *mut u8,
+    m: *const u8,
+    mlen: usize,
+    n: *const u8,
+    k: *const u8,
+) -> i32 {
+    crypto_stream_xchacha20_xor_ic(c, m, mlen, n, 0, k)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn crypto_stream_xchacha20_keygen(
+    k: *mut u8,
+) {
+    if k.is_null() {
+        return;
+    }
+
+    let out = std::slice::from_raw_parts_mut(k, KEYBYTES);
+    for byte in out.iter_mut() {
+        *byte = getrandom_byte();
+    }
+}
+
+fn getrandom_byte() -> u8 {
+    let mut buf: [u8; 1] = [0; 1];
+    // Use getrandom syscall
+    let ret = unsafe {
+        libc::getrandom(buf.as_mut_ptr(), 1, 0)
+    };
+    if ret == 1 {
+        buf[0]
+    } else {
+        // Fallback to /dev/urandom
+        let fd = unsafe { libc::open(b"/dev/urandom\0".as_ptr() as *const i8, libc::O_RDONLY) };
+        if fd >= 0 {
+            unsafe {
+                libc::read(fd, buf.as_mut_ptr() as *mut libc::c_void, 1);
+                libc::close(fd);
+            }
+        }
+        buf[0]
+    }
+}
+>>>

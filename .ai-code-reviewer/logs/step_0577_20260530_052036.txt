@@ -1,0 +1,27 @@
+=== STEP 577 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/Makefile:
+PROGRESS:
+📁 Directory: sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20
+   Files: 0/1
+📄 File: sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/Makefile
+✏️  Edits: 2 files modified
+
+```
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+all:
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+```
+
+--- RESPONSE ---
+
+
+The Makefile already has cargo build rules. The build errors are from the FreeBSD top-level build system (`Makefile.inc1`), not from the Rust code. Let me check if the Rust code compiles by running cargo directly:
+
+ACTION: BUILD

@@ -1,0 +1,61 @@
+=== STEP 750 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*share/mk/src.opts.mk*'
+
+--- RESPONSE ---
+
+
+The build keeps failing with 0 errors. The `.include <src.opts.mk>` likely doesn't exist in this tree. Let me simplify the Makefile:
+
+ACTION: EDIT_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/Makefile
+OLD:
+<<<
+# Rust replacement for h_helper_dso1.c
+# Builds a shared library (DSO) for the ld.elf_so test suite.
+
+.include <src.opts.mk>
+
+PROG=	h_helper_dso1
+SRCS=	h_helper_dso1.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/libhelper_dso1.so ${.TARGET}
+
+all: ${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>
+NEW:
+<<<
+# Rust replacement for h_helper_dso1.c
+# Builds a shared library (DSO) for the ld.elf_so test suite.
+
+PROG=	h_helper_dso1
+SRCS=	h_helper_dso1.c
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+CP?=		cp
+RM?=		rm -f
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/libhelper_dso1.so ${.TARGET}
+
+all: ${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+>>>

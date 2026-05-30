@@ -1,0 +1,14 @@
+=== STEP 506 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*src.opts.mk*':
+```
+./share/mk/src.opts.mk
+```
+
+--- RESPONSE ---
+
+
+The "0 errors, 0 warnings" failure is puzzling. Let me check if there's a parent Makefile that includes this unit.
+
+ACTION: FIND_FILE tools/*/Makefile

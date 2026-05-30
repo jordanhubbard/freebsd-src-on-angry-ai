@@ -1,0 +1,16 @@
+=== STEP 516 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*.ai*':
+```
+./contrib/ncurses/include/Caps.aix4
+./contrib/libpcap/doc/README.aix
+./usr.bin/hesinfo/cargo-target/debug/deps/hesinfo-c87e176f8d1cab00.aihjc9m1buqqeor9xvk5so00w.1fwpoxj.rcgu.o
+./usr.bin/hesinfo/cargo-target/debug/deps/hesinfo-c87e176f8d1cab00.aihjc9m1buqqeor9xvk5so00w.1fvhjnr.rcgu.o
+./usr.bin/hesinfo/cargo-target/debug/deps/hesinfo-c87e176f8d1cab00.aihjc9m1buqqeor9xvk5so00w.0kqleil.rcgu.o
+```
+
+--- RESPONSE ---
+
+
+ACTION: FIND_FILE .ai

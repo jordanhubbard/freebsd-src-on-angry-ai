@@ -1,0 +1,64 @@
+=== STEP 224 ===
+
+--- REQUEST ---
+GREP_RESULT for 'PowerPC':
+```
+./tests/sys/audit/miscellaneous.c:112:	/* For PowerPC, ARM64, RISCV archs, sysarch(2) is not supported */
+./stand/efi/include/i386/pe.h:101:#define IMAGE_FILE_MACHINE_POWERPC           0x1F0   // IBM PowerPC Little-Endian
+./stand/efi/include/i386/pe.h:449:// IBM PowerPC relocation types.
+./stand/efi/include/amd64/pe.h:101:#define IMAGE_FILE_MACHINE_POWERPC           0x1F0   // IBM PowerPC Little-Endian
+./stand/efi/include/amd64/pe.h:449:// IBM PowerPC relocation types.
+./stand/uboot/arch/powerpc/conf.c:90:/* Exported for PowerPC only */
+./stand/common/load_elf.c:1286:	 * want to apply offset adjustments.  For PowerPC, the kernel is
+./stand/powerpc/ofw/conf.c:94:/* Exported for PowerPC only */
+./stand/kboot/kboot/arch/powerpc64/load_addr.c:39: * Find a good place to load the kernel, subject to the PowerPC's constraints
+./stand/kboot/libkboot/arch/powerpc64/start_arch.h:8: * Due to the PowerPC ABI, We can call main directly from here, so do so.
+./sys/cddl/dev/dtrace/powerpc/dtrace_subr.c:133: * between multiple processors in dtrace.  Since PowerPC Timebases can be much
+./sys/cddl/dev/fbt/powerpc/fbt_isa.c:116:	 * PowerPC64 uses '.' prefixes on symbol names, ignore it, but only
+./sys/sys/linker.h:249:/* These values are MD on PowerPC */
+./sys/sys/elf_common.h:222:#define	EM_PPC		20	/* PowerPC 32-bit. */
+./sys/sys/elf_common.h:223:#define	EM_PPC64	21	/* PowerPC 64-bit. */
+./sys/sys/elf_common.h:860:#define	NT_PPC_VMX	0x100	/* PowerPC Altivec/VMX registers */
+./sys/sys/pmc.h:114:    __PMC_CPU(PPC_7450,			0x300,	"PowerPC MPC7450")		\
+./sys/sys/pmc.h:115:    __PMC_CPU(PPC_E500,			0x340,	"PowerPC e500 Core")		\
+./sys/sys/pmc.h:116:    __PMC_CPU(PPC_970,			0x380,	"IBM PowerPC 970")		\
+./sys/kern/uipc_mbuf.c:214:/* PowerPC booke has 64-bit physical pointers. */
+./sys/dev/vt/hw/ofwfb/ofwfb.c:701:	 * If we are running on PowerPC in real mode (supported only on AIM
+./sys/dev/aac/aac_tables.h:93:	{"Unknown PowerPC",	CPUPPC_xxx},
+./sys/dev/usb/usb_freebsd.h:68:#define USB_HOST_ALIGN	32		/* Arm and PowerPC need at least this much, if not more */
+./sys/dev/aacraid/aacraid.c:168:	{"Unknown PowerPC",	CPUPPC_xxx},
+./sys/dev/hwpmc/hwpmc_mpc7xxx.c:62: * This should work for every 32-bit PowerPC implementation I know of (G3 and G4
+./sys/dev/mpt/mpilib/mpi_type.h:52: *  08-30-05  01.05.02  Added PowerPC option to #ifdef's.
+./sys/contrib/ncsw/etc/ncsw_mem.c:58:/* NOTE: This implementation is only valid for CodeWarrior for PowerPC */
+./sys/contrib/ncsw/inc/cores/ppc_ext.h:37: @Description   Core API for PowerPC cores
+./sys/contrib/ncsw/inc/cores/ppc_ext.h:39:                These routines must be implemented by each specific PowerPC
+./sys/contrib/ncsw/inc/cores/arm_ext.h:39:                These routines must be implemented by each specific PowerPC
+./sys/contrib/xz-embedded/linux/lib/xz/xz_dec_bcj.c:68:		 * PowerPC          4           0
+./sys/contrib/zlib/crc32.c:53:  Lake i7, AMD Ryzen 7, ARM Cortex-A57, Sparc64-VII, PowerPC POWER9, and MIPS64
+./sys/contrib/zlib/crc32.c:55:  with N=5, W=8. The Sparc, PowerPC, and MIPS64 were all fastest at N=5, W=4.
+./sys/contrib/zlib/inffast.c:308:   inflate_fast() speedups that turned out slower (on a PowerPC G3 750CXe):
+./sys/contrib/zstd/lib/common/xxhash.h:4210: * vec_mulo and vec_mule are very problematic intrinsics on PowerPC
+./sys/contrib/openzfs/module/zstd/lib/common/xxhash.h:4211: * vec_mulo and vec_mule are very problematic intrinsics on PowerPC
+./sys/powerpc/powermac/macio.c:453:	if ((child = OF_finddevice("/cpus/PowerPC,G4@0")) != -1 &&
+./sys/powerpc/fpu/fpu_emu.c:275:	 * On PowerPC all floating point values are stored in registers
+./sys/powerpc/fpu/fpu_emu.c:449:				 * PowerPC uses this to round a double
+./sys/powerpc/powerpc/trap.c:851: * possibilities that can happen on a 32-bit PowerPC in big-endian mode.
+./sys/powerpc/powerpc/gdb_machdep.c:104:	 * On PowerPC, .text starts at KERNBASE + SIZEOF_HEADERS and
+./sys/powerpc/powerpc/gdb_machdep.c:106:	 * On PowerPC64, .text starts at KERNBASE and text segment at
+./sys/powerpc/powerpc/gdb_machdep.c:115:	 * TODO: Add DataSeg to response. On PowerPC64 all sections reside
+./sys/powerpc/powerpc/cpu.c:118:        { "Motorola PowerPC 601",	MPC601,		REVFMT_DEC,
+./sys/powerpc/powerpc/cpu.c:120:        { "Motorola PowerPC 602",	MPC602,		REVFMT_DEC,
+./sys/powerpc/powerpc/cpu.c:122:        { "Motorola PowerPC 603",	MPC603,		REVFMT_MAJMIN,
+./sys/powerpc/powerpc/db_disasm.c:112: * PowerPC Microprocessor Family: The Programming Environments
+./sys/powerpc/powerpc/exec_machdep.c:745:	/* No debug registers on PowerPC */
+./sys/powerpc/powerpc/exec_machdep.c:783:	/* No debug registers on PowerPC */
+./sys/powerpc/aim/aim_machdep.c:209:		 * PowerPC 970 CPUs have a misfeature requested by Apple that
+... [176 more matches]
+```
+
+--- RESPONSE ---
+
+
+I need to find the PowerPC/TargetInfo entry in the rewrite index to mark it as skipped.
+
+ACTION: GREP

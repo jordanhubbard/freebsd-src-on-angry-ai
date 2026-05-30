@@ -1,0 +1,69 @@
+=== STEP 683 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/contrib/llvm-project/libc/src/__support:
+```
+CPP
+FPUtil
+File
+GPU
+HashTable
+OSUtil
+RPC
+StringUtil
+arg_list.h
+big_int.h
+block.h
+blockstore.h
+c_string.h
+char_vector.h
+common.h
+complex_basic_ops.h
+complex_type.h
+ctype_utils.h
+detailed_powers_of_ten.h
+endian_internal.h
+error_or.h
+fixed_point
+fixedvector.h
+float_to_string.h
+freelist.cpp
+freelist.h
+freelist_heap.cpp
+freelist_heap.h
+freestore.h
+freetrie.cpp
+freetrie.h
+hash.h
+high_precision_decimal.h
+integer_literals.h
+integer_operations.h
+integer_to_string.h
+intrusive_list.h
+libc_assert.h
+libc_errno.h
+macros
+math
+math_extras.h
+memory_size.h
+number_pair.h
+ryu_constants.h
+ryu_long_double_constants.h
+sign.h
+str_to_float.h
+str_to_integer.h
+str_to_num_result.h
+threads
+time
+uint128.h
+wchar
+wcs_to_integer.h
+wctype_utils.h
+```
+
+--- RESPONSE ---
+
+
+This is a Windows-specific LLVM libc directory with no FreeBSD build integration. The build keeps failing silently. Let me check what the actual build command is:
+
+ACTION: FIND_FILE contrib/llvm-project/libc/src/__support/Makefile

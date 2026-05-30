@@ -1,0 +1,56 @@
+=== STEP 839 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/lib/libthr/arch/arm/Cargo.toml:
+PROGRESS:
+📁 Directory: lib/libthr/arch/arm
+   Files: 0/2
+📄 File: lib/libthr/arch/arm/Cargo.toml
+✏️  Edits: 3 files modified
+
+```
+[package]
+name = "thr_rtld_arm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+name = "thr_rtld_arm"
+path = "src/lib.rs"
+```
+
+--- RESPONSE ---
+
+
+The build errors are pre-existing `.info` directives from Makefile.inc1 being treated as errors by the build harness. This ARM-specific unit requires cross-compilation and has no standalone Makefile - it's only a Makefile.inc included by the parent lib/libthr. This is not a suitable candidate for a simple rewrite.
+
+Let me clean up my changes and move to a different unit:
+
+ACTION: EDIT_FILE lib/libthr/arch/arm/Makefile.inc
+OLD:
+<<<
+.PATH: ${.CURDIR}/arch/arm
+SRCS+= \
+ thr_rtld_arm.c
+
+# Rust replacement for thr_rtld_arm
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+THR_RTLD_ARM_RUST=	${.CURDIR}/cargo-target/debug/libthr_rtld_arm.a
+
+THR_RTLD_ARM_RUST: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+.if exists(${THR_RTLD_ARM_RUST})
+DPADD+=	${THR_RTLD_ARM_RUST}
+LDADD+=	-lthr_rtld_arm -L${.CURDIR}/cargo-target/debug
+.endif
+>>>
+NEW:
+<<<
+.PATH: ${.CURDIR}/arch/arm
+SRCS+= \
+ thr_rtld_arm.c
+>>>

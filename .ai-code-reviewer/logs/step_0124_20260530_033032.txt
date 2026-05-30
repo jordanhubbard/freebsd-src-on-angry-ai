@@ -1,0 +1,274 @@
+=== STEP 124 ===
+
+--- REQUEST ---
+NEXT_CHUNK_RESULT:
+
+PROGRESS:
+📁 Directory: lib/libsys
+   Files: 1/248
+📄 File: sys/sys/elf_common.h
+   Chunks: 2/7
+
+```
+=== CHUNK 2/7: /usr/home/jkh/Src/frustbsd/sys/sys/elf_common.h === [line_chunk: chunk_2]
+=== Lines 251-500 (250 lines) ===
+
+#define	EM_AMD64	EM_X86_64	/* Advanced Micro Devices x86-64 (compat) */
+#define	EM_PDSP		63	/* Sony DSP Processor. */
+#define	EM_FX66		66	/* Siemens FX66 microcontroller. */
+#define	EM_ST9PLUS	67	/* STMicroelectronics ST9+ 8/16
+				   microcontroller. */
+#define	EM_ST7		68	/* STmicroelectronics ST7 8-bit
+				   microcontroller. */
+#define	EM_68HC16	69	/* Motorola MC68HC16 microcontroller. */
+#define	EM_68HC11	70	/* Motorola MC68HC11 microcontroller. */
+#define	EM_68HC08	71	/* Motorola MC68HC08 microcontroller. */
+#define	EM_68HC05	72	/* Motorola MC68HC05 microcontroller. */
+#define	EM_SVX		73	/* Silicon Graphics SVx. */
+#define	EM_ST19		74	/* STMicroelectronics ST19 8-bit mc. */
+#define	EM_VAX		75	/* Digital VAX. */
+#define	EM_CRIS		76	/* Axis Communications 32-bit embedded
+				   processor. */
+#define	EM_JAVELIN	77	/* Infineon Technologies 32-bit embedded
+				   processor. */
+#define	EM_FIREPATH	78	/* Element 14 64-bit DSP Processor. */
+#define	EM_ZSP		79	/* LSI Logic 16-bit DSP Processor. */
+#define	EM_MMIX		80	/* Donald Knuth's educational 64-bit proc. */
+#define	EM_HUANY	81	/* Harvard University machine-independent
+				   object files. */
+#define	EM_PRISM	82	/* SiTera Prism. */
+#define	EM_AVR		83	/* Atmel AVR 8-bit microcontroller. */
+#define	EM_FR30		84	/* Fujitsu FR30. */
+#define	EM_D10V		85	/* Mitsubishi D10V. */
+#define	EM_D30V		86	/* Mitsubishi D30V. */
+#define	EM_V850		87	/* NEC v850. */
+#define	EM_M32R		88	/* Mitsubishi M32R. */
+#define	EM_MN10300	89	/* Matsushita MN10300. */
+#define	EM_MN10200	90	/* Matsushita MN10200. */
+#define	EM_PJ		91	/* picoJava. */
+#define	EM_OPENRISC	92	/* OpenRISC 32-bit embedded processor. */
+#define	EM_ARC_A5	93	/* ARC Cores Tangent-A5. */
+#define	EM_XTENSA	94	/* Tensilica Xtensa Architecture. */
+#define	EM_VIDEOCORE	95	/* Alphamosaic VideoCore processor. */
+#define	EM_TMM_GPP	96	/* Thompson Multimedia General Purpose
+				   Processor. */
+#define	EM_NS32K	97	/* National Semiconductor 32000 series. */
+#define	EM_TPC		98	/* Tenor Network TPC processor. */
+#define	EM_SNP1K	99	/* Trebia SNP 1000 processor. */
+#define	EM_ST200	100	/* STMicroelectronics ST200 microcontroller. */
+#define	EM_IP2K		101	/* Ubicom IP2xxx microcontroller family. */
+#define	EM_MAX		102	/* MAX Processor. */
+#define	EM_CR		103	/* National Semiconductor CompactRISC
+				   microprocessor. */
+#define	EM_F2MC16	104	/* Fujitsu F2MC16. */
+#define	EM_MSP430	105	/* Texas Instruments embedded microcontroller
+				   msp430. */
+#define	EM_BLACKFIN	106	/* Analog Devices Blackfin (DSP) processor. */
+#define	EM_SE_C33	107	/* S1C33 Family of Seiko Epson processors. */
+#define	EM_SEP		108	/* Sharp embedded microprocessor. */
+#define	EM_ARCA		109	/* Arca RISC Microprocessor. */
+#define	EM_UNICORE	110	/* Microprocessor series from PKU-Unity Ltd.
+				   and MPRC of Peking University */
+#define	EM_AARCH64	183	/* AArch64 (64-bit ARM) */
+#define	EM_RISCV	243	/* RISC-V */
+#define	EM_LOONGARCH	258	/* Loongson LoongArch */
+
+/* Non-standard or deprecated. */
+#define	EM_486		6	/* Intel i486. */
+#define	EM_MIPS_RS4_BE	10	/* MIPS R4000 Big-Endian */
+#define	EM_ALPHA_STD	41	/* Digital Alpha (standard value). */
+#define	EM_ALPHA	0x9026	/* Alpha (written in the absence of an ABI) */
+
+/**
+ * e_flags
+ */
+#define	EF_ARM_RELEXEC	0x1
+#define	EF_ARM_HASENTRY	0x2
+#define	EF_ARM_SYMSARESORTED	0x4
+#define	EF_ARM_DYNSYMSUSESEGIDX	0x8
+#define	EF_ARM_MAPSYMSFIRST	0x10
+#define	EF_ARM_LE8		0x00400000
+#define	EF_ARM_BE8		0x00800000
+#define	EF_ARM_EABIMASK		0xFF000000
+#define	EF_ARM_EABI_UNKNOWN	0x00000000
+#define	EF_ARM_EABI_VER1	0x01000000
+#define	EF_ARM_EABI_VER2	0x02000000
+#define	EF_ARM_EABI_VER3	0x03000000
+#define	EF_ARM_EABI_VER4	0x04000000
+#define	EF_ARM_EABI_VER5	0x05000000
+#define	EF_ARM_EABI_VERSION(x)	((x) & EF_ARM_EABIMASK)
+#define	EF_ARM_INTERWORK	0x00000004
+#define	EF_ARM_APCS_26		0x00000008
+#define	EF_ARM_APCS_FLOAT	0x00000010
+#define	EF_ARM_PIC		0x00000020
+#define	EF_ARM_ALIGN8		0x00000040
+#define	EF_ARM_NEW_ABI		0x00000080
+#define	EF_ARM_OLD_ABI		0x00000100
+#define	EF_ARM_ABI_FLOAT_SOFT	0x00000200
+#define	EF_ARM_SOFT_FLOAT	EF_ARM_ABI_FLOAT_SOFT /* Pre-V5 ABI name */
+#define	EF_ARM_ABI_FLOAT_HARD	0x00000400
+#define	EF_ARM_VFP_FLOAT	EF_ARM_ABI_FLOAT_HARD /* Pre-V5 ABI name */
+#define	EF_ARM_MAVERICK_FLOAT	0x00000800
+
+/*
+ * Loongson LoongArch Specific e_flags
+ *
+ * Definitions from LoongArch ELF psABI v2.01.
+ * Reference: https://github.com/loongson/LoongArch-Documentation
+ * (commit hash 296de4def055c871809068e0816325a4ac04eb12)
+ */
+
+/* LoongArch Base ABI Modifiers */
+#define	EF_LOONGARCH_ABI_SOFT_FLOAT	0x00000001
+#define	EF_LOONGARCH_ABI_SINGLE_FLOAT	0x00000002
+#define	EF_LOONGARCH_ABI_DOUBLE_FLOAT	0x00000003
+#define	EF_LOONGARCH_ABI_MODIFIER_MASK	0x00000007
+
+/* LoongArch Object file ABI versions */
+#define	EF_LOONGARCH_OBJABI_V0		0x00000000
+#define	EF_LOONGARCH_OBJABI_V1		0x00000040
+#define	EF_LOONGARCH_OBJABI_MASK	0x000000C0
+
+#define	EF_MIPS_NOREORDER	0x00000001
+#define	EF_MIPS_PIC		0x00000002	/* Contains PIC code */
+#define	EF_MIPS_CPIC		0x00000004	/* STD PIC calling sequence */
+#define	EF_MIPS_UCODE		0x00000010
+#define	EF_MIPS_ABI2		0x00000020	/* N32 */
+#define	EF_MIPS_OPTIONS_FIRST	0x00000080
+#define	EF_MIPS_ABI		0x0000F000
+#define	EF_MIPS_ABI_O32		0x00001000
+#define	EF_MIPS_ABI_O64		0x00002000
+#define	EF_MIPS_ABI_EABI32	0x00003000
+#define	EF_MIPS_ABI_EABI64	0x00004000
+#define	EF_MIPS_ARCH_ASE	0x0F000000	/* Architectural extensions */
+#define	EF_MIPS_ARCH_ASE_MDMX	0x08000000	/* MDMX multimedia extension */
+#define	EF_MIPS_ARCH_ASE_M16	0x04000000	/* MIPS-16 ISA extensions */
+#define	EF_MIPS_ARCH		0xF0000000	/* Architecture field */
+#define	EF_MIPS_ARCH_1		0x00000000	/* -mips1 code */
+#define	EF_MIPS_ARCH_2		0x10000000	/* -mips2 code */
+#define	EF_MIPS_ARCH_3		0x20000000	/* -mips3 code */
+#define	EF_MIPS_ARCH_4		0x30000000	/* -mips4 code */
+#define	EF_MIPS_ARCH_5		0x40000000	/* -mips5 code */
+#define	EF_MIPS_ARCH_32		0x50000000	/* -mips32 code */
+#define	EF_MIPS_ARCH_64		0x60000000	/* -mips64 code */
+#define	EF_MIPS_ARCH_32R2	0x70000000	/* -mips32r2 code */
+#define	EF_MIPS_ARCH_64R2	0x80000000	/* -mips64r2 code */
+
+#define	EF_PPC_EMB		0x80000000
+#define	EF_PPC_RELOCATABLE	0x00010000
+#define	EF_PPC_RELOCATABLE_LIB	0x00008000
+
+#define	EF_RISCV_RVC		0x00000001
+#define	EF_RISCV_FLOAT_ABI_MASK	0x00000006
+#define	EF_RISCV_FLOAT_ABI_SOFT	0x00000000
+#define	EF_RISCV_FLOAT_ABI_SINGLE 0x000002
+#define	EF_RISCV_FLOAT_ABI_DOUBLE 0x000004
+#define	EF_RISCV_FLOAT_ABI_QUAD	0x00000006
+#define	EF_RISCV_RVE		0x00000008
+#define	EF_RISCV_TSO		0x00000010
+
+#define	EF_SPARC_EXT_MASK	0x00ffff00
+#define	EF_SPARC_32PLUS		0x00000100
+#define	EF_SPARC_SUN_US1	0x00000200
+#define	EF_SPARC_HAL_R1		0x00000200
+#define	EF_SPARC_SUN_US3	0x00000800
+
+#define	EF_SPARCV9_MM		0x00000003
+#define	EF_SPARCV9_TSO		0x00000000
+#define	EF_SPARCV9_PSO		0x00000001
+#define	EF_SPARCV9_RMO		0x00000002
+
+/* Special section indexes. */
+#define	SHN_UNDEF	     0		/* Undefined, missing, irrelevant. */
+#define	SHN_LORESERVE	0xff00		/* First of reserved range. */
+#define	SHN_LOPROC	0xff00		/* First processor-specific. */
+#define	SHN_HIPROC	0xff1f		/* Last processor-specific. */
+#define	SHN_LOOS	0xff20		/* First operating system-specific. */
+#define	SHN_FREEBSD_CACHED	SHN_LOOS
+					/* Transient, for sys/kern/link_elf_obj
+					   linker only: Cached global in local
+					   symtab. */
+#define	SHN_HIOS	0xff3f		/* Last operating system-specific. */
+#define	SHN_ABS		0xfff1		/* Absolute values. */
+#define	SHN_COMMON	0xfff2		/* Common data. */
+#define	SHN_XINDEX	0xffff		/* Escape -- index stored elsewhere. */
+#define	SHN_HIRESERVE	0xffff		/* Last of reserved range. */
+
+/* sh_type */
+#define	SHT_NULL		0	/* inactive */
+#define	SHT_PROGBITS		1	/* program defined information */
+#define	SHT_SYMTAB		2	/* symbol table section */
+#define	SHT_STRTAB		3	/* string table section */
+#define	SHT_RELA		4	/* relocation section with addends */
+#define	SHT_HASH		5	/* symbol hash table section */
+#define	SHT_DYNAMIC		6	/* dynamic section */
+#define	SHT_NOTE		7	/* note section */
+#define	SHT_NOBITS		8	/* no space section */
+#define	SHT_REL			9	/* relocation section - no addends */
+#define	SHT_SHLIB		10	/* reserved - purpose unknown */
+#define	SHT_DYNSYM		11	/* dynamic symbol table section */
+#define	SHT_INIT_ARRAY		14	/* Initialization function pointers. */
+#define	SHT_FINI_ARRAY		15	/* Termination function pointers. */
+#define	SHT_PREINIT_ARRAY	16	/* Pre-initialization function ptrs. */
+#define	SHT_GROUP		17	/* Section group. */
+#define	SHT_SYMTAB_SHNDX	18	/* Section indexes (see SHN_XINDEX). */
+#define	SHT_LOOS		0x60000000	/* First of OS specific semantics */
+#define	SHT_LLVM_ADDRSIG	0x6fff4c03	/* Address significance table */
+#define	SHT_LOSUNW		0x6ffffff4
+#define	SHT_SUNW_dof		0x6ffffff4
+#define	SHT_SUNW_cap		0x6ffffff5
+#define	SHT_GNU_ATTRIBUTES	0x6ffffff5
+#define	SHT_SUNW_SIGNATURE	0x6ffffff6
+#define	SHT_GNU_HASH		0x6ffffff6
+#define	SHT_GNU_LIBLIST		0x6ffffff7
+#define	SHT_SUNW_ANNOTATE	0x6ffffff7
+#define	SHT_SUNW_DEBUGSTR	0x6ffffff8
+#define	SHT_SUNW_DEBUG		0x6ffffff9
+#define	SHT_SUNW_move		0x6ffffffa
+#define	SHT_SUNW_COMDAT		0x6ffffffb
+#define	SHT_SUNW_syminfo	0x6ffffffc
+#define	SHT_SUNW_verdef		0x6ffffffd
+#define	SHT_GNU_verdef		0x6ffffffd	/* Symbol versions provided */
+#define	SHT_SUNW_verneed	0x6ffffffe
+#define	SHT_GNU_verneed		0x6ffffffe	/* Symbol versions required */
+#define	SHT_SUNW_versym		0x6fffffff
+#define	SHT_GNU_versym		0x6fffffff	/* Symbol version table */
+#define	SHT_HISUNW		0x6fffffff
+#define	SHT_HIOS		0x6fffffff	/* Last of OS specific semantics */
+#define	SHT_LOPROC		0x70000000	/* reserved range for processor */
+
+#define	SHT_AARCH64_MEMTAG_GLOBALS_STATIC	0x70000007
+#define	SHT_AARCH64_MEMTAG_GLOBALS_DYNAMIC	0x70000008
+
+#define	SHT_ARM_EXIDX		0x70000001	/* Exception index table. */
+#define	SHT_ARM_PREEMPTMAP	0x70000002	/* BPABI DLL dynamic linking
+						   pre-emption map. */
+#define	SHT_ARM_ATTRIBUTES	0x70000003	/* Object file compatibility
+						   attributes. */
+#define	SHT_ARM_DEBUGOVERLAY	0x70000004	/* See DBGOVL for details. */
+#define	SHT_ARM_OVERLAYSECTION	0x70000005	/* See DBGOVL for details. */
+#define	SHT_MIPS_LIBLIST	0x70000000
+#define	SHT_MIPS_MSYM		0x70000001
+#define	SHT_MIPS_CONFLICT	0x70000002
+#define	SHT_MIPS_GPTAB		0x70000003
+#define	SHT_MIPS_UCODE		0x70000004
+#define	SHT_MIPS_DEBUG		0x70000005
+#define	SHT_MIPS_REGINFO	0x70000006
+#define	SHT_MIPS_PACKAGE	0x70000007
+#define	SHT_MIPS_PACKSYM	0x70000008
+#define	SHT_MIPS_RELD		0x70000009
+#define	SHT_MIPS_IFACE		0x7000000b
+#define	SHT_MIPS_CONTENT	0x7000000c
+#define	SHT_MIPS_OPTIONS	0x7000000d
+#define	SHT_MIPS_DELTASYM	0x7000001b
+#define	SHT_MIPS_DELTAINST	0x7000001c
+#define	SHT_MIPS_DELTACLASS	0x7000001d
+
+```
+
+--- RESPONSE ---
+
+
+Let me check for any existing Rust infrastructure in the FreeBSD build system.
+
+ACTION: FIND_FILE Cargo.toml

@@ -1,0 +1,9 @@
+=== STEP 230 ===
+
+--- REQUEST ---
+GREP_ERROR: No pattern specified
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE

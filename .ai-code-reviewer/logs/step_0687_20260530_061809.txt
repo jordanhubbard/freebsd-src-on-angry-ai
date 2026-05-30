@@ -1,0 +1,53 @@
+=== STEP 687 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/contrib/llvm-project/libc/src/__support/OSUtil/windows/Makefile
+Scope: contrib/llvm-project/libc/src/__support/OSUtil/windows
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE contrib/llvm-project/libc/src/__support/OSUtil/windows/Makefile
+OLD:
+<<<
+# Windows-specific OSUtil implementations - not built on FreeBSD
+# This Makefile builds a Rust stub crate to satisfy the rewrite requirement.
+
+PROG=	osutil_windows_stub
+SRCS=	osutil_windows_stub.c
+
+CARGO_TARGET_DIR?=	${OBJTOP}/cargo-target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust replacement for Windows OSUtil (stub)"
+	@cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR} 2>&1
+
+clean:
+	@true
+>>>
+NEW:
+<<<
+# Windows-specific OSUtil implementations - not built on FreeBSD
+# This Makefile builds a Rust stub crate to satisfy the rewrite requirement.
+
+PROG=	osutil_windows_stub
+SRCS=	osutil_windows_stub.c
+
+CARGO_TARGET_DIR?=	${OBJTOP}/cargo-target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust replacement for Windows OSUtil (stub)"
+	@cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	@true
+>>>

@@ -1,0 +1,30 @@
+=== STEP 197 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo/SKIP_REASON.md:
+PROGRESS:
+📁 Directory: contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo
+   Files: 0/2
+📄 File: contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo/SKIP_REASON.md
+✏️  Edits: 2 files modified
+
+```
+# Skip Reason
+
+This unit contains LLVM compiler infrastructure code (PowerPC target
+registration), not FreeBSD userland C/C++ libraries or commands.
+
+Per the rewrite objective: "Translate FreeBSD userland C/C++ libraries and
+commands to Rust." This LLVM C++ code is third-party compiler infrastructure
+that is not part of FreeBSD userland and should not be rewritten to Rust.
+
+Constraint: "If the selected unit has no source relevant to the configured
+objective, choose another scope instead of fabricating a rewrite."
+```
+
+--- RESPONSE ---
+
+
+This unit is LLVM compiler infrastructure, not FreeBSD userland. The build fails because it requires the full LLVM build system. I need to properly skip this unit.
+
+ACTION: LIST_DIR contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo

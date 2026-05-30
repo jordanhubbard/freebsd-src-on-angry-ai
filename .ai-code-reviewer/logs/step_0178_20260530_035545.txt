@@ -1,0 +1,23 @@
+=== STEP 178 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/frustbsd/.ai-code-reviewer/REWRITE-INDEX.md.
+Remaining files in contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo:
+  - contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo/PowerPCTargetInfo.h
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+This unit contains LLVM compiler infrastructure code, not FreeBSD userland. I need to mark it as skipped in the rewrite index and move on.
+
+ACTION: EDIT_FILE .ai-code-reviewer/REWRITE-INDEX.md
+OLD:
+<<<
+## Current Position
+CURRENT POSITION: `contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo`
+>>>
+NEW:
+<<<
+## Current Position
+CURRENT POSITION: `bin/cat/tests`

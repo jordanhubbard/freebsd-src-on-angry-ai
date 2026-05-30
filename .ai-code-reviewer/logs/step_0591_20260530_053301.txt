@@ -1,0 +1,119 @@
+=== STEP 591 ===
+
+--- REQUEST ---
+READ_FILE_RESULT for /usr/home/jkh/Src/frustbsd/usr.bin/asa/Makefile:
+PROGRESS:
+📄 File: usr.bin/asa/Makefile
+
+```
+.include <src.opts.mk>
+
+PROG=	asa
+BINDIR?=	/usr/bin
+BINOWN?=	root
+BINGRP?=	wheel
+BINMODE?=	555
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+all: ${PROG}
+
+install: ${PROG}
+	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m ${BINMODE} ${PROG} ${DESTDIR}${BINDIR}/${PROG}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+CLEANFILES+=	${PROG} ${CARGO_TARGET_DIR}
+
+HAS_TESTS=
+SUBDIR.${MK_TESTS}=	tests
+
+```
+
+--- RESPONSE ---
+
+
+The build errors are from the FreeBSD top-level build system, not from the Rust code. The `usr.bin/asa` Makefile avoids `bsd.prog.mk` and uses explicit rules instead. Let me update the Makefile to follow that pattern:
+
+ACTION: EDIT_FILE tools/regression/nfsmmap/test2/Makefile
+OLD:
+<<<
+PROG= test2
+MAN=
+NFSSERVER?= herring.nlsystems.com
+CLEANFILES= test2.zeros test2.good test2.data test2.scratch cargo-target
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+all: test2 test2.zeros test2.good
+	@cp ${.OBJDIR}/test2.zeros ${.OBJDIR}/test2.data
+	@if [ `hostname` != ${NFSSERVER} ] ; then \
+		ssh ${NFSSERVER} touch ${.OBJDIR}/test2.data; \
+	fi
+	@cd ${.OBJDIR}; ${.OBJDIR}/test2
+	@if cmp -s ${.OBJDIR}/test2.data ${.OBJDIR}/test2.good && \
+	   cmp -s ${.OBJDIR}/test2.scratch ${.OBJDIR}/test2.good ; then \
+		echo passed; \
+	else \
+		echo failed; \
+	fi
+
+test2.zeros: test2.zeros.uu
+	uudecode $?
+
+test2.good: test2.good.uu
+	uudecode $?
+
+test2: ${SRCS}
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${INSTALL} ${CARGO_TARGET_DIR}/debug/test2 ${.OBJDIR}/test2
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	test2
+NFSSERVER?=	herring.nlsystems.com
+CLEANFILES=	test2.zeros test2.good test2.data test2.scratch cargo-target
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+all: ${PROG} test2.zeros test2.good
+	@cp ${.CURDIR}/test2.zeros ${.CURDIR}/test2.data
+	@if [ `hostname` != ${NFSSERVER} ] ; then \
+		ssh ${NFSSERVER} touch ${.CURDIR}/test2.data; \
+	fi
+	@cd ${.CURDIR}; ${.CURDIR}/${PROG}
+	@if cmp -s ${.CURDIR}/test2.data ${.CURDIR}/test2.good && \
+	   cmp -s ${.CURDIR}/test2.scratch ${.CURDIR}/test2.good ; then \
+		echo passed; \
+	else \
+		echo failed; \
+	fi
+
+test2.zeros: test2.zeros.uu
+	uudecode $?
+
+test2.good: test2.good.uu
+	uudecode $?
+
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/${PROG} ${.TARGET}
+
+clean:
+	${RM} ${PROG}
+	${RM} -rf ${CARGO_TARGET_DIR}
+>>>

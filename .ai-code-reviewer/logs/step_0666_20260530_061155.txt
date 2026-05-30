@@ -1,0 +1,24 @@
+=== STEP 666 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/contrib/llvm-project/libc/src/__support/OSUtil:
+```
+baremetal
+darwin
+exit.h
+fcntl.h
+fuchsia
+gpu
+io.h
+linux
+syscall.h
+uefi
+windows
+```
+
+--- RESPONSE ---
+
+
+This is a subdirectory of the LLVM libc project with no Makefile. Let me check how the parent LLVM libc is built:
+
+ACTION: FIND_FILE contrib/llvm-project/libc/CMakeLists.txt

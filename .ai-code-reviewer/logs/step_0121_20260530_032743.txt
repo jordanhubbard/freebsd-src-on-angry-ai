@@ -1,0 +1,14 @@
+=== STEP 121 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*elf_common.h*':
+```
+./sys/sys/elf_common.h
+```
+
+--- RESPONSE ---
+
+
+Let me understand the architecture and constants needed.
+
+ACTION: FIND_FILE sys/param.h

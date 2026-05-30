@@ -1,0 +1,12 @@
+=== STEP 234 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: /usr/home/jkh/Src/frustbsd is a directory, not a file
+TIP: Use LIST_FILES to see directory contents
+
+--- RESPONSE ---
+
+
+This is LLVM compiler infrastructure C++ code, not FreeBSD userland. It has already failed 3 attempts. I need to mark it as skipped and move to the next unit. Let me write a skip reason and update the index.
+
+ACTION: WRITE_FILE

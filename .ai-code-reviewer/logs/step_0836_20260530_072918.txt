@@ -1,0 +1,37 @@
+=== STEP 836 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/lib/libthr/arch/arm/Makefile.inc
+Scope: lib/libthr/arch/arm
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE lib/libthr/arch/arm/Makefile.inc
+OLD:
+<<<
+.PATH: ${.CURDIR}/arch/arm
+SRCS+= \
+ thr_rtld_arm.c
+
+# Rust replacement for thr_rtld_arm
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+THR_RTLD_ARM_RUST=	${.CURDIR}/cargo-target/debug/libthr_rtld_arm.a
+
+THR_RTLD_ARM_RUST: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+
+.if exists(${THR_RTLD_ARM_RUST})
+DPADD+=	${THR_RTLD_ARM_RUST}
+LDADD+=	-lthr_rtld_arm -L${.CURDIR}/cargo-target/debug
+.endif
+>>>
+NEW:
+<<<
+.PATH: ${.CURDIR}/arch/arm
+SRCS+= \
+ thr_rtld_arm.c
+>>>

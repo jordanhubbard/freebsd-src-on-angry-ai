@@ -1,0 +1,12 @@
+=== STEP 634 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo is marked skipped.
+
+Choose a pending work unit instead.
+NEXT: Use SET_SCOPE contrib/llvm-project/libc/src/__support/OSUtil/windows
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE contrib/llvm-project/libc/src/__support/OSUtil/windows

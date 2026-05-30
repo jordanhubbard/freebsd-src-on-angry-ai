@@ -1,0 +1,12 @@
+=== STEP 116 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*auxv.h*':
+```
+./sys/sys/auxv.h
+```
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE sys/sys/auxv.h

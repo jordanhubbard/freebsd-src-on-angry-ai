@@ -1,0 +1,18 @@
+=== STEP 528 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT for '*.ai*':
+```
+./contrib/ncurses/include/Caps.aix4
+./contrib/libpcap/doc/README.aix
+./usr.bin/hesinfo/cargo-target/debug/deps/hesinfo-c87e176f8d1cab00.aihjc9m1buqqeor9xvk5so00w.1fwpoxj.rcgu.o
+./usr.bin/hesinfo/cargo-target/debug/deps/hesinfo-c87e176f8d1cab00.aihjc9m1buqqeor9xvk5so00w.1fvhjnr.rcgu.o
+./usr.bin/hesinfo/cargo-target/debug/deps/hesinfo-c87e176f8d1cab00.aihjc9m1buqqeor9xvk5so00w.0kqleil.rcgu.o
+```
+
+--- RESPONSE ---
+
+
+This is a crypto library unit in `sys/contrib/libsodium/` which is kernel-adjacent and involves cryptographic primitives. The strategy says to prefer small userland commands before kernel-adjacent components. However, I'm already scoped to it. Let me check if there's a Cargo.toml already or if I need to create one.
+
+ACTION: FIND_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/Cargo.toml

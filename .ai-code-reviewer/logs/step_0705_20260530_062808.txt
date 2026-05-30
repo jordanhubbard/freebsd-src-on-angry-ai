@@ -1,0 +1,31 @@
+=== STEP 705 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/src/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/netbsd-tests/libexec/ld.elf_so/helper_dso1/Makefile
+CONTENT:
+<<<
+# Rust replacement for h_helper_dso1.c
+# Builds a shared library (DSO) for the ld.elf_so test suite.
+
+PROG=	h_helper_dso1
+SRCS=	h_helper_dso1.c
+
+CARGO_TARGET_DIR?=	${.CURDIR}/target
+
+.PHONY: all clean rust-build
+
+all: rust-build
+
+rust-build:
+	@echo "Building Rust replacement for h_helper_dso1"
+	@cargo build --manifest-path ${.CURDIR}/Cargo.toml --target-dir ${CARGO_TARGET_DIR}
+
+clean:
+	@true
+>>>

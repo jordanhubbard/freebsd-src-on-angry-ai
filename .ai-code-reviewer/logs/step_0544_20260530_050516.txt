@@ -1,0 +1,40 @@
+=== STEP 544 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/src/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The implementation has bugs - HChaCha20 output indexing is wrong and it uses `libc` which isn't available. Let me fix the source.
+
+ACTION: EDIT_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/src/lib.rs
+OLD:
+<<<
+    let mut output = [0u8; 32];
+    output[0..4].copy_from_slice(&working[16].to_le_bytes());
+    output[4..8].copy_from_slice(&working[17].to_le_bytes());
+    output[8..12].copy_from_slice(&working[18].to_le_bytes());
+    output[12..16].copy_from_slice(&working[19].to_le_bytes());
+    output[16..20].copy_from_slice(&working[20].to_le_bytes());
+    output[20..24].copy_from_slice(&working[21].to_le_bytes());
+    output[24..28].copy_from_slice(&working[22].to_le_bytes());
+    output[28..32].copy_from_slice(&working[23].to_le_bytes());
+    output
+}
+>>>
+NEW:
+<<<
+    let mut output = [0u8; 32];
+    output[0..4].copy_from_slice(&working[0].to_le_bytes());
+    output[4..8].copy_from_slice(&working[1].to_le_bytes());
+    output[8..12].copy_from_slice(&working[2].to_le_bytes());
+    output[12..16].copy_from_slice(&working[3].to_le_bytes());
+    output[16..20].copy_from_slice(&working[12].to_le_bytes());
+    output[20..24].copy_from_slice(&working[13].to_le_bytes());
+    output[24..28].copy_from_slice(&working[14].to_le_bytes());
+    output[28..32].copy_from_slice(&working[15].to_le_bytes());
+    output
+}
+>>>

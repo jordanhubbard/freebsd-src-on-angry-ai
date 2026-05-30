@@ -1,0 +1,9 @@
+=== STEP 667 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/llvm-project/libc/CMakeLists.txt*'
+
+--- RESPONSE ---
+
+
+ACTION: LIST_DIR contrib/llvm-project/libc

@@ -1,0 +1,32 @@
+=== STEP 573 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Already scoped to sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20. Do not switch work units.
+
+Your active scope is `sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20` and has not been completed.
+Continue working there instead of selecting a new directory:
+  1. Use READ_FILE on files within sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20
+  2. Make any required rewrite edits (EDIT_FILE / WRITE_FILE)
+  3. Run ACTION: BUILD to validate and commit the unit
+
+Files in scope:
+  - sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/stream_xchacha20.c
+
+--- RESPONSE ---
+
+
+I need to recreate the Rust crate files since they were reverted. Let me start fresh:
+
+ACTION: WRITE_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "crypto_stream_xchacha20"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["staticlib"]
+name = "crypto_stream_xchacha20"
+path = "src/lib.rs"
+>>>

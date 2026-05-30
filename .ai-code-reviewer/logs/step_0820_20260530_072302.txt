@@ -1,0 +1,109 @@
+=== STEP 820 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/lib/libthr/arch/arm/Cargo.toml
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE lib/libthr/arch/arm/src/lib.rs
+CONTENT:
+<<<
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2024, Michal Meloun <mmel@freebsd.org>
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice unmodified, this list of conditions, and the following
+ *    disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+//! ARM AEABI compatibility symbols for libthr.
+//!
+//! These symbols are needed for ARM EABI compatibility. The
+//! `_thr_resolve_machdep` function forces early PLT resolution of
+//! these symbols at runtime.
+
+use std::os::raw::{c_char, c_int, c_uint};
+
+#[repr(C)]
+pub struct aeabi_idivmod {
+    pub q: c_int,
+    pub r: c_int,
+}
+
+#[repr(C)]
+pub struct aeabi_uidivmod {
+    pub q: c_uint,
+    pub r: c_uint,
+}
+
+#[repr(C)]
+pub struct aeabi_ldivmod {
+    pub q: i64,
+    pub r: i64,
+}
+
+#[repr(C)]
+pub struct aeabi_uldivmod {
+    pub q: u64,
+    pub r: u64,
+}
+
+extern "C" {
+    fn __aeabi_idiv(a: c_int, b: c_int) -> c_int;
+    fn __aeabi_uidiv(a: c_uint, b: c_uint) -> c_uint;
+    fn __aeabi_idivmod(a: c_int, b: c_int) -> aeabi_idivmod;
+    fn __aeabi_uidivmod(a: c_uint, b: c_uint) -> aeabi_uidivmod;
+    fn __aeabi_ldivmod(a: i64, b: i64) -> aeabi_ldivmod;
+    fn __aeabi_uldivmod(a: u64, b: u64) -> aeabi_uldivmod;
+    fn __aeabi_memset(dest: *mut c_char, n: usize, c: c_int);
+    fn __aeabi_memclr(dest: *mut c_char, n: usize);
+    fn __aeabi_memmove(dest: *mut c_char, src: *const c_char, n: usize);
+    fn __aeabi_memcpy(dest: *mut c_char, src: *const c_char, n: usize);
+    fn __aeabi_memcmp(dest: *mut c_char, src: *const c_char, n: usize);
+}
+
+/// Force early PLT resolution of AEABI symbols.
+///
+/// This function calls each AEABI symbol once to ensure they are
+/// resolved before the dynamic linker finishes initialization.
+#[no_mangle]
+pub unsafe extern "C" fn _thr_resolve_machdep() {
+    let mut tmp: [c_char; 2] = [0, 0];
+
+    __aeabi_idiv(1, 1);
+    __aeabi_uidiv(1, 1);
+
+    __aeabi_idivmod(1, 1);
+    __aeabi_uidivmod(1, 1);
+
+    __aeabi_ldivmod(1, 1);
+    __aeabi_uldivmod(1, 1);
+
+    __aeabi_memset(tmp.as_mut_ptr(), 1, 0);
+    __aeabi_memclr(tmp.as_mut_ptr(), 1);
+    __aeabi_memmove(tmp.as_mut_ptr(), tmp.as_ptr().add(1), 1);
+    __aeabi_memcpy(tmp.as_mut_ptr(), tmp.as_ptr().add(1), 1);
+    __aeabi_memcmp(tmp.as_mut_ptr(), tmp.as_ptr().add(1), 1);
+}
+>>>

@@ -1,0 +1,30 @@
+=== STEP 606 ===
+
+--- REQUEST ---
+WRITE_FILE_OK: Successfully wrote /usr/home/jkh/Src/frustbsd/tools/tools/shlib-compat/test/libtest1/src/lib.rs
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE tools/tools/shlib-compat/test/libtest1/Makefile
+CONTENT:
+<<<
+TESTNUM=	1
+
+CARGO?=		cargo
+CARGO_TARGET_DIR?=	${.CURDIR}/cargo-target
+
+LIB=		test${TESTNUM}
+SHLIB_MAJOR=	0
+
+all: lib${LIB}.so.${SHLIB_MAJOR}
+
+lib${LIB}.so.${SHLIB_MAJOR}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/lib.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml --offline --target-dir ${CARGO_TARGET_DIR}
+	${CP} ${CARGO_TARGET_DIR}/debug/libtest1.so ${.TARGET}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+	${RM} lib${LIB}.so.${SHLIB_MAJOR}
+>>>

@@ -1,0 +1,33 @@
+=== STEP 675 ===
+
+--- REQUEST ---
+FIND_FILE_RESULT: No files matching '*contrib/llvm-project/libc/src/Makefile*'
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE contrib/llvm-project/libc/src/__support/OSUtil/windows/Makefile
+OLD:
+<<<
+# Windows-specific OSUtil implementations - not built on FreeBSD
+# This Makefile exists to allow the build system to pass through this directory.
+
+all:
+	@echo "Skipping Windows-specific OSUtil directory on FreeBSD"
+
+clean:
+	@true
+>>>
+NEW:
+<<<
+# Windows-specific OSUtil implementations - not built on FreeBSD
+# This Makefile exists to allow the build system to pass through this directory.
+
+.PHONY: all clean
+
+all:
+	@echo "Skipping Windows-specific OSUtil directory on FreeBSD"
+
+clean:
+	@true
+>>>

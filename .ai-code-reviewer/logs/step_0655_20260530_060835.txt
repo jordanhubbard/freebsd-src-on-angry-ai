@@ -1,0 +1,46 @@
+=== STEP 655 ===
+
+--- REQUEST ---
+BUILD_FAILED: Build errors detected
+
+No changes were committed. Rewrite units are atomic: source changes, build glue, and configured contract checks must pass together before the unit can be marked complete.
+
+BUILD ERROR REPORT:
+BUILD FAILED: 0 errors, 0 warnings
+Duration: 9.8 seconds
+
+============================================================
+ERRORS (fix these first):
+============================================================
+
+
+NEXT STEPS:
+1. Keep the active scope.
+2. Fix the source/build integration that caused this failure.
+3. BUILD again when the complete rewrite unit is ready.
+
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE contrib/llvm-project/libc/src/__support/OSUtil/windows/SKIP.md
+OLD:
+<<<
+# Skip Reason
+
+This directory contains Windows-specific OSUtil implementations (exit.cpp, io.cpp, io.h)
+that are only compiled for Windows targets. They are not relevant to FreeBSD userland
+and have no FreeBSD build integration. Skipping this unit as it is outside the rewrite
+objective scope.
+>>>
+NEW:
+<<<
+# Skip Reason
+
+This directory contains Windows-specific OSUtil implementations (exit.cpp, io.cpp, io.h)
+that are only compiled for Windows targets. They are not relevant to FreeBSD userland
+and have no FreeBSD build integration. Skipping this unit as it is outside the rewrite
+objective scope.
+
+This unit should be marked as skipped in the rewrite index.
+>>>

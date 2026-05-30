@@ -1,0 +1,17 @@
+=== STEP 668 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/contrib/llvm-project/libc:
+```
+hdr
+include
+shared
+src
+```
+
+--- RESPONSE ---
+
+
+This is part of the LLVM project which uses CMake, not FreeBSD make. This unit is not relevant to FreeBSD userland. Let me check if there's a FreeBSD Makefile at a higher level:
+
+ACTION: FIND_FILE contrib/llvm-project/Makefile

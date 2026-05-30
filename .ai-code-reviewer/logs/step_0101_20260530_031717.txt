@@ -1,0 +1,57 @@
+=== STEP 101 ===
+
+--- REQUEST ---
+GREP_RESULT for 'MAXPAGESIZES':
+```
+./tests/sys/posixshm/posixshm.h:33:pagesizes(size_t ps[MAXPAGESIZES], bool required)
+./tests/sys/posixshm/posixshm.h:37:	pscnt = getpagesizes(ps, MAXPAGESIZES);
+./tests/sys/posixshm/posixshm.h:40:	ATF_REQUIRE_MSG(pscnt <= MAXPAGESIZES, "invalid pscnt %d", pscnt);
+./tests/sys/posixshm/posixshm_test.c:1258:	size_t ps[MAXPAGESIZES];
+./tests/sys/posixshm/posixshm_test.c:1314:	size_t ps[MAXPAGESIZES + 1]; /* silence warnings if MAXPAGESIZES == 1 */
+./tests/sys/posixshm/posixshm_test.c:1376:	size_t ps[MAXPAGESIZES];
+./tests/sys/posixshm/memfd_test.c:285:	size_t ps[MAXPAGESIZES], pgsize;
+./tests/sys/vm/shared_shadow_inval_test.c:360:	size_t largepagesize, pagesize, pagesizes[MAXPAGESIZES], sysctllen;
+./tests/sys/vm/shared_shadow_inval_test.c:368:	largepagesize = MAXPAGESIZES >= 2 &&
+./tests/sys/vm/mlock_test.c:185:	size_t len, pagesizes[MAXPAGESIZES];
+./tests/sys/vm/mlock_test.c:189:	count = getpagesizes(pagesizes, MAXPAGESIZES);
+./sys/compat/freebsd32/freebsd32_misc.c:3645:	int32_t pagesizes32[MAXPAGESIZES];
+./sys/compat/freebsd32/freebsd32_misc.c:3694:	for (i = 0; i < MAXPAGESIZES; i++)
+./sys/arm64/arm64/pmap.c:1827:		KASSERT(MAXPAGESIZES > 1 && pagesizes[1] == 0,
+./sys/arm64/arm64/pmap.c:1830:		KASSERT(MAXPAGESIZES > 2 && pagesizes[2] == 0,
+./sys/arm64/arm64/pmap.c:1834:			KASSERT(MAXPAGESIZES > 3 && pagesizes[3] == 0,
+./sys/arm64/include/param.h:97:#define	MAXPAGESIZES	4		/* maximum number of supported page sizes */
+./sys/kern/kern_exec.c:1737:	imgp->pagesizeslen = sizeof(pagesizes[0]) * MAXPAGESIZES;
+./sys/kern/uipc_shm.c:278:static u_long count_largepages[MAXPAGESIZES];
+./sys/kern/uipc_shm.c:581:		if (conf->psind <= 0 || conf->psind >= MAXPAGESIZES ||
+./sys/kern/uipc_shm.c:1031:	for (i = 1; i < MAXPAGESIZES; i++) {
+./sys/kern/imgact_elf.c:1165:	for (i = MAXPAGESIZES - 1; i > 0; i--) {
+./sys/kern/kern_mib.c:252:_Static_assert(MAXPAGESIZES > VM_NRESERVLEVEL, "MAXPAGESIZES is too small");
+./sys/kern/kern_mib.c:255:u_long __read_mostly pagesizes[MAXPAGESIZES] = { PAGE_SIZE };
+./sys/kern/kern_mib.c:264:	uint32_t pagesizes32[MAXPAGESIZES];
+./sys/riscv/include/param.h:81:#define	MAXPAGESIZES	3	/* maximum number of supported page sizes */
+./sys/arm/include/param.h:104:#define	MAXPAGESIZES	2		/* maximum number of supported page sizes */
+./sys/arm/arm/pmap-v6.c:1782:		KASSERT(MAXPAGESIZES > 1 && pagesizes[1] == 0,
+./sys/amd64/amd64/pmap.c:2589:		KASSERT(MAXPAGESIZES > 1 && pagesizes[1] == 0,
+./sys/amd64/amd64/pmap.c:2593:			KASSERT(MAXPAGESIZES > 2 && pagesizes[2] == 0,
+./sys/amd64/amd64/pmap.c:7004:	KASSERT(psind > 0 && psind < MAXPAGESIZES && pagesizes[psind] != 0,
+./sys/amd64/include/param.h:123:#define	MAXPAGESIZES	3	/* maximum number of supported page sizes */
+./sys/i386/i386/pmap.c:1019:		KASSERT(MAXPAGESIZES > 1 && pagesizes[1] == 0,
+./sys/i386/include/param.h:102:#define	MAXPAGESIZES	2	/* maximum number of supported page sizes */
+./sys/powerpc/aim/mmu_oea64.c:1924:		KASSERT(MAXPAGESIZES > 1 && pagesizes[1] == 0,
+./sys/powerpc/aim/mmu_radix.c:3707:		KASSERT(MAXPAGESIZES > 1 && pagesizes[1] == 0,
+./sys/powerpc/include/param.h:117:#define	MAXPAGESIZES	3	/* maximum number of supported page sizes */
+./sys/vm/vm_mmap.c:113:_Static_assert(MAXPAGESIZES <= 4, "MINCORE_SUPER too narrow");
+./sys/vm/vm_init.c:113:	for (i = 1; i < MAXPAGESIZES; i++) {
+./sys/vm/vm_map.c:1691:		if (bidx >= MAXPAGESIZES)
+./sys/vm/vm_fault.c:2018:		if (MAXPAGESIZES > 1 && size < pagesizes[1])
+./libexec/rtld-elf/rtld.c:2534:	static size_t psa[MAXPAGESIZES];
+./lib/libc/gen/memfd_create.c:54:	size_t pgs[MAXPAGESIZES];
+./lib/libsys/getpagesizes.c:50:	static u_long ps[MAXPAGESIZES];
+```
+
+--- RESPONSE ---
+
+
+The instructions say to start with `contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo`. Let me examine that unit.
+
+ACTION: SET_SCOPE contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo

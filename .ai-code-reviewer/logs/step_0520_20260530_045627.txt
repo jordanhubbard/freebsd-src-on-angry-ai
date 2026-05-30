@@ -1,0 +1,12 @@
+=== STEP 520 ===
+
+--- REQUEST ---
+READ_FILE_ERROR: File not found: /usr/home/jkh/Src/frustbsd/.ai
+TIP: Use FIND_FILE to locate files
+
+--- RESPONSE ---
+
+
+The "0 errors, 0 warnings" failure is suspicious. Let me check the build configuration to understand what command is being run.
+
+ACTION: READ_FILE usr.bin/asa/Makefile

@@ -1,0 +1,34 @@
+=== STEP 431 ===
+
+--- REQUEST ---
+EDIT_FILE_ERROR: OLD text not found in /usr/home/jkh/Src/frustbsd/tools/test/auxinfo/Makefile
+Closest match found in file (copy this EXACT block for OLD):
+<<<
+PROG=	auxinfo
+MAN=
+SRCS=	# empty - Rust replacement
+
+# Rust replacement - build auxinfo from Rust source
+CARGO=	cargo
+CARGO_TARGET_DIR=	${.OBJDIR}/cargo-target
+
+# Build the Rust binary
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	${INSTALL} -s ${CARGO_TARGET_DIR}/release/${PROG} ${.OBJDIR}/${PROG}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>
+
+HINT: The OLD block must be EXACTLY copied from the file.
+Re-read the file and copy the exact text you want to replace,
+including all whitespace and indentation. Do not paraphrase.
+
+--- RESPONSE ---
+
+
+ACTION: READ_FILE tools/test/auxinfo/Makefile

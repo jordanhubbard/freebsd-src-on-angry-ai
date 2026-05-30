@@ -1,0 +1,52 @@
+=== STEP 423 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/tools/test/auxinfo/Makefile
+Scope: tools/test/auxinfo
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: EDIT_FILE tools/test/auxinfo/Makefile
+OLD:
+<<<
+PROG=	auxinfo
+MAN=
+
+# Rust replacement - build auxinfo from Rust source
+CARGO=	cargo
+CARGO_TARGET_DIR=	${.OBJDIR}/cargo-target
+
+# Build the Rust binary
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	${INSTALL} -s ${CARGO_TARGET_DIR}/release/${PROG} ${.OBJDIR}/${PROG}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>
+NEW:
+<<<
+PROG=	auxinfo
+MAN=
+SRCS=	# empty - Rust replacement
+
+# Rust replacement - build auxinfo from Rust source
+CARGO=	cargo
+CARGO_TARGET_DIR=	${.OBJDIR}/cargo-target
+
+# Build the Rust binary
+${PROG}: ${.CURDIR}/Cargo.toml ${.CURDIR}/src/main.rs
+	${CARGO} build --manifest-path ${.CURDIR}/Cargo.toml \
+	    --target-dir ${CARGO_TARGET_DIR} --release
+	${INSTALL} -s ${CARGO_TARGET_DIR}/release/${PROG} ${.OBJDIR}/${PROG}
+
+clean:
+	${RM} -rf ${CARGO_TARGET_DIR}
+
+.include <bsd.prog.mk>
+>>>

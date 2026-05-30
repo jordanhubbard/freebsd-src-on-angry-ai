@@ -1,0 +1,19 @@
+=== STEP 678 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/contrib/llvm-project/libc/src/__support/OSUtil/windows/Makefile
+Scope: contrib/llvm-project/libc/src/__support/OSUtil/windows
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+ACTION: WRITE_FILE contrib/llvm-project/libc/src/__support/OSUtil/windows/osutil_windows_stub.c
+CONTENT:
+<<<
+/* Windows-specific OSUtil stub - not used on FreeBSD */
+
+int osutil_windows_stub(void) {
+    return 0;
+}
+>>>

@@ -1,0 +1,25 @@
+=== STEP 65 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: Already scoped to lib/libsys. Do not switch work units.
+
+Your active scope is `lib/libsys` and has not been completed.
+Continue working there instead of selecting a new directory:
+  1. Use READ_FILE on files within lib/libsys
+  2. Make any required rewrite edits (EDIT_FILE / WRITE_FILE)
+  3. Run ACTION: BUILD to validate and commit the unit
+
+Files in scope:
+  - lib/libsys/Makefile
+  - lib/libsys/__error.c
+  - lib/libsys/__getosreldate.c
+  - lib/libsys/__vdso_gettimeofday.c
+  - lib/libsys/_exit.2
+  ... and 243 more
+
+--- RESPONSE ---
+
+
+I'm scoped to `lib/libsys`. Let me find the smallest coherent rewrite increment within this library. Let me examine the simpler C source files.
+
+ACTION: READ_FILE lib/libsys/__error.c

@@ -1,0 +1,11 @@
+=== STEP 205 ===
+
+--- REQUEST ---
+GREP_RESULT: No matches for 'contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo'
+
+--- RESPONSE ---
+
+
+This unit is LLVM compiler infrastructure, not FreeBSD userland. I need to check the build system to understand how to properly skip it.
+
+ACTION: FIND_FILE contrib/llvm-project/llvm/lib/Target/PowerPC/Makefile

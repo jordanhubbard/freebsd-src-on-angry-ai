@@ -1,0 +1,54 @@
+=== STEP 546 ===
+
+--- REQUEST ---
+EDIT_FILE_OK: Successfully edited /usr/home/jkh/Src/frustbsd/sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/src/lib.rs
+Scope: sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20
+Diffs will be shown for all changed files after BUILD succeeds.
+
+--- RESPONSE ---
+
+
+The macro approach is wrong. Let me use a simpler approach with std::fs::File:
+
+ACTION: EDIT_FILE sys/contrib/libsodium/src/libsodium/crypto_stream/xchacha20/src/lib.rs
+OLD:
+<<<
+fn getrandom_byte() -> u8 {
+    // Read from /dev/urandom using raw syscalls
+    let path = b"/dev/urandom\0";
+    let mut buf: [u8; 1] = [0];
+    unsafe {
+        // open("/dev/urandom", O_RDONLY)
+        let fd = libc_syscall!(open, path.as_ptr() as *const i8, 0);
+        if fd >= 0 {
+            // read(fd, &buf, 1)
+            let _ = libc_syscall!(read, fd, buf.as_mut_ptr() as *mut std::ffi::c_void, 1);
+            // close(fd)
+            let _ = libc_syscall!(close, fd);
+        }
+    }
+    buf[0]
+}
+
+macro_rules! libc_syscall {
+    ($name:ident, $($arg:expr),*) => {
+        // Use raw syscall via inline assembly or fallback
+        0
+    };
+}
+>>>
+NEW:
+<<<
+fn getrandom_byte() -> u8 {
+    use std::fs::File;
+    use std::io::Read;
+    let mut f = File::open("/dev/urandom").unwrap_or_else(|_| {
+        panic!("Failed to open /dev/urandom");
+    });
+    let mut buf = [0u8; 1];
+    f.read_exact(&mut buf).unwrap_or_else(|_| {
+        panic!("Failed to read from /dev/urandom");
+    });
+    buf[0]
+}
+>>>

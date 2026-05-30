@@ -1,0 +1,14 @@
+=== STEP 829 ===
+
+--- REQUEST ---
+SKIP_FILE_OK: Skipped remaining chunks of /usr/home/jkh/Src/frustbsd/Makefile.inc1.
+Remaining files in lib/libthr/arch/arm:
+  (All tracked files rewritten or skipped in this directory)
+Pick another file with ACTION: READ_FILE <path> or move to a different directory with ACTION: SET_SCOPE <dir>.
+
+--- RESPONSE ---
+
+
+The build errors come from Makefile.inc1's `.info` directives about cross-compiler bootstrapping - these are pre-existing environment issues, not caused by my changes. This unit is ARM-specific and requires cross-compilation setup. Let me try building the Rust crate directly to verify it compiles:
+
+ACTION: BUILD

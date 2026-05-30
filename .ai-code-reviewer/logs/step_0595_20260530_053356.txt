@@ -1,0 +1,28 @@
+=== STEP 595 ===
+
+--- REQUEST ---
+LIST_DIR_RESULT for /usr/home/jkh/Src/frustbsd/tools/regression/nfsmmap/test2:
+```
+Makefile
+test2.c
+test2.good.uu
+test2.zeros.uu
+```
+
+--- RESPONSE ---
+
+
+The Cargo.toml and src/main.rs were reverted when the scope was abandoned. Let me recreate them:
+
+ACTION: WRITE_FILE tools/regression/nfsmmap/test2/Cargo.toml
+CONTENT:
+<<<
+[package]
+name = "test2"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "test2"
+path = "src/main.rs"
+>>>

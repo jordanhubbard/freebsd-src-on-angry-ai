@@ -1,0 +1,9 @@
+=== STEP 231 ===
+
+--- REQUEST ---
+SET_SCOPE_ERROR: No directory specified
+
+--- RESPONSE ---
+
+
+ACTION: SET_SCOPE contrib/llvm-project/llvm/lib/Target/PowerPC/TargetInfo
